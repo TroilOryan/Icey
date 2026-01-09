@@ -1,0 +1,140 @@
+part of 'controller.dart';
+
+class ArtistListPage extends StatefulWidget {
+  const ArtistListPage({super.key});
+
+  @override
+  State<ArtistListPage> createState() => _ArtistListPageState();
+}
+
+final artistListController = ArtistListController();
+
+class _ArtistListPageState extends State<ArtistListPage>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    artistListController.onInit();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+
+    final theme = Theme.of(context);
+
+    final artistList = mediaManager.artistList.watch(context),
+        coverList = artistListController.state.coverList.watch(context);
+
+    Uint8List? cover(BigInt id) {
+      final index = coverList.indexWhere((e) => e.id == id);
+
+      if (index != -1) {
+        return coverList[index].cover;
+      }
+
+      return null;
+    }
+
+    final mediaQuery = MediaQuery.of(context);
+
+    final paddingBottom = mediaQuery.padding.bottom != 0
+        ? mediaQuery.padding.bottom
+        : 16.h;
+
+    return CustomScrollView(
+      controller: homeController.artistListScrollController,
+      slivers: [
+        // HeaderAppBar(
+        //   offstage: artistList.isEmpty,
+        //   onPlayRandom: () => {},
+        //   onOpenSortMenu: () => {},
+        // ),
+        SliverPadding(
+          padding: EdgeInsets.fromLTRB(24.w, 0, 24.w, paddingBottom + 104.h),
+          sliver: SliverGrid(
+            delegate: SliverChildBuilderDelegate(
+              childCount: artistList.length,
+              (context, index) {
+                final artist = artistList[index];
+
+                final artistCover = cover(artist.id);
+
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () => context.push(
+                        "/artist_list_detail/${artist.id}",
+                        extra: {
+                          "name": artist.name,
+                          "cover": cover(artist.id),
+                          "mediaIDs": artist.mediaIDs,
+                        },
+                      ),
+                      child: Hero(
+                        tag: "artistCover_${artist.id}",
+                        child: artistCover != null
+                            ? Container(
+                                height: 156.h,
+                                clipBehavior: Clip.antiAlias,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.all(
+                                    AppTheme.borderRadiusSm,
+                                  ),
+                                ),
+                                child: Image.memory(
+                                  artistCover,
+                                  fit: BoxFit.cover,
+                                ),
+                              )
+                            : MediaCover(
+                                id: artist.id.toInt(),
+                                size: 156.h,
+                                type: ArtworkType.ARTIST,
+                                borderRadius: BorderRadius.all(
+                                  AppTheme.borderRadiusSm,
+                                ),
+                                onQueried: (v) => artistListController
+                                    .handleQueried(v, artist.id),
+                              ),
+                      ),
+                    ),
+                    SizedBox(height: 8.h),
+                    Hero(
+                      tag: "artistTitle_${artist.id}",
+                      child: Text(
+                        artist.name,
+                        style: theme.textTheme.titleMedium,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: true,
+                      ),
+                    ),
+                    Text(
+                      '${artist.mediaIDs.length}首',
+                      style: theme.textTheme.bodyMedium,
+                    ),
+                  ],
+                );
+              },
+            ),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 12.w,
+              crossAxisSpacing: 12.w,
+              childAspectRatio: 0.72,
+            ),
+            // gridDelegate: _mySliverGridDelegateWithMaxCrossAxisExtent(),
+          ),
+        ),
+      ],
+    );
+  }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
+}
