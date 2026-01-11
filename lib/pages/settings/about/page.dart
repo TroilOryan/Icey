@@ -2,6 +2,7 @@ import 'package:IceyPlayer/build_config.dart';
 import 'package:IceyPlayer/components/list_card/list_card.dart';
 import 'package:IceyPlayer/components/list_item/list_item.dart';
 import 'package:IceyPlayer/components/page_wrapper/page_wrapper.dart';
+import 'package:IceyPlayer/models/settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -31,6 +32,8 @@ class _AboutPageState extends State<AboutPage> {
   Widget build(BuildContext context) {
     final version = state.version.watch(context);
 
+    final autoUpdate = settingsManager.autoUpdate.watch(context);
+
     return PageWrapper(
       title: '关于',
       body: Column(
@@ -53,6 +56,18 @@ class _AboutPageState extends State<AboutPage> {
             title: "版本信息",
             padding: EdgeInsets.zero,
             children: [ListItem(title: '版本号', desc: BuildConfig.versionName)],
+          ),
+          ListCard(
+            title: "应用设置",
+            padding: EdgeInsets.zero,
+            children: [
+              ListItem(
+                title: '启动时检查更新',
+                isSwitch: true,
+                value: autoUpdate,
+                onChanged: settingsManager.setAutoUpdate,
+              ),
+            ],
           ),
         ],
       ),

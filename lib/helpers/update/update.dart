@@ -5,6 +5,7 @@ import 'package:IceyPlayer/components/bottom_sheet/bottom_sheet.dart';
 import 'package:IceyPlayer/components/button/button.dart';
 import 'package:IceyPlayer/components/list_card/list_card.dart';
 import 'package:IceyPlayer/helpers/toast/toast.dart';
+import 'package:IceyPlayer/models/settings/settings.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -18,7 +19,7 @@ import 'ua_type.dart';
 abstract class UpdateHelper {
   // 检查更新
   static Future<void> checkUpdate(BuildContext context) async {
-    if (kDebugMode) return;
+    if (kDebugMode || !settingsManager.autoUpdate.value) return;
 
     try {
       final res = await Request().get(

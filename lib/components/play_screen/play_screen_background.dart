@@ -21,7 +21,7 @@ class PlayScreenBackground extends StatelessWidget {
       child: Builder(
         builder: (context) {
           final double value = settingsManager.highMaterial.watch(context)
-              ? 64
+              ? 48
               : 24;
 
           final dynamicLight = settingsManager.dynamicLight.watch(context),
@@ -30,14 +30,19 @@ class PlayScreenBackground extends StatelessWidget {
           final child = Blur(
             blur: value,
             colorOpacity: artCover ? 0.01 : 0.5,
-            child: Transform.flip(
-              flipY: true,
-              child: PlayCover(
-                height: height,
-                width: width,
-                repeat: ImageRepeat.repeat,
-                fit: BoxFit.fitWidth,
-                filterQuality: FilterQuality.low,
+            child: RepaintBoundary(
+              child: Transform.flip(
+                flipY: true,
+                child: Opacity(
+                  opacity: 0.6,
+                  child: PlayCover(
+                    height: height,
+                    width: width,
+                    repeat: ImageRepeat.repeat,
+                    fit: BoxFit.fitWidth,
+                    filterQuality: FilterQuality.low,
+                  ),
+                ),
               ),
             ),
           );
@@ -49,6 +54,7 @@ class PlayScreenBackground extends StatelessWidget {
                 colors: [
                   theme.colorScheme.primary.withAlpha(55),
                   theme.colorScheme.secondary.withAlpha(55),
+                  theme.colorScheme.inversePrimary.withAlpha(55),
                 ],
                 child: child,
               ),

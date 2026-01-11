@@ -112,6 +112,7 @@ class SettingsManager {
   final Signal<bool> _fakeEnhanced;
   final Signal<bool> _immersive;
   final Signal<bool> _audioFocus;
+  final Signal<bool> _autoUpdate;
 
   Signal<MediaSort> get sortType => _sortType;
 
@@ -141,6 +142,8 @@ class SettingsManager {
 
   Signal<bool> get audioFocus => _audioFocus;
 
+  Signal<bool> get autoUpdate => _autoUpdate;
+
   SettingsManager()
     : _sortType = signal(MediaSort.title),
       _brightnessTheme = signal(BrightnessTheme.system),
@@ -155,7 +158,8 @@ class SettingsManager {
       _karaoke = signal(true),
       _fakeEnhanced = signal(false),
       _immersive = signal(false),
-      _audioFocus = signal(true) {
+      _audioFocus = signal(true),
+      _autoUpdate = signal(true) {
     _sortType.value = MediaSort.getByValue(
       _settingsBox.get(
         CacheKey.Settings.sortType,
@@ -226,6 +230,11 @@ class SettingsManager {
 
     _audioFocus.value = _settingsBox.get(
       CacheKey.Settings.audioFocus,
+      defaultValue: true,
+    );
+
+    _autoUpdate.value = _settingsBox.get(
+      CacheKey.Settings.autoUpdate,
       defaultValue: true,
     );
   }
@@ -314,5 +323,11 @@ class SettingsManager {
     _audioFocus.value = value;
 
     _settingsBox.put(CacheKey.Settings.audioFocus, value);
+  }
+
+  void setAutoUpdate(bool value) {
+    _autoUpdate.value = value;
+
+    _settingsBox.put(CacheKey.Settings.autoUpdate, value);
   }
 }
