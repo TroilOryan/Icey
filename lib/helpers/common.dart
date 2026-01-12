@@ -1,5 +1,7 @@
+import 'package:IceyPlayer/helpers/toast/toast.dart';
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import "package:path/path.dart" as path;
 
 class CommonHelper {
@@ -104,5 +106,16 @@ class CommonHelper {
       }
     }
     return parentFolders;
+  }
+
+  static Future<void> copyText(
+    String text, {
+    bool needToast = true,
+    String? toastText,
+  }) {
+    if (needToast) {
+      showToast(toastText ?? '已复制');
+    }
+    return Clipboard.setData(ClipboardData(text: text));
   }
 }

@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:IceyPlayer/helpers/logs/json_file_handler.dart';
 import 'package:audio_service/audio_service.dart';
+import 'package:catcher_2/catcher_2.dart';
 import 'package:chinese_font_library/chinese_font_library.dart';
 import 'package:IceyPlayer/models/media/media.dart';
 import 'package:IceyPlayer/models/settings/settings.dart';
@@ -9,6 +11,7 @@ import 'package:IceyPlayer/pages/home/controller.dart';
 import 'package:IceyPlayer/router/router.dart';
 import 'package:IceyPlayer/services/audio_service.dart';
 import 'package:IceyPlayer/theme/theme.dart';
+import 'package:common_utils/common_utils.dart';
 import 'package:flex_seed_scheme/flex_seed_scheme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -20,6 +23,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_transitions/go_transitions.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:signals/signals_flutter.dart';
+import 'build_config.dart';
 import 'constants/box_key.dart';
 import 'constants/cache_key.dart';
 import 'entities/artwork_color.dart';
@@ -37,7 +41,32 @@ final appState = AppState();
 Future<void> main() async {
   await initServices();
 
-  runApp(const App());
+  // 异常捕获 logo记录
+  final customParameters = {
+    'BuildConfig':
+        '\nBuild Time: ${DateUtil.formatDateMs(BuildConfig.buildTime, format: DateFormats.full)}\n'
+        'Commit Hash: ${BuildConfig.commitHash}',
+  };
+  final fileHandler = await JsonFileHandler.init();
+  final Catcher2Options debugConfig = Catcher2Options(SilentReportMode(), [
+    ?fileHandler,
+    ConsoleHandler(
+      enableDeviceParameters: false,
+      enableApplicationParameters: false,
+      enableCustomParameters: true,
+    ),
+  ], customParameters: customParameters);
+
+  final Catcher2Options releaseConfig = Catcher2Options(SilentReportMode(), [
+    ?fileHandler,
+    ConsoleHandler(enableCustomParameters: true),
+  ], customParameters: customParameters);
+
+  Catcher2(
+    debugConfig: debugConfig,
+    releaseConfig: releaseConfig,
+    rootWidget: const App(),
+  );
 }
 
 class App extends StatefulWidget {

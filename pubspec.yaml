@@ -66,6 +66,7 @@ dependencies:
   permission_handler: ^12.0.1
 
   ## 日志
+  catcher_2: ^2.1.5
   logger: ^2.6.2
 
   ## 设备信息

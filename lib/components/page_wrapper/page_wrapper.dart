@@ -26,7 +26,8 @@ class PageWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    final paddingTop = MediaQuery.of(context).padding.top;
+    final paddingTop = MediaQuery.of(context).padding.top,
+        paddingBottom = MediaQuery.of(context).padding.bottom;
 
     return Scaffold(
       backgroundColor: backgroundColor,
@@ -88,18 +89,22 @@ class PageWrapper extends StatelessWidget {
                   ? SliverPadding(
                       padding:
                           padding ??
-                          EdgeInsets.symmetric(
-                            horizontal: 16.w,
-                            vertical: 12.h,
+                          EdgeInsets.fromLTRB(
+                            16.w,
+                            12.h,
+                            16.w,
+                            paddingBottom + 12.h,
                           ),
                       sliver: body,
                     )
                   : SliverPadding(
                       padding:
                           padding ??
-                          EdgeInsets.symmetric(
-                            horizontal: 16.w,
-                            vertical: 12.h,
+                          EdgeInsets.fromLTRB(
+                            16.w,
+                            12.h,
+                            16.w,
+                            paddingBottom + 12.h,
                           ),
                       sliver: SliverToBoxAdapter(child: body),
                     ),

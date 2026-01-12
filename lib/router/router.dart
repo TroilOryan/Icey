@@ -4,6 +4,8 @@ import 'package:IceyPlayer/pages/home/controller.dart';
 import 'package:IceyPlayer/pages/media_order_detail/page.dart';
 import 'package:IceyPlayer/pages/player_style/page.dart';
 import 'package:IceyPlayer/pages/search/page.dart';
+import 'package:IceyPlayer/pages/settings/about/logs/logs_detail/page.dart';
+import 'package:IceyPlayer/pages/settings/about/logs/page.dart';
 import 'package:IceyPlayer/pages/settings/about/page.dart';
 import 'package:IceyPlayer/pages/settings/audio_output/page.dart';
 import 'package:IceyPlayer/pages/settings/interface/high_material/high_material.dart';
@@ -98,7 +100,22 @@ final GoRouter router = GoRouter(
           path: '/audio_output',
           builder: (_, __) => const AudioOutputPage(),
         ),
-        GoRoute(path: '/about', builder: (_, __) => const AboutPage()),
+        GoRoute(
+          path: '/about',
+          builder: (_, __) => const AboutPage(),
+          routes: [
+            GoRoute(
+              path: '/logs',
+              builder: (_, __) => const LogsPage(),
+              routes: [
+                GoRoute(
+                  path: '/detail',
+                  builder: (_, __) => const LogsDetailPage(),
+                ),
+              ],
+            ),
+          ],
+        ),
       ],
     ),
   ],
