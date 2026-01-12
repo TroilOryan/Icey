@@ -45,7 +45,23 @@ class LogsController {
     );
   }
 
+  Future<void> clearLogs() async {
+    if (await LogsHelper.clearLogs()) {
+      showToast("已清空");
+      state.logs.value = [];
+    }
+  }
+
   void onInit() {
     getLog();
+  }
+
+  void onDispose() {
+    if (state.latestLog.value != null) {
+      final time = state.latestLog.value!.dateTime;
+      if (DateTime.now().difference(time) >= const Duration(days: 14)) {
+        LogsHelper.clearLogs();
+      }
+    }
   }
 }

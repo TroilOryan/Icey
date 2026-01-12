@@ -1,10 +1,13 @@
 import 'dart:convert';
 
 import 'package:IceyPlayer/components/bottom_sheet/bottom_sheet.dart';
+import 'package:IceyPlayer/components/button/button.dart';
 import 'package:IceyPlayer/components/list_card/list_card.dart';
 import 'package:IceyPlayer/components/list_item/list_item.dart';
 import 'package:IceyPlayer/components/page_wrapper/page_wrapper.dart';
+import 'package:IceyPlayer/helpers/common.dart';
 import 'package:IceyPlayer/helpers/logs/logs.dart';
+import 'package:IceyPlayer/helpers/toast/toast.dart';
 import 'package:IceyPlayer/pages/settings/about/logs/info_card/info_card.dart';
 import 'package:IceyPlayer/pages/settings/about/logs/state.dart';
 import 'package:catcher_2/model/platform_type.dart';
@@ -31,6 +34,14 @@ class _LogsPageState extends State<LogsPage> {
     super.initState();
 
     controller.onInit();
+  }
+
+  @override
+  void dispose() {
+    controller.onDispose();
+
+    // TODO: implement dispose
+    super.dispose();
   }
 
   @override
@@ -101,6 +112,19 @@ class _LogsPageState extends State<LogsPage> {
                   ),
                 )
                 .toList(),
+          ),
+          Button(
+            block: true,
+            onPressed: () => CommonHelper.launchURL(
+              'https://github.com/TroilOryan/Icey/issues',
+            ),
+            child: Text("反馈错误"),
+          ),
+          Button(
+            primary: false,
+            block: true,
+            onPressed: controller.clearLogs,
+            child: Text("清空日志"),
           ),
         ],
       ),

@@ -3,6 +3,7 @@ import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import "package:path/path.dart" as path;
+import 'package:url_launcher/url_launcher.dart';
 
 class CommonHelper {
   static Text buildDuration(
@@ -117,5 +118,19 @@ class CommonHelper {
       showToast(toastText ?? '已复制');
     }
     return Clipboard.setData(ClipboardData(text: text));
+  }
+
+  static Future<void> launchURL(
+    String url, {
+    LaunchMode mode = LaunchMode.externalApplication,
+  }) async {
+    try {
+      final Uri uri = Uri.parse(url);
+      if (!await launchUrl(uri, mode: mode)) {
+        showToast('Could not launch $url');
+      }
+    } catch (e) {
+      showToast(e.toString());
+    }
   }
 }

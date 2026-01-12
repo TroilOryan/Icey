@@ -4,6 +4,7 @@ import 'package:IceyPlayer/build_config.dart';
 import 'package:IceyPlayer/components/bottom_sheet/bottom_sheet.dart';
 import 'package:IceyPlayer/components/button/button.dart';
 import 'package:IceyPlayer/components/list_card/list_card.dart';
+import 'package:IceyPlayer/helpers/common.dart';
 import 'package:IceyPlayer/helpers/toast/toast.dart';
 import 'package:IceyPlayer/models/settings/settings.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -53,7 +54,7 @@ abstract class UpdateHelper {
                 Text('${data['tag_name']}', style: theme.textTheme.titleMedium),
                 Text('${data['body'] ?? "暂无内容"}'),
                 GestureDetector(
-                  onTap: () => launchURL(
+                  onTap: () => CommonHelper.launchURL(
                     'https://github.com/TroilOryan/Icey/commits/main',
                   ),
                   child: Text(
@@ -95,7 +96,7 @@ abstract class UpdateHelper {
             final String name = i['name'];
             if (name.contains(plat) &&
                 ((ext == null || ext.isEmpty) ? true : name.endsWith(ext))) {
-              launchURL(i['browser_download_url']);
+              CommonHelper.launchURL(i['browser_download_url']);
               return;
             }
           }
@@ -115,19 +116,5 @@ abstract class UpdateHelper {
       if (kDebugMode) debugPrint('download error: $e');
       // launchURL('${Constants.sourceCodeUrl}/releases/latest');
     }
-  }
-}
-
-Future<void> launchURL(
-  String url, {
-  LaunchMode mode = LaunchMode.externalApplication,
-}) async {
-  try {
-    final Uri uri = Uri.parse(url);
-    if (!await launchUrl(uri, mode: mode)) {
-      showToast('Could not launch $url');
-    }
-  } catch (e) {
-    showToast(e.toString());
   }
 }
