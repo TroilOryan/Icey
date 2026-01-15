@@ -27,41 +27,33 @@ class PlayScreenBackground extends StatelessWidget {
           final dynamicLight = settingsManager.dynamicLight.watch(context),
               artCover = settingsManager.artCover.watch(context);
 
-          final child = Blur(
+          return Blur(
             blur: value,
             colorOpacity: artCover ? 0.01 : 0.5,
+            overlay: dynamicLight
+                ? AnimatedGradientBackground(
+                    duration: const Duration(seconds: 6),
+                    colors: [
+                      theme.colorScheme.primary.withAlpha(155),
+                      theme.colorScheme.secondary.withAlpha(155),
+                      theme.colorScheme.inversePrimary.withAlpha(155),
+                    ],
+                    child: Container(),
+                  )
+                : null,
             child: RepaintBoundary(
               child: Transform.flip(
                 flipY: true,
-                child: Opacity(
-                  opacity: 0.6,
-                  child: PlayCover(
-                    height: height,
-                    width: width,
-                    repeat: ImageRepeat.repeat,
-                    fit: BoxFit.fitWidth,
-                    filterQuality: FilterQuality.low,
-                  ),
+                child: PlayCover(
+                  height: height,
+                  width: width,
+                  repeat: ImageRepeat.repeat,
+                  fit: BoxFit.fitWidth,
+                  filterQuality: FilterQuality.low,
                 ),
               ),
             ),
           );
-
-          if (dynamicLight) {
-            return RepaintBoundary(
-              child: AnimatedGradientBackground(
-                duration: const Duration(seconds: 6),
-                colors: [
-                  theme.colorScheme.primary.withAlpha(55),
-                  theme.colorScheme.secondary.withAlpha(55),
-                  theme.colorScheme.inversePrimary.withAlpha(55),
-                ],
-                child: child,
-              ),
-            );
-          }
-
-          return child;
         },
       ),
     );

@@ -4,6 +4,7 @@ import 'package:IceyPlayer/components/list_item/list_item.dart';
 import 'package:IceyPlayer/components/page_wrapper/page_wrapper.dart';
 import 'package:IceyPlayer/models/settings/settings.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:signals/signals_flutter.dart';
 
@@ -65,6 +66,10 @@ class _AboutPageState extends State<AboutPage> {
                 isSwitch: true,
                 value: autoUpdate,
                 onChanged: settingsManager.setAutoUpdate,
+              ),
+              ListItem(
+                title: '错误日志',
+                onTap: () => context.push("/settings/about/logs"),
               ),
             ],
           ),

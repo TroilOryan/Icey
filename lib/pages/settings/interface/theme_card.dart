@@ -42,7 +42,7 @@ class ThemeCard extends StatelessWidget {
                     active ? brightnessTheme.activeIcon : brightnessTheme.icon,
                     fontSize: 18,
                   ),
-                  Text(brightnessTheme.name),
+                  Text(brightnessTheme.name, style: theme.textTheme.bodyMedium),
                 ],
               ),
             ),
