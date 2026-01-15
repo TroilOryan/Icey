@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LeadingButton extends StatelessWidget {
   final Widget icon;
@@ -12,13 +11,13 @@ class LeadingButton extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Ink(
-      width: 36.sp,
-      height: 36.sp,
+      width: 36,
+      height: 36,
       decoration: ShapeDecoration(
         color: theme.secondaryHeaderColor,
         shape: const CircleBorder(),
       ),
-      child: IconButton(iconSize: 16.sp, icon: icon, onPressed: onTap),
+      child: IconButton(iconSize: 16, icon: icon, onPressed: onTap),
     );
   }
 }

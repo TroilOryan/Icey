@@ -2,7 +2,6 @@ import 'package:IceyPlayer/components/play_lyric_shader_mask/play_lyric_shader_m
 import 'package:IceyPlayer/components/responsive_builder/responsive_builder.dart';
 import 'package:IceyPlayer/models/media/media.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:lyric/lyrics_reader_model.dart';
 import 'package:signals/signals_flutter.dart';
@@ -37,7 +36,7 @@ class _PlayLyricSmallState extends State<PlayLyricSmall> {
     final isPlaying = currentLyricIndex == index;
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 0.sp, vertical: 2.sp),
+      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 2),
       child: Text(
         index < 0 ? "" : lyricList[index].mainText ?? "",
         style: isPlaying
@@ -130,7 +129,7 @@ class _PlayLyricSmallState extends State<PlayLyricSmall> {
           final parsedLyric = mediaManager.parsedLyric.watch(context),
               currentLyricIndex = mediaManager.currentLyricIndex.watch(context);
 
-          final lineHeight = textStyle.fontSize! * textStyle.height! + 2.sp;
+          final lineHeight = textStyle.fontSize! * textStyle.height! + 2;
 
           final containerHeight = lineHeight * 2;
 

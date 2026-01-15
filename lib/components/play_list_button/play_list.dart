@@ -1,11 +1,9 @@
 import 'dart:async';
 
 import 'package:audio_service/audio_service.dart';
-import 'package:IceyPlayer/components/marquee/marquee.dart';
 import 'package:IceyPlayer/components/media_item_list_tile/media_item_list_tile.dart';
 import 'package:IceyPlayer/models/media/media.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:super_sliver_list/super_sliver_list.dart';
 
 import '../../theme/theme.dart';
@@ -30,8 +28,8 @@ class _PlayListState extends State<PlayList> {
     super.initState();
 
     final index = mediaManager.queue.value.indexWhere(
-          (queue) =>
-      queue.id == mediaManager.mediaItem.value?.id &&
+      (queue) =>
+          queue.id == mediaManager.mediaItem.value?.id &&
           queue.extras?['uuid'] ==
               mediaManager.mediaItem.value?.extras?['uuid'],
     );
@@ -52,8 +50,8 @@ class _PlayListState extends State<PlayList> {
     WidgetsBinding.instance.addPostFrameCallback((callback) {
       listener = mediaManager.mediaItem.listen((mediaItem) {
         final index = mediaManager.queue.value.indexWhere(
-              (queue) =>
-          queue.id == mediaItem?.id &&
+          (queue) =>
+              queue.id == mediaItem?.id &&
               queue.extras?['uuid'] == mediaItem?.extras?['uuid'],
         );
 
@@ -91,13 +89,13 @@ class _PlayListState extends State<PlayList> {
         final queue = snapshot.data;
 
         return Container(
-          margin: EdgeInsets.only(top: 16.h),
+          margin: EdgeInsets.only(top: 16),
           child: Column(
-            spacing: 16.h,
+            spacing: 16,
             children: [
               Container(
-                margin: EdgeInsets.symmetric(horizontal: 12.w),
-                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+                margin: EdgeInsets.symmetric(horizontal: 12),
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
                   color: theme.cardTheme.color,
                   borderRadius: BorderRadius.all(AppTheme.borderRadiusSm),
@@ -105,11 +103,11 @@ class _PlayListState extends State<PlayList> {
                 child: Row(
                   children: [
                     PlayCover(
-                      width: 55.h,
-                      height: 55.h,
+                      width: 55,
+                      height: 55,
                       borderRadius: BorderRadius.all(AppTheme.borderRadiusSm),
                     ),
-                    SizedBox(width: 8.w),
+                    SizedBox(width: 8),
                     Flexible(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -129,7 +127,7 @@ class _PlayListState extends State<PlayList> {
                                     maxLines: 2,
                                     softWrap: true,
                                   ),
-                                  SizedBox(width: 12.w),
+                                  const SizedBox(width: 12),
                                   Text(
                                     mediaItem?.artist ?? "暂无歌手",
                                     style: theme.textTheme.bodyMedium,
@@ -151,21 +149,21 @@ class _PlayListState extends State<PlayList> {
                   child: SuperListView.builder(
                     listController: listController,
                     controller: scrollController,
-                    padding: EdgeInsets.symmetric(horizontal: 12.w),
+                    padding: EdgeInsets.symmetric(horizontal: 12),
                     itemCount: queue?.length ?? 0,
                     itemBuilder: (context, index) => Container(
                       margin: EdgeInsets.only(
                         bottom: queue != null
                             ? index == queue.length - 1
-                            ? 16.h
-                            : 8.h
-                            : 8.h,
+                                  ? 16
+                                  : 8
+                            : 8,
                       ),
                       child: MediaItemListTile(
                         queue![index],
                         active:
-                        mediaManager.mediaItem.value?.id ==
-                            queue[index].id &&
+                            mediaManager.mediaItem.value?.id ==
+                                queue[index].id &&
                             mediaManager.mediaItem.value?.extras?['uuid'] ==
                                 queue[index].extras?['uuid'],
                         onTap: () => mediaManager.skipToQueueItem(index),

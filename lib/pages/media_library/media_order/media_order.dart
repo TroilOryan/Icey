@@ -7,7 +7,6 @@ import 'package:IceyPlayer/entities/media_order.dart';
 import 'package:IceyPlayer/event_bus/event_bus.dart';
 import 'package:IceyPlayer/pages/media_library/media_order/media_order_create.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:signals/signals_flutter.dart';
 import 'package:super_sliver_list/super_sliver_list.dart';
@@ -207,17 +206,17 @@ class _MediaOrderState extends State<MediaOrder> {
     final mediaOrder = state.mediaOrder.watch(context);
 
     return SliverPadding(
-      padding: EdgeInsets.symmetric(horizontal: 24.w),
+      padding: EdgeInsets.symmetric(horizontal: 24),
       sliver: SliverToBoxAdapter(
         child: Container(
-          margin: EdgeInsets.only(bottom: 16.h),
-          width: 88.h,
-          height: 88.h,
+          margin: EdgeInsets.only(bottom: 16),
+          width: 88,
+          height: 88,
           child: MediaQuery.removePadding(
             removeLeft: true,
             context: context,
             child: SuperListView.separated(
-              separatorBuilder: (context, index) => SizedBox(width: 12.w),
+              separatorBuilder: (context, index) => SizedBox(width: 12),
               itemCount: mediaOrder.length + 1,
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {

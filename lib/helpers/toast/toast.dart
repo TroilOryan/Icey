@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 void showToast(String msg) {
@@ -10,6 +9,6 @@ void showToast(String msg) {
     timeInSecForIosWeb: 1,
     backgroundColor: const Color(0x80000000),
     textColor: Colors.white,
-    fontSize: 14.0.sp,
+    fontSize: 14.0,
   );
 }

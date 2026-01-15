@@ -1,6 +1,5 @@
 import 'package:IceyPlayer/entities/media.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:keframe/keframe.dart';
 
 import 'az_list_index_bar.dart';
@@ -45,12 +44,12 @@ class MediaListIndexBar extends StatelessWidget {
     }
 
     return Positioned(
-      top: 16.h,
+      top: 16,
       right: 0,
       child: FrameSeparateWidget(
         child: RepaintBoundary(
           child: Container(
-            padding: EdgeInsets.only(right: 6.w),
+            padding: EdgeInsets.only(right: 6),
             key: indexBarContainerKey,
             width: indexBarWidth,
             alignment: Alignment.center,

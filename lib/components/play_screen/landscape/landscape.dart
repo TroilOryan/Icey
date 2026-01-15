@@ -10,7 +10,6 @@ import 'package:IceyPlayer/models/media/media.dart';
 import 'package:IceyPlayer/models/settings/settings.dart';
 import 'package:IceyPlayer/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:signals/signals_flutter.dart';
 
 import '../../play_lyric/play_lyric.dart';
@@ -33,7 +32,7 @@ class Landscape extends StatelessWidget {
           () => coverShape.value == CoverShape.immersive.value,
         );
 
-        final height = immersive.value ? deviceHeight : deviceHeight - 32.h;
+        final height = immersive.value ? deviceHeight : deviceHeight - 32;
 
         Widget child;
 
@@ -41,7 +40,7 @@ class Landscape extends StatelessWidget {
           child = PlayImmersiveCover(isLandscape: true, size: height);
         } else {
           child = Container(
-            margin: EdgeInsets.only(top: 32.h),
+            margin: EdgeInsets.only(top: 32),
             child: PlayShapedCover(isLandscape: true),
           );
         }
@@ -59,18 +58,18 @@ class Landscape extends StatelessWidget {
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
-      spacing: 24.w,
+      spacing: 24,
       children: [
         buildPlayCover(onTap: () {}, deviceHeight: deviceHeight),
         Flexible(
           child: Padding(
-            padding: EdgeInsets.fromLTRB(0, 32.h, 24.w, 8.h),
+            padding: EdgeInsets.fromLTRB(0, 32, 24, 8),
             child: Column(
               children: [
                 PlayInfo(panelOpened: panelOpened),
-                SizedBox(height: 8.h),
+                SizedBox(height: 8),
                 Flexible(child: PlayLyric()),
-                SizedBox(height: 16.h),
+                SizedBox(height: 16),
                 StreamBuilder(
                   stream: mediaManager.mediaItem,
                   builder: (context, snapshot) {
@@ -86,16 +85,16 @@ class Landscape extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     PlayListButton(
-                      size: 24.sp,
+                      size: 24,
                       color: appThemeExtension.primary,
                     ),
-                    PrevButton(size: 24.sp, color: appThemeExtension.primary),
-                    SizedBox(width: 8.w),
-                    PlayButton(size: 40.sp, color: appThemeExtension.primary),
-                    SizedBox(width: 8.w),
-                    NextButton(size: 24.sp, color: appThemeExtension.primary),
+                    PrevButton(size: 24, color: appThemeExtension.primary),
+                    SizedBox(width: 8),
+                    PlayButton(size: 40, color: appThemeExtension.primary),
+                    SizedBox(width: 8),
+                    NextButton(size: 24, color: appThemeExtension.primary),
                     PlayMenuButton(
-                      size: 24.sp,
+                      size: 24,
                       color: appThemeExtension.primary,
                     ),
                   ],

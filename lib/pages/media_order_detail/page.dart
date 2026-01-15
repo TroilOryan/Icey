@@ -24,7 +24,6 @@ import 'package:IceyPlayer/pages/media_order_detail/state.dart';
 import 'package:IceyPlayer/theme/theme.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_sficon/flutter_sficon.dart';
 import 'package:go_router/go_router.dart';
 import 'package:signals/signals_flutter.dart';
@@ -99,9 +98,9 @@ class _MediaOrderDetailPageState extends State<MediaOrderDetailPage> {
 
     final mediaQuery = MediaQuery.of(context);
 
-    final paddingBottom = mediaQuery.padding.bottom != 0
+    final double paddingBottom = mediaQuery.padding.bottom != 0
         ? mediaQuery.padding.bottom
-        : 16.h;
+        : 16;
 
     return Scaffold(
       body: CustomScrollView(
@@ -114,8 +113,8 @@ class _MediaOrderDetailPageState extends State<MediaOrderDetailPage> {
             leading: Align(
               alignment: Alignment.centerLeft,
               child: Container(
-                height: 36.sp,
-                margin: EdgeInsets.fromLTRB(24.w, 4.h, 0, 0),
+                height: 36,
+                margin: EdgeInsets.fromLTRB(24, 4, 0, 0),
                 child: RoundIconButton(
                   icon: const Icon(Icons.arrow_back),
                   onTap: context.pop,
@@ -125,7 +124,7 @@ class _MediaOrderDetailPageState extends State<MediaOrderDetailPage> {
             floating: false,
             pinned: true,
             snap: false,
-            expandedHeight: 256.h,
+            expandedHeight: 256,
             elevation: 0,
             flexibleSpace: FlexibleSpaceBar(
               background: GestureDetector(
@@ -152,16 +151,16 @@ class _MediaOrderDetailPageState extends State<MediaOrderDetailPage> {
           ),
 
           SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
             sliver: MultiSliver(
               children: [
                 SliverToBoxAdapter(
                   child: Container(
-                    margin: EdgeInsets.only(bottom: 16.h),
+                    margin: EdgeInsets.only(bottom: 16),
                     child: Row(
                       children: [
                         Material(
-                          borderRadius: BorderRadius.all(Radius.circular(6.r)),
+                          borderRadius: BorderRadius.all(Radius.circular(6)),
                           clipBehavior: Clip.antiAlias,
                           type: MaterialType.transparency,
                           child: Ink(
@@ -169,8 +168,8 @@ class _MediaOrderDetailPageState extends State<MediaOrderDetailPage> {
                               onTap: controller.handlePlayAll,
                               child: Padding(
                                 padding: EdgeInsets.symmetric(
-                                  horizontal: 6.w,
-                                  vertical: 2.h,
+                                  horizontal: 6,
+                                  vertical: 2,
                                 ),
                                 child: RichText(
                                   text: TextSpan(
@@ -181,7 +180,7 @@ class _MediaOrderDetailPageState extends State<MediaOrderDetailPage> {
                                         child: SFIcon(
                                           SFIcons.sf_play_circle_fill,
                                           color: theme.colorScheme.primary,
-                                          fontSize: 22.sp,
+                                          fontSize: 22,
                                         ),
                                       ),
                                       WidgetSpan(
@@ -222,7 +221,7 @@ class _MediaOrderDetailPageState extends State<MediaOrderDetailPage> {
                     return SuperSliverList.separated(
                       itemCount: mediaList.length,
                       separatorBuilder: (context, index) =>
-                          SizedBox(height: 16.h),
+                          SizedBox(height: 16),
                       itemBuilder: (context, index) => controller.buildItem(
                         context,
                         index,

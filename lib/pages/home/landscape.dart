@@ -11,7 +11,14 @@ class Landscape extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Flexible(flex: 1, child: HeaderTabBar(offstage: false, onTap: (s) {})),
+        Flexible(
+          flex: 1,
+          child: HeaderTabBar(
+            isLandscape: true,
+            offstage: false,
+            onTap: (s) {},
+          ),
+        ),
         Flexible(
           flex: 3,
           child: TabBarView(

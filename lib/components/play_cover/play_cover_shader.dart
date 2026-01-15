@@ -2,7 +2,6 @@ import 'dart:math';
 import 'dart:ui' as ui;
 import 'package:IceyPlayer/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// 播放封面沉浸
 class PlayCoverShader extends StatelessWidget {
@@ -29,9 +28,9 @@ class PlayCoverShader extends StatelessWidget {
         colorStops ??
         (isLandscape ? const [0, 0, 0.3, 1.0] : const [0.0, 0.0, 0.3, 1]);
 
-    final alignmentX = (2 * 32.w / height) - 1;
+    final alignmentX = (2 * 32 / height) - 1;
 
-    final alignmentY = (2 * (32.h + mediaQuery.padding.top) / height) - 1;
+    final alignmentY = (2 * (32 + mediaQuery.padding.top) / height) - 1;
 
     final scale = max(1 - (offset ?? 0) / mediaQuery.size.width, 0.2);
 

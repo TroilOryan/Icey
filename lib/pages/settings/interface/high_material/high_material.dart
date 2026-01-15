@@ -3,7 +3,6 @@ import 'package:IceyPlayer/components/list_item/list_item.dart';
 import 'package:IceyPlayer/components/page_wrapper/page_wrapper.dart';
 import 'package:IceyPlayer/models/settings/settings.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:signals/signals_flutter.dart';
 
 class HighMaterialPage extends StatelessWidget {
@@ -16,7 +15,7 @@ class HighMaterialPage extends StatelessWidget {
     return PageWrapper(
       title: '高阶材质',
       body: Column(
-        spacing: 16.h,
+        spacing: 16,
         children: [
           ListCard(
             spacing: 0,

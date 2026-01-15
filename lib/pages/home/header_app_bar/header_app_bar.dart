@@ -3,7 +3,6 @@ import 'dart:ui';
 
 import 'package:IceyPlayer/components/persistent_header/persistent_header.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_sficon/flutter_sficon.dart';
 import 'package:go_router/go_router.dart';
 
@@ -49,14 +48,14 @@ class HeaderAppBar extends StatelessWidget {
       floating: false,
       delegate: PersistentHeaderBuilder(
         min: kToolbarHeight + paddingTop,
-        max: 150.h,
+        max: 150,
         builder: (ctx, offset) => ClipRect(
           clipBehavior: Clip.antiAlias,
           child: BackdropFilter(
-            enabled: offset > 20.h,
+            enabled: offset > 20,
             filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
             child: Container(
-              padding: EdgeInsets.fromLTRB(24.w, paddingTop, 6.w, 0),
+              padding: EdgeInsets.fromLTRB(24, paddingTop, 6, 0),
               alignment: Alignment.centerLeft,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -72,7 +71,7 @@ class HeaderAppBar extends StatelessWidget {
                   Row(
                     children: [
                       IconButton(
-                        icon: SFIcon(SFIcons.sf_shuffle, fontSize: 20.sp),
+                        icon: SFIcon(SFIcons.sf_shuffle, fontSize: 20),
                         onPressed: onPlayRandom,
                       ),
                       PopupMenuButton(
@@ -80,7 +79,7 @@ class HeaderAppBar extends StatelessWidget {
                         onSelected: (value) =>
                             handleMenuSelected(value, context),
                         itemBuilder: (context) => menu,
-                        icon: SFIcon(SFIcons.sf_plus, fontSize: 22.sp),
+                        icon: SFIcon(SFIcons.sf_plus, fontSize: 22),
                       ),
                     ],
                   ),

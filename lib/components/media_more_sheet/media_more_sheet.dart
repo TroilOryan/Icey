@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:common_utils/common_utils.dart';
@@ -18,7 +17,6 @@ import 'package:IceyPlayer/helpers/toast/toast.dart';
 import 'package:IceyPlayer/models/media/media.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mime_type/mime_type.dart';
 import 'package:open_app/open_app.dart';
@@ -106,16 +104,16 @@ class MediaMoreSheet {
       builder: (context) => [
         Text("添加到歌单", style: theme.textTheme.titleMedium),
         ListCard(
-          spacing: 16.h,
+          spacing: 16,
           children: mediaOrder
               .map(
                 (e) => ListItem(
                   icon: Container(
-                    width: 50.h,
-                    height: 50.h,
+                    width: 50,
+                    height: 50,
                     clipBehavior: Clip.antiAlias,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(10.r)),
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
                     ),
                     child: e.cover != null
                         ? ExtendedImage.memory(
@@ -126,9 +124,9 @@ class MediaMoreSheet {
                         : e.mediaIDs.isNotEmpty
                         ? MediaCover(
                             id: e.mediaIDs.last,
-                            size: 50.h,
+                            size: 50,
                             borderRadius: BorderRadius.all(
-                              Radius.circular(10.r),
+                              Radius.circular(10),
                             ),
                           )
                         : ExtendedImage.asset(

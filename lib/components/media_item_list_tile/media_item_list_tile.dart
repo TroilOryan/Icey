@@ -1,6 +1,5 @@
 import "package:audio_service/audio_service.dart";
 import "package:IceyPlayer/theme/theme.dart";
-import "package:flutter_screenutil/flutter_screenutil.dart";
 
 import "package:flutter/material.dart";
 
@@ -32,7 +31,7 @@ class MediaItemListTile extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(color: theme.cardTheme.color),
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
             child: Row(
               children: [
                 Flexible(
@@ -56,7 +55,7 @@ class MediaItemListTile extends StatelessWidget {
                               ),
                             ),
                           ),
-                          SizedBox(width: 10.w),
+                          SizedBox(width: 10),
                         ],
                       ),
                       Text(
@@ -70,7 +69,7 @@ class MediaItemListTile extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(width: 12.w),
+                SizedBox(width: 12),
                 Row(
                   children: [
                     InkWell(

@@ -74,11 +74,6 @@ class _MediaLibraryPageState extends State<MediaLibraryPage>
               slivers: [
                 MultiSliver(
                   children: <Widget>[
-                    // HeaderAppBar(
-                    //   offstage: mediaList.isEmpty,
-                    //   onPlayRandom: controller.handlePlayRandom,
-                    //   onOpenSortMenu: () => eventBus.fire(OpenSortMenu()),
-                    // ),
                     HeaderLocator.sliver(),
 
                     MediaSearchBar(
@@ -118,7 +113,7 @@ class _MediaLibraryPageState extends State<MediaLibraryPage>
         ),
 
         Positioned(
-          bottom: max(106.h + paddingBottom, 116.h),
+          bottom: max(106 + paddingBottom, 116),
           right: 20,
           child: FrameSeparateWidget(
             child: Offstage(

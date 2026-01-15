@@ -4,16 +4,13 @@ import 'dart:io';
 import 'package:audio_session/audio_session.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:IceyPlayer/components/bottom_sheet/bottom_sheet.dart';
 import 'package:IceyPlayer/components/list_card/list_card.dart';
 import 'package:IceyPlayer/components/list_item/list_item.dart';
 import 'package:IceyPlayer/components/round_icon_button/round_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sficon/flutter_sficon.dart';
-import 'package:IceyPlayer/models/media/media.dart';
 import 'package:signals/signals_flutter.dart';
-import 'package:signals_flutter/signals_core.dart';
 
 part './controller.dart';
 
@@ -45,13 +42,13 @@ class _PlaySessionButtonState extends State<PlaySessionButton> {
         return [
           Text("Icey妙播", style: theme.textTheme.titleMedium),
           ListCard(
-            spacing: 16.h,
+            spacing: 16,
             children: devices.map((device) {
               final item = AudioDeviceTypeText.getByValue(device.type);
 
               return ListItem(
                 // active: currentDevice?.id == device.id,
-                icon: Icon(item.icon, size: 24.sp),
+                icon: Icon(item.icon, size: 24),
                 title: device.name,
                 desc: item.name,
                 trailing: const SizedBox(),

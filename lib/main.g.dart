@@ -71,11 +71,22 @@ Future<void> initServices() async {
 
   mediaManager.init(medias: medias, audioService: audioService);
 
-  await ScreenUtil.ensureScreenSize();
-
   FlutterNativeSplash.remove();
 
   Request();
+
+  ErrorWidget.builder = (FlutterErrorDetails flutterErrorDetails) {
+    debugPrint(flutterErrorDetails.toString());
+    return Material(
+      child: Center(
+        child: Text(
+          "发生未预见的错误\n请通知开发者"
+          "${flutterErrorDetails.exceptionAsString()}",
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  };
 }
 
 late final EffectCleanup _brightnessThemeListener;

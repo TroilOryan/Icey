@@ -6,7 +6,6 @@ import 'package:IceyPlayer/models/pro/pro.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 
@@ -48,10 +47,10 @@ class PayPage extends StatelessWidget {
     return PageWrapper(
       title: '激活Icey Pro',
       body: Column(
-        spacing: 16.h,
+        spacing: 16,
         children: [
           ListCard(
-            spacing: 8.h,
+            spacing: 8,
             title: '付款码(长按保存到图库)',
             padding: EdgeInsets.zero,
             children: [

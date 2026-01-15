@@ -12,7 +12,6 @@ import 'package:IceyPlayer/pages/home/controller.dart';
 import 'package:IceyPlayer/pages/media_library/media_empty/media_empty.dart';
 import 'package:IceyPlayer/pages/media_library/media_list/media_list.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:IceyPlayer/theme/theme.dart';
 import 'package:keframe/keframe.dart';
 import 'package:pinyin/pinyin.dart';
@@ -30,7 +29,7 @@ import 'state.dart';
 part 'page.dart';
 
 class MediaLibraryController {
-  final indexBarWidth = 16.w;
+  final indexBarWidth = 16.0;
 
   final state = MediaLibraryState();
 
@@ -61,7 +60,7 @@ class MediaLibraryController {
     if (mediaIndex != -1) {
       homeController.observerController.jumpTo(
         index: mediaIndex,
-        offset: (_) => 150.h,
+        offset: (_) => 150,
       );
     }
   }

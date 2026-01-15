@@ -3,7 +3,6 @@ import 'dart:ui';
 
 import 'package:IceyPlayer/components/persistent_header/persistent_header.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:IceyPlayer/components/round_icon_button/round_icon_button.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sliver_tools/sliver_tools.dart';
@@ -39,22 +38,22 @@ class PageWrapper extends StatelessWidget {
                 floating: false,
                 delegate: PersistentHeaderBuilder(
                   min: kToolbarHeight + paddingTop,
-                  max: 150.h,
+                  max: 150,
                   builder: (ctx, offset) => ClipRect(
                     clipBehavior: Clip.antiAlias,
                     child: BackdropFilter(
-                      enabled: offset > 20.h,
+                      enabled: offset > 20,
                       filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
                       child: Container(
-                        padding: EdgeInsets.fromLTRB(0, paddingTop, 6.w, 0),
+                        padding: EdgeInsets.fromLTRB(0, paddingTop, 6, 0),
                         alignment: Alignment.centerLeft,
                         child: Stack(
                           children: [
                             Align(
                               alignment: Alignment.centerLeft,
                               child: Container(
-                                height: 36.sp,
-                                margin: EdgeInsets.fromLTRB(24.w, 4.h, 0, 0),
+                                height: 36,
+                                margin: EdgeInsets.fromLTRB(24, 4, 0, 0),
                                 child: RoundIconButton(
                                   icon: const Icon(Icons.arrow_back),
                                   onTap: context.pop,
@@ -89,8 +88,8 @@ class PageWrapper extends StatelessWidget {
                       padding:
                           padding ??
                           EdgeInsets.symmetric(
-                            horizontal: 16.w,
-                            vertical: 12.h,
+                            horizontal: 16,
+                            vertical: 12,
                           ),
                       sliver: body,
                     )
@@ -98,8 +97,8 @@ class PageWrapper extends StatelessWidget {
                       padding:
                           padding ??
                           EdgeInsets.symmetric(
-                            horizontal: 16.w,
-                            vertical: 12.h,
+                            horizontal: 16,
+                            vertical: 12,
                           ),
                       sliver: SliverToBoxAdapter(child: body),
                     ),

@@ -5,7 +5,6 @@ import 'package:IceyPlayer/models/media/media.dart';
 import 'package:IceyPlayer/models/settings/settings.dart';
 import 'package:IceyPlayer/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:signals/signals_flutter.dart';
 
 /// 圆形、方形、不规则
@@ -22,8 +21,8 @@ class PlayShapedCover extends StatelessWidget {
     final mediaQuery = MediaQuery.of(context);
 
     final size = isLandscape
-        ? mediaQuery.size.height - 48.h
-        : mediaQuery.size.width - 48.w;
+        ? mediaQuery.size.height - 48
+        : mediaQuery.size.width - 48;
 
     final diskShadowColor = theme.colorScheme.secondaryContainer;
 
@@ -31,9 +30,9 @@ class PlayShapedCover extends StatelessWidget {
 
     final scale = max(1 - (offset ?? 0) / mediaQuery.size.width, 0.25);
 
-    final alignmentX = (2 * 16.w / size) - 1;
+    final alignmentX = (2 * 16 / size) - 1;
 
-    // final alignmentY = (2 * (72.h - 24.w - 8.h) / size) - 1;
+    // final alignmentY = (2 * (72.h - 24.w - 8) / size) - 1;
 
     final alignmentY = -0.5;
 
@@ -67,7 +66,7 @@ class PlayShapedCover extends StatelessWidget {
                               ),
                             ],
                             border: Border.all(
-                              width: 1.w,
+                              width: 1,
                               color: diskShadowColor.withAlpha(22),
                             ),
                             shape: BoxShape.circle,
@@ -76,11 +75,11 @@ class PlayShapedCover extends StatelessWidget {
                         ),
                       ),
                       Positioned(
-                        left: 24.sp,
-                        top: 24.sp,
+                        left: 24,
+                        top: 24,
                         child: Container(
-                          width: size - 48.sp,
-                          height: size - 48.sp,
+                          width: size - 48,
+                          height: size - 48,
                           decoration: const BoxDecoration(
                             shape: BoxShape.circle,
                           ),
@@ -127,15 +126,15 @@ class PlayShapedCover extends StatelessWidget {
                 ),
                 child: PlayCover(
                   duration: AppTheme.defaultDurationLong,
-                  width: size - 8.w,
-                  height: size - 8.w,
+                  width: size - 8,
+                  height: size - 8,
                 ),
               );
             } else if (coverShape == CoverShape.irregular) {
               return PlayCover(
                 duration: AppTheme.defaultDurationLong,
-                width: size - 8.w,
-                height: size - 8.w,
+                width: size - 8,
+                height: size - 8,
               );
             }
 
@@ -166,7 +165,7 @@ class PlayShapedCover extends StatelessWidget {
                 height: size,
                 duration: AppTheme.defaultDuration,
                 margin: EdgeInsets.only(
-                  top: mediaQuery.size.width * 0.25 / 2 + 32.h,
+                  top: mediaQuery.size.width * 0.25 / 2 + 32,
                 ),
                 child: child,
               ),

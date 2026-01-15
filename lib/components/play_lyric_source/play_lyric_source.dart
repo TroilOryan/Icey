@@ -1,6 +1,5 @@
 import 'package:IceyPlayer/models/media/media.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../theme/theme.dart';
 
@@ -27,8 +26,8 @@ class PlayLyricSource extends StatelessWidget {
     final appThemeExtension = AppThemeExtension.of(context);
 
     return Container(
-      width: 22.sp,
-      height: 22.sp,
+      width: 22,
+      height: 22,
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         boxShadow: [
@@ -39,7 +38,7 @@ class PlayLyricSource extends StatelessWidget {
           ),
         ],
         color: appThemeExtension.secondaryContainer,
-        borderRadius: BorderRadius.all(Radius.circular(6.r)),
+        borderRadius: const BorderRadius.all(Radius.circular(6)),
       ),
       child: Center(
         child: Text(

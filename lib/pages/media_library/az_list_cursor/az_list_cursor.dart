@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AzListCursorInfoModel {
   final String title;
@@ -21,7 +20,7 @@ class AzListCursor extends StatelessWidget {
     Widget buildTitle() {
       Widget resultWidget = Text(
         title,
-        style: TextStyle(color: Colors.white, fontSize: 32.sp),
+        style: TextStyle(color: Colors.white, fontSize: 32),
       );
 
       resultWidget = ClipRRect(

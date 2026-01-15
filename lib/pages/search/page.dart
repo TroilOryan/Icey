@@ -1,12 +1,9 @@
 import 'package:extended_image/extended_image.dart';
-import 'package:IceyPlayer/components/bottom_sheet/bottom_sheet.dart';
 import 'package:IceyPlayer/components/media_list_tile/media_list_tile.dart';
-import 'package:IceyPlayer/components/media_more_sheet/media_more_sheet.dart';
 import 'package:IceyPlayer/components/page_wrapper/page_wrapper.dart';
 import 'package:IceyPlayer/entities/media.dart';
 import 'package:IceyPlayer/models/media/media.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_sficon/flutter_sficon.dart';
 import 'package:IceyPlayer/pages/home/controller.dart';
 import 'package:pinyin/pinyin.dart';
@@ -57,13 +54,13 @@ class _SearchPageState extends State<SearchPage> {
         children: [
           SliverToBoxAdapter(
             child: Container(
-              margin: EdgeInsets.only(bottom: 16.h),
+              margin: EdgeInsets.only(bottom: 16),
               child: TextField(
                 focusNode: controller.focusNode,
                 onChanged: controller.handleChanged,
                 decoration: InputDecoration(
                   fillColor: theme.cardTheme.color,
-                  prefixIcon: Icon(SFIcons.sf_magnifyingglass, size: 16.sp),
+                  prefixIcon: Icon(SFIcons.sf_magnifyingglass, size: 16),
                   hint: Text(
                     "Search...",
                     style: theme.textTheme.titleSmall?.copyWith(
@@ -80,7 +77,7 @@ class _SearchPageState extends State<SearchPage> {
             child: mediaList.isEmpty
                 ? ExtendedImage.asset("assets/images/empty.png")
                 : Padding(
-                    padding: EdgeInsets.only(bottom: 16.h),
+                    padding: EdgeInsets.only(bottom: 16),
                     child: Text(
                       "共${mediaList.length}个",
                       textAlign: TextAlign.center,
@@ -109,7 +106,7 @@ class _SearchPageState extends State<SearchPage> {
                         controller.handleMediaLongPress(media, context),
                   );
                 },
-                separatorBuilder: (context, index) => SizedBox(height: 16.h),
+                separatorBuilder: (context, index) => SizedBox(height: 16),
                 itemCount: mediaList.length,
               );
             },

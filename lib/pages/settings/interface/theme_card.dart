@@ -1,7 +1,6 @@
 import 'package:IceyPlayer/models/settings/settings.dart';
 import 'package:IceyPlayer/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_sficon/flutter_sficon.dart';
 
 class ThemeCard extends StatelessWidget {
@@ -34,14 +33,14 @@ class ThemeCard extends StatelessWidget {
             onTap: () => onTap(value),
             child: Container(
               width: double.infinity,
-              padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 6.w),
+              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 6),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                spacing: 12.h,
+                spacing: 12,
                 children: [
                   SFIcon(
                     active ? brightnessTheme.activeIcon : brightnessTheme.icon,
-                    fontSize: 18.sp,
+                    fontSize: 18,
                   ),
                   Text(brightnessTheme.name),
                 ],

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_sficon/flutter_sficon.dart';
 
 class FileItem extends StatelessWidget {
@@ -19,14 +18,14 @@ class FileItem extends StatelessWidget {
 
     return ListTile(
         dense: true,
-        contentPadding: EdgeInsets.only(left: 8.sp),
+        contentPadding: EdgeInsets.only(left: 8),
         leading: SFIcon(SFIcons.sf_folder_fill,
             color: isFiltered == true
                 ? theme.textTheme.bodyMedium?.color
                 : theme.colorScheme.primary),
         title: Text(path,
             style: theme.textTheme.titleMedium?.copyWith(
-                fontSize: 12.sp,
+                fontSize: 12,
                 color: isFiltered == true
                     ? theme.textTheme.bodyMedium?.color
                     : theme.textTheme.titleMedium?.color)),
@@ -36,7 +35,7 @@ class FileItem extends StatelessWidget {
               isFiltered == true
                   ? SFIcons.sf_eye_fill
                   : SFIcons.sf_eye_slash_fill,
-              fontSize: 12.sp,
+              fontSize: 12,
             )));
   }
 }

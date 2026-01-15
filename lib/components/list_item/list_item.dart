@@ -2,7 +2,6 @@ import 'package:IceyPlayer/components/icey_switch/icey_switch.dart';
 import 'package:IceyPlayer/models/pro/pro.dart';
 import 'package:IceyPlayer/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_sficon/flutter_sficon.dart';
 import 'package:signals/signals_flutter.dart';
 
@@ -106,14 +105,14 @@ class ListItem extends StatelessWidget {
       child: InkWell(
         onTap: () => handleTap(_disabled),
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Flexible(
                 child: Row(
-                  spacing: 16.w,
+                  spacing: 16,
                   children: [
                     ...titleChildren,
                     Flexible(
@@ -121,7 +120,7 @@ class ListItem extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
-                            spacing: isPro == true ? 16.w : 0,
+                            spacing: isPro == true ? 16 : 0,
                             children: [
                               isPro == true
                                   ? const Icon(
@@ -154,7 +153,7 @@ class ListItem extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(width: 8.w),
+              SizedBox(width: 8),
               ...children,
             ],
           ),

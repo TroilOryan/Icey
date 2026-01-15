@@ -10,8 +10,6 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 
 import 'package:flutter/physics.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:IceyPlayer/theme/theme.dart';
 
 enum PanelState { OPEN, CLOSED }
 

@@ -16,7 +16,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_transitions/go_transitions.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:signals/signals_flutter.dart';
@@ -129,63 +128,38 @@ class _AppState extends State<App> with WidgetsBindingObserver {
         statusBarColor: Colors.transparent,
         systemNavigationBarColor: Colors.transparent,
       ),
-      child: ScreenUtilInit(
-        designSize: const Size(375, 812),
-        builder: (context, child) {
-          return OrientationBuilder(
-            builder: (context, orientation) {
-              SystemChrome.setEnabledSystemUIMode(
-                orientation == Orientation.landscape || immersive
-                    ? SystemUiMode.immersive
-                    : SystemUiMode.edgeToEdge,
-              );
+      child: OrientationBuilder(
+        builder: (context, orientation) {
+          SystemChrome.setEnabledSystemUIMode(
+            orientation == Orientation.landscape || immersive
+                ? SystemUiMode.immersive
+                : SystemUiMode.edgeToEdge,
+          );
 
-              ScreenUtil.init(
-                context,
-                designSize: orientation == Orientation.landscape
-                    ? const Size(812, 375)
-                    : const Size(375, 812),
-              );
-
-              // ErrorWidget.builder = (FlutterErrorDetails flutterErrorDetails) {
-              //   debugPrint(flutterErrorDetails.toString());
-              //   return Material(
-              //     child: Center(
-              //       child: Text(
-              //         "发生未预见的错误\n请通知开发者"
-              //         "${flutterErrorDetails.exceptionAsString()}",
-              //         textAlign: TextAlign.center,
-              //       ),
-              //     ),
-              //   );
-              // };
-
-              return MaterialApp.router(
-                restorationScopeId: 'mainApp',
-                themeMode: BrightnessTheme.toThemeMode(themeMode.value),
-                scrollBehavior: scrollBehavior.value,
-                routerConfig: router,
-                title: 'Icey Player',
-                theme: AppTheme.theme(
-                  isLightCover: !coverColor.isDark,
-                  artCover: artCover,
-                  colorScheme: SeedColorScheme.fromSeeds(
-                    primaryKey: Color(coverColor.primary),
-                    brightness: brightness,
-                    tones: FlexTones.highContrast(brightness),
-                  ),
-                ).useSystemChineseFont(brightness),
-                darkTheme: AppTheme.theme(
-                  isLightCover: !coverColor.isDark,
-                  artCover: artCover,
-                  colorScheme: SeedColorScheme.fromSeeds(
-                    primaryKey: Color(coverColor.primary),
-                    brightness: brightness,
-                    tones: FlexTones.highContrast(brightness),
-                  ),
-                ).useSystemChineseFont(brightness),
-              );
-            },
+          return MaterialApp.router(
+            restorationScopeId: 'mainApp',
+            themeMode: BrightnessTheme.toThemeMode(themeMode.value),
+            scrollBehavior: scrollBehavior.value,
+            routerConfig: router,
+            title: 'Icey Player',
+            theme: AppTheme.theme(
+              isLightCover: !coverColor.isDark,
+              artCover: artCover,
+              colorScheme: SeedColorScheme.fromSeeds(
+                primaryKey: Color(coverColor.primary),
+                brightness: brightness,
+                tones: FlexTones.highContrast(brightness),
+              ),
+            ).useSystemChineseFont(brightness),
+            darkTheme: AppTheme.theme(
+              isLightCover: !coverColor.isDark,
+              artCover: artCover,
+              colorScheme: SeedColorScheme.fromSeeds(
+                primaryKey: Color(coverColor.primary),
+                brightness: brightness,
+                tones: FlexTones.highContrast(brightness),
+              ),
+            ).useSystemChineseFont(brightness),
           );
         },
       ),

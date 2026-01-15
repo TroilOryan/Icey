@@ -2,7 +2,6 @@ import 'package:audio_service/audio_service.dart';
 import 'package:IceyPlayer/components/marquee/marquee.dart';
 import 'package:IceyPlayer/models/media/media.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'play_bar_lyric.dart';
 
@@ -22,7 +21,7 @@ class PlayInfo extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Row(
-      spacing: 16.w,
+      spacing: 16,
       children: [
         StreamBuilder(
           stream: mediaManager.mediaItem,
@@ -31,7 +30,7 @@ class PlayInfo extends StatelessWidget {
 
             return Flexible(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 72.h),
+                padding: EdgeInsets.symmetric(horizontal: 72),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,

@@ -4,7 +4,6 @@ import 'package:IceyPlayer/components/list_item/list_item.dart';
 import 'package:IceyPlayer/components/page_wrapper/page_wrapper.dart';
 import 'package:IceyPlayer/models/pro/pro.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:signals/signals_flutter.dart';
 
@@ -18,7 +17,7 @@ class ProPage extends StatelessWidget {
     return PageWrapper(
       title: 'Icey Pro',
       body: Column(
-        spacing: 16.h,
+        spacing: 16,
         children: [
           const ListCard(
             spacing: 0,

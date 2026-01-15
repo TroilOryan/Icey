@@ -4,7 +4,6 @@
  * @Date: 2023-10-28 11:35:03
  */
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:scrollview_observer/scrollview_observer.dart';
 
 class AzListIndexBar extends StatefulWidget {
@@ -44,7 +43,7 @@ class _AzListIndexBarState extends State<AzListIndexBar> {
         final primary = Theme.of(context).colorScheme.primary;
 
         return ListView.separated(
-          separatorBuilder: (context, index) => SizedBox(height: 6.h),
+          separatorBuilder: (context, index) => SizedBox(height: 6),
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemBuilder: (context, index) {
@@ -53,14 +52,14 @@ class _AzListIndexBarState extends State<AzListIndexBar> {
             Widget resultWidget = Text(
               widget.symbols[index],
               style: bodySmall?.copyWith(
-                fontSize: 8.sp,
+                fontSize: 8,
                 color: isSelected ? Colors.white : null,
               ),
             );
 
             resultWidget = Container(
-              width: 12.sp,
-              height: 12.sp,
+              width: 12,
+              height: 12,
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,

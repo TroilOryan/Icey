@@ -1,9 +1,7 @@
 import 'package:IceyPlayer/components/play_menu_button/play_menu_button.dart';
-import 'package:IceyPlayer/components/round_icon_button/round_icon_button.dart';
 import 'package:IceyPlayer/models/settings/settings.dart';
 import 'package:IceyPlayer/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:signals/signals_flutter.dart';
 
 class ActionBar extends StatelessWidget {
@@ -21,18 +19,18 @@ class ActionBar extends StatelessWidget {
       opacity: immersive ? 0 : 1,
       duration: AppTheme.defaultDuration,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 2.w),
-        margin: EdgeInsets.only(top: 32.h),
+        padding: EdgeInsets.symmetric(horizontal: 2),
+        margin: EdgeInsets.only(top: 32),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             IconButton(
               color: appThemeExtension.primary,
               onPressed: onClosePanel,
-              iconSize: 24.sp,
+              iconSize: 24,
               icon: Icon(Icons.keyboard_arrow_down),
             ),
-            PlayMenuButton(size: 24.sp, color: appThemeExtension.primary),
+            PlayMenuButton(size: 24, color: appThemeExtension.primary),
           ],
         ),
       ),

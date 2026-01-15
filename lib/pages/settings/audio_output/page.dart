@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:IceyPlayer/components/list_card/list_card.dart';
 import 'package:IceyPlayer/components/list_item/list_item.dart';
 import 'package:IceyPlayer/components/page_wrapper/page_wrapper.dart';
@@ -21,7 +20,7 @@ class _AudioOutputPageState extends State<AudioOutputPage> {
     return PageWrapper(
       title: "音频输出",
       body: Column(
-        spacing: 16.h,
+        spacing: 16,
         children: [
           ListCard(
             children: [

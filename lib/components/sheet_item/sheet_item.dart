@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../theme/theme.dart';
@@ -42,7 +41,7 @@ class SheetItem extends StatelessWidget {
         child: InkWell(
           onTap: () => handleTap(context),
           child: Container(
-            padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 12.w),
+            padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
             child: Row(
               children: [
                 Text(

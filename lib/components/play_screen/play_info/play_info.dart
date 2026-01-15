@@ -6,7 +6,6 @@ import 'package:IceyPlayer/models/media/media.dart';
 import 'package:IceyPlayer/models/settings/settings.dart';
 import 'package:IceyPlayer/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:signals_flutter/signals_flutter.dart';
 
 final _likedBox = Boxes.likedBox;
@@ -53,14 +52,14 @@ class PlayInfo extends StatelessWidget {
             duration: AppTheme.defaultDurationMid,
             child: SizedBox(
               width: lyricOpened == true
-                  ? mediaQuery.size.width * 0.8 - 64.w - 16.w
-                  : mediaQuery.size.width - 64.w,
+                  ? mediaQuery.size.width * 0.8 - 64 - 16
+                  : mediaQuery.size.width - 64,
               child: Column(
-                spacing: 6.h,
+                spacing: 6,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
-                    spacing: 8.w,
+                    spacing: 8,
                     children: [
                       Flexible(
                         child: Marquee(
@@ -80,7 +79,7 @@ class PlayInfo extends StatelessWidget {
                               key: ValueKey(mediaItem?.id),
                               id: mediaItem?.id,
                               color: themeExtension.primary,
-                              size: 26.sp,
+                              size: 26,
                               onTap: (liked) =>
                                   handleLike(mediaItem?.id, liked),
                             ),
@@ -106,9 +105,9 @@ class PlayInfo extends StatelessWidget {
     if (lyricOpened != null) {
       return AnimatedPositioned(
         top: lyricOpened!
-            ? mediaQuery.size.width * 0.25 / 2 + 64.h
+            ? mediaQuery.size.width * 0.25 / 2 + 64
             : mediaQuery.size.width * 1.2,
-        left: lyricOpened! ? (48.w + mediaQuery.size.width * 0.2) : 32.w,
+        left: lyricOpened! ? (48 + mediaQuery.size.width * 0.2) : 32,
         curve: Curves.easeInOutSine,
         duration: AppTheme.defaultDurationMid,
         child: AnimatedOpacity(

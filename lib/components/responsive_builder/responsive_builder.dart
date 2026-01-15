@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 enum ScreenType {
   /// height <= 900
@@ -21,9 +20,9 @@ class ResponsiveBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.sizeOf(context);
 
-    if (screenSize.height <= 600.h) {
+    if (screenSize.height <= 600) {
       return builder(context, ScreenType.small);
-    } else if (screenSize.height > 600.h && screenSize.height < 900.h) {
+    } else if (screenSize.height > 600 && screenSize.height < 900) {
       return builder(context, ScreenType.medium);
     } else {
       return builder(context, ScreenType.large);

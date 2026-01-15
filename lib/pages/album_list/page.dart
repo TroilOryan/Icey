@@ -42,7 +42,7 @@ class _AlbumListPageState extends State<AlbumListPage>
 
     final paddingBottom = mediaQuery.padding.bottom != 0
         ? mediaQuery.padding.bottom
-        : 16.h;
+        : 16;
 
     return CustomScrollView(
       controller: homeController.albumListScrollController,
@@ -53,7 +53,7 @@ class _AlbumListPageState extends State<AlbumListPage>
         //   onOpenSortMenu: () => {},
         // ),
         SliverPadding(
-          padding: EdgeInsets.fromLTRB(24.w, 0, 24.w, paddingBottom + 104.h),
+          padding: EdgeInsets.fromLTRB(24, 0, 24, paddingBottom + 104),
           sliver: SliverGrid(
             delegate: SliverChildBuilderDelegate(childCount: albumList.length, (
               context,
@@ -79,7 +79,7 @@ class _AlbumListPageState extends State<AlbumListPage>
                       tag: "albumCover_${album.id}",
                       child: albumCover != null
                           ? Container(
-                              height: 156.h,
+                              height: 156,
                               clipBehavior: Clip.antiAlias,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.all(
@@ -93,7 +93,7 @@ class _AlbumListPageState extends State<AlbumListPage>
                             )
                           : MediaCover(
                               id: album.id.toInt(),
-                              size: 156.h,
+                              size: 156,
                               type: ArtworkType.ALBUM,
                               borderRadius: BorderRadius.all(
                                 AppTheme.borderRadiusSm,
@@ -103,7 +103,7 @@ class _AlbumListPageState extends State<AlbumListPage>
                             ),
                     ),
                   ),
-                  SizedBox(height: 8.h),
+                  SizedBox(height: 8),
                   Hero(
                     tag: "albumTitle_${album.id}",
                     child: Text(
@@ -123,8 +123,8 @@ class _AlbumListPageState extends State<AlbumListPage>
             }),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              mainAxisSpacing: 12.w,
-              crossAxisSpacing: 12.w,
+              mainAxisSpacing: 12,
+              crossAxisSpacing: 12,
               childAspectRatio: 0.72,
             ),
             // gridDelegate: _mySliverGridDelegateWithMaxCrossAxisExtent(),

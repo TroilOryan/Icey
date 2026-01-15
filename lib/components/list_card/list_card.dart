@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:IceyPlayer/components/high_material_wrapper/high_material_wrapper.dart';
 
 import '../../theme/theme.dart';
@@ -29,14 +28,14 @@ class ListCard extends StatelessWidget {
     if (title != null) {
       leading.add(
         Container(
-          margin: EdgeInsets.only(left: 8.w),
+          margin: EdgeInsets.only(left: 8),
           child: Text(title!, style: theme.textTheme.bodyMedium),
         ),
       );
     }
 
     return Column(
-      spacing: 8.h,
+      spacing: 8,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ...leading,
@@ -44,7 +43,7 @@ class ListCard extends StatelessWidget {
             ? HighMaterialWrapper(
           padding:
           padding ??
-              EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+              EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           decoration: (highMaterial) => BoxDecoration(
             borderRadius: BorderRadius.all(AppTheme.borderRadiusMd),
             color: theme.cardTheme.color!.withAlpha(
@@ -54,7 +53,7 @@ class ListCard extends StatelessWidget {
             ),
           ),
           builder: (_) => Column(
-            spacing: spacing ?? 12.h,
+            spacing: spacing ?? 12,
             children: children.isNotEmpty
                 ? children
                 : [Text("暂无内容", style: theme.textTheme.bodyMedium)],
@@ -64,14 +63,14 @@ class ListCard extends StatelessWidget {
           width: double.infinity,
           padding:
           padding ??
-              EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+              EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
             color: Theme.of(context).cardTheme.color,
             borderRadius: BorderRadius.all(AppTheme.borderRadiusMd),
           ),
           child: Column(
-            spacing: spacing ?? 12.h,
+            spacing: spacing ?? 12,
             children: children.isNotEmpty
                 ? children
                 : [Text("暂无内容", style: theme.textTheme.bodyMedium)],

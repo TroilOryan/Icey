@@ -10,7 +10,6 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:IceyPlayer/http/init.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -48,7 +47,7 @@ abstract class UpdateHelper {
           builder: (context) => [
             Text('🎉 发现新版本 ', style: theme.textTheme.titleMedium),
             ListCard(
-              spacing: 16.h,
+              spacing: 16,
               children: [
                 Text('${data['tag_name']}', style: theme.textTheme.titleMedium),
                 Text('${data['body'] ?? "暂无内容"}'),

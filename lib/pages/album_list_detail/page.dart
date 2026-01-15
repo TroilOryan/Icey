@@ -4,7 +4,6 @@ import 'dart:ui' as ui;
 import 'package:audio_query/types/artwork_type.dart';
 import 'package:blur/blur.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_sficon/flutter_sficon.dart';
 import 'package:go_router/go_router.dart';
 import 'package:IceyPlayer/components/label_value/label_value.dart';
@@ -83,12 +82,12 @@ class AlbumListDetailPage extends StatelessWidget {
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  spacing: 16.h,
+                  spacing: 16,
                   children: [
                     Hero(
                       tag: "albumCover_$id",
                       child: Container(
-                        height: 156.h,
+                        height: 156,
                         clipBehavior: Clip.antiAlias,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(
@@ -100,7 +99,7 @@ class AlbumListDetailPage extends StatelessWidget {
                             : MediaCover(
                                 id: id,
                                 type: ArtworkType.ALBUM,
-                                size: 156.h,
+                                size: 156,
                                 borderRadius: BorderRadius.all(
                                   AppTheme.borderRadiusSm,
                                 ),
@@ -117,7 +116,7 @@ class AlbumListDetailPage extends StatelessWidget {
                     ),
 
                     Row(
-                      spacing: 64.w,
+                      spacing: 64,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         LabelValue(
@@ -145,15 +144,15 @@ class AlbumListDetailPage extends StatelessWidget {
                   ],
                 ),
 
-                SizedBox(height: 16.h),
+                SizedBox(height: 16),
 
                 SliverToBoxAdapter(
                   child: Container(
-                    margin: EdgeInsets.only(bottom: 16.h),
+                    margin: EdgeInsets.only(bottom: 16),
                     child: Row(
                       children: [
                         Material(
-                          borderRadius: BorderRadius.all(Radius.circular(6.r)),
+                          borderRadius: BorderRadius.all(Radius.circular(6)),
                           clipBehavior: Clip.antiAlias,
                           type: MaterialType.transparency,
                           child: Ink(
@@ -162,8 +161,8 @@ class AlbumListDetailPage extends StatelessWidget {
                                   controller.handlePlayAll(albumList()),
                               child: Padding(
                                 padding: EdgeInsets.symmetric(
-                                  horizontal: 6.w,
-                                  vertical: 2.h,
+                                  horizontal: 6,
+                                  vertical: 2,
                                 ),
                                 child: RichText(
                                   text: TextSpan(
@@ -174,7 +173,7 @@ class AlbumListDetailPage extends StatelessWidget {
                                         child: SFIcon(
                                           SFIcons.sf_play_circle_fill,
                                           color: theme.colorScheme.primary,
-                                          fontSize: 22.sp,
+                                          fontSize: 22,
                                         ),
                                       ),
                                       WidgetSpan(
@@ -208,7 +207,7 @@ class AlbumListDetailPage extends StatelessWidget {
                 ),
 
                 SuperSliverList.separated(
-                  separatorBuilder: (context, index) => SizedBox(height: 16.h),
+                  separatorBuilder: (context, index) => SizedBox(height: 16),
                   itemCount: albumList().length,
                   itemBuilder: (context, index) {
                     final media = albumList()[index];
@@ -223,7 +222,7 @@ class AlbumListDetailPage extends StatelessWidget {
                   },
                 ),
 
-                SizedBox(height: 16.h),
+                SizedBox(height: 16),
               ],
             ),
           ),

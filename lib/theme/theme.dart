@@ -1,6 +1,5 @@
 import 'package:IceyPlayer/helpers/dominant_color.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_transitions/go_transitions.dart';
 
 class AppTheme {
@@ -18,11 +17,11 @@ class AppTheme {
 
   static const int defaultAlphaLight = 33;
 
-  static Radius borderRadiusSm = Radius.circular(16.r);
+  static Radius borderRadiusSm = Radius.circular(16);
 
-  static Radius borderRadiusMd = Radius.circular(24.r);
+  static Radius borderRadiusMd = Radius.circular(24);
 
-  static Radius borderRadiusLg = Radius.circular(28.r);
+  static Radius borderRadiusLg = Radius.circular(28);
 
   static const Color bgColor = Color(0xfff1f3f5);
 
@@ -33,32 +32,32 @@ class AppTheme {
   static const Color bgColorDarkDisabled = Color(0xff424242);
 
   static TextStyle titleLarge = TextStyle(
-    fontSize: 24.0.sp,
+    fontSize: 24.0,
     fontWeight: FontWeight.bold,
   );
 
   static TextStyle titleMedium = TextStyle(
-    fontSize: 20.0.sp,
+    fontSize: 20.0,
     fontWeight: FontWeight.bold,
   );
 
   static TextStyle titleSmall = TextStyle(
-    fontSize: 16.0.sp,
+    fontSize: 16.0,
     fontWeight: FontWeight.bold,
   );
 
   static TextStyle bodyLarge = TextStyle(
-    fontSize: 14.0.sp,
+    fontSize: 14.0,
     fontWeight: FontWeight.w500,
   );
 
   static TextStyle bodyMedium = TextStyle(
-    fontSize: 12.0.sp,
+    fontSize: 12.0,
     fontWeight: FontWeight.w500,
   );
 
   static TextStyle bodySmall = TextStyle(
-    fontSize: 10.0.sp,
+    fontSize: 10.0,
     fontWeight: FontWeight.w500,
   );
 
@@ -215,37 +214,37 @@ class AppTheme {
             ? const Color(0xff212121)
             : const Color(0xfff2f3f4),
       ),
-      iconTheme: IconThemeData(size: 16.h, color: colorScheme.onSurface),
+      iconTheme: IconThemeData(size: 16, color: colorScheme.onSurface),
       inputDecorationTheme: InputDecorationTheme(
-        constraints: BoxConstraints(maxHeight: 66.h),
+        constraints: BoxConstraints(maxHeight: 66),
         fillColor: (isDark ? const Color(0xff212121) : Colors.white),
         filled: true,
         hintStyle: bodySmall,
-        contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 16.w),
+        contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 16),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.all(borderRadiusLg),
           borderSide: BorderSide(
             color: colorScheme.outline.withAlpha(10),
-            width: 1.sp,
+            width: 1,
           ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(borderRadiusLg),
           borderSide: BorderSide(
             color: colorScheme.outline.withAlpha(10),
-            width: 1.sp,
+            width: 1,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(borderRadiusLg),
           borderSide: BorderSide(
             color: primaryColor.withAlpha(50),
-            width: 1.sp,
+            width: 1,
           ),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(borderRadiusLg),
-          borderSide: BorderSide(width: 1.sp),
+          borderSide: BorderSide(width: 1),
         ),
       ),
       listTileTheme: ListTileThemeData(

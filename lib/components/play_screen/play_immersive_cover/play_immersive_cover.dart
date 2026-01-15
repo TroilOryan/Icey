@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:IceyPlayer/components/play_cover/play_cover.dart';
 import 'package:IceyPlayer/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import "dart:ui" as ui;
 
 /// 沉浸封面
@@ -33,7 +32,7 @@ class PlayImmersiveCover extends StatelessWidget {
         ? const [0, 0, 0.3, 1.0]
         : const [0.0, 0.0, 0.6, 1]);
 
-    final alignmentX = (2 * 32.w / deviceWidth) - 1;
+    final alignmentX = (2 * 32 / deviceWidth) - 1;
 
     final scale = max(1 - (offset ?? 0) / mediaQuery.size.width, 0.2);
 
@@ -64,7 +63,7 @@ class PlayImmersiveCover extends StatelessWidget {
           isLandscape ? Offset(0, rect.width) : Offset(rect.width / 2, 0),
           isLandscape
               ? Offset(rect.width, rect.width)
-              : Offset(rect.width / 2, deviceWidth - 10.h),
+              : Offset(rect.width / 2, deviceWidth - 10),
           [
             Colors.white.withAlpha(0),
             Colors.white,
@@ -87,7 +86,7 @@ class PlayImmersiveCover extends StatelessWidget {
         height: _size,
         margin: EdgeInsets.only(
           top: lyricOpened != null && lyricOpened!
-              ? mediaQuery.size.width * 0.25 / 2 + 14.h
+              ? mediaQuery.size.width * 0.25 / 2 + 14
               : 0,
         ),
         child: Stack(

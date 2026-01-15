@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class RoundIconButton extends StatelessWidget {
   final Color? color;
@@ -24,15 +23,15 @@ class RoundIconButton extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Ink(
-      width: size ?? 36.sp,
-      height: size ?? 36.sp,
+      width: size ?? 36,
+      height: size ?? 36,
       decoration: ShapeDecoration(
         color: theme.secondaryHeaderColor,
         shape: const CircleBorder(),
       ),
       child: IconButton(
         color: color,
-        iconSize: iconSize ?? 16.sp,
+        iconSize: iconSize ?? 16,
         icon: icon,
         onPressed: onTap,
         onLongPress: onLongPress,

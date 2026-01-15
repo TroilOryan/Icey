@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:IceyPlayer/components/list_card/list_card.dart';
 import 'package:IceyPlayer/components/list_item/list_item.dart';
 import 'package:IceyPlayer/models/settings/settings.dart';
@@ -28,7 +27,7 @@ class MediaDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Container(
-        padding: EdgeInsets.fromLTRB(24.w, 32.h, 0, 0),
+        padding: EdgeInsets.fromLTRB(24, 32, 0, 0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [

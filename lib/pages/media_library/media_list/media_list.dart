@@ -3,7 +3,6 @@ import 'package:IceyPlayer/components/media_list_tile/media_list_tile.dart';
 import 'package:IceyPlayer/entities/media.dart';
 import 'package:IceyPlayer/models/media/media.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:super_sliver_list/super_sliver_list.dart';
 
 class MediaList extends StatelessWidget {
@@ -41,7 +40,7 @@ class MediaList extends StatelessWidget {
       showDuration: showDuration,
       isPlaying: isPlaying,
       margin: index == mediaList.length - 1
-          ? EdgeInsets.only(bottom: paddingBottom + 104.h)
+          ? EdgeInsets.only(bottom: paddingBottom + 104)
           : null,
       onTap: () => onTap(item),
       onLongPress: () => onLongPress(item),
@@ -52,9 +51,9 @@ class MediaList extends StatelessWidget {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
 
-    final paddingBottom = mediaQuery.padding.bottom != 0
+    final double paddingBottom = mediaQuery.padding.bottom != 0
         ? mediaQuery.padding.bottom
-        : 16.h;
+        : 16;
 
     return StreamBuilder(
       stream: mediaManager.mediaItem,
@@ -62,12 +61,12 @@ class MediaList extends StatelessWidget {
         final mediaItem = snapshot.data;
 
         return SliverPadding(
-          padding: EdgeInsets.symmetric(horizontal: 24.w),
+          padding: EdgeInsets.symmetric(horizontal: 24),
           sliver: SuperSliverList.separated(
             addAutomaticKeepAlives: false,
             layoutKeptAliveChildren: true,
             itemCount: mediaList.length,
-            separatorBuilder: (context, index) => SizedBox(height: 16.h),
+            separatorBuilder: (context, index) => SizedBox(height: 16),
             itemBuilder: (context, index) =>
                 buildItem(context, index, mediaItem, paddingBottom),
           ),

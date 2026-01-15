@@ -5,9 +5,7 @@ import 'package:IceyPlayer/models/media/media.dart';
 import 'package:IceyPlayer/models/settings/settings.dart';
 import 'package:IceyPlayer/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_sficon/flutter_sficon.dart';
-import 'package:lyric/lyric_ui/ui_netease.dart';
 import 'package:lyric/lyrics_model_builder.dart';
 import 'package:lyric/lyrics_reader_model.dart';
 import 'package:lyric/lyrics_reader_widget.dart';
@@ -67,7 +65,7 @@ class _PlayLyricState extends State<PlayLyric> {
 
     return Container(
       width: MediaQuery.of(context).size.width,
-      padding: EdgeInsets.fromLTRB(12.w, 16.h, 12.w, 0),
+      padding: EdgeInsets.fromLTRB(12, 16, 12, 0),
       decoration: BoxDecoration(
         color: appThemeExtension.primaryContainer.withAlpha(20),
       ),
@@ -161,17 +159,17 @@ class _PlayLyricState extends State<PlayLyric> {
 
             final textStyle = theme.textTheme.titleLarge!.copyWith(
               color: appThemeExtension.secondary,
-              fontSize: isLandscape ? null : 32.sp,
+              fontSize: isLandscape ? null : 32,
             );
 
             final activeTextStyle = theme.textTheme.titleLarge!.copyWith(
               color: appThemeExtension.primary,
-              fontSize: isLandscape ? null : 32.sp,
+              fontSize: isLandscape ? null : 32,
             );
 
             final extTextStyle = theme.textTheme.titleLarge!.copyWith(
               color: appThemeExtension.secondary,
-              fontSize: isLandscape ? null : 20.sp,
+              fontSize: isLandscape ? null : 20,
             );
 
             final ui = CustomUI(

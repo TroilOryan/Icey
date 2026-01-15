@@ -4,7 +4,6 @@ import 'package:IceyPlayer/components/list_item/list_item.dart';
 import 'package:IceyPlayer/components/page_wrapper/page_wrapper.dart';
 import 'package:IceyPlayer/models/settings/settings.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:signals/signals_flutter.dart';
 
@@ -37,7 +36,7 @@ class _AboutPageState extends State<AboutPage> {
     return PageWrapper(
       title: '关于',
       body: Column(
-        spacing: 16.h,
+        spacing: 16,
         children: [
           const ListCard(
             title: "开发团队",

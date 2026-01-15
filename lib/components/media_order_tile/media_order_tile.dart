@@ -10,7 +10,6 @@ import 'package:IceyPlayer/event_bus/event_bus.dart';
 import 'package:IceyPlayer/theme/theme.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:signals/signals_flutter.dart';
 
@@ -131,7 +130,7 @@ class _MediaOrderTileState extends State<MediaOrderTile> {
       onTap: () => handleTap(context),
       onLongPress: widget.onLongPress,
       child: SizedBox(
-        width: 88.h,
+        width: 88,
         child: Stack(
           children: [
             Hero(
@@ -140,7 +139,7 @@ class _MediaOrderTileState extends State<MediaOrderTile> {
                   ? ExtendedImage.memory(
                       _cover,
                       gaplessPlayback: true,
-                      width: 88.h,
+                      width: 88,
                       fit: BoxFit.cover,
                       clipBehavior: Clip.antiAlias,
                       shape: BoxShape.rectangle,
@@ -149,7 +148,7 @@ class _MediaOrderTileState extends State<MediaOrderTile> {
                   : ExtendedImage.asset(
                       'assets/images/no_cover.png',
                       fit: BoxFit.cover,
-                      width: 88.h,
+                      width: 88,
                       gaplessPlayback: true,
                       clipBehavior: Clip.antiAlias,
                       shape: BoxShape.rectangle,
@@ -157,19 +156,19 @@ class _MediaOrderTileState extends State<MediaOrderTile> {
                     ),
             ),
             Positioned(
-              right: 8.w,
-              bottom: 8.h,
+              right: 8,
+              bottom: 8,
               child: HighMaterialWrapper(
                 decoration: (highMaterial) => BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(6.r)),
+                  borderRadius: BorderRadius.all(Radius.circular(6)),
                   color: theme.cardTheme.color!.withAlpha(
                     highMaterial
                         ? AppTheme.defaultAlphaLight
                         : AppTheme.defaultAlpha,
                   ),
                 ),
-                padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
-                borderRadius: BorderRadius.all(Radius.circular(8.r)),
+                padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                borderRadius: BorderRadius.all(Radius.circular(8)),
                 builder: (_) => Text(
                   widget.mediaOrder.name,
                   style: theme.textTheme.bodyLarge!.copyWith(),

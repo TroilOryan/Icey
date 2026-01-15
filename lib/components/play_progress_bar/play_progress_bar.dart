@@ -2,12 +2,11 @@ import 'package:IceyPlayer/components/play_progress_bar/play_progress_bar_painte
 import 'package:IceyPlayer/helpers/common.dart';
 import 'package:IceyPlayer/models/media/media.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:signals/signals_flutter.dart';
 
 import '../../theme/theme.dart';
 
-final _progressBarHeight = 8.h;
+final _progressBarHeight = 8.0;
 
 class PlayProgressBarState {
   final Signal<Duration> duration = signal(Duration.zero);
@@ -204,12 +203,12 @@ class _PlayProgressBarState extends State<PlayProgressBar> {
                 ),
               ),
               Positioned(
-                top: _progressBarHeight + 8.h,
-                left: dragPosition * constrains.maxWidth - 32.w,
+                top: _progressBarHeight + 8,
+                left: dragPosition * constrains.maxWidth - 32,
                 child: Offstage(
                   offstage: !isDragging,
                   child: Container(
-                    padding: EdgeInsets.fromLTRB(8.w, 2.h, 8.w, 2.h),
+                    padding: EdgeInsets.fromLTRB(8, 2, 8, 2),
                     decoration: BoxDecoration(
                       color: progressBarBgColor,
                       borderRadius: const BorderRadius.all(Radius.circular(16)),
@@ -226,7 +225,7 @@ class _PlayProgressBarState extends State<PlayProgressBar> {
                 opacity: isDragging ? 0.5 : 1,
                 duration: AppTheme.defaultDuration,
                 child: Padding(
-                  padding: EdgeInsets.only(top: _progressBarHeight + 10.h),
+                  padding: EdgeInsets.only(top: _progressBarHeight + 10),
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
@@ -235,10 +234,10 @@ class _PlayProgressBarState extends State<PlayProgressBar> {
                         child: Center(
                           child: ClipRRect(
                             borderRadius: BorderRadius.all(
-                              Radius.circular(4.r),
+                              Radius.circular(4),
                             ),
                             child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 6.w),
+                              padding: EdgeInsets.symmetric(horizontal: 6),
                               decoration: BoxDecoration(
                                 color: progressBarBgColor,
                               ),
@@ -246,7 +245,7 @@ class _PlayProgressBarState extends State<PlayProgressBar> {
                                 widget.quality ?? "",
                                 style: Theme.of(context).textTheme.bodyMedium
                                     ?.copyWith(
-                                      fontSize: 10.sp,
+                                      fontSize: 10,
                                       color: progressBarColor,
                                     ),
                               ),

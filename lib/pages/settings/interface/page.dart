@@ -6,7 +6,6 @@ import 'package:IceyPlayer/components/page_wrapper/page_wrapper.dart';
 import 'package:IceyPlayer/models/settings/settings.dart';
 import 'package:IceyPlayer/pages/settings/interface/theme_card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:signals_flutter/signals_flutter.dart';
@@ -41,17 +40,17 @@ class InterfacePage extends StatelessWidget {
     return PageWrapper(
       title: '用户界面',
       body: Column(
-        spacing: 16.h,
+        spacing: 16,
         children: [
           ListCard(
             spacing: 0,
             title: '用户界面',
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             children: [
               Container(
-                margin: EdgeInsets.only(bottom: 16.h),
+                margin: EdgeInsets.only(bottom: 16),
                 child: Row(
-                  spacing: 12.w,
+                  spacing: 12,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: BrightnessTheme.values
                       .map(
@@ -81,8 +80,8 @@ class InterfacePage extends StatelessWidget {
                     ? Image.memory(
                         listBg,
                         gaplessPlayback: true,
-                        width: 50.sp,
-                        height: 50.sp,
+                        width: 50,
+                        height: 50,
                         fit: BoxFit.cover,
                       )
                     : null,

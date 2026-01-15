@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app_minimizer_plus/flutter_app_minimizer_plus.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:IceyPlayer/components/bottom_sheet/bottom_sheet.dart';
 import 'package:IceyPlayer/components/button/button.dart';
 import 'package:IceyPlayer/components/media_list_tile/media_list_tile.dart';
@@ -48,8 +47,6 @@ part 'page.dart';
 
 class HomeController {
   final state = HomeState();
-
-  final indexBarWidth = 16.w;
 
   bool panelIsUp = false;
 
@@ -102,7 +99,7 @@ class HomeController {
     if (index != -1) {
       homeController.observerController.jumpTo(
         index: index,
-        offset: (_) => 150.h,
+        offset: (_) => 150,
       );
     }
   }
@@ -156,13 +153,13 @@ class HomeController {
         return Column(
           children: [
             Text("媒体排序", style: Theme.of(context).textTheme.titleMedium),
-            SizedBox(height: 16.h),
+            SizedBox(height: 16),
             Flexible(
               child: GridView.count(
                 crossAxisCount: 2,
                 childAspectRatio: 2.5,
-                crossAxisSpacing: 16.h,
-                mainAxisSpacing: 16.w,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
                 children: MediaSort.values.map((item) {
                   final active = sortType.value == item.value;
 
@@ -266,7 +263,7 @@ class HomeController {
                 Text(
                   'Start: ${DateUtil.formatDate(start, format: DateFormats.full)}',
                 ),
-                SizedBox(height: 16.h),
+                SizedBox(height: 16),
                 Flexible(
                   child: StreamBuilder(
                     stream: streamController?.stream,
@@ -287,7 +284,7 @@ class HomeController {
                               ),
                             ),
                           ),
-                          SizedBox(height: 16.h),
+                          SizedBox(height: 16),
                           Text(
                             scanEnded
                                 ? "End: ${DateUtil.formatDate(scanEndTime, format: DateFormats.full)} 共${queriedSongs?.length ?? 0}首媒体"
@@ -298,7 +295,7 @@ class HomeController {
                     },
                   ),
                 ),
-                SizedBox(height: 16.h),
+                SizedBox(height: 16),
                 Button(
                   block: true,
                   disabled: !scanEnded,
@@ -355,9 +352,11 @@ class HomeController {
 
       state.scanEnded.value = true;
 
-      mediaScanListController!.jumpTo(
-        mediaScanListController!.position.maxScrollExtent,
-      );
+      if (mediaScanListController?.position != null) {
+        mediaScanListController!.jumpTo(
+          mediaScanListController!.position.maxScrollExtent,
+        );
+      }
     }
   }
 

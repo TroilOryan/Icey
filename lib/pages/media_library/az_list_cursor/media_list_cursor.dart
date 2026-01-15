@@ -1,6 +1,5 @@
 import 'package:IceyPlayer/pages/media_library/az_list_cursor/az_list_cursor.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:keframe/keframe.dart';
 
 class MediaListCursor extends StatelessWidget {
@@ -25,11 +24,11 @@ class MediaListCursor extends StatelessWidget {
       builder: (context) {
         Widget resultWidget = Container();
 
-        double top = 0, right = indexBarWidth + 16.w;
+        double top = 0, right = indexBarWidth + 16;
 
-        double titleSize = 80.h;
+        double titleSize = 80;
 
-        top = cursorInfo!.offset.dy + 190.h - titleSize * 0.5;
+        top = cursorInfo!.offset.dy + 190 - titleSize * 0.5;
 
         resultWidget = AzListCursor(size: titleSize, title: cursorInfo!.title);
 

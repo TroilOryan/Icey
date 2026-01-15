@@ -5,7 +5,6 @@ import 'package:IceyPlayer/components/play_screen/portrait/lyric_page.dart';
 import 'package:IceyPlayer/components/play_screen/portrait/play_page.dart';
 import 'package:IceyPlayer/models/settings/settings.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:signals/signals_flutter.dart';
 
 import '../play_info/play_info.dart';
@@ -61,7 +60,7 @@ class Portrait extends StatelessWidget {
     return RepaintBoundary(
       child: Padding(
         padding: EdgeInsets.only(
-          bottom: paddingBottom == 0 ? 16.h : paddingBottom,
+          bottom: paddingBottom == 0 ? 16 : paddingBottom,
         ),
         child: Stack(
           children: [

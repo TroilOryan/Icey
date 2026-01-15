@@ -15,10 +15,8 @@ import 'package:IceyPlayer/theme/theme.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_sficon/flutter_sficon.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:signals/signals_flutter.dart';
 import 'package:uuid/uuid.dart';
 
@@ -103,8 +101,8 @@ class _MediaOrderCreateState extends State<MediaOrderCreate> {
                           }
                         },
                         child: SizedBox(
-                          width: 88.h,
-                          height: 88.h,
+                          width: 88,
+                          height: 88,
                           child: _customizeCoverData != null
                               ? ExtendedImage.memory(
                                   _customizeCoverData,
@@ -112,7 +110,7 @@ class _MediaOrderCreateState extends State<MediaOrderCreate> {
                                 )
                               : Center(
                                   child: Column(
-                                    spacing: 8.h,
+                                    spacing: 8,
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Icon(SFIcons.sf_plus),
@@ -180,8 +178,8 @@ class _MediaOrderCreateState extends State<MediaOrderCreate> {
           child: InkWell(
             onTap: () => handleOpenCreateMediaOrder(context),
             child: SizedBox(
-              width: 88.h,
-              height: 88.h,
+              width: 88,
+              height: 88,
               child: const Center(child: Icon(SFIcons.sf_plus)),
             ),
           ),

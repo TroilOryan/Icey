@@ -9,7 +9,6 @@ import 'package:IceyPlayer/components/play_screen/play_screen.dart';
 import 'package:IceyPlayer/components/sliding_up_panel/sliding_up_panel.dart';
 import 'package:IceyPlayer/models/media/media.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:keframe/keframe.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import '../../theme/theme.dart';
@@ -62,8 +61,8 @@ class PlayBar extends StatelessWidget {
       onHorizontalDragUpdate: playBarController.handleHorizontalDragUpdate,
       onHorizontalDragEnd: playBarController.handleHorizontalDragEnd,
       child: Container(
-        height: 88.h,
-        padding: EdgeInsets.symmetric(horizontal: 16.h, vertical: 16.h),
+        height: 88,
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         decoration: BoxDecoration(color: Colors.black.withAlpha(188)),
         child: Stack(
           children: [
@@ -93,7 +92,7 @@ class PlayBar extends StatelessWidget {
                           alignment: Alignment.center,
                           children: [
                             Positioned(
-                              right: constraints.maxWidth - 16.h - 35.2.h,
+                              right: constraints.maxWidth - 16 - 35.2,
                               child: VisibilityDetector(
                                 key: Key("prev"),
                                 onVisibilityChanged:
@@ -147,7 +146,7 @@ class PlayBar extends StatelessWidget {
                               panelOpened: panelOpened,
                             ),
                             Positioned(
-                              left: constraints.maxWidth - 16.h - 35.2.h,
+                              left: constraints.maxWidth - 16 - 35.2,
                               child: VisibilityDetector(
                                 key: Key("next"),
                                 onVisibilityChanged:
@@ -200,8 +199,8 @@ class PlayBar extends StatelessWidget {
                 borderRadius: BorderRadius.all(AppTheme.borderRadiusSm),
               ),
               child: PlayCover(
-                width: 56.h,
-                height: 56.h,
+                width: 56,
+                height: 56,
                 borderRadius: BorderRadius.all(AppTheme.borderRadiusSm),
                 transitionBuilder:
                     (Widget child, Animation<double> animation) =>
@@ -217,7 +216,7 @@ class PlayBar extends StatelessWidget {
             ),
             Align(
               alignment: Alignment.centerRight,
-              child: PlayProgressButton(size: 16.h, color: Colors.white),
+              child: PlayProgressButton(size: 16, color: Colors.white),
             ),
           ],
         ),
@@ -233,7 +232,7 @@ class PlayBar extends StatelessWidget {
           isDraggable: isDraggable,
           controller: controller,
           minHeight: !isDraggable || hidePlayBar
-              ? 0 : max(94.h + paddingBottom, 104.h),
+              ? 0 : max(94 + paddingBottom, 104),
           maxHeight: deviceHeight,
           onPanelOpened: onPanelOpened,
           onPanelClosed: onPanelClosed,
@@ -248,10 +247,10 @@ class PlayBar extends StatelessWidget {
           collapsed: FrameSeparateWidget(
             child: Container(
               margin: EdgeInsets.fromLTRB(
-                16.h,
+                16,
                 0,
-                16.h,
-                paddingBottom == 0 ? 16.h : paddingBottom,
+                16,
+                paddingBottom == 0 ? 16 : paddingBottom,
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.all(AppTheme.borderRadiusMd),

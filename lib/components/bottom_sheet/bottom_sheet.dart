@@ -1,7 +1,6 @@
 import 'package:bottom_sheet/bottom_sheet.dart';
 import 'package:IceyPlayer/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 scrollableBottomSheet({
   required BuildContext context,
@@ -29,9 +28,9 @@ scrollableBottomSheet({
                 MediaQuery.of(context).padding.bottom,
           ),
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
             child: Column(
-              spacing: 16.h,
+              spacing: 16,
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: builder(context),
@@ -64,7 +63,7 @@ bottomSheet({
     bottomSheetBorderRadius: BorderRadius.all(AppTheme.borderRadiusLg),
     context: context,
     builder: (context, controller, _) => Padding(
-      padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       child: Builder(builder: (context) => builder(context, controller)),
     ),
   );

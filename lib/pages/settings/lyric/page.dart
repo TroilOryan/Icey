@@ -3,7 +3,6 @@ import 'package:IceyPlayer/components/list_item/list_item.dart';
 import 'package:IceyPlayer/components/page_wrapper/page_wrapper.dart';
 import 'package:IceyPlayer/models/settings/settings.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:signals_flutter/signals_flutter.dart';
 
 class LyricPage extends StatelessWidget {
@@ -17,7 +16,7 @@ class LyricPage extends StatelessWidget {
     return PageWrapper(
       title: '歌词',
       body: Column(
-        spacing: 16.h,
+        spacing: 16,
         children: [
           ListCard(
             spacing: 0,

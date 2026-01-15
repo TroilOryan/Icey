@@ -3,7 +3,6 @@ import "dart:ui";
 import "package:IceyPlayer/components/high_material_wrapper/high_material_wrapper.dart";
 import "package:IceyPlayer/helpers/common.dart";
 import "package:IceyPlayer/models/media/media.dart";
-import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:flutter_sficon/flutter_sficon.dart";
 import "package:IceyPlayer/components/media_cover/media_cover.dart";
 import "package:IceyPlayer/components/media_quality/media_quality.dart";
@@ -27,25 +26,25 @@ class MediaListTile extends StatelessWidget {
   final bool isPlaying;
 
   const MediaListTile(
-      this.media, {
-        super.key,
-        this.obscure = true,
-        this.forceObscure=false,
-        this.onTap,
-        this.onLongPress,
-        this.showAddIcon = true,
-        this.showDuration = false,
-        this.showCover = true,
-        this.showDefault = false,
-        this.margin,
-        this.ghost = false,
-        this.isPlaying = false,
-      });
+    this.media, {
+    super.key,
+    this.obscure = true,
+    this.forceObscure = false,
+    this.onTap,
+    this.onLongPress,
+    this.showAddIcon = true,
+    this.showDuration = false,
+    this.showCover = true,
+    this.showDefault = false,
+    this.margin,
+    this.ghost = false,
+    this.isPlaying = false,
+  });
 
   void handleAddToQueue() {
     final currentIndex = mediaManager.queue.value.indexWhere(
-          (item) =>
-      item.id == mediaManager.mediaItem.value?.id &&
+      (item) =>
+          item.id == mediaManager.mediaItem.value?.id &&
           item.extras?['uuid'] == mediaManager.mediaItem.value?.extras?['uuid'],
     );
 
@@ -66,8 +65,10 @@ class MediaListTile extends StatelessWidget {
         color: ghost == true
             ? theme.colorScheme.secondaryContainer
             : theme.cardTheme.color?.withAlpha(
-       (forceObscure || (highMaterial && obscure)) ? AppTheme.defaultAlphaLight : 255,
-        ),
+                (forceObscure || (highMaterial && obscure))
+                    ? AppTheme.defaultAlphaLight
+                    : 255,
+              ),
         borderRadius: BorderRadius.all(AppTheme.borderRadiusSm),
       ),
       builder: (highMaterial) => Material(
@@ -78,7 +79,7 @@ class MediaListTile extends StatelessWidget {
           onTap: onTap,
           onLongPress: onLongPress,
           child: Container(
-            padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 12.w),
+            padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -87,14 +88,14 @@ class MediaListTile extends StatelessWidget {
                   child: MediaCover(
                     showDefault: showDefault,
                     id: media.id,
-                    size: 56.h,
+                    size: 56,
                     borderRadius: BorderRadius.all(AppTheme.borderRadiusSm),
                   ),
                 ),
-                SizedBox(width: 12.w),
+                SizedBox(width: 12),
                 Flexible(
                   child: Column(
-                    spacing: 3.h,
+                    spacing: 3,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -108,13 +109,13 @@ class MediaListTile extends StatelessWidget {
                               media.title,
                               style: theme.listTileTheme.titleTextStyle
                                   ?.copyWith(
-                                color: isPlaying
-                                    ? theme.colorScheme.primary
-                                    : null,
-                              ),
+                                    color: isPlaying
+                                        ? theme.colorScheme.primary
+                                        : null,
+                                  ),
                             ),
                           ),
-                          SizedBox(width: 10.w),
+                          SizedBox(width: 10),
                         ],
                       ),
 
@@ -131,7 +132,7 @@ class MediaListTile extends StatelessWidget {
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,
                                     style:
-                                    theme.listTileTheme.subtitleTextStyle,
+                                        theme.listTileTheme.subtitleTextStyle,
                                   ),
                                 ),
                               ],
@@ -140,7 +141,7 @@ class MediaListTile extends StatelessWidget {
                           Offstage(
                             offstage: !showDuration,
                             child: Container(
-                              margin: EdgeInsets.only(left: 6.w),
+                              margin: EdgeInsets.only(left: 6),
                               child: Row(
                                 children: [
                                   CommonHelper.buildDuration(
@@ -155,28 +156,28 @@ class MediaListTile extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(width: 12.w),
+                SizedBox(width: 12),
                 Offstage(
                   offstage: onLongPress == null,
                   child: Row(
                     children: [
                       showAddIcon
                           ? InkWell(
-                        onTap: handleAddToQueue,
-                        child: SFIcon(
-                          SFIcons.sf_plus_circle_fill,
-                          color: theme.textTheme.bodySmall?.color,
-                          fontSize: 16.sp,
-                        ),
-                      )
+                              onTap: handleAddToQueue,
+                              child: SFIcon(
+                                SFIcons.sf_plus_circle_fill,
+                                color: theme.textTheme.bodySmall?.color,
+                                fontSize: 16,
+                              ),
+                            )
                           : const SizedBox(),
-                      SizedBox(width: 6.w),
+                      SizedBox(width: 6),
                       InkWell(
                         onTap: onLongPress,
                         child: Icon(
                           Icons.more_vert,
                           color: theme.textTheme.bodySmall?.color,
-                          size: 16.sp,
+                          size: 16,
                         ),
                       ),
                     ],

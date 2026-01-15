@@ -51,7 +51,7 @@ class MediaOrderDetailController {
       minHeight: 0.4,
       context: context,
       builder: (context, _) => Column(
-        spacing: 16.h,
+        spacing: 16,
         children: [
           MediaListTile(media, obscure: false),
           MediaMoreSheet.addToNextPlay(media),
@@ -127,8 +127,8 @@ class MediaOrderDetailController {
                           }
                         },
                         child: SizedBox(
-                          width: 88.h,
-                          height: 88.h,
+                          width: 88,
+                          height: 88,
                           child: _customizeCoverData != null
                               ? ExtendedImage.memory(
                                   _customizeCoverData,
@@ -136,7 +136,7 @@ class MediaOrderDetailController {
                                 )
                               : Center(
                                   child: Column(
-                                    spacing: 8.h,
+                                    spacing: 8,
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Icon(SFIcons.sf_plus),

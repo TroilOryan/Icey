@@ -8,7 +8,6 @@ import 'package:IceyPlayer/entities/media.dart';
 import 'package:IceyPlayer/helpers/media_scanner/media_scanner.dart';
 import 'package:IceyPlayer/models/media/media.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:signals/signals_flutter.dart';
 
 import 'file_item.dart';
@@ -17,8 +16,6 @@ import "package:path/path.dart" as path;
 part 'controller.dart';
 
 part 'state.dart';
-
-
 
 class MediaStorePage extends StatelessWidget {
   const MediaStorePage({super.key});
@@ -32,7 +29,7 @@ class MediaStorePage extends StatelessWidget {
     return PageWrapper(
       title: '媒体库',
       body: Column(
-        spacing: 16.h,
+        spacing: 16,
         children: [
           ListCard(
             padding: EdgeInsets.zero,

@@ -2,9 +2,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:IceyPlayer/components/play_button/play_button.dart';
 import 'package:IceyPlayer/models/media/media.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../services/media_state.dart';
 import 'play_progress_circle.dart';
 
 class PlayProgressButton extends StatelessWidget {

@@ -1,7 +1,6 @@
 import 'package:animated_gradient_background/animated_gradient_background.dart';
 import 'package:IceyPlayer/components/button/button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:IceyPlayer/components/media_default_cover/media_default_cover.dart';
 
 class MediaEmpty extends StatelessWidget {
@@ -17,7 +16,7 @@ class MediaEmpty extends StatelessWidget {
 
     final titleStyle = Theme.of(
       context,
-    ).textTheme.titleLarge!.copyWith(fontSize: 48.sp);
+    ).textTheme.titleLarge!.copyWith(fontSize: 48);
 
     final bodyStyle = Theme.of(context).textTheme.bodyLarge;
 
@@ -33,7 +32,7 @@ class MediaEmpty extends StatelessWidget {
         children: [
           Positioned(
             right: -size / 2,
-            top: paddingTop + 24.h,
+            top: paddingTop + 24,
             child: MediaDefaultCover(
               size: Size(size, size),
               isDarkMode: true,
@@ -41,8 +40,8 @@ class MediaEmpty extends StatelessWidget {
             ),
           ),
           Positioned(
-            left: 48.w,
-            bottom: paddingBottom + 120.h,
+            left: 48,
+            bottom: paddingBottom + 120,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -53,10 +52,10 @@ class MediaEmpty extends StatelessWidget {
             ),
           ),
           Positioned(
-            right: 48.w,
-            bottom: paddingBottom + 24.h,
+            right: 48,
+            bottom: paddingBottom + 24,
             child: Row(
-              spacing: 16.w,
+              spacing: 16,
               children: [
                 Text("添加音乐以开始", style: bodyStyle),
                 Button(onPressed: onScan, child: Text("扫描")),

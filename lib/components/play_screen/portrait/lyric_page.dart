@@ -3,13 +3,10 @@ import 'dart:async';
 import 'package:IceyPlayer/components/next_button/next_button.dart';
 import 'package:IceyPlayer/components/play_button/play_button.dart';
 import 'package:IceyPlayer/components/play_lyric/play_lyric.dart';
-import 'package:IceyPlayer/components/play_lyric_source/play_lyric_source.dart';
-import 'package:IceyPlayer/components/play_progress_button/play_progress_button.dart';
 import 'package:IceyPlayer/components/prev_button/prev_button.dart';
 import 'package:IceyPlayer/models/media/media.dart';
 import 'package:IceyPlayer/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:signals/signals_flutter.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -109,10 +106,10 @@ class _LyricPageState extends State<LyricPage> {
               duration: AppTheme.defaultDurationMid,
               child: Container(
                 padding: EdgeInsets.fromLTRB(
-                  22.w,
-                  paddingTop + deviceWidth * 0.2 + 88.h,
-                  22.w,
-                  paddingBottom + 16.h,
+                  22,
+                  paddingTop + deviceWidth * 0.2 + 88,
+                  22,
+                  paddingBottom + 16,
                 ),
                 child: Column(
                   children: [
@@ -125,20 +122,20 @@ class _LyricPageState extends State<LyricPage> {
                           opacity: _visible ? 1 : 0,
                           duration: AppTheme.defaultDurationMid,
                           child: Row(
-                            spacing: 32.w,
+                            spacing: 32,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               // PlayLyricSource(),
                               PrevButton(
-                                size: 24.sp,
+                                size: 24,
                                 color: appThemeExtension.primary,
                               ),
                               PlayButton(
                                 color: appThemeExtension.primary,
-                                size: 40.sp,
+                                size: 40,
                               ),
                               NextButton(
-                                size: 24.sp,
+                                size: 24,
                                 color: appThemeExtension.primary,
                               ),
                             ],
