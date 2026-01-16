@@ -12,7 +12,6 @@ import 'package:IceyPlayer/pages/settings/about/logs/info_card/info_card.dart';
 import 'package:IceyPlayer/pages/settings/about/logs/state.dart';
 import 'package:catcher_2/model/platform_type.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:signals/signals_flutter.dart';
 
@@ -56,15 +55,15 @@ class _LogsPageState extends State<LogsPage> {
     return PageWrapper(
       title: "错误日志",
       body: Column(
-        spacing: 16.h,
+        spacing: 16,
         children: [
           ListCard(
             spacing: 0,
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             children: [
               if (latestLog != null)
                 Row(
-                  spacing: 12.w,
+                  spacing: 12,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     InfoCard(

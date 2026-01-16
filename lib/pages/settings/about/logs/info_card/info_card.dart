@@ -1,7 +1,5 @@
 import 'package:IceyPlayer/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_sficon/flutter_sficon.dart';
 
 class InfoCard extends StatelessWidget {
   final IconData icon;
@@ -29,12 +27,12 @@ class InfoCard extends StatelessWidget {
             onTap: () => onTap(),
             child: Container(
               width: double.infinity,
-              padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 6.w),
+              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 6),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                spacing: 12.h,
+                spacing: 12,
                 children: [
-                  Icon(icon, size: 18.sp),
+                  Icon(icon, size: 18),
                   Text(label, style: theme.textTheme.bodyMedium),
                 ],
               ),
