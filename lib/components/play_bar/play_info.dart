@@ -39,9 +39,7 @@ class PlayInfo extends StatelessWidget {
                       disableAnimation: panelOpened,
                       child: Text(
                         mediaItem?.title ?? "暂无歌曲",
-                        style: theme.textTheme.titleSmall?.copyWith(
-                          color: Colors.white,
-                        ),
+                        style: theme.textTheme.titleSmall,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                         softWrap: true,

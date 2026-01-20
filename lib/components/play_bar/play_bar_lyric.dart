@@ -43,7 +43,6 @@ class PlayBarLyric extends StatelessWidget {
                   ? parsedLyric[currentLyricIndex].mainText ?? ""
                   : "暂无歌词",
               style: theme.textTheme.bodyMedium?.copyWith(
-                color: Colors.white.withAlpha(AppTheme.defaultAlpha),
                 leadingDistribution: TextLeadingDistribution.even,
                 decoration: TextDecoration.none,
               ),

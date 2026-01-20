@@ -120,20 +120,37 @@ class _MediaLibraryPageState extends State<MediaLibraryPage>
               offstage: mediaList.isEmpty,
               child: HighMaterialWrapper(
                 borderRadius: const BorderRadius.all(Radius.circular(100)),
-                builder: (highMaterial) => FloatingActionButton(
-                  backgroundColor: theme.cardTheme.color!.withAlpha(
-                    highMaterial ? AppTheme.defaultAlphaLight : 255,
-                  ),
-                  elevation: 16,
-                  shape: const CircleBorder(),
-                  onPressed: homeController.handleLocate,
-                  child: SFIcon(
-                    SFIcons.sf_dot_radiowaves_left_and_right,
-                    color: theme.colorScheme.onSurface.withAlpha(
-                      AppTheme.defaultAlpha,
-                    ),
-                  ),
-                ),
+                builder: (highMaterial) => highMaterial
+                    ? GlassPanel(
+                        shape: LiquidOval(),
+                        padding: EdgeInsets.zero,
+                        child: FloatingActionButton(
+                          backgroundColor: Colors.transparent,
+                          elevation: 16,
+                          shape: const CircleBorder(),
+                          onPressed: homeController.handleLocate,
+                          child: SFIcon(
+                            SFIcons.sf_dot_radiowaves_left_and_right,
+                            color: theme.colorScheme.onSurface.withAlpha(
+                              AppTheme.defaultAlpha,
+                            ),
+                          ),
+                        ),
+                      )
+                    : FloatingActionButton(
+                        backgroundColor: theme.cardTheme.color!.withAlpha(
+                          highMaterial ? AppTheme.defaultAlphaLight : 255,
+                        ),
+                        elevation: 16,
+                        shape: const CircleBorder(),
+                        onPressed: homeController.handleLocate,
+                        child: SFIcon(
+                          SFIcons.sf_dot_radiowaves_left_and_right,
+                          color: theme.colorScheme.onSurface.withAlpha(
+                            AppTheme.defaultAlpha,
+                          ),
+                        ),
+                      ),
               ),
             ),
           ),

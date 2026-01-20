@@ -1,4 +1,6 @@
+import 'package:IceyPlayer/constants/glass_settings.dart';
 import 'package:flutter/material.dart';
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 
 class HeaderTabBarItem extends StatelessWidget {
   final String label;
@@ -20,9 +22,9 @@ class HeaderTabBarItem extends StatelessWidget {
       alignment: Alignment.center,
       child: Text(
         label,
-        style: theme.textTheme.bodyMedium!.copyWith(
-          color: active ? theme.colorScheme.onSurface : null,
-        ),
+        // style: theme.textTheme.bodyMedium!.copyWith(
+        //   color: active ? theme.colorScheme.onSurface : null,
+        // ),
       ),
     );
 
@@ -60,6 +62,8 @@ class HeaderTabBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
+    final TabController tabController = DefaultTabController.of(context);
+
     return Offstage(
       offstage: offstage,
       child: Padding(
@@ -79,6 +83,31 @@ class HeaderTabBar extends StatelessWidget {
                 ),
               );
             }
+
+            // return AnimatedBuilder(
+            //   animation: tabController,
+            //   builder: (context, child) {
+            //     return GlassPanel(
+            //       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            //       child: GlassTabBar(
+            //         backgroundColor: Colors.white.withAlpha(0),
+            //         indicatorColor: theme.colorScheme.onSurface.withAlpha(11),
+            //         settings: RecommendedGlassSettings.surface,
+            //         selectedLabelStyle: theme.textTheme.titleSmall!.copyWith(
+            //           color: theme.colorScheme.primary,
+            //         ),
+            //         unselectedLabelStyle: theme.textTheme.titleSmall,
+            //         tabs: [
+            //           GlassTab(label: '媒体库'),
+            //           GlassTab(label: '专辑'),
+            //           GlassTab(label: '艺术家'),
+            //         ],
+            //         selectedIndex: tabController.index,
+            //         onTabSelected: onTap,
+            //       ),
+            //     );
+            //   },
+            // );
 
             return TabBar(
               onTap: onTap,

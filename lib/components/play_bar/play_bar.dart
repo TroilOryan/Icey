@@ -1,3 +1,5 @@
+import 'package:IceyPlayer/constants/glass_settings.dart';
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 import 'package:signals/signals_flutter.dart';
 import 'dart:math';
 import 'dart:ui';
@@ -63,7 +65,6 @@ class PlayBar extends StatelessWidget {
       child: Container(
         height: 88,
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        decoration: BoxDecoration(color: Colors.black.withAlpha(188)),
         child: Stack(
           children: [
             StreamBuilder(
@@ -77,7 +78,7 @@ class PlayBar extends StatelessWidget {
                     final mediaItem = snapshot.data;
 
                     final index = mediaItem != null
-                        ? queue.indexOf(mediaItem!)
+                        ? queue.indexOf(mediaItem)
                         : -1;
 
                     final prevIndex = index == 0 ? queue.length - 1 : index - 1;
@@ -96,7 +97,7 @@ class PlayBar extends StatelessWidget {
                               child: VisibilityDetector(
                                 key: Key("prev"),
                                 onVisibilityChanged:
-                                playBarController.handleVisibilityChanged,
+                                    playBarController.handleVisibilityChanged,
                                 child: Offstage(
                                   offstage: isNext != -1 || queue.isEmpty,
                                   child: SizedBox(
@@ -104,9 +105,9 @@ class PlayBar extends StatelessWidget {
                                       width: constraints.maxWidth / 3,
                                       child: Column(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.end,
+                                            CrossAxisAlignment.end,
                                         mainAxisAlignment:
-                                        MainAxisAlignment.center,
+                                            MainAxisAlignment.center,
                                         children: [
                                           Text(
                                             queue.isNotEmpty
@@ -124,15 +125,15 @@ class PlayBar extends StatelessWidget {
                                             textAlign: TextAlign.right,
                                             style: theme.textTheme.bodyMedium
                                                 ?.copyWith(
-                                              color: Colors.white.withAlpha(
-                                                AppTheme.defaultAlpha,
-                                              ),
-                                              leadingDistribution:
-                                              TextLeadingDistribution
-                                                  .even,
-                                              decoration:
-                                              TextDecoration.none,
-                                            ),
+                                                  color: Colors.white.withAlpha(
+                                                    AppTheme.defaultAlpha,
+                                                  ),
+                                                  leadingDistribution:
+                                                      TextLeadingDistribution
+                                                          .even,
+                                                  decoration:
+                                                      TextDecoration.none,
+                                                ),
                                           ),
                                         ],
                                       ),
@@ -150,12 +151,12 @@ class PlayBar extends StatelessWidget {
                               child: VisibilityDetector(
                                 key: Key("next"),
                                 onVisibilityChanged:
-                                playBarController.handleVisibilityChanged,
+                                    playBarController.handleVisibilityChanged,
                                 child: Offstage(
                                   offstage: isNext != 1 || queue.isEmpty,
                                   child: Column(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
@@ -172,13 +173,13 @@ class PlayBar extends StatelessWidget {
                                         "下一首",
                                         style: theme.textTheme.bodyMedium
                                             ?.copyWith(
-                                          color: Colors.white.withAlpha(
-                                            AppTheme.defaultAlpha,
-                                          ),
-                                          leadingDistribution:
-                                          TextLeadingDistribution.even,
-                                          decoration: TextDecoration.none,
-                                        ),
+                                              color: Colors.white.withAlpha(
+                                                AppTheme.defaultAlpha,
+                                              ),
+                                              leadingDistribution:
+                                                  TextLeadingDistribution.even,
+                                              decoration: TextDecoration.none,
+                                            ),
                                       ),
                                     ],
                                   ),
@@ -204,19 +205,19 @@ class PlayBar extends StatelessWidget {
                 borderRadius: BorderRadius.all(AppTheme.borderRadiusSm),
                 transitionBuilder:
                     (Widget child, Animation<double> animation) =>
-                    FadeTransition(
-                      opacity: animation,
-                      child: ScaleTransition(
-                        scale: animation,
-                        child: child,
-                      ),
-                    ),
+                        FadeTransition(
+                          opacity: animation,
+                          child: ScaleTransition(
+                            scale: animation,
+                            child: child,
+                          ),
+                        ),
                 duration: AppTheme.defaultDurationMid,
               ),
             ),
             Align(
               alignment: Alignment.centerRight,
-              child: PlayProgressButton(size: 16, color: Colors.white),
+              child: PlayProgressButton(size: 16, color: theme.colorScheme.onSurface),
             ),
           ],
         ),
@@ -232,7 +233,8 @@ class PlayBar extends StatelessWidget {
           isDraggable: isDraggable,
           controller: controller,
           minHeight: !isDraggable || hidePlayBar
-              ? 0 : max(94 + paddingBottom, 104),
+              ? 0
+              : max(94 + paddingBottom, 104),
           maxHeight: deviceHeight,
           onPanelOpened: onPanelOpened,
           onPanelClosed: onPanelClosed,
@@ -245,20 +247,16 @@ class PlayBar extends StatelessWidget {
           ),
           body: FrameSeparateWidget(child: body),
           collapsed: FrameSeparateWidget(
-            child: Container(
+            child: GlassPanel(
+              padding: EdgeInsets.zero,
+              settings: RecommendedGlassSettings.bottomBar,
               margin: EdgeInsets.fromLTRB(
                 16,
                 0,
                 16,
                 paddingBottom == 0 ? 16 : paddingBottom,
               ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.all(AppTheme.borderRadiusMd),
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
-                  child: playBar,
-                ),
-              ),
+              child: playBar,
             ),
           ),
         );

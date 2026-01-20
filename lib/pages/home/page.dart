@@ -153,7 +153,8 @@ class _HomePageState extends State<HomePage>
                             ),
                             HeaderTabBar(
                               offstage: mediaList.isEmpty,
-                              onTap: homeController.handleSelected,
+                              onTap: (v) =>
+                                  homeController.handleSelected(v, context),
                             ),
                           ],
                         ),

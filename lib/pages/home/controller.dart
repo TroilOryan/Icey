@@ -177,8 +177,11 @@ class HomeController {
     );
   }
 
-  void handleSelected(int v) {
+  void handleSelected(int v, BuildContext context) {
+    DefaultTabController.of(context).animateTo(v);
+
     settingsManager.setListType(ListType.values[v]);
+
     _settingsBox.put(CacheKey.Settings.listType, ListType.values[v].value);
 
     state.scrollDirection.value = ScrollDirection.idle;
