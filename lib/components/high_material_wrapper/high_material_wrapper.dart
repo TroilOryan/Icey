@@ -11,6 +11,7 @@ class HighMaterialWrapper extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry? margin;
   final BoxDecoration Function(bool)? decoration;
+  final Clip Function(bool)? clipBehavior;
   final Widget Function(bool) builder;
 
   const HighMaterialWrapper({
@@ -21,6 +22,7 @@ class HighMaterialWrapper extends StatelessWidget {
     this.borderRadius,
     this.padding,
     this.margin,
+    this.clipBehavior,
     required this.builder,
   });
 
@@ -37,7 +39,9 @@ class HighMaterialWrapper extends StatelessWidget {
           return Container(
             padding: padding,
             margin: margin,
-            clipBehavior: Clip.antiAlias,
+            clipBehavior: clipBehavior != null
+                ? clipBehavior!(true)
+                : Clip.antiAlias,
             decoration: decoration != null
                 ? decoration!(true)
                 : BoxDecoration(borderRadius: borderRadius),
@@ -51,7 +55,9 @@ class HighMaterialWrapper extends StatelessWidget {
         return Container(
           margin: margin,
           padding: padding,
-          clipBehavior: Clip.antiAlias,
+          clipBehavior: clipBehavior != null
+              ? clipBehavior!(false)
+              : Clip.antiAlias,
           decoration: decoration != null
               ? decoration!(false)
               : BoxDecoration(borderRadius: borderRadius),

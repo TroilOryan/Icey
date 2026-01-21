@@ -44,15 +44,6 @@ class _MediaLibraryPageState extends State<MediaLibraryPage>
       return MediaEmpty(onScan: MediaScanner.scanMedias);
     }
 
-    // return MediaList(
-    //   showDuration: showDuration,
-    //   mediaList: mediaList,
-    //   sliverContextMap: homeController.sliverContextMap,
-    //   onTap: homeController.handleMediaTap,
-    //   onLongPress: (media) =>
-    //       homeController.handleMediaLongPress(media, context),
-    // );
-
     return Stack(
       children: [
         SliverViewObserver(
@@ -112,48 +103,9 @@ class _MediaLibraryPageState extends State<MediaLibraryPage>
           onSelectionEnd: controller.handleSelectionEnd,
         ),
 
-        Positioned(
-          bottom: max(106 + paddingBottom, 116),
-          right: 20,
-          child: FrameSeparateWidget(
-            child: Offstage(
-              offstage: mediaList.isEmpty,
-              child: HighMaterialWrapper(
-                borderRadius: const BorderRadius.all(Radius.circular(100)),
-                builder: (highMaterial) => highMaterial
-                    ? GlassPanel(
-                        shape: LiquidOval(),
-                        padding: EdgeInsets.zero,
-                        child: FloatingActionButton(
-                          backgroundColor: Colors.transparent,
-                          elevation: 16,
-                          shape: const CircleBorder(),
-                          onPressed: homeController.handleLocate,
-                          child: SFIcon(
-                            SFIcons.sf_dot_radiowaves_left_and_right,
-                            color: theme.colorScheme.onSurface.withAlpha(
-                              AppTheme.defaultAlpha,
-                            ),
-                          ),
-                        ),
-                      )
-                    : FloatingActionButton(
-                        backgroundColor: theme.cardTheme.color!.withAlpha(
-                          highMaterial ? AppTheme.defaultAlphaLight : 255,
-                        ),
-                        elevation: 16,
-                        shape: const CircleBorder(),
-                        onPressed: homeController.handleLocate,
-                        child: SFIcon(
-                          SFIcons.sf_dot_radiowaves_left_and_right,
-                          color: theme.colorScheme.onSurface.withAlpha(
-                            AppTheme.defaultAlpha,
-                          ),
-                        ),
-                      ),
-              ),
-            ),
-          ),
+        MediaLocator(
+          offstage: mediaList.isEmpty,
+          onTap: homeController.handleLocate,
         ),
       ],
     );

@@ -13,10 +13,17 @@ class ActionBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final appThemeExtension = AppThemeExtension.of(context);
 
-    final immersive = settingsManager.immersive.watch(context);
+    final immersive = settingsManager.immersive.watch(context),
+        coverShape = settingsManager.coverShape.watch(context);
+
+    final opacity = computed(
+      () => (coverShape.value == CoverShape.immersive.value || immersive)
+          ? 0.0
+          : 1.0,
+    );
 
     return AnimatedOpacity(
-      opacity: immersive ? 0 : 1,
+      opacity: opacity(),
       duration: AppTheme.defaultDuration,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 2),

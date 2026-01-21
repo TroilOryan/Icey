@@ -1,5 +1,4 @@
-import 'dart:ui';
-
+import 'package:IceyPlayer/pages/home/controller.dart';
 import 'package:animated_gradient_background/animated_gradient_background.dart';
 import 'package:blur/blur.dart';
 import 'package:IceyPlayer/components/play_cover/play_cover.dart';
@@ -20,23 +19,29 @@ class PlayScreenBackground extends StatelessWidget {
     return RepaintBoundary(
       child: Builder(
         builder: (context) {
-          final double value = settingsManager.highMaterial.watch(context)
-              ? 48
-              : 24;
+          final double panelSlideValue = homeController.state.panelSlideValue
+              .watch(context);
 
-          final dynamicLight = settingsManager.dynamicLight.watch(context),
+          final highMaterial = settingsManager.highMaterial.watch(context),
+              dynamicLight = settingsManager.dynamicLight.watch(context),
               artCover = settingsManager.artCover.watch(context);
 
+          final blurValue = computed(() => highMaterial ? 48.0 : 24.0);
+
+          final colorOpacity = computed(() => artCover ? 0.01 : 0.5);
+
+          final enabled = computed(() => panelSlideValue > 0.01 && dynamicLight);
+
           return Blur(
-            blur: value,
-            colorOpacity: artCover ? 0.01 : 0.5,
-            overlay: dynamicLight
+            blur: blurValue(),
+            colorOpacity: colorOpacity(),
+            overlay: enabled()
                 ? AnimatedGradientBackground(
-                    duration: const Duration(seconds: 6),
+                    duration: const Duration(seconds: 30),
                     colors: [
                       theme.colorScheme.primary.withAlpha(155),
                       theme.colorScheme.secondary.withAlpha(155),
-                      theme.colorScheme.inversePrimary.withAlpha(155),
+                      theme.colorScheme.surface.withAlpha(33),
                     ],
                     child: Container(),
                   )

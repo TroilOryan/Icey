@@ -2,7 +2,6 @@ import 'package:IceyPlayer/constants/glass_settings.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 import 'package:signals/signals_flutter.dart';
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:flutter/services.dart';
 import 'package:IceyPlayer/components/play_cover/play_cover.dart';
@@ -59,171 +58,6 @@ class PlayBar extends StatelessWidget {
     final delta = playBarController.state.delta.watch(context),
         isNext = playBarController.state.isNext.watch(context);
 
-    final playBar = GestureDetector(
-      onHorizontalDragUpdate: playBarController.handleHorizontalDragUpdate,
-      onHorizontalDragEnd: playBarController.handleHorizontalDragEnd,
-      child: Container(
-        height: 88,
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        child: Stack(
-          children: [
-            StreamBuilder(
-              stream: mediaManager.queue,
-              builder: (context, snapshot) {
-                final queue = snapshot.data ?? [];
-
-                return StreamBuilder(
-                  stream: mediaManager.mediaItem,
-                  builder: (context, snapshot) {
-                    final mediaItem = snapshot.data;
-
-                    final index = mediaItem != null
-                        ? queue.indexOf(mediaItem)
-                        : -1;
-
-                    final prevIndex = index == 0 ? queue.length - 1 : index - 1;
-
-                    final nextIndex = index == queue.length - 1 ? 0 : index + 1;
-
-                    return Transform.translate(
-                      offset: Offset(delta, 0),
-                      child: LayoutBuilder(
-                        builder: (context, constraints) => Stack(
-                          clipBehavior: Clip.none,
-                          alignment: Alignment.center,
-                          children: [
-                            Positioned(
-                              right: constraints.maxWidth - 16 - 35.2,
-                              child: VisibilityDetector(
-                                key: Key("prev"),
-                                onVisibilityChanged:
-                                    playBarController.handleVisibilityChanged,
-                                child: Offstage(
-                                  offstage: isNext != -1 || queue.isEmpty,
-                                  child: SizedBox(
-                                    child: SizedBox(
-                                      width: constraints.maxWidth / 3,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            queue.isNotEmpty
-                                                ? queue[prevIndex].title
-                                                : "",
-                                            style: theme.textTheme.titleSmall
-                                                ?.copyWith(color: Colors.white),
-                                            textAlign: TextAlign.right,
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                            softWrap: true,
-                                          ),
-                                          Text(
-                                            "上一首",
-                                            textAlign: TextAlign.right,
-                                            style: theme.textTheme.bodyMedium
-                                                ?.copyWith(
-                                                  color: Colors.white.withAlpha(
-                                                    AppTheme.defaultAlpha,
-                                                  ),
-                                                  leadingDistribution:
-                                                      TextLeadingDistribution
-                                                          .even,
-                                                  decoration:
-                                                      TextDecoration.none,
-                                                ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            PlayInfo(
-                              mediaItem: mediaItem,
-                              panelOpened: panelOpened,
-                            ),
-                            Positioned(
-                              left: constraints.maxWidth - 16 - 35.2,
-                              child: VisibilityDetector(
-                                key: Key("next"),
-                                onVisibilityChanged:
-                                    playBarController.handleVisibilityChanged,
-                                child: Offstage(
-                                  offstage: isNext != 1 || queue.isEmpty,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        queue.isNotEmpty
-                                            ? queue[nextIndex].title
-                                            : "",
-                                        style: theme.textTheme.titleSmall
-                                            ?.copyWith(color: Colors.white),
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
-                                        softWrap: true,
-                                      ),
-                                      Text(
-                                        "下一首",
-                                        style: theme.textTheme.bodyMedium
-                                            ?.copyWith(
-                                              color: Colors.white.withAlpha(
-                                                AppTheme.defaultAlpha,
-                                              ),
-                                              leadingDistribution:
-                                                  TextLeadingDistribution.even,
-                                              decoration: TextDecoration.none,
-                                            ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
-            Container(
-              clipBehavior: Clip.antiAlias,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(AppTheme.borderRadiusSm),
-              ),
-              child: PlayCover(
-                width: 56,
-                height: 56,
-                borderRadius: BorderRadius.all(AppTheme.borderRadiusSm),
-                transitionBuilder:
-                    (Widget child, Animation<double> animation) =>
-                        FadeTransition(
-                          opacity: animation,
-                          child: ScaleTransition(
-                            scale: animation,
-                            child: child,
-                          ),
-                        ),
-                duration: AppTheme.defaultDurationMid,
-              ),
-            ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: PlayProgressButton(size: 16, color: theme.colorScheme.onSurface),
-            ),
-          ],
-        ),
-      ),
-    );
-
     return StreamBuilder(
       stream: mediaManager.mediaItem,
       builder: (context, snapshot) {
@@ -256,7 +90,193 @@ class PlayBar extends StatelessWidget {
                 16,
                 paddingBottom == 0 ? 16 : paddingBottom,
               ),
-              child: playBar,
+              child: GestureDetector(
+                onHorizontalDragUpdate:
+                    playBarController.handleHorizontalDragUpdate,
+                onHorizontalDragEnd: playBarController.handleHorizontalDragEnd,
+                child: Container(
+                  height: 88,
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                  child: Stack(
+                    children: [
+                      StreamBuilder(
+                        stream: mediaManager.queue,
+                        builder: (context, snapshot) {
+                          final queue = snapshot.data ?? [];
+
+                          return StreamBuilder(
+                            stream: mediaManager.mediaItem,
+                            builder: (context, snapshot) {
+                              final mediaItem = snapshot.data;
+
+                              final index = mediaItem != null
+                                  ? queue.indexOf(mediaItem)
+                                  : -1;
+
+                              final prevIndex = index == 0
+                                  ? queue.length - 1
+                                  : index - 1;
+
+                              final nextIndex = index == queue.length - 1
+                                  ? 0
+                                  : index + 1;
+
+                              return Transform.translate(
+                                offset: Offset(delta, 0),
+                                child: LayoutBuilder(
+                                  builder: (context, constraints) => Stack(
+                                    clipBehavior: Clip.none,
+                                    alignment: Alignment.center,
+                                    children: [
+                                      Positioned(
+                                        right: constraints.maxWidth - 16 - 35.2,
+                                        child: VisibilityDetector(
+                                          key: Key("prev"),
+                                          onVisibilityChanged: playBarController
+                                              .handleVisibilityChanged,
+                                          child: Offstage(
+                                            offstage:
+                                                isNext != -1 || queue.isEmpty,
+                                            child: SizedBox(
+                                              child: SizedBox(
+                                                width: constraints.maxWidth / 3,
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.end,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Text(
+                                                      queue.isNotEmpty
+                                                          ? queue[prevIndex]
+                                                                .title
+                                                          : "",
+                                                      style: theme
+                                                          .textTheme
+                                                          .titleSmall,
+                                                      textAlign:
+                                                          TextAlign.right,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      maxLines: 1,
+                                                      softWrap: true,
+                                                    ),
+                                                    Text(
+                                                      "上一首",
+                                                      textAlign:
+                                                          TextAlign.right,
+                                                      style: theme
+                                                          .textTheme
+                                                          .bodyMedium
+                                                          ?.copyWith(
+                                                            leadingDistribution:
+                                                                TextLeadingDistribution
+                                                                    .even,
+                                                            decoration:
+                                                                TextDecoration
+                                                                    .none,
+                                                          ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      PlayInfo(
+                                        mediaItem: mediaItem,
+                                        panelOpened: panelOpened,
+                                      ),
+                                      Positioned(
+                                        left: constraints.maxWidth - 16 - 35.2,
+                                        child: VisibilityDetector(
+                                          key: Key("next"),
+                                          onVisibilityChanged: playBarController
+                                              .handleVisibilityChanged,
+                                          child: Offstage(
+                                            offstage:
+                                                isNext != 1 || queue.isEmpty,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  queue.isNotEmpty
+                                                      ? queue[nextIndex].title
+                                                      : "",
+                                                  style: theme
+                                                      .textTheme
+                                                      .titleSmall,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  maxLines: 1,
+                                                  softWrap: true,
+                                                ),
+                                                Text(
+                                                  "下一首",
+                                                  style: theme
+                                                      .textTheme
+                                                      .bodyMedium
+                                                      ?.copyWith(
+                                                        leadingDistribution:
+                                                            TextLeadingDistribution
+                                                                .even,
+                                                        decoration:
+                                                            TextDecoration.none,
+                                                      ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
+                      Container(
+                        clipBehavior: Clip.antiAlias,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            AppTheme.borderRadiusXs,
+                          ),
+                        ),
+                        child: PlayCover(
+                          width: 56,
+                          height: 56,
+                          borderRadius: BorderRadius.all(
+                            AppTheme.borderRadiusXs,
+                          ),
+                          transitionBuilder:
+                              (Widget child, Animation<double> animation) =>
+                                  FadeTransition(
+                                    opacity: animation,
+                                    child: ScaleTransition(
+                                      scale: animation,
+                                      child: child,
+                                    ),
+                                  ),
+                          duration: AppTheme.defaultDurationMid,
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: PlayProgressButton(
+                          size: 16,
+                          color: theme.colorScheme.onSurface,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
           ),
         );
