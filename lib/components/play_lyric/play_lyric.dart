@@ -179,7 +179,7 @@ class _PlayLyricState extends State<PlayLyric> {
               textStyle: textStyle,
               activeTextStyle: activeTextStyle,
               extTextStyle: extTextStyle,
-              highlightColor: primary,
+              highlightColor: theme.colorScheme.primary,
             );
 
             return LayoutBuilder(
