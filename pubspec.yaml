@@ -29,6 +29,7 @@ dependencies:
   blur: ^4.0.2
   easy_refresh: ^3.4.0
   flex_seed_scheme: ^4.0.1
+  flutter_lyric: ^3.0.2
   flutter_sficon: ^1.2.1
   keframe: ^3.0.0
   liquid_glass_widgets: ^0.2.1-dev.7

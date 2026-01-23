@@ -111,9 +111,9 @@ class _LyricPageState extends State<LyricPage> {
                   22,
                   paddingBottom + 16,
                 ),
-                child: Column(
+                child: Stack(
                   children: [
-                    Flexible(child: PlayLyric(onScroll: handleScroll)),
+                    PlayLyric(onScroll: handleScroll),
                     Align(
                       alignment: Alignment.bottomCenter,
                       child: IgnorePointer(
