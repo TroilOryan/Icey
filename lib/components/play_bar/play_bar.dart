@@ -81,19 +81,20 @@ class PlayBar extends StatelessWidget {
           ),
           body: FrameSeparateWidget(child: body),
           collapsed: FrameSeparateWidget(
-            child: GlassPanel(
-              padding: EdgeInsets.zero,
-              settings: RecommendedGlassSettings.bottomBar,
-              margin: EdgeInsets.fromLTRB(
-                16,
-                0,
-                16,
-                paddingBottom == 0 ? 16 : paddingBottom,
-              ),
-              child: GestureDetector(
-                onHorizontalDragUpdate:
-                    playBarController.handleHorizontalDragUpdate,
-                onHorizontalDragEnd: playBarController.handleHorizontalDragEnd,
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onHorizontalDragUpdate:
+                  playBarController.handleHorizontalDragUpdate,
+              onHorizontalDragEnd: playBarController.handleHorizontalDragEnd,
+              child: GlassPanel(
+                padding: EdgeInsets.zero,
+                settings: RecommendedGlassSettings.bottomBar,
+                margin: EdgeInsets.fromLTRB(
+                  16,
+                  0,
+                  16,
+                  paddingBottom == 0 ? 16 : paddingBottom,
+                ),
                 child: Container(
                   height: 88,
                   padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
