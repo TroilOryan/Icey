@@ -29,7 +29,7 @@ class QueryAudios {
     }
 
     // 信号量控制最大并发数
-    private val semaphore = Semaphore(5) // 限制最大5个并发
+    private val semaphore = Semaphore(15) // 限制最大5个并发
 
     // 用于跟踪已处理的音频ID，防止重复
     private val processedIds = Collections.synchronizedSet(HashSet<Long>())
