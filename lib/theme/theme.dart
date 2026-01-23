@@ -91,15 +91,11 @@ class AppTheme {
         primaryContainer = colorScheme.primaryContainer,
         primaryFixed = colorScheme.primaryFixed;
 
-    if(artCover){
+    if (artCover) {
       if (isLightCover) {
         primary = Colors.black;
 
-        secondary = DominantColorHelper.fadeOnBackgroundColor(
-          primary,
-          0.6,
-          Color(0xffa0a0a0),
-        );
+        secondary = Colors.black45;
 
         primaryContainer = Colors.black.withAlpha(AppTheme.defaultAlphaMid);
 
@@ -107,26 +103,18 @@ class AppTheme {
       } else {
         primary = Colors.white;
 
-        secondary = DominantColorHelper.fadeOnBackgroundColor(
-          primary,
-          0.6,
-          Color(0xffbbbbbb),
-        );
+        secondary = Colors.white54;
 
         primaryContainer = Colors.white.withAlpha(AppTheme.defaultAlphaMid);
 
         primaryFixed = Colors.white.withAlpha(AppTheme.defaultAlpha);
       }
-    }else{
+    } else {
       if (isLightCover) {
         if (isDark) {
           primary = Colors.white;
 
-          secondary = DominantColorHelper.fadeOnBackgroundColor(
-            primary,
-            0.6,
-            Color(0xffbbbbbb),
-          );
+          secondary = Colors.white54;
         } else {
           primary = colorScheme.primary;
 
@@ -142,13 +130,9 @@ class AppTheme {
         primaryFixed = Colors.black.withAlpha(AppTheme.defaultAlpha);
       } else {
         if (isDark) {
-        primary = Colors.white;
+          primary = Colors.white;
 
-        secondary = DominantColorHelper.fadeOnBackgroundColor(
-          primary,
-          0.6,
-          Color(0xffbbbbbb),
-        );
+          secondary = Colors.white54;
         } else {
           primary = colorScheme.primary;
 
@@ -164,8 +148,6 @@ class AppTheme {
         primaryFixed = Colors.white.withAlpha(AppTheme.defaultAlpha);
       }
     }
-
-
 
     return ThemeData(
       fontFamily: "Arial",
@@ -239,10 +221,7 @@ class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(borderRadiusLg),
-          borderSide: BorderSide(
-            color: primaryColor.withAlpha(50),
-            width: 1,
-          ),
+          borderSide: BorderSide(color: primaryColor.withAlpha(50), width: 1),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(borderRadiusLg),
