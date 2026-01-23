@@ -47,67 +47,59 @@ class PlayShapedCover extends StatelessWidget {
             final coverShape = settingsManager.coverShape.watch(context);
 
             if (coverShape == CoverShape.circle) {
-              return RepaintBoundary(
-                child: RotationTransition(
-                  turns: rotationAnimation!,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      RepaintBoundary(
-                        child: Container(
-                          width: size,
-                          height: size,
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                color: diskShadowColor.withAlpha(13),
-                                spreadRadius: 13,
-                                blurRadius: 33,
-                              ),
-                            ],
-                            border: Border.all(
-                              width: 1,
-                              color: diskShadowColor.withAlpha(22),
-                            ),
-                            shape: BoxShape.circle,
-                            color: diskShadowColor.withAlpha(22),
+              return RotationTransition(
+                turns: rotationAnimation!,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Container(
+                      width: size,
+                      height: size,
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: diskShadowColor.withAlpha(13),
+                            spreadRadius: 13,
+                            blurRadius: 33,
                           ),
+                        ],
+                        border: Border.all(
+                          width: 1,
+                          color: diskShadowColor.withAlpha(22),
+                        ),
+                        shape: BoxShape.circle,
+                        color: diskShadowColor.withAlpha(22),
+                      ),
+                    ),
+                    Positioned(
+                      left: 24,
+                      top: 24,
+                      child: Container(
+                        width: size - 48,
+                        height: size - 48,
+                        decoration: const BoxDecoration(shape: BoxShape.circle),
+                        child: Image.asset(
+                          'assets/images/music_back.png',
+                          gaplessPlayback: true,
+                          fit: BoxFit.fill,
                         ),
                       ),
-                      Positioned(
-                        left: 24,
-                        top: 24,
-                        child: Container(
-                          width: size - 48,
-                          height: size - 48,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                          ),
-                          child: Image.asset(
-                            'assets/images/music_back.png',
-                            gaplessPlayback: true,
-                            fit: BoxFit.fill,
-                          ),
+                    ),
+                    Positioned(
+                      left: size / 2 - size / 4,
+                      top: size / 2 - size / 4,
+                      child: Container(
+                        clipBehavior: Clip.hardEdge,
+                        decoration: const BoxDecoration(shape: BoxShape.circle),
+                        child: PlayCover(
+                          noCover: true,
+                          duration: AppTheme.defaultDurationLong,
+                          width: size / 2,
+                          height: size / 2,
                         ),
                       ),
-                      Positioned(
-                        left: size / 2 - size / 4,
-                        top: size / 2 - size / 4,
-                        child: Container(
-                          clipBehavior: Clip.hardEdge,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                          ),
-                          child: PlayCover(
-                            noCover: true,
-                            duration: AppTheme.defaultDurationLong,
-                            width: size / 2,
-                            height: size / 2,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               );
             } else if (coverShape == CoverShape.rectangle) {
@@ -149,26 +141,24 @@ class PlayShapedCover extends StatelessWidget {
           );
         }
 
-        return RepaintBoundary(
-          child: AnimatedSlide(
+        return AnimatedSlide(
+          curve: Curves.easeInOutSine,
+          offset: Offset(0, immersive ? 0.2 : 0),
+          duration: AppTheme.defaultDurationMid,
+          child: AnimatedScale(
             curve: Curves.easeInOutSine,
-            offset: Offset(0, immersive ? 0.2 : 0),
             duration: AppTheme.defaultDurationMid,
-            child: AnimatedScale(
-              curve: Curves.easeInOutSine,
-              duration: AppTheme.defaultDurationMid,
-              alignment: Alignment(alignmentX, alignmentY),
-              scale: scale,
-              child: AnimatedContainer(
-                alignment: Alignment.center,
-                width: mediaQuery.size.width,
-                height: size,
-                duration: AppTheme.defaultDuration,
-                margin: EdgeInsets.only(
-                  top: mediaQuery.size.width * 0.25 / 2 + 32,
-                ),
-                child: child,
+            alignment: Alignment(alignmentX, alignmentY),
+            scale: scale,
+            child: AnimatedContainer(
+              alignment: Alignment.center,
+              width: mediaQuery.size.width,
+              height: size,
+              duration: AppTheme.defaultDuration,
+              margin: EdgeInsets.only(
+                top: mediaQuery.size.width * 0.25 / 2 + 32,
               ),
+              child: child,
             ),
           ),
         );

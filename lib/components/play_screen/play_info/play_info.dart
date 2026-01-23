@@ -42,64 +42,61 @@ class PlayInfo extends StatelessWidget {
 
     final immersive = settingsManager.immersive.watch(context);
 
-    final info = RepaintBoundary(
-      child: StreamBuilder(
-        stream: mediaManager.mediaItem,
-        builder: (context, snapshot) {
-          final mediaItem = snapshot.data;
+    final info = StreamBuilder(
+      stream: mediaManager.mediaItem,
+      builder: (context, snapshot) {
+        final mediaItem = snapshot.data;
 
-          return AnimatedSwitcher(
-            duration: AppTheme.defaultDurationMid,
-            child: SizedBox(
-              width: lyricOpened == true
-                  ? mediaQuery.size.width * 0.8 - 64 - 16
-                  : mediaQuery.size.width - 64,
-              child: Column(
-                spacing: 6,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    spacing: 8,
-                    children: [
-                      Flexible(
-                        child: Marquee(
-                          disableAnimation: !panelOpened,
-                          child: Text(
-                            mediaItem?.title ?? "暂无歌曲",
-                            style: textTheme.titleLarge?.copyWith(
-                              leadingDistribution: TextLeadingDistribution.even,
-                              color: themeExtension.primary,
-                            ),
+        return AnimatedSwitcher(
+          duration: AppTheme.defaultDurationMid,
+          child: SizedBox(
+            width: lyricOpened == true
+                ? mediaQuery.size.width * 0.8 - 64 - 16
+                : mediaQuery.size.width - 64,
+            child: Column(
+              spacing: 6,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  spacing: 8,
+                  children: [
+                    Flexible(
+                      child: Marquee(
+                        disableAnimation: !panelOpened,
+                        child: Text(
+                          mediaItem?.title ?? "暂无歌曲",
+                          style: textTheme.titleLarge?.copyWith(
+                            leadingDistribution: TextLeadingDistribution.even,
+                            color: themeExtension.primary,
                           ),
                         ),
                       ),
-                      lyricOpened == true
-                          ? const SizedBox()
-                          : PlayLikeButton(
-                              key: ValueKey(mediaItem?.id),
-                              id: mediaItem?.id,
-                              color: themeExtension.primary,
-                              size: 26,
-                              onTap: (liked) =>
-                                  handleLike(mediaItem?.id, liked),
-                            ),
-                    ],
-                  ),
-                  Marquee(
-                    disableAnimation: !panelOpened,
-                    child: Text(
-                      mediaItem?.artist ?? "未知歌手",
-                      style: textTheme.bodyMedium?.copyWith(
-                        color: themeExtension.secondary,
-                      ),
+                    ),
+                    lyricOpened == true
+                        ? const SizedBox()
+                        : PlayLikeButton(
+                            key: ValueKey(mediaItem?.id),
+                            id: mediaItem?.id,
+                            color: themeExtension.primary,
+                            size: 26,
+                            onTap: (liked) => handleLike(mediaItem?.id, liked),
+                          ),
+                  ],
+                ),
+                Marquee(
+                  disableAnimation: !panelOpened,
+                  child: Text(
+                    mediaItem?.artist ?? "未知歌手",
+                    style: textTheme.bodyMedium?.copyWith(
+                      color: themeExtension.secondary,
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
 
     if (lyricOpened != null) {

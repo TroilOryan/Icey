@@ -88,7 +88,7 @@ class PlayBar extends StatelessWidget {
               onHorizontalDragEnd: playBarController.handleHorizontalDragEnd,
               child: GlassPanel(
                 padding: EdgeInsets.zero,
-                settings: RecommendedGlassSettings.bottomBar,
+                settings: RecommendedGlassSettings.overlay,
                 margin: EdgeInsets.fromLTRB(
                   16,
                   0,
@@ -97,7 +97,7 @@ class PlayBar extends StatelessWidget {
                 ),
                 child: Container(
                   height: 88,
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                  padding: EdgeInsets.fromLTRB(16, 16, 12, 16),
                   child: Stack(
                     children: [
                       StreamBuilder(
@@ -270,7 +270,7 @@ class PlayBar extends StatelessWidget {
                       Align(
                         alignment: Alignment.centerRight,
                         child: PlayProgressButton(
-                          size: 16,
+                          size: 18,
                           color: theme.colorScheme.onSurface,
                         ),
                       ),

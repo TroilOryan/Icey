@@ -62,7 +62,7 @@ class _SearchPageState extends State<SearchPage> {
                   fillColor: theme.cardTheme.color,
                   prefixIcon: Icon(SFIcons.sf_magnifyingglass, size: 16),
                   hint: Text(
-                    "Search...",
+                    "搜索媒体或者歌手",
                     style: theme.textTheme.titleSmall?.copyWith(
                       fontWeight: FontWeight.normal,
                       color: theme.textTheme.bodyMedium?.color,

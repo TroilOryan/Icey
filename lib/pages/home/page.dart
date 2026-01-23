@@ -126,7 +126,7 @@ class _HomePageState extends State<HomePage>
               ],
             ),
           Scaffold(
-            resizeToAvoidBottomInset: true,
+            resizeToAvoidBottomInset: false,
             backgroundColor: listBg.isNotEmpty
                 ? Colors.transparent
                 : theme.scaffoldBackgroundColor,

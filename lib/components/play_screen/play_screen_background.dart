@@ -16,51 +16,49 @@ class PlayScreenBackground extends StatelessWidget {
     final width = MediaQuery.of(context).size.width,
         height = MediaQuery.of(context).size.height;
 
-    return RepaintBoundary(
-      child: Builder(
-        builder: (context) {
-          final double panelSlideValue = homeController.state.panelSlideValue
-              .watch(context);
+    return Builder(
+      builder: (context) {
+        final double panelSlideValue = homeController.state.panelSlideValue
+            .watch(context);
 
-          final highMaterial = settingsManager.highMaterial.watch(context),
-              dynamicLight = settingsManager.dynamicLight.watch(context),
-              artCover = settingsManager.artCover.watch(context);
+        final highMaterial = settingsManager.highMaterial.watch(context),
+            dynamicLight = settingsManager.dynamicLight.watch(context),
+            artCover = settingsManager.artCover.watch(context);
 
-          final blurValue = computed(() => highMaterial ? 48.0 : 24.0);
+        final blurValue = computed(() => highMaterial ? 48.0 : 24.0);
 
-          final colorOpacity = computed(() => artCover ? 0.01 : 0.5);
+        final colorOpacity = computed(() => artCover ? 0.01 : 0.5);
 
-          final enabled = computed(() => panelSlideValue > 0.01 && dynamicLight);
+        final enabled = computed(() => panelSlideValue > 0.01 && dynamicLight);
 
-          return Blur(
-            blur: blurValue(),
-            colorOpacity: colorOpacity(),
-            overlay: enabled()
-                ? AnimatedGradientBackground(
-                    duration: const Duration(seconds: 30),
-                    colors: [
-                      theme.colorScheme.primary.withAlpha(155),
-                      theme.colorScheme.secondary.withAlpha(155),
-                      theme.colorScheme.surface.withAlpha(33),
-                    ],
-                    child: Container(),
-                  )
-                : null,
-            child: RepaintBoundary(
-              child: Transform.flip(
-                flipY: true,
-                child: PlayCover(
-                  height: height,
-                  width: width,
-                  repeat: ImageRepeat.repeat,
-                  fit: BoxFit.fitWidth,
-                  filterQuality: FilterQuality.low,
-                ),
+        return Blur(
+          blur: blurValue(),
+          colorOpacity: colorOpacity(),
+          overlay: enabled()
+              ? AnimatedGradientBackground(
+                  duration: const Duration(seconds: 30),
+                  colors: [
+                    theme.colorScheme.primary.withAlpha(155),
+                    theme.colorScheme.secondary.withAlpha(155),
+                    theme.colorScheme.surface.withAlpha(33),
+                  ],
+                  child: Container(),
+                )
+              : null,
+          child: RepaintBoundary(
+            child: Transform.flip(
+              flipY: true,
+              child: PlayCover(
+                height: height,
+                width: width,
+                repeat: ImageRepeat.repeat,
+                fit: BoxFit.fitWidth,
+                filterQuality: FilterQuality.low,
               ),
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

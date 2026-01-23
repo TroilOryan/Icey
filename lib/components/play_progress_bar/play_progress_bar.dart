@@ -175,106 +175,102 @@ class _PlayProgressBarState extends State<PlayProgressBar> {
         position = state.position.watch(context),
         dragPosition = state.dragPosition.watch(context);
 
-    return RepaintBoundary(
-      child: GestureDetector(
-        onHorizontalDragDown: handleHorizontalDragDown,
-        onHorizontalDragUpdate: (details) =>
-            handleHorizontalDragUpdate(details, context),
-        onHorizontalDragEnd: handleHorizontalDragEnd,
-        onTapUp: handleTapUp,
-        onTapDown: (details) => handleTapDown(details, context),
-        child: LayoutBuilder(
-          builder: (context, constrains) => Stack(
-            clipBehavior: Clip.none,
-            children: [
-              AnimatedScale(
-                alignment: Alignment.center,
-                scale: isDragging ? 1.02 : 1,
-                duration: AppTheme.defaultDuration,
-                child: CustomPaint(
-                  isComplex: true,
-                  willChange: true,
-                  size: Size.fromHeight(_progressBarHeight),
-                  painter: PlayProgressBarBgPainter(color: progressBarBgColor),
-                  foregroundPainter: PlayProgressBarPainter(
-                    position: dragPosition,
-                    color: progressBarColor,
+    return GestureDetector(
+      onHorizontalDragDown: handleHorizontalDragDown,
+      onHorizontalDragUpdate: (details) =>
+          handleHorizontalDragUpdate(details, context),
+      onHorizontalDragEnd: handleHorizontalDragEnd,
+      onTapUp: handleTapUp,
+      onTapDown: (details) => handleTapDown(details, context),
+      child: LayoutBuilder(
+        builder: (context, constrains) => Stack(
+          clipBehavior: Clip.none,
+          children: [
+            AnimatedScale(
+              alignment: Alignment.center,
+              scale: isDragging ? 1.02 : 1,
+              duration: AppTheme.defaultDuration,
+              child: CustomPaint(
+                isComplex: true,
+                willChange: true,
+                size: Size.fromHeight(_progressBarHeight),
+                painter: PlayProgressBarBgPainter(color: progressBarBgColor),
+                foregroundPainter: PlayProgressBarPainter(
+                  position: dragPosition,
+                  color: progressBarColor,
+                ),
+              ),
+            ),
+            Positioned(
+              top: _progressBarHeight + 8,
+              left: dragPosition * constrains.maxWidth - 32,
+              child: Offstage(
+                offstage: !isDragging,
+                child: Container(
+                  padding: EdgeInsets.fromLTRB(8, 2, 8, 2),
+                  decoration: BoxDecoration(
+                    color: progressBarBgColor,
+                    borderRadius: const BorderRadius.all(Radius.circular(16)),
+                  ),
+                  child: CommonHelper.buildDuration(
+                    dragDuration,
+                    progressBarColor,
+                    theme.textTheme.bodyMedium,
                   ),
                 ),
               ),
-              Positioned(
-                top: _progressBarHeight + 8,
-                left: dragPosition * constrains.maxWidth - 32,
-                child: Offstage(
-                  offstage: !isDragging,
-                  child: Container(
-                    padding: EdgeInsets.fromLTRB(8, 2, 8, 2),
-                    decoration: BoxDecoration(
-                      color: progressBarBgColor,
-                      borderRadius: const BorderRadius.all(Radius.circular(16)),
-                    ),
-                    child: CommonHelper.buildDuration(
-                      dragDuration,
-                      progressBarColor,
-                      theme.textTheme.bodyMedium,
-                    ),
-                  ),
-                ),
-              ),
-              AnimatedOpacity(
-                opacity: isDragging ? 0.5 : 1,
-                duration: AppTheme.defaultDuration,
-                child: Padding(
-                  padding: EdgeInsets.only(top: _progressBarHeight + 10),
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Offstage(
-                        offstage: widget.quality == null,
-                        child: Center(
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(4),
+            ),
+            AnimatedOpacity(
+              opacity: isDragging ? 0.5 : 1,
+              duration: AppTheme.defaultDuration,
+              child: Padding(
+                padding: EdgeInsets.only(top: _progressBarHeight + 10),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Offstage(
+                      offstage: widget.quality == null,
+                      child: Center(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.all(Radius.circular(4)),
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 6),
+                            decoration: BoxDecoration(
+                              color: progressBarBgColor,
                             ),
-                            child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 6),
-                              decoration: BoxDecoration(
-                                color: progressBarBgColor,
-                              ),
-                              child: Text(
-                                widget.quality ?? "",
-                                style: Theme.of(context).textTheme.bodyMedium
-                                    ?.copyWith(
-                                      fontSize: 10,
-                                      color: progressBarColor,
-                                    ),
-                              ),
+                            child: Text(
+                              widget.quality ?? "",
+                              style: Theme.of(context).textTheme.bodyMedium
+                                  ?.copyWith(
+                                    fontSize: 10,
+                                    color: progressBarColor,
+                                  ),
                             ),
                           ),
                         ),
                       ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          CommonHelper.buildDuration(
-                            position,
-                            progressBarColor,
-                            theme.textTheme.bodyMedium,
-                          ),
-                          CommonHelper.buildDuration(
-                            duration,
-                            progressBarColor,
-                            theme.textTheme.bodyMedium,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CommonHelper.buildDuration(
+                          position,
+                          progressBarColor,
+                          theme.textTheme.bodyMedium,
+                        ),
+                        CommonHelper.buildDuration(
+                          duration,
+                          progressBarColor,
+                          theme.textTheme.bodyMedium,
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

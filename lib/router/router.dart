@@ -20,43 +20,6 @@ import 'package:go_router/go_router.dart';
 final GoRouter router = GoRouter(
   initialLocation: "/",
   routes: <RouteBase>[
-    // StatefulShellRoute.indexedStack(
-    //   restorationScopeId: 'appShell',
-    //   pageBuilder:
-    //       (
-    //         BuildContext context,
-    //         GoRouterState state,
-    //         StatefulNavigationShell navigationShell,
-    //       ) {
-    //         return MaterialPage<void>(
-    //           restorationId: 'appShellPage',
-    //           child: HomePage(navigationShell: navigationShell),
-    //         );
-    //       },
-    //   branches: <StatefulShellBranch>[
-    //     StatefulShellBranch(
-    //       routes: <GoRoute>[
-    //         GoRoute(path: '/', builder: (_, __) => const MediaLibraryPage()),
-    //       ],
-    //     ),
-    //     StatefulShellBranch(
-    //       routes: <GoRoute>[
-    //         GoRoute(
-    //           path: '/album_list',
-    //           builder: (_, __) => const AlbumListPage(),
-    //         ),
-    //       ],
-    //     ),
-    //     StatefulShellBranch(
-    //       routes: <GoRoute>[
-    //         GoRoute(
-    //           path: '/artist_list',
-    //           builder: (_, __) => const ArtistListPage(),
-    //         ),
-    //       ],
-    //     ),
-    //   ],
-    // ),
     GoRoute(path: '/', builder: (_, state) => const HomePage()),
     GoRoute(
       path: '/album_list_detail/:id',

@@ -113,12 +113,10 @@ class PlayCover extends StatelessWidget {
             return cover;
           }
 
-          return RepaintBoundary(
-            child: AnimatedSwitcher(
-              duration: duration ?? AppTheme.defaultDurationLong,
-              transitionBuilder: transitionBuilder,
-              child: cover,
-            ),
+          return AnimatedSwitcher(
+            duration: duration ?? AppTheme.defaultDurationLong,
+            transitionBuilder: transitionBuilder,
+            child: cover,
           );
         },
       ),

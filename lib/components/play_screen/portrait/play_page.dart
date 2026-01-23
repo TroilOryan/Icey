@@ -44,121 +44,119 @@ class PlayPage extends StatelessWidget {
 
     final immersive = settingsManager.immersive.watch(context);
 
-    return RepaintBoundary(
-      child: IgnorePointer(
-        ignoring: lyricOpened,
-        child: AnimatedOpacity(
-          opacity: lyricOpened ? 0 : 1,
+    return IgnorePointer(
+      ignoring: lyricOpened,
+      child: AnimatedOpacity(
+        opacity: lyricOpened ? 0 : 1,
+        duration: AppTheme.defaultDurationMid,
+        child: AnimatedSlide(
+          curve: Curves.easeInOutSine,
+          offset: Offset(0, lyricOpened ? 2 : 0),
           duration: AppTheme.defaultDurationMid,
-          child: AnimatedSlide(
-            curve: Curves.easeInOutSine,
-            offset: Offset(0, lyricOpened ? 2 : 0),
-            duration: AppTheme.defaultDurationMid,
-            child: Column(
-              children: [
-                AnimatedOpacity(
-                  opacity: immersive ? 0 : 1,
-                  duration: AppTheme.defaultDuration,
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(
-                      32,
-                      MediaQuery.of(context).size.width * 1.2 + 46,
-                      32,
-                      0,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: 24),
-                        PlayLyricSmall(
-                          color: appThemeExtension.primary,
-                          onTap: () => onOpenLyric(context),
-                        ),
-                        SizedBox(height: 24),
-                        StreamBuilder(
-                          stream: mediaManager.mediaItem,
-                          builder: (context, snapshot) {
-                            final mediaItem = snapshot.data;
+          child: Column(
+            children: [
+              AnimatedOpacity(
+                opacity: immersive ? 0 : 1,
+                duration: AppTheme.defaultDuration,
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(
+                    32,
+                    MediaQuery.of(context).size.width * 1.2 + 46,
+                    32,
+                    0,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 24),
+                      PlayLyricSmall(
+                        color: appThemeExtension.primary,
+                        onTap: () => onOpenLyric(context),
+                      ),
+                      SizedBox(height: 24),
+                      StreamBuilder(
+                        stream: mediaManager.mediaItem,
+                        builder: (context, snapshot) {
+                          final mediaItem = snapshot.data;
 
-                            return PlayProgressBar(
-                              quality: mediaItem?.extras?["quality"],
-                              onChangeEnd: mediaManager.seek,
-                            );
-                          },
-                        ),
-                      ],
-                    ),
+                          return PlayProgressBar(
+                            quality: mediaItem?.extras?["quality"],
+                            onChangeEnd: mediaManager.seek,
+                          );
+                        },
+                      ),
+                    ],
                   ),
                 ),
-                SizedBox(height: 16),
-                Flexible(
-                  child: AnimatedSlide(
-                    curve: Curves.easeInOutSine,
-                    offset: Offset(0, immersive ? -0.5 : 0),
-                    duration: AppTheme.defaultDurationMid,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
+              ),
+              SizedBox(height: 16),
+              Flexible(
+                child: AnimatedSlide(
+                  curve: Curves.easeInOutSine,
+                  offset: Offset(0, immersive ? -0.5 : 0),
+                  duration: AppTheme.defaultDurationMid,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 32),
+                        child: Row(
+                          spacing: 32,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            PrevButton(
+                              size: 24,
+                              color: appThemeExtension.primary,
+                            ),
+                            PlayButton(
+                              immersive: true,
+                              size: 40,
+                              color: appThemeExtension.primary,
+                            ),
+                            NextButton(
+                              size: 24,
+                              color: appThemeExtension.primary,
+                            ),
+                          ],
+                        ),
+                      ),
+                      AnimatedOpacity(
+                        opacity: immersive ? 0 : 1,
+                        duration: AppTheme.defaultDuration,
+                        child: Padding(
                           padding: EdgeInsets.symmetric(horizontal: 32),
                           child: Row(
-                            spacing: 32,
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            spacing: 16,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              PrevButton(
-                                size: 24,
-                                color: appThemeExtension.primary,
+                              PlayModeButton(
+                                size: 20,
+                                color: appThemeExtension.secondary,
                               ),
-                              PlayButton(
-                                immersive: true,
-                                size: 40,
-                                color: appThemeExtension.primary,
+                              PlayListButton(
+                                size: 20,
+                                color: appThemeExtension.secondary,
                               ),
-                              NextButton(
-                                size: 24,
-                                color: appThemeExtension.primary,
+                              PlaySessionButton(
+                                size: 20,
+                                color: appThemeExtension.secondary,
+                              ),
+                              PlayLyricButton(
+                                active: lyricOpened,
+                                onTap: () => onOpenLyric(context),
+                                size: 20,
+                                color: appThemeExtension.secondary,
                               ),
                             ],
                           ),
                         ),
-                        AnimatedOpacity(
-                          opacity: immersive ? 0 : 1,
-                          duration: AppTheme.defaultDuration,
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 32),
-                            child: Row(
-                              spacing: 16,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                PlayModeButton(
-                                  size: 20,
-                                  color: appThemeExtension.secondary,
-                                ),
-                                PlayListButton(
-                                  size: 20,
-                                  color: appThemeExtension.secondary,
-                                ),
-                                PlaySessionButton(
-                                  size: 20,
-                                  color: appThemeExtension.secondary,
-                                ),
-                                PlayLyricButton(
-                                  active: lyricOpened,
-                                  onTap: () => onOpenLyric(context),
-                                  size: 20,
-                                  color: appThemeExtension.secondary,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 6),
-                      ],
-                    ),
+                      ),
+                      SizedBox(height: 6),
+                    ],
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

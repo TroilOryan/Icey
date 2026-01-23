@@ -92,59 +92,57 @@ class _LyricPageState extends State<LyricPage> {
 
     final _visible = controllerVisible.watch(context);
 
-    return RepaintBoundary(
-      child: IgnorePointer(
-        ignoring: !widget.lyricOpened,
-        child: VisibilityDetector(
-          key: Key("lyricPage"),
-          onVisibilityChanged: handleVisibilityChanged,
-          child: Offstage(
-            offstage: !widget.lyricOpened,
-            child: AnimatedSlide(
-              curve: Curves.easeInOutSine,
-              offset: Offset(0, widget.lyricOpened ? 0 : 2),
-              duration: AppTheme.defaultDurationMid,
-              child: Container(
-                padding: EdgeInsets.fromLTRB(
-                  22,
-                  paddingTop + deviceWidth * 0.2 + 88,
-                  22,
-                  paddingBottom + 16,
-                ),
-                child: Column(
-                  children: [
-                    Flexible(child: PlayLyric(onScroll: handleScroll)),
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: IgnorePointer(
-                        ignoring: !_visible,
-                        child: AnimatedOpacity(
-                          opacity: _visible ? 1 : 0,
-                          duration: AppTheme.defaultDurationMid,
-                          child: Row(
-                            spacing: 32,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              // PlayLyricSource(),
-                              PrevButton(
-                                size: 24,
-                                color: appThemeExtension.primary,
-                              ),
-                              PlayButton(
-                                color: appThemeExtension.primary,
-                                size: 40,
-                              ),
-                              NextButton(
-                                size: 24,
-                                color: appThemeExtension.primary,
-                              ),
-                            ],
-                          ),
+    return IgnorePointer(
+      ignoring: !widget.lyricOpened,
+      child: VisibilityDetector(
+        key: Key("lyricPage"),
+        onVisibilityChanged: handleVisibilityChanged,
+        child: Offstage(
+          offstage: !widget.lyricOpened,
+          child: AnimatedSlide(
+            curve: Curves.easeInOutSine,
+            offset: Offset(0, widget.lyricOpened ? 0 : 2),
+            duration: AppTheme.defaultDurationMid,
+            child: Container(
+              padding: EdgeInsets.fromLTRB(
+                22,
+                paddingTop + deviceWidth * 0.2 + 88,
+                22,
+                paddingBottom + 16,
+              ),
+              child: Column(
+                children: [
+                  Flexible(child: PlayLyric(onScroll: handleScroll)),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: IgnorePointer(
+                      ignoring: !_visible,
+                      child: AnimatedOpacity(
+                        opacity: _visible ? 1 : 0,
+                        duration: AppTheme.defaultDurationMid,
+                        child: Row(
+                          spacing: 32,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            // PlayLyricSource(),
+                            PrevButton(
+                              size: 24,
+                              color: appThemeExtension.primary,
+                            ),
+                            PlayButton(
+                              color: appThemeExtension.primary,
+                              size: 40,
+                            ),
+                            NextButton(
+                              size: 24,
+                              color: appThemeExtension.primary,
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
