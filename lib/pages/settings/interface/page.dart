@@ -30,6 +30,7 @@ class InterfacePage extends StatelessWidget {
     final brightnessTheme = settingsManager.brightnessTheme.watch(context),
         isMaterialScrollBehavior = settingsManager.isMaterialScrollBehavior
             .watch(context),
+        scrollHidePlayBar = settingsManager.scrollHidePlayBar.watch(context),
         coverShape = settingsManager.coverShape.watch(context),
         artCover = settingsManager.artCover.watch(context),
         wakelock = settingsManager.wakelock.watch(context),
@@ -72,6 +73,12 @@ class InterfacePage extends StatelessWidget {
                 isSwitch: true,
                 value: isMaterialScrollBehavior,
                 onChanged: settingsManager.setIsMaterialScrollBehavior,
+              ),
+              ListItem(
+                title: '滚动隐藏播放条',
+                isSwitch: true,
+                value: scrollHidePlayBar,
+                onChanged: settingsManager.setScrollHidePlayBar,
               ),
               ListItem(
                 isPro: true,

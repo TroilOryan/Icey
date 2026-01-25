@@ -81,19 +81,23 @@ class _HomePageState extends State<HomePage>
           backgroundColor: listBg.isNotEmpty
               ? Colors.transparent
               : theme.scaffoldBackgroundColor,
-          bottomNavigationBar: BottomBar(
-            selectedIndex: widget.navigationShell.currentIndex,
-            onSearch: () => homeController.navToSearch(context),
-            onTabSelected: widget.navigationShell.goBranch,
-          ),
+          bottomNavigationBar: mediaList.isNotEmpty
+              ? BottomBar(
+                  selectedIndex: widget.navigationShell.currentIndex,
+                  onSearch: () => homeController.navToSearch(context),
+                  onTabSelected: widget.navigationShell.goBranch,
+                )
+              : null,
           body: Stack(
             alignment: Alignment.bottomCenter,
             children: [
               widget.navigationShell,
-              PlayBar(
-                hidePlayBar: hidePlayBar,
-                onTap: () => homeController.handleOpenPanel(context),
-              ),
+
+              if (mediaList.isNotEmpty)
+                PlayBar(
+                  hidePlayBar: hidePlayBar,
+                  onTap: () => homeController.handleOpenPanel(context),
+                ),
             ],
           ),
         ),
