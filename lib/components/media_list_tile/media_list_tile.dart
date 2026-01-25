@@ -112,6 +112,7 @@ class MediaListTile extends StatelessWidget {
                                     color: isPlaying
                                         ? theme.colorScheme.primary
                                         : null,
+                                    height: 1,
                                   ),
                             ),
                           ),
