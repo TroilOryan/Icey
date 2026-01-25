@@ -44,21 +44,19 @@ class MediaListIndexBar extends StatelessWidget {
     }
 
     return Positioned(
-      top: 16,
+      top: 200,
       right: 0,
       child: FrameSeparateWidget(
-        child: RepaintBoundary(
-          child: Container(
-            padding: EdgeInsets.only(right: 6),
-            key: indexBarContainerKey,
-            width: indexBarWidth,
-            alignment: Alignment.center,
-            child: AzListIndexBar(
-              parentKey: indexBarContainerKey,
-              symbols: symbols,
-              onSelectionUpdate: onSelectionUpdate,
-              onSelectionEnd: onSelectionEnd,
-            ),
+        child: Container(
+          padding: EdgeInsets.only(right: 6),
+          key: indexBarContainerKey,
+          width: indexBarWidth,
+          alignment: Alignment.center,
+          child: AzListIndexBar(
+            parentKey: indexBarContainerKey,
+            symbols: symbols,
+            onSelectionUpdate: onSelectionUpdate,
+            onSelectionEnd: onSelectionEnd,
           ),
         ),
       ),

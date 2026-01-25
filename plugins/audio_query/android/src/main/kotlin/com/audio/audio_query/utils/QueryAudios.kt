@@ -17,7 +17,6 @@ import kotlinx.coroutines.sync.Semaphore
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.collections.HashSet
-import com.audio.audio_query.utils.QueryArtworkColor
 
 class QueryAudios {
     // 使用SupervisorJob确保子协程失败不影响其他协程
@@ -165,17 +164,6 @@ class QueryAudios {
                 // 设置数据源
                 retriever.setDataSource(audioItem.dataPath)
 
-                // 提取原始尺寸封面
-                val coverImage = extractOriginalCover(retriever, audioItem.id.toString())
-
-                // 使用挂起函数同步获取颜色结果
-                val color = if (coverImage != null) {
-                    QueryArtworkColor().queryArtworkColorSync(coverImage, audioItem.id.toString())
-                } else {
-                    null
-                }
-
-
                 val audioData = mutableMapOf<String, Any?>().apply {
                     // 基本信息（来自预加载的AudioItem）
                     put("_id", audioItem.id)
@@ -202,11 +190,6 @@ class QueryAudios {
                             getBitDepth(retriever)
                         )
                     )
-
-                    // 添加封面图片
-                    put("cover_image", coverImage) // 原始尺寸封面字节数组，无封面时为null
-
-                    put("color", color)
                 }
 
                 // 在主线程发送数据

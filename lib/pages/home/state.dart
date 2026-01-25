@@ -8,8 +8,6 @@ class HomeState {
 
   final panelOpened = signal(false);
 
-  final panelSlideValue = signal(0.0);
-
   final hidePlayBar = signal(false);
 
   final lastScrollOffset = signal(0.0);

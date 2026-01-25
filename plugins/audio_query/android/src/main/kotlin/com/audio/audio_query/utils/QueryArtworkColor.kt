@@ -51,43 +51,6 @@ class QueryArtworkColor : ViewModel() {
         }
     }
 
-    /**
-     * 解析应用端传递的图片数据
-     * @param imageData 图片字节数组（对应Flutter Uint8List）
-     * @param cacheKey 可选缓存键，用于优化重复解析
-     */
-//  fun queryArtworkColor(data: ByteArray?, cacheKey: String): Map<String, Any?>? = {
-////    val result = PluginProvider.result()
-////    val call = PluginProvider.call()
-//
-////    val data = call.argument<ByteArray>("data") ?: throw IllegalArgumentException("data参数缺失")
-////    val cacheKey = call.argument<String>("cacheKey") ?: throw IllegalArgumentException("cacheKey参数缺失")
-//
-//    viewModelScope.launch(coroutineExceptionHandler) {
-//      try {
-//        val analysisResult = processImageData(data, cacheKey)
-////        result.success(analysisResult)
-//        return analysisResult;
-//      } catch (e: Exception) {
-////        result.error("PROCESS_ERROR", "图片处理失败: ${e.message}", e.stackTraceToString())
-//        return null;
-//      }
-//    }
-//  }
-
-    // 外部可直接调用的函数
-//  fun queryArtworkColor(
-//    data: ByteArray,
-//    cacheKey: String,
-//    callback: (Map<String, Any?>?) -> Unit
-//  ) {
-//    // 协程在内部实现，外部无感知
-//    viewModelScope.launch(coroutineExceptionHandler) {
-//      val result = processImageData(data, cacheKey)
-//      callback(result)
-//    }
-//  }
-
     suspend fun queryArtworkColorSync(data: ByteArray, cacheKey: String): Map<String, Any?>? =
         withContext(Dispatchers.IO) {
             processImageData(data, cacheKey)

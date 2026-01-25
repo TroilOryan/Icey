@@ -50,17 +50,18 @@ class PageWrapper extends StatelessWidget {
                         alignment: Alignment.centerLeft,
                         child: Stack(
                           children: [
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Container(
-                                height: 36,
-                                margin: EdgeInsets.fromLTRB(24, 4, 0, 0),
-                                child: RoundIconButton(
-                                  icon: const Icon(Icons.arrow_back),
-                                  onTap: context.pop,
+                            if (context.canPop())
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Container(
+                                  height: 36,
+                                  margin: EdgeInsets.fromLTRB(24, 4, 0, 0),
+                                  child: RoundIconButton(
+                                    icon: const Icon(Icons.arrow_back),
+                                    onTap: context.pop,
+                                  ),
                                 ),
                               ),
-                            ),
                             Center(
                               child: Text(
                                 title,

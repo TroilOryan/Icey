@@ -7,12 +7,10 @@ import 'play_bar_lyric.dart';
 
 /// 音乐信息
 class PlayInfo extends StatelessWidget {
-  final bool panelOpened;
   final MediaItem? mediaItem;
 
   const PlayInfo({
     super.key,
-    required this.panelOpened,
     required this.mediaItem,
   });
 
@@ -21,7 +19,6 @@ class PlayInfo extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Row(
-      spacing: 16,
       children: [
         StreamBuilder(
           stream: mediaManager.mediaItem,
@@ -30,13 +27,12 @@ class PlayInfo extends StatelessWidget {
 
             return Flexible(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 72),
+                padding: EdgeInsets.symmetric(horizontal: 56),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Marquee(
-                      disableAnimation: panelOpened,
                       child: Text(
                         mediaItem?.title ?? "暂无歌曲",
                         style: theme.textTheme.titleSmall,
@@ -46,7 +42,7 @@ class PlayInfo extends StatelessWidget {
                       ),
                     ),
 
-                    PlayBarLyric(panelOpened: panelOpened),
+                    PlayBarLyric(),
                   ],
                 ),
               ),

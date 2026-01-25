@@ -1,7 +1,11 @@
+import 'package:IceyPlayer/pages/album_list/controller.dart';
 import 'package:IceyPlayer/pages/album_list_detail/page.dart';
+import 'package:IceyPlayer/pages/artist_list/controller.dart';
 import 'package:IceyPlayer/pages/artist_list_detail/page.dart';
 import 'package:IceyPlayer/pages/home/controller.dart';
+import 'package:IceyPlayer/pages/media_library/controller.dart';
 import 'package:IceyPlayer/pages/media_order_detail/page.dart';
+import 'package:IceyPlayer/pages/play_screen/controller.dart';
 import 'package:IceyPlayer/pages/player_style/page.dart';
 import 'package:IceyPlayer/pages/search/page.dart';
 import 'package:IceyPlayer/pages/settings/about/logs/logs_detail/page.dart';
@@ -15,49 +19,65 @@ import 'package:IceyPlayer/pages/settings/media_store/page.dart';
 import 'package:IceyPlayer/pages/settings/page.dart';
 import 'package:IceyPlayer/pages/settings/pro/page.dart';
 import 'package:IceyPlayer/pages/settings/pro/pay/page.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:go_transitions/go_transitions.dart';
 
 final GoRouter router = GoRouter(
   initialLocation: "/",
   routes: <RouteBase>[
-    // StatefulShellRoute.indexedStack(
-    //   restorationScopeId: 'appShell',
-    //   pageBuilder:
-    //       (
-    //         BuildContext context,
-    //         GoRouterState state,
-    //         StatefulNavigationShell navigationShell,
-    //       ) {
-    //         return MaterialPage<void>(
-    //           restorationId: 'appShellPage',
-    //           child: HomePage(navigationShell: navigationShell),
-    //         );
-    //       },
-    //   branches: <StatefulShellBranch>[
-    //     StatefulShellBranch(
-    //       routes: <GoRoute>[
-    //         GoRoute(path: '/', builder: (_, __) => const MediaLibraryPage()),
-    //       ],
-    //     ),
-    //     StatefulShellBranch(
-    //       routes: <GoRoute>[
-    //         GoRoute(
-    //           path: '/album_list',
-    //           builder: (_, __) => const AlbumListPage(),
-    //         ),
-    //       ],
-    //     ),
-    //     StatefulShellBranch(
-    //       routes: <GoRoute>[
-    //         GoRoute(
-    //           path: '/artist_list',
-    //           builder: (_, __) => const ArtistListPage(),
-    //         ),
-    //       ],
-    //     ),
-    //   ],
-    // ),
-    GoRoute(path: '/', builder: (_, state) => const HomePage()),
+    StatefulShellRoute.indexedStack(
+      restorationScopeId: 'appShell',
+      pageBuilder:
+          (
+            BuildContext context,
+            GoRouterState state,
+            StatefulNavigationShell navigationShell,
+          ) {
+            return MaterialPage<void>(
+              restorationId: 'appShellPage',
+              child: HomePage(navigationShell: navigationShell),
+            );
+          },
+      branches: <StatefulShellBranch>[
+        StatefulShellBranch(
+          routes: <GoRoute>[
+            GoRoute(path: '/', builder: (_, __) => const MediaLibraryPage()),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: <GoRoute>[
+            GoRoute(
+              path: '/album_list',
+              builder: (_, __) => const AlbumListPage(),
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: <GoRoute>[
+            GoRoute(
+              path: '/artist_list',
+              builder: (_, __) => const ArtistListPage(),
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: <GoRoute>[
+            GoRoute(
+              path: '/settings',
+              builder: (_, __) => const SettingsPage(),
+            ),
+          ],
+        ),
+      ],
+    ),
+    // GoRoute(path: '/', builder: (_, state) => const HomePage()),
+    GoRoute(
+      path: '/play_screen',
+      pageBuilder: GoTransitions.slide.toTop.build(
+        builder: (_, __) => const PlayScreenPage(),
+      ),
+    ),
     GoRoute(
       path: '/album_list_detail/:id',
       builder: (_, state) => const AlbumListDetailPage(),

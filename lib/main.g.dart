@@ -4,7 +4,6 @@ Future<void> initHive() async {
   await Hive.initFlutter();
 
   Hive.registerAdapter(MediaEntityAdapter(), override: true);
-  Hive.registerAdapter(ArtworkColorEntityAdapter(), override: true);
   Hive.registerAdapter(MediaOrderEntityAdapter(), override: true);
 
   await Hive.openBox(BoxKey.media);
@@ -12,7 +11,6 @@ Future<void> initHive() async {
   await Hive.openBox(BoxKey.settings);
 
   Hive.openBox(BoxKey.liked);
-  Hive.openBox(BoxKey.artworkColor);
 
   Hive.openBox(BoxKey.mediaCount);
 

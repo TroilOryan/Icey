@@ -24,16 +24,14 @@ class PlayLyricButton extends StatelessWidget {
     return RoundIconButton(
       color: iconColor,
       size: size * 2.1,
-      icon: RepaintBoundary(
-        child: AnimatedSwitcher(
-          duration: AppTheme.defaultDuration,
-          child: SFIcon(
-            key: ValueKey(active),
-            active == true
-                ? SFIcons.sf_quote_bubble_fill
-                : SFIcons.sf_quote_bubble,
-            fontSize: size,
-          ),
+      icon: AnimatedSwitcher(
+        duration: AppTheme.defaultDuration,
+        child: SFIcon(
+          key: ValueKey(active),
+          active == true
+              ? SFIcons.sf_quote_bubble_fill
+              : SFIcons.sf_quote_bubble,
+          fontSize: size,
         ),
       ),
       onTap: onTap,

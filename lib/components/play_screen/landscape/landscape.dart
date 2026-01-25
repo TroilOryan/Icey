@@ -16,38 +16,34 @@ import '../../play_lyric/play_lyric.dart';
 import '../play_info/play_info.dart' show PlayInfo;
 
 class Landscape extends StatelessWidget {
-  final bool panelOpened;
-
-  const Landscape({super.key, required this.panelOpened});
+  const Landscape({super.key});
 
   Widget buildPlayCover({
     required VoidCallback onTap,
     required double deviceHeight,
-  }) => RepaintBoundary(
-    child: Builder(
-      builder: (context) {
-        final coverShape = settingsManager.coverShape.watch(context);
+  }) => Builder(
+    builder: (context) {
+      final coverShape = settingsManager.coverShape.watch(context);
 
-        final immersive = computed(
-          () => coverShape.value == CoverShape.immersive.value,
+      final immersive = computed(
+        () => coverShape.value == CoverShape.immersive.value,
+      );
+
+      final height = immersive.value ? deviceHeight : deviceHeight - 32;
+
+      Widget child;
+
+      if (immersive.value) {
+        child = PlayImmersiveCover(isLandscape: true, size: height);
+      } else {
+        child = Container(
+          margin: EdgeInsets.only(top: 32),
+          child: PlayShapedCover(isLandscape: true),
         );
+      }
 
-        final height = immersive.value ? deviceHeight : deviceHeight - 32;
-
-        Widget child;
-
-        if (immersive.value) {
-          child = PlayImmersiveCover(isLandscape: true, size: height);
-        } else {
-          child = Container(
-            margin: EdgeInsets.only(top: 32),
-            child: PlayShapedCover(isLandscape: true),
-          );
-        }
-
-        return GestureDetector(onTap: onTap, child: child);
-      },
-    ),
+      return GestureDetector(onTap: onTap, child: child);
+    },
   );
 
   @override
@@ -66,7 +62,7 @@ class Landscape extends StatelessWidget {
             padding: EdgeInsets.fromLTRB(0, 32, 24, 8),
             child: Column(
               children: [
-                PlayInfo(panelOpened: panelOpened),
+                PlayInfo(),
                 SizedBox(height: 8),
                 Flexible(child: PlayLyric()),
                 SizedBox(height: 16),
@@ -84,19 +80,13 @@ class Landscape extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    PlayListButton(
-                      size: 24,
-                      color: appThemeExtension.primary,
-                    ),
+                    PlayListButton(size: 24, color: appThemeExtension.primary),
                     PrevButton(size: 24, color: appThemeExtension.primary),
                     SizedBox(width: 8),
                     PlayButton(size: 40, color: appThemeExtension.primary),
                     SizedBox(width: 8),
                     NextButton(size: 24, color: appThemeExtension.primary),
-                    PlayMenuButton(
-                      size: 24,
-                      color: appThemeExtension.primary,
-                    ),
+                    PlayMenuButton(size: 24, color: appThemeExtension.primary),
                   ],
                 ),
               ],

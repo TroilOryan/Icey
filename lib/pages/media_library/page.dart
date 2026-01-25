@@ -45,6 +45,7 @@ class _MediaLibraryPageState extends State<MediaLibraryPage>
     }
 
     return Stack(
+      alignment: Alignment.center,
       children: [
         SliverViewObserver(
           controller: homeController.observerController,
@@ -67,14 +68,18 @@ class _MediaLibraryPageState extends State<MediaLibraryPage>
                   children: <Widget>[
                     HeaderLocator.sliver(),
 
-                    MediaSearchBar(
-                      mediaList: mediaList,
-                      offstage: mediaList.isEmpty,
-                      focusNode: controller.focusNode,
-                      onTap: () => controller.handleNavToSearch(context),
+                    HeaderAppBar(
+                      onPlayRandom: homeController.handlePlayRandom,
+                      onOpenSortMenu: controller.handleOpenSortMenu,
                     ),
 
-                    MediaOrder(offstage: mediaList.isEmpty),
+                    // MediaSearchBar(
+                    //   mediaList: mediaList,
+                    //   offstage: mediaList.isEmpty,
+                    //   focusNode: controller.focusNode,
+                    //   onTap: () => controller.handleNavToSearch(context),
+                    // ),
+                    // MediaOrder(offstage: mediaList.isEmpty),
                     MediaList(
                       showDuration: showDuration,
                       mediaList: mediaList,

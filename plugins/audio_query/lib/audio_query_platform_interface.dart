@@ -38,8 +38,16 @@ abstract class AudioQueryPlatform extends PlatformInterface {
     throw UnimplementedError('deleteMediaFolder() has not been implemented.');
   }
 
-  Future queryArtworkColor(Uint8List data, String cacheKey) {
-    throw UnimplementedError('queryArtworkColor() has not been implemented.');
+  Future queryArtworkWithColor(
+    int id,
+    ArtworkType type, {
+    ArtworkFormat? format,
+    int? size,
+    int? quality,
+  }) {
+    throw UnimplementedError(
+      'queryArtworkWithColor() has not been implemented.',
+    );
   }
 
   Future<Uint8List?> queryArtwork(

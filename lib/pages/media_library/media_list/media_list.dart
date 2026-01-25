@@ -40,7 +40,7 @@ class MediaList extends StatelessWidget {
       showDuration: showDuration,
       isPlaying: isPlaying,
       margin: index == mediaList.length - 1
-          ? EdgeInsets.only(bottom: paddingBottom + 104)
+          ? EdgeInsets.only(bottom: paddingBottom + 64)
           : null,
       onTap: () => onTap(item),
       onLongPress: () => onLongPress(item),

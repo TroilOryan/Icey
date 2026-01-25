@@ -126,23 +126,23 @@ class SlidingUpPanelState extends State<SlidingUpPanel>
     super.initState();
 
     _ac =
-    AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 300),
-      value: widget.defaultPanelState == PanelState.CLOSED
-          ? 0.0
-          : 1.0, //set the default panel state (i.e. set initial value of _ac)
-    )..addListener(() {
-      if (widget.onPanelSlide != null) widget.onPanelSlide!(_ac.value);
+        AnimationController(
+          vsync: this,
+          duration: const Duration(milliseconds: 300),
+          value: widget.defaultPanelState == PanelState.CLOSED
+              ? 0.0
+              : 1.0, //set the default panel state (i.e. set initial value of _ac)
+        )..addListener(() {
+          if (widget.onPanelSlide != null) widget.onPanelSlide!(_ac.value);
 
-      if (widget.onPanelOpened != null && _ac.value == 1.0) {
-        widget.onPanelOpened!();
-      }
+          if (widget.onPanelOpened != null && _ac.value == 1.0) {
+            widget.onPanelOpened!();
+          }
 
-      if (widget.onPanelClosed != null && _ac.value == 0.0) {
-        widget.onPanelClosed!();
-      }
-    });
+          if (widget.onPanelClosed != null && _ac.value == 0.0) {
+            widget.onPanelClosed!();
+          }
+        });
 
     // prevent the panel content from being scrolled only if the widget is
     // draggable and panel scrolling is enabled
@@ -314,10 +314,10 @@ class SlidingUpPanelState extends State<SlidingUpPanel>
   //animate the panel position to value - must
   //be between 0.0 and 1.0
   Future<void> _animatePanelToPosition(
-      double value, {
-        Duration? duration,
-        Curve curve = Curves.linear,
-      }) {
+    double value, {
+    Duration? duration,
+    Curve curve = Curves.linear,
+  }) {
     assert(0.0 <= value && value <= 1.0);
     return _ac.animateTo(value, duration: duration, curve: curve);
   }
@@ -381,79 +381,79 @@ class SlidingUpPanelState extends State<SlidingUpPanel>
             builder: (context, panelVisible, child) {
               return panelVisible
                   ? _gestureHandler(
-                child: Container(
-                  decoration: BoxDecoration(
-                    boxShadow: widget.boxShadow,
-                    color: widget.color,
-                  ),
-                  child: ValueListenableBuilder(
-                    valueListenable: _ac,
-                    builder: (context, value, child) => Builder(
-                      builder: (context) {
-                        return AnimatedContainer(
-                          curve: Curves.easeInOutSine,
-                          duration: Duration(
-                            milliseconds: widget.minHeight == 0
-                                ? 500
-                                : value > 0
-                                ? 0
-                                : 500,
-                          ),
-                          height:
-                          value *
-                              (widget.maxHeight - widget.minHeight) +
-                              widget.minHeight,
-                          child: Stack(
-                            children: [
-                              Positioned(
-                                top: 0,
-                                width: width,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          boxShadow: widget.boxShadow,
+                          color: widget.color,
+                        ),
+                        child: ValueListenableBuilder(
+                          valueListenable: _ac,
+                          builder: (context, value, child) => Builder(
+                            builder: (context) {
+                              return AnimatedContainer(
+                                curve: Curves.easeInOutSine,
+                                duration: Duration(
+                                  milliseconds: widget.minHeight == 0
+                                      ? 500
+                                      : value > 0
+                                      ? 0
+                                      : 500,
+                                ),
+                                height:
+                                    value *
+                                        (widget.maxHeight - widget.minHeight) +
+                                    widget.minHeight,
                                 child: Stack(
                                   children: [
-                                    RepaintBoundary(
-                                      key: const ValueKey("panel"),
-                                      child: IgnorePointer(
-                                        ignoring: value != 1,
-                                        child: AnimatedOpacity(
-                                          opacity: value < 0.02
-                                              ? value * 50
-                                              : 1,
-                                          duration: const Duration(
-                                            milliseconds: 50,
+                                    Positioned(
+                                      top: 0,
+                                      width: width,
+                                      child: Stack(
+                                        children: [
+                                          RepaintBoundary(
+                                            key: const ValueKey("panel"),
+                                            child: IgnorePointer(
+                                              ignoring: value != 1,
+                                              child: AnimatedOpacity(
+                                                opacity: value < 0.02
+                                                    ? value * 50
+                                                    : 1,
+                                                duration: const Duration(
+                                                  milliseconds: 50,
+                                                ),
+                                                child: SizedBox(
+                                                  height: widget.maxHeight,
+                                                  child: widget.panel,
+                                                ),
+                                              ),
+                                            ),
                                           ),
-                                          child: SizedBox(
-                                            height: widget.maxHeight,
-                                            child: widget.panel,
+                                          RepaintBoundary(
+                                            key: const ValueKey("collapsed"),
+                                            child: IgnorePointer(
+                                              ignoring: value != 0,
+                                              child: AnimatedOpacity(
+                                                duration: const Duration(
+                                                  milliseconds: 50,
+                                                ),
+                                                opacity: value < 0.02
+                                                    ? 1 - value * 50
+                                                    : 0,
+                                                child: widget.collapsed,
+                                              ),
+                                            ),
                                           ),
-                                        ),
-                                      ),
-                                    ),
-                                    RepaintBoundary(
-                                      key: const ValueKey("collapsed"),
-                                      child: IgnorePointer(
-                                        ignoring: value != 0,
-                                        child: AnimatedOpacity(
-                                          duration: const Duration(
-                                            milliseconds: 50,
-                                          ),
-                                          opacity: value < 0.02
-                                              ? 1 - value * 50
-                                              : 0,
-                                          child: widget.collapsed,
-                                        ),
+                                        ],
                                       ),
                                     ),
                                   ],
                                 ),
-                              ),
-                            ],
+                              );
+                            },
                           ),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-              )
+                        ),
+                      ),
+                    )
                   : Container();
             },
           ),
@@ -507,10 +507,10 @@ class PanelController {
   /// (optional) duration specifies the time for the animation to complete
   /// (optional) curve specifies the easing behavior of the animation.
   Future<void> animatePanelToPosition(
-      double value, {
-        Duration? duration,
-        Curve curve = Curves.linear,
-      }) {
+    double value, {
+    Duration? duration,
+    Curve curve = Curves.linear,
+  }) {
     assert(isAttached, "PanelController must be attached to a SlidingUpPanel");
     assert(0.0 <= value && value <= 1.0);
     return _panelState!._animatePanelToPosition(
@@ -530,8 +530,8 @@ class PanelController {
   }) {
     assert(isAttached, "PanelController must be attached to a SlidingUpPanel");
     assert(
-    _panelState!.widget.snapPoint != null,
-    "SlidingUpPanel snapPoint property must not be null",
+      _panelState!.widget.snapPoint != null,
+      "SlidingUpPanel snapPoint property must not be null",
     );
     return _panelState!._animatePanelToSnapPoint(
       duration: duration,

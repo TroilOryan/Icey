@@ -57,28 +57,26 @@ class PlayButton extends StatelessWidget {
           onLongPress: handleLongPress,
         );
 
-        return RepaintBoundary(
-          child: AnimatedSwitcher(
-            duration: AppTheme.defaultDurationMid,
-            switchInCurve: Curves.easeIn,
-            switchOutCurve: Curves.easeOut,
-            transitionBuilder: (Widget child, Animation<double> animation) =>
-                FadeTransition(
-                  opacity: animation,
-                  child: ScaleTransition(scale: animation, child: child),
-                ),
-            child: ghost == true
-                ? button
-                : Ink(
-                    key: playing ? pauseKey : playKey,
-                    width: size * 1.6,
-                    height: size * 1.6,
-                    decoration: const ShapeDecoration(
-                      shape: CircleBorder(), // 圆形背景
-                    ),
-                    child: button,
+        return AnimatedSwitcher(
+          duration: AppTheme.defaultDurationMid,
+          switchInCurve: Curves.easeIn,
+          switchOutCurve: Curves.easeOut,
+          transitionBuilder: (Widget child, Animation<double> animation) =>
+              FadeTransition(
+                opacity: animation,
+                child: ScaleTransition(scale: animation, child: child),
+              ),
+          child: ghost == true
+              ? button
+              : Ink(
+                  key: playing ? pauseKey : playKey,
+                  width: size * 1.6,
+                  height: size * 1.6,
+                  decoration: const ShapeDecoration(
+                    shape: CircleBorder(), // 圆形背景
                   ),
-          ),
+                  child: button,
+                ),
         );
       },
     );

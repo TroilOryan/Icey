@@ -47,20 +47,27 @@ class AudioQuery {
     return status;
   }
 
-  Future<ArtworkColorEntity> queryArtworkColor(
-    Uint8List data,
-    String cacheKey,
-  ) async {
-    final res = await AudioQueryPlatform.instance.queryArtworkColor(
-      data,
-      cacheKey,
+  Future<Map<String, dynamic>> queryArtworkWithColor(
+    int id,
+    ArtworkType type, {
+    ArtworkFormat? format,
+    int? size,
+    int? quality,
+  }) async {
+    final res = await AudioQueryPlatform.instance.queryArtworkWithColor(
+      id,
+      type,
+      format: format,
+      size: size,
+      quality: quality,
     );
 
-    return ArtworkColorEntity(
-      primaryColor: res["primaryColor"],
-      secondaryColor: res["secondaryColor"],
-      isDark: res["isDark"],
-    );
+    return {
+      "cover": res["data"],
+      "primaryColor": res["color"]["primaryColor"],
+      "secondaryColor": res["color"]["secondaryColor"],
+      "isDark": res["color"]["isDark"],
+    };
   }
 
   Future<Uint8List?> queryArtwork(

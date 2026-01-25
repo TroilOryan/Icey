@@ -14,13 +14,11 @@ const menu = [
 late StatefulNavigationShell nav;
 
 class HeaderAppBar extends StatelessWidget {
-  final bool offstage;
   final VoidCallback onPlayRandom;
   final VoidCallback onOpenSortMenu;
 
   const HeaderAppBar({
     super.key,
-    required this.offstage,
     required this.onPlayRandom,
     required this.onOpenSortMenu,
   });
@@ -39,9 +37,6 @@ class HeaderAppBar extends StatelessWidget {
 
     final textTheme = Theme.of(context).textTheme;
 
-    if (offstage) {
-      return SizedBox();
-    }
 
     return SliverPersistentHeader(
       pinned: true,
@@ -61,7 +56,7 @@ class HeaderAppBar extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Icey Player",
+                    "媒体库",
                     style: textTheme.titleLarge!.copyWith(
                       fontSize:
                           textTheme.titleLarge!.fontSize! *
@@ -74,13 +69,17 @@ class HeaderAppBar extends StatelessWidget {
                         icon: SFIcon(SFIcons.sf_shuffle, fontSize: 20),
                         onPressed: onPlayRandom,
                       ),
-                      PopupMenuButton(
-                        clipBehavior: Clip.antiAlias,
-                        onSelected: (value) =>
-                            handleMenuSelected(value, context),
-                        itemBuilder: (context) => menu,
-                        icon: SFIcon(SFIcons.sf_plus, fontSize: 22),
+                      IconButton(
+                        icon: SFIcon(SFIcons.sf_list_bullet, fontSize: 20),
+                        onPressed: onOpenSortMenu,
                       ),
+                      // PopupMenuButton(
+                      //   clipBehavior: Clip.antiAlias,
+                      //   onSelected: (value) =>
+                      //       handleMenuSelected(value, context),
+                      //   itemBuilder: (context) => menu,
+                      //   icon: SFIcon(SFIcons.sf_plus, fontSize: 22),
+                      // ),
                     ],
                   ),
                 ],

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:IceyPlayer/pages/home/bottom_bar/bottom_bar.dart';
 import 'package:audio_query/entities.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:common_utils/common_utils.dart';
@@ -26,19 +27,14 @@ import 'package:IceyPlayer/helpers/update/update.dart';
 import 'package:IceyPlayer/main.dart';
 import 'package:IceyPlayer/models/media/media.dart';
 import 'package:IceyPlayer/models/settings/settings.dart';
-import 'package:IceyPlayer/pages/album_list/controller.dart';
-import 'package:IceyPlayer/pages/artist_list/controller.dart';
-import 'package:IceyPlayer/pages/home/header_tab_bar/header_tab_bar.dart';
-import 'package:IceyPlayer/pages/home/landscape.dart';
-import 'package:IceyPlayer/pages/media_library/controller.dart';
+import 'package:go_router/go_router.dart';
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 import 'package:scrollview_observer/scrollview_observer.dart';
 import 'package:signals/signals_flutter.dart';
-import 'package:sliver_tools/sliver_tools.dart';
 import 'package:super_sliver_list/super_sliver_list.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../components/sliding_up_panel/sliding_up_panel.dart';
-import 'header_app_bar/header_app_bar.dart';
 import 'state.dart';
 
 import 'package:path/path.dart' as path;
@@ -53,8 +49,6 @@ class HomeController {
   Timer? _scrollTimer;
 
   final _settingsBox = Boxes.settingsBox;
-
-  final PanelController panelController = PanelController();
 
   StreamController<List<AudioEntity>>? streamController;
 
@@ -79,18 +73,6 @@ class HomeController {
 
   late final EffectCleanup _panelOpenedListener;
 
-  late final EffectCleanup _panelSlideValueListener;
-
-  MediaItem? currentMediaItem;
-
-  late final StreamSubscription<MediaItem?> mediaItemListener;
-
-  late final AppLifecycleListener? lifecycleListener;
-
-  late final AnimationController rotationController;
-
-  late final Animation<double> rotationAnimation;
-
   void handleLocate() {
     final index = mediaManager.mediaList.value.indexWhere(
       (item) => item.id.toString() == mediaManager.mediaItem.value?.id,
@@ -102,6 +84,10 @@ class HomeController {
         offset: (_) => 150,
       );
     }
+  }
+
+  void navToSearch(BuildContext context) {
+    context.push("/search");
   }
 
   void handleMediaTap(MediaEntity media) {
@@ -194,8 +180,9 @@ class HomeController {
   void handlePopInvokedWithResult(bool didPop, Object? result) {
     if (didPop) return;
 
-    if (state.panelOpened.value ||
-        (panelIsUp && state.panelSlideValue.value > 0)) {
+    if (state.panelOpened.value) {
+      state.panelOpened.value = false;
+
       if (playScreenState.lyricOpened.value) {
         playScreenState.lyricOpened.value = false;
         playScreenState.offset.value = 0;
@@ -203,37 +190,10 @@ class HomeController {
         return;
       }
 
-      panelController.close();
-
       return;
     }
 
     FlutterAppMinimizerPlus.minimizeApp();
-  }
-
-  void handleClosePanel() {
-    panelController.close();
-  }
-
-  void handlePanelOpened() {
-    state.panelOpened.value = true;
-  }
-
-  void handlePanelClosed() {
-    state.panelOpened.value = false;
-
-    playScreenState.lyricOpened.value = false;
-    playScreenState.offset.value = 0;
-  }
-
-  void handlePanelSlide(double value) {
-    if (value > state.panelSlideValue.value) {
-      panelIsUp = true;
-    } else {
-      panelIsUp = false;
-    }
-
-    state.panelSlideValue.value = value;
   }
 
   Future<void> handlePlayRandom() async {
@@ -420,6 +380,16 @@ class HomeController {
     });
   }
 
+  void handleOpenPanel(BuildContext context) {
+    context.push("/play_screen").then((_) {
+      state.panelOpened.value = false;
+    });
+
+    Future.delayed(const Duration(milliseconds: 600)).then((_) {
+      state.panelOpened.value = true;
+    });
+  }
+
   void setStatusBarIconBrightness(bool isDark) {
     final brightness = isDark ? Brightness.light : Brightness.dark;
 
@@ -481,30 +451,10 @@ class HomeController {
           );
         }
       });
-
-      _panelSlideValueListener = effect(() {
-        if (panelIsUp &&
-            state.panelSlideValue.value > 0.96 &&
-            state.panelSlideValue.value < 0.97) {
-          setStatusBarIconBrightness(mediaManager.coverColor.value.isDark);
-        } else if (!panelIsUp &&
-            state.panelSlideValue.value > 0.96 &&
-            state.panelSlideValue.value < 0.97) {
-          setStatusBarIconBrightness(
-            MediaQuery.of(context).platformBrightness == Brightness.dark,
-          );
-        }
-      });
     });
   }
 
   void onDispose() {
-    rotationController.dispose();
-
-    mediaItemListener.cancel();
-
-    lifecycleListener?.dispose();
-
     mediaListScrollController.removeListener(_listenMediaListScroll);
 
     albumListScrollController.removeListener(_listenMediaListScroll);
@@ -522,7 +472,5 @@ class HomeController {
     mediaScanListController?.dispose();
 
     _panelOpenedListener();
-
-    _panelSlideValueListener();
   }
 }
