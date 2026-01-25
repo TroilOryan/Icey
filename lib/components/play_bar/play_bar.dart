@@ -48,7 +48,7 @@ class PlayBar extends StatelessWidget {
             padding: EdgeInsets.zero,
             settings: LiquidGlassSettings(
               blur: 3,
-              thickness: 10,
+              thickness: 16,
               glassColor: Color.fromRGBO(255, 255, 255, 0.01),
               lightAngle: 135,
               lightIntensity: 0.7,

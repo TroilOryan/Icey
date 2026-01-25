@@ -1,7 +1,9 @@
 import 'dart:ui';
 
+import 'package:IceyPlayer/constants/glass_settings.dart';
 import 'package:IceyPlayer/models/settings/settings.dart';
 import 'package:flutter/material.dart';
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 import 'package:signals/signals_flutter.dart';
 
 class HighMaterialWrapper extends StatelessWidget {
@@ -36,6 +38,13 @@ class HighMaterialWrapper extends StatelessWidget {
     return Builder(
       builder: (context) {
         if (obscure) {
+          return GlassPanel(
+            settings: RecommendedGlassSettings.bottomBar,
+            padding: padding ?? EdgeInsets.zero,
+            margin: margin,
+            child: builder(true),
+          );
+
           return Container(
             padding: padding,
             margin: margin,

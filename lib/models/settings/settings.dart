@@ -102,6 +102,7 @@ class SettingsManager {
   final Signal<BrightnessTheme> _brightnessTheme;
   final Signal<ListType> _listType;
   final Signal<bool> _isMaterialScrollBehavior;
+  final Signal<bool> _scrollHidePlayBar;
   final Signal<CoverShape> _coverShape;
   final Signal<bool> _artCover;
   final Signal<bool> _wakelock;
@@ -121,6 +122,8 @@ class SettingsManager {
   Signal<ListType> get listType => _listType;
 
   Signal<bool> get isMaterialScrollBehavior => _isMaterialScrollBehavior;
+
+  Signal<bool> get scrollHidePlayBar => _scrollHidePlayBar;
 
   Signal<CoverShape> get coverShape => _coverShape;
 
@@ -149,6 +152,7 @@ class SettingsManager {
       _brightnessTheme = signal(BrightnessTheme.system),
       _listType = signal(ListType.media),
       _isMaterialScrollBehavior = signal(false),
+      _scrollHidePlayBar = signal(true),
       _coverShape = signal(CoverShape.circle),
       _artCover = signal(true),
       _wakelock = signal(false),
@@ -184,6 +188,11 @@ class SettingsManager {
     _isMaterialScrollBehavior.value = _settingsBox.get(
       CacheKey.Settings.isMaterialScrollBehavior,
       defaultValue: false,
+    );
+
+    _isMaterialScrollBehavior.value = _settingsBox.get(
+      CacheKey.Settings.scrollHidePlayBar,
+      defaultValue: true,
     );
 
     _coverShape.value = CoverShape.getByValue(
@@ -263,6 +272,12 @@ class SettingsManager {
     _isMaterialScrollBehavior.value = value;
 
     _settingsBox.put(CacheKey.Settings.isMaterialScrollBehavior, value);
+  }
+
+  void setScrollHidePlayBar(bool value) {
+    _scrollHidePlayBar.value = value;
+
+    _settingsBox.put(CacheKey.Settings.scrollHidePlayBar, value);
   }
 
   void setCoverShape(CoverShape value) {

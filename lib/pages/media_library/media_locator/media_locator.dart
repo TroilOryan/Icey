@@ -26,38 +26,21 @@ class MediaLocator extends StatelessWidget {
         child: Offstage(
           offstage: offstage,
           child: HighMaterialWrapper(
-            borderRadius: const BorderRadius.all(Radius.circular(100)),
             clipBehavior: (highMaterial) =>
                 highMaterial ? Clip.antiAlias : Clip.none,
-            builder: (highMaterial) => highMaterial
-                ? GlassPanel(
-                    shape: LiquidOval(),
-                    padding: EdgeInsets.zero,
-                    child: FloatingActionButton(
-                      backgroundColor: Colors.transparent,
-                      elevation: 0,
-                      shape: const CircleBorder(),
-                      onPressed: onTap,
-                      child: SFIcon(
-                        SFIcons.sf_dot_radiowaves_left_and_right,
-                        color: theme.colorScheme.onSurface.withAlpha(
-                          AppTheme.defaultAlpha,
-                        ),
-                      ),
-                    ),
-                  )
-                : FloatingActionButton(
-                    backgroundColor: theme.cardTheme.color,
-                    elevation: 6,
-                    shape: const CircleBorder(),
-                    onPressed: onTap,
-                    child: SFIcon(
-                      SFIcons.sf_dot_radiowaves_left_and_right,
-                      color: theme.colorScheme.onSurface.withAlpha(
-                        AppTheme.defaultAlpha,
-                      ),
-                    ),
-                  ),
+            builder: (highMaterial) => FloatingActionButton(
+              backgroundColor: highMaterial
+                  ? Colors.transparent
+                  : theme.cardTheme.color,
+              elevation: highMaterial ? 0 : 6,
+              onPressed: onTap,
+              child: SFIcon(
+                SFIcons.sf_dot_radiowaves_left_and_right,
+                color: theme.colorScheme.onSurface.withAlpha(
+                  AppTheme.defaultAlpha,
+                ),
+              ),
+            ),
           ),
         ),
       ),

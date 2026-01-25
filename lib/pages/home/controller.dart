@@ -334,6 +334,8 @@ class HomeController {
   }
 
   void _listenMediaListScroll() {
+    if (!settingsManager.scrollHidePlayBar.value) return;
+
     late final double currentOffset;
 
     if (settingsManager.listType.value == ListType.media) {
