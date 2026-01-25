@@ -101,6 +101,7 @@ class SettingsManager {
   final Signal<MediaSort> _sortType;
   final Signal<BrightnessTheme> _brightnessTheme;
   final Signal<ListType> _listType;
+  final Signal<bool> _liquidGlass;
   final Signal<bool> _isMaterialScrollBehavior;
   final Signal<bool> _scrollHidePlayBar;
   final Signal<CoverShape> _coverShape;
@@ -120,6 +121,8 @@ class SettingsManager {
   Signal<BrightnessTheme> get brightnessTheme => _brightnessTheme;
 
   Signal<ListType> get listType => _listType;
+
+  Signal<bool> get liquidGlass => _liquidGlass;
 
   Signal<bool> get isMaterialScrollBehavior => _isMaterialScrollBehavior;
 
@@ -151,8 +154,9 @@ class SettingsManager {
     : _sortType = signal(MediaSort.title),
       _brightnessTheme = signal(BrightnessTheme.system),
       _listType = signal(ListType.media),
-      _isMaterialScrollBehavior = signal(false),
+      _liquidGlass = signal(true),
       _scrollHidePlayBar = signal(true),
+      _isMaterialScrollBehavior = signal(false),
       _coverShape = signal(CoverShape.circle),
       _artCover = signal(true),
       _wakelock = signal(false),
@@ -185,14 +189,19 @@ class SettingsManager {
       ),
     );
 
-    _isMaterialScrollBehavior.value = _settingsBox.get(
-      CacheKey.Settings.isMaterialScrollBehavior,
-      defaultValue: false,
+    _liquidGlass.value = _settingsBox.get(
+      CacheKey.Settings.liquidGlass,
+      defaultValue: true,
+    );
+
+    _scrollHidePlayBar.value = _settingsBox.get(
+      CacheKey.Settings.scrollHidePlayBar,
+      defaultValue: true,
     );
 
     _isMaterialScrollBehavior.value = _settingsBox.get(
-      CacheKey.Settings.scrollHidePlayBar,
-      defaultValue: true,
+      CacheKey.Settings.isMaterialScrollBehavior,
+      defaultValue: false,
     );
 
     _coverShape.value = CoverShape.getByValue(
@@ -268,16 +277,22 @@ class SettingsManager {
     _settingsBox.put(CacheKey.Settings.listType, value.value);
   }
 
-  void setIsMaterialScrollBehavior(bool value) {
-    _isMaterialScrollBehavior.value = value;
+  void setLiquidGlass(bool value) {
+    _liquidGlass.value = value;
 
-    _settingsBox.put(CacheKey.Settings.isMaterialScrollBehavior, value);
+    _settingsBox.put(CacheKey.Settings.liquidGlass, value);
   }
 
   void setScrollHidePlayBar(bool value) {
     _scrollHidePlayBar.value = value;
 
     _settingsBox.put(CacheKey.Settings.scrollHidePlayBar, value);
+  }
+
+  void setIsMaterialScrollBehavior(bool value) {
+    _isMaterialScrollBehavior.value = value;
+
+    _settingsBox.put(CacheKey.Settings.isMaterialScrollBehavior, value);
   }
 
   void setCoverShape(CoverShape value) {

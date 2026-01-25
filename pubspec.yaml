@@ -2,7 +2,7 @@
 description: "A new Flutter project."
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.12+13
+version: 1.0.13+14
 
 environment:
   sdk: ">=3.10.0"
@@ -33,7 +33,7 @@ dependencies:
   flutter_sficon: ^1.2.1
   fluentui_system_icons: ^1.1.273
   keframe: ^3.0.0
-  liquid_glass_widgets: ^0.2.1-dev.7
+  liquid_glass_widgets: ^0.2.1-dev.8
   scrollview_observer: ^1.26.2
   sliver_tools: ^0.2.12
   super_sliver_list:

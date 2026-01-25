@@ -35,6 +35,8 @@ class _SettingsKeys {
 
   final String brightness = "settings_brightness";
 
+  final String liquidGlass = "settings_liquidGlass";
+
   final String scrollHidePlayBar = "settings_scrollHidePlayBar";
 
   final String isMaterialScrollBehavior = "settings_isMaterialScrollBehavior";

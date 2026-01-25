@@ -78,7 +78,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   Future onInit() async {
     WidgetsBinding.instance.addObserver(this);
 
-    GoTransition.defaultCurve = Curves.easeInOut;
+    GoTransition.defaultCurve = Curves.easeInOutSine;
     GoTransition.defaultDuration = const Duration(milliseconds: 600);
 
     setDisplayMode();

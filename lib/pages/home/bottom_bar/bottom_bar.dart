@@ -24,7 +24,7 @@ class BottomBar extends StatelessWidget {
       indicatorColor: theme.colorScheme.primary.withAlpha(55),
       glassSettings: LiquidGlassSettings(
         blur: 3,
-        thickness: 10,
+        thickness: 12,
         glassColor: Color.fromRGBO(255, 255, 255, 0.08),
         lightAngle: 135,
         lightIntensity: 0.7,
