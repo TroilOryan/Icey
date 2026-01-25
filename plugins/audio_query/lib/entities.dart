@@ -5,16 +5,6 @@ class AudioEntity {
 
   final Map<dynamic, dynamic> _info;
 
-  Uint8List? get cover => _info["cover_image"];
-
-  ArtworkColorEntity? get color => _info["color"] != null
-      ? ArtworkColorEntity(
-          primaryColor: _info["color"]["primaryColor"],
-          secondaryColor: _info["color"]["secondaryColor"],
-          isDark: _info["color"]["isDark"],
-        )
-      : null;
-
   int get id => _info["_id"];
 
   String get title => _info["title"];

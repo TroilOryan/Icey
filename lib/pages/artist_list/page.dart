@@ -52,8 +52,9 @@ class _ArtistListPageState extends State<ArtistListPage>
         //   onPlayRandom: () => {},
         //   onOpenSortMenu: () => {},
         // ),
+        HeaderAppBar(),
         SliverPadding(
-          padding: EdgeInsets.fromLTRB(24, 0, 24, paddingBottom + 104),
+          padding: EdgeInsets.fromLTRB(24, 0, 24, paddingBottom + 64),
           sliver: SliverGrid(
             delegate: SliverChildBuilderDelegate(
               childCount: artistList.length,

@@ -44,7 +44,7 @@ class MediaListIndexBar extends StatelessWidget {
     }
 
     return Positioned(
-      top: 16,
+      top: 200,
       right: 0,
       child: FrameSeparateWidget(
         child: Container(

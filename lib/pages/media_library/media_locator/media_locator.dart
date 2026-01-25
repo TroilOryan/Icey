@@ -17,10 +17,10 @@ class MediaLocator extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    final paddingBottom = MediaQuery.of(context).padding.bottom;
+    final paddingBottom = MediaQuery.of(context).viewPadding.bottom;
 
     return Positioned(
-      bottom: max(106 + paddingBottom, 116),
+      bottom: max(144 + paddingBottom, 166),
       right: 20,
       child: FrameSeparateWidget(
         child: Offstage(

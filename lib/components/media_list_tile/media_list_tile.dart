@@ -79,7 +79,7 @@ class MediaListTile extends StatelessWidget {
           onTap: onTap,
           onLongPress: onLongPress,
           child: Container(
-            padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+            padding: EdgeInsets.fromLTRB(12, 12, 8, 12),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [

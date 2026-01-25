@@ -11,18 +11,14 @@ import '../play_info/play_info.dart';
 
 class Portrait extends StatelessWidget {
   final double offset;
-  final bool panelOpened;
   final bool lyricOpened;
   final Function(BuildContext) onOpenLyric;
-  final VoidCallback onClosePanel;
 
   const Portrait({
     super.key,
     required this.offset,
-    required this.panelOpened,
     required this.lyricOpened,
     required this.onOpenLyric,
-    required this.onClosePanel,
   });
 
   Widget buildPlayCover({
@@ -64,14 +60,13 @@ class Portrait extends StatelessWidget {
             onTap: () => onOpenLyric(context),
             deviceWidth: deviceWidth,
           ),
-          PlayInfo(panelOpened: panelOpened, lyricOpened: lyricOpened),
+          PlayInfo(lyricOpened: lyricOpened),
           LyricPage(lyricOpened: lyricOpened),
           PlayPage(
-            panelOpened: panelOpened,
             lyricOpened: lyricOpened,
             onOpenLyric: onOpenLyric,
           ),
-          ActionBar(onClosePanel: onClosePanel),
+          ActionBar(),
         ],
       ),
     );

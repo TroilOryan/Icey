@@ -25,7 +25,6 @@ import 'package:signals/signals_flutter.dart';
 import 'build_config.dart';
 import 'constants/box_key.dart';
 import 'constants/cache_key.dart';
-import 'entities/artwork_color.dart';
 import 'entities/media.dart';
 import 'entities/media_order.dart';
 import 'helpers/media/media.dart';

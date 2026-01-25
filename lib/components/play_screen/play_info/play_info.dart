@@ -12,9 +12,8 @@ final _likedBox = Boxes.likedBox;
 
 class PlayInfo extends StatelessWidget {
   final bool? lyricOpened;
-  final bool panelOpened;
 
-  const PlayInfo({super.key, this.lyricOpened, required this.panelOpened});
+  const PlayInfo({super.key, this.lyricOpened, });
 
   Future<bool> handleLike(String? id, bool liked) async {
     if (id == null) {
@@ -62,7 +61,6 @@ class PlayInfo extends StatelessWidget {
                   children: [
                     Flexible(
                       child: Marquee(
-                        disableAnimation: !panelOpened,
                         child: Text(
                           mediaItem?.title ?? "暂无歌曲",
                           style: textTheme.titleLarge?.copyWith(
@@ -84,7 +82,6 @@ class PlayInfo extends StatelessWidget {
                   ],
                 ),
                 Marquee(
-                  disableAnimation: !panelOpened,
                   child: Text(
                     mediaItem?.artist ?? "未知歌手",
                     style: textTheme.bodyMedium?.copyWith(

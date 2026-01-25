@@ -20,6 +20,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.io.FileInputStream
+import com.audio.audio_query.utils.QueryArtworkColor
+import java.util.*
 
 class QueryArtwork : ViewModel() {
 
@@ -92,6 +94,64 @@ class QueryArtwork : ViewModel() {
         }
     }
 
+    fun queryArtworkWithColor() {
+        val call = PluginProvider.call()
+        val result = PluginProvider.result()
+        val context = PluginProvider.context()
+        this.resolver = context.contentResolver
+
+        id = call.argument<Number>("id")!!
+
+        // If the 'size' is null, will be '200'.
+        size = call.argument<Int>("size")!!
+
+        // The 'quality' value cannot be greater than 100 so, we check and if is, set to '50'.
+        quality = call.argument<Int>("quality")!!
+        if (quality > 100) quality = 50
+
+        // Check format:
+        //   * 0 -> JPEG
+        //   * 1 -> PNG
+        format = checkArtworkFormat(call.argument<Int>("format")!!)
+
+        // Check uri:
+        //   * 0 -> Song.
+        //   * 1 -> Album.
+        //   * 2 -> Playlist.
+        //   * 3 -> Artist.
+        //   * 4 -> Genre.
+        uri = checkArtworkType(call.argument<Int>("type")!!)
+
+        // This query is 'universal' will work for multiple types (audio, album, artist, etc...).
+        type = call.argument<Int>("type")!!
+
+        Log.d(TAG, "Query config: ")
+        Log.d(TAG, "\tid: $id")
+        Log.d(TAG, "\tquality: $quality")
+        Log.d(TAG, "\tformat: $format")
+        Log.d(TAG, "\turi: $uri")
+        Log.d(TAG, "\ttype: $type")
+
+        // Query everything in background for a better performance.
+        viewModelScope.launch {
+            var resultArtList = loadArt()
+
+            // Sometimes android will extract a 'wrong' or 'empty' artwork. Just set as null.
+            if (resultArtList != null && resultArtList.isEmpty()) {
+                Log.i(TAG, "Artwork for '$id' is empty. Returning null")
+                resultArtList = null
+            }
+
+            val color = if (resultArtList != null) {
+                QueryArtworkColor().queryArtworkColorSync(resultArtList, id.toString())
+            } else {
+                null
+            }
+
+            result.success(mapOf("data" to resultArtList, "color" to color))
+        }
+    }
+
     //Loading in Background
     private suspend fun loadArt(): ByteArray? = withContext(Dispatchers.IO) {
         var artData: ByteArray? = null
@@ -149,7 +209,7 @@ class QueryArtwork : ViewModel() {
             } catch (e: Exception) {
                 // This may produce a lot of logging on console so, will required a explicit request
                 // to show the errors.
-        Log.w(TAG, "($id) Message: $e")
+                Log.w(TAG, "($id) Message: $e")
             }
         }
 
@@ -175,7 +235,7 @@ class QueryArtwork : ViewModel() {
         } catch (e: Exception) {
             // This may produce a lot of logging on console so, will required a explicit request
             // to show the errors.
-           Log.w(TAG, "($id) Message: $e")
+            Log.w(TAG, "($id) Message: $e")
         }
 
         convertedBytes = byteArrayBase.toByteArray()

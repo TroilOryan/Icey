@@ -84,6 +84,14 @@ class AudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                 }
             }
 
+            "queryArtworkWithColor" -> {
+                try {
+                    QueryArtwork().queryArtworkWithColor()
+                } catch (e: Exception) {
+                    result.error("QUERY_FAILED", e.message, null)
+                }
+            }
+
             else -> result.notImplemented()
         }
     }

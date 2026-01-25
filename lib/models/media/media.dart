@@ -13,7 +13,6 @@ import 'package:IceyPlayer/entities/album.dart';
 import 'package:IceyPlayer/entities/artist.dart';
 import 'package:IceyPlayer/entities/media.dart';
 import 'package:IceyPlayer/helpers/common.dart';
-import 'package:IceyPlayer/helpers/media/media.dart';
 import 'package:IceyPlayer/helpers/toast/toast.dart';
 import 'package:IceyPlayer/services/audio_service.dart';
 import 'package:IceyPlayer/services/media_state.dart';
@@ -24,15 +23,12 @@ import 'package:lyric/lyrics_reader_model.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:signals/signals.dart';
 import 'package:rxdart/rxdart.dart' as rx;
-import 'package:IceyPlayer/entities/artwork_color.dart';
 
 part 'media.g.dart';
 
 final mediaManager = MediaManager();
 
 final _mediaBox = Boxes.mediaBox;
-
-final _artworkColorBox = Boxes.artworkColorBox;
 
 final _settingsBox = Boxes.settingsBox;
 
@@ -352,23 +348,7 @@ class MediaManager {
 
       final id = int.parse(value.id);
 
-      final ArtworkColorEntity? color = _artworkColorBox.get(id);
-
       _currentMediaItem.value = value;
-
-      if (color != null) {
-        _coverColor.value = CoverColor(
-          primary: color.primary,
-          secondary: color.secondary,
-          isDark: color.isDark,
-        );
-      } else {
-        _coverColor.value = const CoverColor(
-          primary: -1,
-          secondary: -1,
-          isDark: false,
-        );
-      }
 
       try {
         final res = await compute(_parseLyric, {"path": path});
@@ -383,13 +363,29 @@ class MediaManager {
       } catch (e) {}
 
       try {
-        final coverRes = await AudioQuery().queryArtwork(
+        final coverRes = await AudioQuery().queryArtworkWithColor(
           id,
           ArtworkType.AUDIO,
           size: 1024,
         );
 
-        _currentCover.value = coverRes ?? Uint8List(0);
+        _currentCover.value = coverRes != null
+            ? coverRes["cover"]
+            : Uint8List(0);
+
+        if (coverRes["primaryColor"] != null) {
+          _coverColor.value = CoverColor(
+            primary: coverRes["primaryColor"],
+            secondary: coverRes["secondaryColor"],
+            isDark: coverRes["isDark"],
+          );
+        } else {
+          _coverColor.value = const CoverColor(
+            primary: -1,
+            secondary: -1,
+            isDark: false,
+          );
+        }
       } catch (e) {
         print(e);
       }

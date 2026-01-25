@@ -10,7 +10,7 @@ class PlayBarController {
   }
 
   void handleHorizontalDragEnd(DragEndDetails details) {
-    if (state.delta.value.abs() >= 66) {
+    if (state.delta.value.abs() >= 55) {
       final isNext = state.isNext.value;
 
       Future.delayed(const Duration(milliseconds: 100)).then((_) {
@@ -29,7 +29,7 @@ class PlayBarController {
   void handleVisibilityChanged(VisibilityInfo info) {
     final fraction = info.visibleFraction * 100;
 
-    if (fraction == 100 && state.delta.abs() >= 66) {
+    if (fraction == 100 && state.delta.abs() >= 55) {
       HapticFeedback.lightImpact();
     }
   }

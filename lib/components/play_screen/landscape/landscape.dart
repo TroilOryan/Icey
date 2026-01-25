@@ -16,9 +16,7 @@ import '../../play_lyric/play_lyric.dart';
 import '../play_info/play_info.dart' show PlayInfo;
 
 class Landscape extends StatelessWidget {
-  final bool panelOpened;
-
-  const Landscape({super.key, required this.panelOpened});
+  const Landscape({super.key});
 
   Widget buildPlayCover({
     required VoidCallback onTap,
@@ -64,7 +62,7 @@ class Landscape extends StatelessWidget {
             padding: EdgeInsets.fromLTRB(0, 32, 24, 8),
             child: Column(
               children: [
-                PlayInfo(panelOpened: panelOpened),
+                PlayInfo(),
                 SizedBox(height: 8),
                 Flexible(child: PlayLyric()),
                 SizedBox(height: 16),

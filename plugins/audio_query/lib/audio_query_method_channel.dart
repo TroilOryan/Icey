@@ -37,10 +37,19 @@ class MethodChannelAudioQuery extends AudioQueryPlatform {
   }
 
   @override
-  Future queryArtworkColor(Uint8List data, String cacheKey) async {
-    final res = await methodChannel.invokeMethod('queryArtworkColor', {
-      "data": data,
-      "cacheKey": cacheKey,
+  Future queryArtworkWithColor(
+    int id,
+    ArtworkType type, {
+    ArtworkFormat? format,
+    int? size,
+    int? quality,
+  }) async {
+    final res = await methodChannel.invokeMethod('queryArtworkWithColor', {
+      "id": id,
+      "type": type.index,
+      "format": format != null ? format.index : ArtworkFormat.JPEG.index,
+      "size": size ?? 200,
+      "quality": (quality != null && quality <= 100) ? quality : 50,
     });
 
     return res;

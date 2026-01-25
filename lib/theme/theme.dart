@@ -17,6 +17,8 @@ class AppTheme {
 
   static const int defaultAlphaLight = 33;
 
+  static Radius borderRadiusXxs = Radius.circular(12);
+
   static Radius borderRadiusXs = Radius.circular(16);
 
   static Radius borderRadiusSm = Radius.circular(20);

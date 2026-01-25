@@ -6,9 +6,7 @@ import 'package:signals/signals_flutter.dart';
 import '../../theme/theme.dart';
 
 class PlayBarLyric extends StatelessWidget {
-  final bool panelOpened;
-
-  const PlayBarLyric({super.key, required this.panelOpened});
+  const PlayBarLyric({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +34,6 @@ class PlayBarLyric extends StatelessWidget {
         key: currentLyricIndex != -1 ? ValueKey(currentLyricIndex) : null,
         alignment: Alignment.centerLeft,
         child: Marquee(
-          disableAnimation: panelOpened,
           child: Text(
             currentLyricIndex != -1 && parsedLyric.isNotEmpty
                 ? parsedLyric[currentLyricIndex].mainText ?? ""

@@ -40,25 +40,25 @@ class _PlayScreenState extends State<PlayScreen> {
     final lyricOpened = playScreenState.lyricOpened.watch(context),
         offset = playScreenState.offset.watch(context);
 
-    return Stack(
-      children: [
-        PlayScreenBackground(),
-        OrientationBuilder(
-          builder: (context, orientation) {
-            if (orientation == Orientation.landscape) {
-              return Landscape(panelOpened: widget.panelOpened);
-            }
+    return Scaffold(
+      body: Stack(
+        children: [
+          PlayScreenBackground(),
+          OrientationBuilder(
+            builder: (context, orientation) {
+              if (orientation == Orientation.landscape) {
+                return Landscape();
+              }
 
-            return Portrait(
-              offset: offset,
-              panelOpened: widget.panelOpened,
-              lyricOpened: lyricOpened,
-              onOpenLyric: handleOpenLyric,
-              onClosePanel: widget.onClosePanel,
-            );
-          },
-        ),
-      ],
+              return Portrait(
+                offset: offset,
+                lyricOpened: lyricOpened,
+                onOpenLyric: handleOpenLyric,
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 }

@@ -5,8 +5,6 @@ class BoxKey {
 
   static String mediaCount = "mediaCount";
 
-  static String artworkColor = "artworkColor";
-
   /// 歌单
   static String mediaOrder = 'mediaOrder';
 
@@ -21,8 +19,6 @@ class Boxes {
   static final mediaBox = Hive.box(BoxKey.media);
 
   static final mediaCountBox = Hive.box(BoxKey.mediaCount);
-
-  static final artworkColorBox = Hive.box(BoxKey.artworkColor);
 
   static final mediaOrderBox = Hive.box(BoxKey.mediaOrder);
 

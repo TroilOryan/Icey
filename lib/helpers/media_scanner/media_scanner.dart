@@ -1,16 +1,12 @@
-import "dart:math";
-
 import "package:audio_query/audio_query.dart";
 import "package:audio_query/entities.dart" hide ArtworkColorEntity;
 import "package:IceyPlayer/constants/box_key.dart";
 import "package:IceyPlayer/constants/cache_key.dart";
-import "package:IceyPlayer/entities/artwork_color.dart";
 import "package:IceyPlayer/entities/media.dart";
 import "package:IceyPlayer/event_bus/event_bus.dart";
 import "package:IceyPlayer/helpers/common.dart";
 import "package:IceyPlayer/helpers/toast/toast.dart";
 import "package:IceyPlayer/permission/audio.dart";
-import "package:executor/executor.dart";
 
 const MEDIA_EXTENSTIONS = [
   ".mp3",
@@ -24,9 +20,7 @@ const MEDIA_EXTENSTIONS = [
 
 final audioQuery = AudioQuery();
 
-final _mediaBox = Boxes.mediaBox,
-    _artworkColorBox = Boxes.artworkColorBox,
-    _settingsBox = Boxes.settingsBox;
+final _mediaBox = Boxes.mediaBox, _settingsBox = Boxes.settingsBox;
 
 class MediaScanner {
   /// 扫描音频文件
@@ -38,8 +32,6 @@ class MediaScanner {
     }
 
     await _mediaBox.clear();
-
-    await _artworkColorBox.clear();
 
     final stream = await audioQuery.queryAudios();
 
@@ -99,26 +91,26 @@ class MediaScanner {
 
         _settingsBox.put(CacheKey.Settings.scanDir, scanDir);
 
-        final executor = Executor(concurrency: 100);
-
-        for (var audio in audios) {
-          executor.scheduleTask(() async {
-            await _artworkColorBox.put(
-              audio.id,
-              ArtworkColorEntity(
-                primary: audio.color != null ? audio.color!.primaryColor! : -1,
-                secondary: audio.color != null
-                    ? audio.color!.secondaryColor!
-                    : -1,
-                isDark: audio.color != null ? audio.color!.isDark! : false,
-              ),
-            );
-          });
-        }
-
-        await executor.join(withWaiting: true);
-
-        await executor.close();
+        // final executor = Executor(concurrency: 100);
+        //
+        // for (var audio in audios) {
+        //   executor.scheduleTask(() async {
+        //     await _artworkColorBox.put(
+        //       audio.id,
+        //       ArtworkColorEntity(
+        //         primary: audio.color != null ? audio.color!.primaryColor! : -1,
+        //         secondary: audio.color != null
+        //             ? audio.color!.secondaryColor!
+        //             : -1,
+        //         isDark: audio.color != null ? audio.color!.isDark! : false,
+        //       ),
+        //     );
+        //   });
+        // }
+        //
+        // await executor.join(withWaiting: true);
+        //
+        // await executor.close();
       },
     );
   }
