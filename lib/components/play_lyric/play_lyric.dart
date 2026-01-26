@@ -36,6 +36,8 @@ class _PlayLyricState extends State<PlayLyric> {
     final karaoke = settingsManager.karaoke.watch(context),
         fakeEnhanced = settingsManager.fakeEnhanced.watch(context);
 
+    final isHighlight = controller.isHighlight.watch(context);
+
     return Builder(
       builder: (context) {
         return OrientationBuilder(
@@ -45,6 +47,7 @@ class _PlayLyricState extends State<PlayLyric> {
             return LyricWidget(
               controller: controller.lyricController,
               isLandscape: isLandscape,
+              isHighlight: isHighlight,
             );
           },
         );

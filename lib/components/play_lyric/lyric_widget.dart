@@ -7,11 +7,13 @@ import 'package:signals/signals_flutter.dart';
 class LyricWidget extends StatelessWidget {
   final LyricController controller;
   final bool isLandscape;
+  final bool isHighlight;
 
   const LyricWidget({
     super.key,
     required this.controller,
     required this.isLandscape,
+    required this.isHighlight,
   });
 
   @override
@@ -46,8 +48,18 @@ class LyricWidget extends StatelessWidget {
       textStyle: textStyle,
       activeStyle: activeTextStyle,
       // selectedColor: theme.colorScheme.primary,
+      activeHighlightGradient: isHighlight
+          ? LinearGradient(
+              colors: [
+                theme.colorScheme.primary,
+                theme.colorScheme.inversePrimary,
+              ],
+            )
+          : null,
       selectLineResumeMode: SelectionAutoResumeMode.selecting,
-      activeHighlightColor: theme.colorScheme.inversePrimary,
+      activeHighlightColor: isHighlight
+          ? theme.colorScheme.inversePrimary
+          : null,
       scrollCurve: Curves.easeInOutSine,
       scrollDuration: const Duration(milliseconds: 600),
     );

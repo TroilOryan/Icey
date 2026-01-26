@@ -10,21 +10,23 @@ class PlayLyricController {
 
   final lyricParser = LyricParser();
 
+  final isHighlight = signal(false);
+
   late final EffectCleanup lyricListener;
 
   late final EffectCleanup progressListener;
 
-  bool isHighlight(bool karaoke, bool fakeEnhanced, bool? isEnhanced) {
-    if (karaoke && isEnhanced == true) {
-      return true;
-    } else if (!karaoke) {
-      return false;
-    } else if (fakeEnhanced) {
-      return true;
-    } else {
-      return isEnhanced ?? false;
-    }
-  }
+  // bool isHighlight(bool karaoke, bool fakeEnhanced, bool? isEnhanced) {
+  //   if (karaoke && isEnhanced == true) {
+  //     return true;
+  //   } else if (!karaoke) {
+  //     return false;
+  //   } else if (fakeEnhanced) {
+  //     return true;
+  //   } else {
+  //     return isEnhanced ?? false;
+  //   }
+  // }
 
   void onInit() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -32,6 +34,10 @@ class PlayLyricController {
         final lyricModel = lyricParser.parseRaw(mediaManager.rawLyric.value);
 
         mediaManager.setParsedLyric(lyricModel.lines);
+
+        isHighlight.value = lyricModel.lines.any(
+          (e) => e.words != null && e.words!.isNotEmpty,
+        );
 
         lyricController
           ..loadLyric(mediaManager.rawLyric.value)
