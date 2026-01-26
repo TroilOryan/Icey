@@ -1,7 +1,8 @@
 import 'package:IceyPlayer/models/media/media.dart';
+import 'package:IceyPlayer/models/settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lyric/flutter_lyric.dart';
-import 'package:signals/signals.dart';
+import 'package:signals/signals_flutter.dart';
 
 import 'lyric_parser/lyric_parser.dart';
 
@@ -16,21 +17,13 @@ class PlayLyricController {
 
   late final EffectCleanup progressListener;
 
-  // bool isHighlight(bool karaoke, bool fakeEnhanced, bool? isEnhanced) {
-  //   if (karaoke && isEnhanced == true) {
-  //     return true;
-  //   } else if (!karaoke) {
-  //     return false;
-  //   } else if (fakeEnhanced) {
-  //     return true;
-  //   } else {
-  //     return isEnhanced ?? false;
-  //   }
-  // }
-
   void onInit() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       lyricListener = effect(() {
+        lyricParser.fakeEnhanced = settingsManager.fakeEnhanced.value;
+        lyricParser.duration =
+            mediaManager.currentMediaItem.value?.duration ?? Duration.zero;
+
         final lyricModel = lyricParser.parseRaw(mediaManager.rawLyric.value);
 
         mediaManager.setParsedLyric(lyricModel.lines);

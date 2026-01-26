@@ -9,6 +9,9 @@ LyricTag? _extractTag(String line) {
 }
 
 class LrcParser extends LyricParse {
+  bool fakeEnhanced = false;
+  Duration duration = Duration.zero;
+
   @override
   bool isMatch(String mainLyric) {
     return RegExp(
@@ -23,9 +26,9 @@ class LrcParser extends LyricParse {
     final List<LyricLine> lines = [];
 
     // 用于跟踪时间戳到 LyricLine 的映射，处理重复时间戳
-    final Map<int, LyricLine> timeToLyricLine = {};
+    final Map timeToLyricLine = {};
     // 用于跟踪已出现的时间戳
-    final Set<int> seenTimestamps = {};
+    final Set seenTimestamps = {};
 
     for (var line in mainLyric.split('\n')) {
       // 提取标签内容
@@ -87,8 +90,6 @@ class LrcParser extends LyricParse {
 
         // 更新映射和列表
         timeToLyricLine[timeMs] = newLyricLine;
-
-        // 替换列表中的旧歌词
         final index = lines.indexWhere(
           (l) => l.start == existingLyricLine.start,
         );
@@ -101,9 +102,6 @@ class LrcParser extends LyricParse {
 
         // 对于首次出现的时间戳，使用 extractLine 进行拆分
         final lyricLine = extractLine(line);
-
-        print("来了");
-        print(lyricLine?.words);
         if (lyricLine != null) {
           // 使用 extractLine 的结果
           final finalLyricLine = LyricLine(
@@ -120,6 +118,63 @@ class LrcParser extends LyricParse {
     }
 
     lines.sort((a, b) => a.start.compareTo(b.start));
+
+    // 如果启用了 fakeEnhanced，对普通歌词进行逐字适配
+    if (fakeEnhanced && lines.isNotEmpty) {
+      for (int i = 0; i < lines.length; i++) {
+        // 跳过已经有逐字信息的行（原生的逐字歌词）
+        if (lines[i].words != null && lines[i].words!.isNotEmpty) {
+          continue;
+        }
+
+        final Duration startTime = lines[i].start;
+        final String text = lines[i].text;
+
+        // 计算结束时间：下一行的开始时间，如果是最后一行则使用歌曲总时长
+        Duration? endTime;
+        if (i < lines.length - 1) {
+          endTime = lines[i + 1].start;
+        } else {
+          // 最后一行，使用歌曲总时长
+          endTime = this.duration;
+        }
+
+        // 如果没有结束时间，跳过
+        if (endTime == null) continue;
+
+        // 将整行文本拆分成逐字高亮
+        final List<LyricWord> words = [];
+
+        // 计算每个字符的时长（平均分配）
+        final Duration lineDuration = endTime - startTime;
+        final int charCount = text.length;
+        if (charCount == 0) continue;
+
+        final Duration charDuration = Duration(
+          microseconds: lineDuration.inMicroseconds ~/ charCount,
+        );
+
+        // 为每个字符创建 LyricWord
+        for (int j = 0; j < charCount; j++) {
+          final Duration charStartTime = startTime + (charDuration * j);
+          final Duration charEndTime = (j == charCount - 1)
+              ? endTime
+              : charStartTime + charDuration;
+
+          words.add(
+            LyricWord(text: text[j], start: charStartTime, end: charEndTime),
+          );
+        }
+
+        // 更新当前行，添加逐字信息
+        lines[i] = LyricLine(
+          start: startTime,
+          text: text,
+          translation: lines[i].translation,
+          words: words,
+        );
+      }
+    }
 
     return LyricModel(lines: lines, tags: idTags);
   }

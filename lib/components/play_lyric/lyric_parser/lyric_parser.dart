@@ -4,6 +4,9 @@ import 'package:flutter_lyric/core/lyric_parse.dart' hide LrcParser;
 import 'lrc_parser.dart';
 
 class LyricParser extends LyricParse {
+  bool fakeEnhanced = false;
+  Duration duration = Duration.zero;
+
   @override
   bool isMatch(String mainLyric) {
     final lrcParser = LrcParser();
@@ -22,6 +25,8 @@ class LyricParser extends LyricParse {
     final lrcParser = LrcParser();
 
     final qrcParser = QrcParser();
+
+    lrcParser.fakeEnhanced = fakeEnhanced;
 
     final isLrc = lrcParser.isMatch(mainLyric);
 
