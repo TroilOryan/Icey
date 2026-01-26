@@ -36,7 +36,7 @@ class PlayBarLyric extends StatelessWidget {
         child: Marquee(
           child: Text(
             currentLyricIndex != -1 && parsedLyric.isNotEmpty
-                ? parsedLyric[currentLyricIndex].mainText ?? ""
+                ? parsedLyric[currentLyricIndex].text
                 : "暂无歌词",
             style: theme.textTheme.bodyMedium?.copyWith(
               leadingDistribution: TextLeadingDistribution.even,

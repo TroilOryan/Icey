@@ -18,8 +18,7 @@ import 'package:IceyPlayer/services/audio_service.dart';
 import 'package:IceyPlayer/services/media_state.dart';
 import 'package:IceyPlayer/services/play_mode.dart';
 import 'package:flutter/foundation.dart';
-import 'package:lyric/lyric_parser/parser_smart.dart';
-import 'package:lyric/lyrics_reader_model.dart';
+import 'package:flutter_lyric/core/lyric_model.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:signals/signals.dart';
 import 'package:rxdart/rxdart.dart' as rx;
@@ -59,7 +58,7 @@ class MediaManager {
   final Signal<Animation<double>?> _rotationAnimation;
   late final AudioPlayerHandler _audioService;
   final Signal<int> _currentLyricIndex;
-  final Signal<List<LyricsLineModel>> _parsedLyric;
+  final Signal<List<LyricLine>> _parsedLyric;
   final Signal<CoverColor> _coverColor;
   final Signal<Uint8List> _currentCover;
   final Signal<String> _rawLyric;
@@ -175,7 +174,7 @@ class MediaManager {
 
   Signal<PlayMode> get playMode => _playMode;
 
-  Signal<List<LyricsLineModel>> get parsedLyric => _parsedLyric;
+  Signal<List<LyricLine>> get parsedLyric => _parsedLyric;
 
   BehaviorSubject<MediaItem?> get mediaItem => _audioService.mediaItem;
 
@@ -208,10 +207,10 @@ class MediaManager {
     });
   }
 
-  void setCurrentLyricIndex(List<LyricsLineModel> lyric, Duration position) {
+  void setCurrentLyricIndex(List<LyricLine> lyric, Duration position) {
     if (lyric.isNotEmpty) {
       final index = CommonHelper.findClosestIndex(
-        parsedLyric.map((e) => BigInt.from(e.startTime!)).toList(),
+        parsedLyric.map((e) => BigInt.from(e.start.inMilliseconds)).toList(),
         BigInt.from(position.inMilliseconds),
       );
 
@@ -338,6 +337,10 @@ class MediaManager {
     _audioService.seek(position);
   }
 
+  void setParsedLyric(List<LyricLine> value) {
+    _parsedLyric.value = value;
+  }
+
   Future<void> setCurrentMediaItem(MediaItem value) async {
     if (value.id == _currentMediaItem.value?.id) {
       return;
@@ -354,8 +357,6 @@ class MediaManager {
         final res = await compute(_parseLyric, {"path": path});
 
         _rawLyric.value = res["raw"];
-
-        _parsedLyric.value = res["model"];
 
         _lyricSource.value = res["source"];
 

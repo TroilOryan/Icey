@@ -31,6 +31,8 @@ class PlayLyricController {
       lyricListener = effect(() {
         final lyricModel = lyricParser.parseRaw(mediaManager.rawLyric.value);
 
+        mediaManager.setParsedLyric(lyricModel.lines);
+
         lyricController
           ..loadLyric(mediaManager.rawLyric.value)
           ..loadLyricModel(lyricModel);

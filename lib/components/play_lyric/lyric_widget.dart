@@ -45,9 +45,9 @@ class LyricWidget extends StatelessWidget {
       contentPadding: EdgeInsets.only(top: 200),
       textStyle: textStyle,
       activeStyle: activeTextStyle,
-      selectedColor: theme.colorScheme.primary,
+      // selectedColor: theme.colorScheme.primary,
       selectLineResumeMode: SelectionAutoResumeMode.selecting,
-      activeHighlightColor: appThemeExtension.primary,
+      activeHighlightColor: theme.colorScheme.inversePrimary,
       scrollCurve: Curves.easeInOutSine,
       scrollDuration: const Duration(milliseconds: 600),
     );

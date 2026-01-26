@@ -27,20 +27,16 @@ Future<Map<String, dynamic>> _parseLyric(args) async {
       final lyrics = readLyrics(path);
 
       if (lyrics != null) {
-        final res = ParserSmart(lyrics).parseLines();
-
-        return {"model": res, "raw": lyrics, "source": LyricSource.tag};
+        return {"raw": lyrics, "source": LyricSource.tag};
       }
 
       return {
-        "model": List<LyricsLineModel>.empty(),
         "raw": "",
         "source": LyricSource.none,
       };
     }
   } catch (e) {
     return {
-      "model": List<LyricsLineModel>.empty(),
       "raw": "",
       "source": LyricSource.none,
     };
@@ -52,7 +48,6 @@ Future _handleParseLyricFile(String mediaPath, [String? extension]) async {
   final raw = File('$mediaPath.${extension ?? "lrc"}').readAsStringSync();
 
   return {
-    "model": ParserSmart(raw).parseLines(),
     "raw": raw,
     "source": LyricSource.file,
   };

@@ -1,14 +1,16 @@
 import 'dart:async';
 
-import 'package:IceyPlayer/components/play_screen/landscape/landscape.dart';
-import 'package:IceyPlayer/components/play_screen/play_screen_background.dart';
-import 'package:IceyPlayer/components/play_screen/portrait/portrait.dart';
-import 'package:IceyPlayer/components/play_screen/state.dart';
 import 'package:IceyPlayer/models/media/media.dart';
 import 'package:IceyPlayer/models/settings/settings.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:signals/signals_flutter.dart';
+
+import 'landscape/landscape.dart';
+import 'play_screen_background.dart';
+import 'portrait/portrait.dart';
+
+part 'state.dart';
 
 part 'page.dart';
 
@@ -33,6 +35,17 @@ class PlayScreenController {
         : MediaQuery.of(context).size.width;
 
     state.lyricOpened.value = !state.lyricOpened.value;
+  }
+
+  void handlePopInvokedWithResult(bool didPop, dynamic result) {
+    if (didPop) return;
+
+    if (state.lyricOpened.value) {
+      state.lyricOpened.value = false;
+      state.offset.value = 0;
+
+      return;
+    }
   }
 
   void updateVsync(TickerProvider newVsync) {

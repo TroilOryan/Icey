@@ -4,8 +4,6 @@ import 'package:IceyPlayer/components/play_list_button/play_list_button.dart';
 import 'package:IceyPlayer/components/play_lyric/play_lyric.dart';
 import 'package:IceyPlayer/components/play_menu_button/play_menu_button.dart';
 import 'package:IceyPlayer/components/play_progress_bar/play_progress_bar.dart';
-import 'package:IceyPlayer/components/play_screen/play_immersive_cover/play_immersive_cover.dart';
-import 'package:IceyPlayer/components/play_screen/play_shaped_cover/play_shaped_cover.dart';
 import 'package:IceyPlayer/components/prev_button/prev_button.dart';
 import 'package:IceyPlayer/models/media/media.dart';
 import 'package:IceyPlayer/models/settings/settings.dart';
@@ -13,12 +11,13 @@ import 'package:IceyPlayer/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:signals/signals_flutter.dart';
 
+import '../play_immersive_cover/play_immersive_cover.dart';
 import '../play_info/play_info.dart' show PlayInfo;
+import '../play_shaped_cover/play_shaped_cover.dart';
 
 class Landscape extends StatelessWidget {
-  final bool panelOpened;
 
-  const Landscape({super.key, required this.panelOpened});
+  const Landscape({super.key});
 
   Widget buildPlayCover({
     required VoidCallback onTap,
@@ -64,7 +63,7 @@ class Landscape extends StatelessWidget {
             padding: EdgeInsets.fromLTRB(0, 32, 24, 8),
             child: Column(
               children: [
-                PlayInfo(panelOpened: panelOpened),
+                PlayInfo(),
                 SizedBox(height: 8),
                 Flexible(child: PlayLyric()),
                 SizedBox(height: 16),

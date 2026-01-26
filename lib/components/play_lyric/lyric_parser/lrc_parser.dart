@@ -19,10 +19,14 @@ class LrcParser extends LyricParse {
 
   @override
   LyricModel parseRaw(String mainLyric, {String? translationLyric}) {
-    final idTags = <String, String>{};
-    final lines = <LyricLine>[];
-    // 提取翻译歌词
-    var translationMap = extractTranslationMap(translationLyric);
+    final Map<String, String> idTags = {};
+    final List<LyricLine> lines = [];
+
+    // 用于跟踪时间戳到 LyricLine 的映射，处理重复时间戳
+    final Map<int, LyricLine> timeToLyricLine = {};
+    // 用于跟踪已出现的时间戳
+    final Set<int> seenTimestamps = {};
+
     for (var line in mainLyric.split('\n')) {
       // 提取标签内容
       final tagInfo = _extractTag(line);
@@ -31,71 +35,105 @@ class LrcParser extends LyricParse {
         idTags[tag.tag] = tag.value;
         continue;
       }
-      final lineInfo = extractLine(line);
-      if (lineInfo != null) {
-        final lrcLine = lineInfo;
-        for (var duration in lrcLine.durations) {
-          if (lrcLine.text.isNotEmpty) {
-            lines.add(
-              LyricLine(
-                start: duration,
-                text: lrcLine.text,
-                translation: translationMap[duration.inMilliseconds],
-              ),
-            );
-          }
+
+      // 提取时间戳和文本
+      final regexp = RegExp(
+        r'\[(\d{1,}):(\d{2})(?:\.(\d{1,}))?\]',
+        multiLine: true,
+      );
+      final matches = regexp.allMatches(line);
+      if (matches.isEmpty) continue;
+
+      // 提取第一个时间作为 start
+      final firstMatch = matches.first;
+      final minutes = firstMatch.group(1);
+      final seconds = firstMatch.group(2);
+      var milliseconds = firstMatch.group(3) ?? '0';
+      if (milliseconds.length > 3) {
+        milliseconds = milliseconds.substring(0, 3);
+      }
+      final Duration start = Duration(
+        minutes: int.parse(minutes!),
+        seconds: int.parse(seconds!),
+        milliseconds: int.parse(milliseconds.padRight(3, '0')),
+      );
+
+      // 移除所有时间戳，只保留文本
+      String text = line;
+      for (var match in matches) {
+        text = text.replaceAll(match.group(0)!, '');
+      }
+      text = text.trim();
+
+      // 检查是否为空行
+      if (text.isEmpty) continue;
+
+      // 过滤无意义的内容
+      if (text == '//' || text.startsWith('//')) continue;
+
+      final int timeMs = start.inMilliseconds;
+
+      // 检查时间戳是否重复
+      if (seenTimestamps.contains(timeMs)) {
+        // 重复时间戳，当前行作为翻译
+        final existingLyricLine = timeToLyricLine[timeMs]!;
+
+        // 创建新的 LyricLine，添加翻译
+        final newLyricLine = LyricLine(
+          start: existingLyricLine.start,
+          text: existingLyricLine.text,
+          translation: text, // 直接使用整行文本，不拆分
+        );
+
+        // 更新映射和列表
+        timeToLyricLine[timeMs] = newLyricLine;
+
+        // 替换列表中的旧歌词
+        final index = lines.indexWhere(
+          (l) => l.start == existingLyricLine.start,
+        );
+        if (index != -1) {
+          lines[index] = newLyricLine;
+        }
+      } else {
+        // 首次出现的时间戳
+        seenTimestamps.add(timeMs);
+
+        // 对于首次出现的时间戳，使用 extractLine 进行拆分
+        final lyricLine = extractLine(line);
+
+        print("来了");
+        print(lyricLine?.words);
+        if (lyricLine != null) {
+          // 使用 extractLine 的结果
+          final finalLyricLine = LyricLine(
+            start: lyricLine.start,
+            text: lyricLine.text,
+            translation: lyricLine.translation,
+            words: lyricLine.words,
+          );
+
+          timeToLyricLine[timeMs] = finalLyricLine;
+          lines.add(finalLyricLine);
         }
       }
     }
+
     lines.sort((a, b) => a.start.compareTo(b.start));
+
     return LyricModel(lines: lines, tags: idTags);
   }
 
-  static Map<int, String> extractTranslationMap(String? translationLyric) {
-    // 提取翻译歌词
-    var translationMap = <int, String>{};
-    for (var line in translationLyric?.split('\n') ?? []) {
-      final lineInfo = LrcParser.extractLine(line);
-      if (lineInfo != null) {
-        final lrcLine = lineInfo;
-        //剔除无效歌词
-        if (['', '//'].contains(lrcLine.text)) continue;
-        for (var duration in lrcLine.durations) {
-          translationMap[duration.inMilliseconds] = lrcLine.text;
-        }
-      }
-    }
-    return translationMap;
-  }
-
-  static String? findTranslation(
-    Map<int, String> translationMap,
-    int ms,
-    int tolerance,
-  ) {
-    var t = translationMap[ms];
-    if (t != null) {
-      return t;
-    }
-    for (var i = 1; i <= tolerance; i++) {
-      if (translationMap[ms - i] != null) {
-        return translationMap[ms - i];
-      }
-      if (translationMap[ms + i] != null) {
-        return translationMap[ms + i];
-      }
-    }
-    return null;
-  }
-
-  static LrcLine? extractLine(String line) {
+  static LyricLine? extractLine(String line) {
     final regexp = RegExp(
       r'\[(\d{1,}):(\d{2})(?:\.(\d{1,}))?\]',
       multiLine: true,
     );
     final matches = regexp.allMatches(line);
     if (matches.isEmpty) return null;
-    final durations = <Duration>[];
+
+    // 提取所有时间戳
+    final List<Duration> durations = [];
     for (var match in matches) {
       final minutes = match.group(1);
       final seconds = match.group(2);
@@ -109,8 +147,165 @@ class LrcParser extends LyricParse {
         milliseconds: int.parse(milliseconds.padRight(3, '0')),
       );
       durations.add(duration);
+    }
+
+    // 提取第一个时间作为 start
+    final Duration start = durations.first;
+
+    // 移除所有时间戳，只保留文本
+    for (var match in matches) {
       line = line.replaceAll(match.group(0)!, '');
     }
-    return LrcLine(durations: durations, text: line);
+
+    final String mainText = line.trim();
+
+    // 检查是否为空行或只有时间戳的行
+    if (mainText.isEmpty) {
+      return null;
+    }
+
+    // 过滤无意义的内容
+    if (mainText == '//' || mainText.startsWith('//')) {
+      return null;
+    }
+
+    // 关键修改：只有单时间戳且包含这些符号时才跳过，多时间戳（逐字歌词）不跳过
+    if (durations.length == 1 &&
+        (mainText.contains('/') ||
+            mainText.contains(':') ||
+            mainText.contains('：'))) {
+      return LyricLine(
+        start: start,
+        text: mainText,
+        translation: null,
+        words: null,
+      );
+    }
+
+    // 如果有多个时间戳，认为是逐字歌词
+    if (durations.length > 1) {
+      final List<LyricWord> words = _extractWords(mainText, durations);
+      return LyricLine(
+        start: start,
+        text: mainText,
+        translation: null,
+        words: words,
+      );
+    }
+
+    // 单时间戳情况，继续原有的翻译检测逻辑
+    // 找到中文翻译的起始位置（只识别真正的中文字符）
+    int chineseStartIndex = -1;
+
+    for (int i = 0; i < mainText.length; i++) {
+      // 跳过空格
+      if (mainText[i] == ' ') {
+        continue;
+      }
+
+      // 检查是否是中文字符（Unicode 范围 0x4E00-0x9FFF）
+      final int charCode = mainText.codeUnitAt(i);
+      if (charCode >= 0x4E00 && charCode <= 0x9FFF) {
+        // 找到真正的中文字符后，检查是否是连续的中文字符
+        int chineseLength = 0;
+        for (int j = i; j < mainText.length; j++) {
+          final int innerCharCode = mainText.codeUnitAt(j);
+          // 只统计真正的中文字符
+          if (innerCharCode >= 0x4E00 && innerCharCode <= 0x9FFF) {
+            chineseLength++;
+          } else if (mainText[j] == ' ') {
+            // 允许中文中间有空格
+            continue;
+          } else {
+            break; // 遇到非中文字符就停止
+          }
+        }
+
+        // 如果有足够的连续中文字符（至少2个），认为是中文翻译的开始
+        if (chineseLength >= 2) {
+          chineseStartIndex = i;
+          break;
+        }
+      }
+    }
+
+    // 如果找到了中文翻译，分割原歌词和翻译
+    if (chineseStartIndex > 0) {
+      final String originalLyric = mainText
+          .substring(0, chineseStartIndex)
+          .trim();
+      final String chineseTranslation = mainText
+          .substring(chineseStartIndex)
+          .trim();
+
+      return LyricLine(
+        start: start,
+        text: originalLyric,
+        translation: chineseTranslation,
+      );
+    }
+
+    return LyricLine(start: start, text: mainText);
+  }
+
+  // 提取逐字高亮信息
+  static List<LyricWord> _extractWords(String text, List<Duration> durations) {
+    final List<LyricWord> words = [];
+
+    if (durations.isEmpty) {
+      return words;
+    }
+
+    // 逐字逐时间戳匹配
+    int textIndex = 0;
+
+    for (int i = 0; i < durations.length && textIndex < text.length; i++) {
+      final Duration startTime = durations[i];
+      Duration? endTime;
+
+      // 计算结束时间
+      if (i < durations.length - 1) {
+        endTime = durations[i + 1];
+      }
+
+      // 获取当前字符
+      final String char = text[textIndex];
+      textIndex++;
+
+      // 如果当前字符是空格，跳过空格，将时间分配给下一个非空格字符
+      if (char == ' ') {
+        // 继续查找下一个非空格字符
+        while (textIndex < text.length && text[textIndex] == ' ') {
+          textIndex++;
+        }
+
+        // 如果找到了非空格字符，将时间分配给这个字符
+        if (textIndex < text.length) {
+          final String nextChar = text[textIndex];
+          textIndex++;
+
+          words.add(LyricWord(text: nextChar, start: startTime, end: endTime));
+        } else {
+          // 没有找到非空格字符，添加空字符串
+          words.add(LyricWord(text: '', start: startTime, end: endTime));
+        }
+      } else {
+        // 非空格字符，直接添加
+        words.add(LyricWord(text: char, start: startTime, end: endTime));
+      }
+    }
+
+    // 如果还有剩余的文本（时间戳少于字符），添加到最后一个 LyricWord
+    if (textIndex < text.length && words.isNotEmpty) {
+      final String remainingText = text.substring(textIndex);
+      final lastWord = words.last;
+      words.last = LyricWord(
+        text: lastWord.text + remainingText,
+        start: lastWord.start,
+        end: lastWord.end,
+      );
+    }
+
+    return words;
   }
 }

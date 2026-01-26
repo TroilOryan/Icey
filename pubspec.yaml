@@ -20,8 +20,6 @@ dependencies:
   audio_service: ^0.18.18
   audio_session: ^0.2.2
   just_audio: ^0.10.5
-  lyric:
-    path: plugins/lyric
 
   ## UI
   animated_gradient_background: ^0.0.1

@@ -20,9 +20,9 @@ class LyricPage extends StatefulWidget {
 }
 
 class _LyricPageState extends State<LyricPage> {
-  final controllerVisible = signal(true);
-
   Timer? controllerVisibleTimer;
+
+  final controllerVisible = signal(true);
 
   void handleVisibilityChanged(VisibilityInfo info) {
     final fraction = info.visibleFraction * 100;
@@ -117,9 +117,11 @@ class _LyricPageState extends State<LyricPage> {
                     Align(
                       alignment: Alignment.bottomCenter,
                       child: IgnorePointer(
-                        ignoring: !_visible,
+                        // ignoring: !_visible,
+                        ignoring: false,
                         child: AnimatedOpacity(
-                          opacity: _visible ? 1 : 0,
+                          // opacity: _visible ? 1 : 0,
+                          opacity: 1,
                           duration: AppTheme.defaultDurationMid,
                           child: Row(
                             spacing: 32,

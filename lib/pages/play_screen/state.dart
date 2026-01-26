@@ -1,4 +1,4 @@
-import 'package:signals/signals_flutter.dart';
+part of 'controller.dart';
 
 class PlayScreenState {
   final lyricOpened = signal(false);

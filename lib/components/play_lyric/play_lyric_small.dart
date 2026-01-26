@@ -2,8 +2,8 @@ import 'package:IceyPlayer/components/play_lyric_shader_mask/play_lyric_shader_m
 import 'package:IceyPlayer/components/responsive_builder/responsive_builder.dart';
 import 'package:IceyPlayer/models/media/media.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_lyric/core/lyric_model.dart';
 
-import 'package:lyric/lyrics_reader_model.dart';
 import 'package:signals/signals_flutter.dart';
 import 'package:super_sliver_list/super_sliver_list.dart';
 
@@ -27,7 +27,7 @@ class _PlayLyricSmallState extends State<PlayLyricSmall> {
   final ScrollController scrollController = ScrollController();
 
   Widget _buildLyricItem(
-    List<LyricsLineModel> lyricList,
+    List<LyricLine> lyricList,
     int index,
     int currentLyricIndex,
     TextStyle textStyle,
@@ -38,7 +38,7 @@ class _PlayLyricSmallState extends State<PlayLyricSmall> {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 0, vertical: 2),
       child: Text(
-        index < 0 ? "" : lyricList[index].mainText ?? "",
+        index < 0 ? "" : lyricList[index].text,
         style: isPlaying
             ? textStyle
             : textStyle.copyWith(color: theme.secondary),

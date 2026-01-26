@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:IceyPlayer/pages/home/bottom_bar/bottom_bar.dart';
 import 'package:audio_query/entities.dart';
-import 'package:audio_service/audio_service.dart';
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -14,7 +13,6 @@ import 'package:IceyPlayer/components/button/button.dart';
 import 'package:IceyPlayer/components/media_list_tile/media_list_tile.dart';
 import 'package:IceyPlayer/components/media_more_sheet/media_more_sheet.dart';
 import 'package:IceyPlayer/components/play_bar/play_bar.dart';
-import 'package:IceyPlayer/components/play_screen/play_screen.dart';
 import 'package:IceyPlayer/components/sheet_item/sheet_item.dart';
 import 'package:IceyPlayer/constants/box_key.dart';
 import 'package:IceyPlayer/constants/cache_key.dart';
@@ -182,13 +180,6 @@ class HomeController {
 
     if (state.panelOpened.value) {
       state.panelOpened.value = false;
-
-      if (playScreenState.lyricOpened.value) {
-        playScreenState.lyricOpened.value = false;
-        playScreenState.offset.value = 0;
-
-        return;
-      }
 
       return;
     }

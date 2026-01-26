@@ -45,24 +45,30 @@ class _PlayScreenPageState extends State<PlayScreenPage>
     final lyricOpened = playScreenController.state.lyricOpened.watch(context),
         offset = playScreenController.state.offset.watch(context);
 
-    return Scaffold(
-      body: Stack(
-        children: [
-          PlayScreenBackground(),
-          OrientationBuilder(
-            builder: (context, orientation) {
-              if (orientation == Orientation.landscape) {
-                return Landscape();
-              }
+    return PopScope(
+      canPop: !lyricOpened,
+      onPopInvokedWithResult: playScreenController.handlePopInvokedWithResult,
+      child: Scaffold(
+        extendBody: true,
+        extendBodyBehindAppBar: true,
+        body: Stack(
+          children: [
+            PlayScreenBackground(),
+            OrientationBuilder(
+              builder: (context, orientation) {
+                if (orientation == Orientation.landscape) {
+                  return Landscape();
+                }
 
-              return Portrait(
-                offset: offset,
-                lyricOpened: lyricOpened,
-                onOpenLyric: playScreenController.handleOpenLyric,
-              );
-            },
-          ),
-        ],
+                return Portrait(
+                  offset: offset,
+                  lyricOpened: lyricOpened,
+                  onOpenLyric: playScreenController.handleOpenLyric,
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

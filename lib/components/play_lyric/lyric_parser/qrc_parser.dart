@@ -39,10 +39,10 @@ class QrcParser extends LyricParse {
       Duration startTime = Duration.zero;
       Duration endTime = Duration.zero;
       String text = '';
-      final matchs = lineRegExp.allMatches(line);
-      if (matchs.isEmpty) continue;
+      final matches = lineRegExp.allMatches(line);
+      if (matches.isEmpty) continue;
       final words = <LyricWord>[];
-      for (var match in matchs) {
+      for (var match in matches) {
         final totalTime = match.group(1);
         if (totalTime?.isNotEmpty ?? false) {
           final time = extractTime(totalTime!);

@@ -17,13 +17,11 @@ import 'package:signals/signals_flutter.dart';
 final _likedBox = Boxes.likedBox;
 
 class PlayPage extends StatelessWidget {
-  final bool panelOpened;
   final bool lyricOpened;
   final Function(BuildContext) onOpenLyric;
 
   const PlayPage({
     super.key,
-    required this.panelOpened,
     required this.lyricOpened,
     required this.onOpenLyric,
   });

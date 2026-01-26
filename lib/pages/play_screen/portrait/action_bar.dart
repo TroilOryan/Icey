@@ -2,12 +2,11 @@ import 'package:IceyPlayer/components/play_menu_button/play_menu_button.dart';
 import 'package:IceyPlayer/models/settings/settings.dart';
 import 'package:IceyPlayer/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:signals/signals_flutter.dart';
 
 class ActionBar extends StatelessWidget {
-  final VoidCallback onClosePanel;
-
-  const ActionBar({super.key, required this.onClosePanel});
+  const ActionBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +32,7 @@ class ActionBar extends StatelessWidget {
           children: [
             IconButton(
               color: appThemeExtension.primary,
-              onPressed: onClosePanel,
+              onPressed: context.pop,
               iconSize: 24,
               icon: Icon(Icons.keyboard_arrow_down),
             ),
