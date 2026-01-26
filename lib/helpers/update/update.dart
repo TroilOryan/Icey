@@ -27,7 +27,7 @@ abstract class UpdateHelper {
         options: Options(headers: {'user-agent': UaType.mob.ua}),
       );
       if (res.data is Map || res.data.isEmpty) {
-        showToast('检查更新失败，GitHub接口未返回数据，请检查网络');
+        showToast('检查更新失败，请检查网络，或等待30分钟后再试。');
         return;
       }
       final data = res.data[0];
