@@ -36,6 +36,7 @@ dependencies:
   sliver_tools: ^0.2.12
   super_sliver_list:
     path: plugins/super_sliver_list
+  xml: ^6.6.1
   visibility_detector: ^0.4.0+2
 
   ## 存储

@@ -1,5 +1,4 @@
 import 'package:IceyPlayer/components/play_lyric/lyric_widget.dart';
-import 'package:IceyPlayer/models/settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:signals/signals_flutter.dart';
 
@@ -33,9 +32,6 @@ class _PlayLyricState extends State<PlayLyric> {
 
   @override
   Widget build(BuildContext context) {
-    final karaoke = settingsManager.karaoke.watch(context),
-        fakeEnhanced = settingsManager.fakeEnhanced.watch(context);
-
     final isHighlight = controller.isHighlight.watch(context);
 
     return Builder(

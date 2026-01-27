@@ -14,7 +14,7 @@ class LyricManager {
 
   final lyricParser = LyricParser();
 
-  LyricModel? lyricModel;
+  final Signal<LyricModel?> _lyricModel;
 
   final Signal<String> _rawLyric;
 
@@ -23,6 +23,8 @@ class LyricManager {
   final Signal<LyricSource> _lyricSource;
 
   final Signal<int> _currentIndex;
+
+  Signal<LyricModel?> get lyricModel => _lyricModel;
 
   // 歌词源数据
   Signal<String> get rawLyric => _rawLyric;
@@ -36,7 +38,8 @@ class LyricManager {
   Signal<int> get currentIndex => _currentIndex;
 
   LyricManager()
-    : _rawLyric = signal(""),
+    : _lyricModel = signal(null),
+      _rawLyric = signal(""),
       _parsedLyric = signal([]),
       _lyricSource = signal(LyricSource.none),
       _currentIndex = signal(-1) {
@@ -54,9 +57,11 @@ class LyricManager {
   void setLyricModel(String value) {
     _rawLyric.value = value;
 
-    lyricModel = lyricParser.parseRaw(value);
+    final model = lyricParser.parseRaw(value);
 
-    final lyric = lyricModel?.lines ?? [];
+    _lyricModel.value = model;
+
+    final lyric = model.lines;
 
     _parsedLyric.value = lyric;
 

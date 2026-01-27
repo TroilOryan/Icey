@@ -19,7 +19,7 @@ class LyricWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final rawLyric = lyricManager.rawLyric.watch(context);
+    final parsedLyric = lyricManager.parsedLyric.watch(context);
 
     final theme = Theme.of(context);
 
@@ -48,6 +48,7 @@ class LyricWidget extends StatelessWidget {
       contentPadding: EdgeInsets.only(top: 200),
       textStyle: textStyle,
       activeStyle: activeTextStyle,
+      translationStyle: extTextStyle,
       // selectedColor: theme.colorScheme.primary,
       activeHighlightGradient: isHighlight
           ? LinearGradient(
@@ -65,7 +66,7 @@ class LyricWidget extends StatelessWidget {
       scrollDuration: const Duration(milliseconds: 600),
     );
 
-    if (rawLyric.isEmpty) {
+    if (parsedLyric.isEmpty) {
       return Center(child: Text('暂无歌词', style: extTextStyle));
     }
 

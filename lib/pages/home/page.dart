@@ -85,13 +85,30 @@ class _HomePageState extends State<HomePage>
               ? BottomBar(
                   selectedIndex: widget.navigationShell.currentIndex,
                   onSearch: () => homeController.navToSearch(context),
-                  onTabSelected: widget.navigationShell.goBranch,
+                  onTabSelected: (index) {
+                    homeController.pageController.animateToPage(
+                      index,
+                      duration: AppTheme.defaultDurationMid,
+                      curve: Curves.easeInOut,
+                    );
+
+                    widget.navigationShell.goBranch(index);
+                  },
                 )
               : null,
           body: Stack(
             alignment: Alignment.bottomCenter,
             children: [
-              widget.navigationShell,
+              PageView(
+                controller: homeController.pageController,
+                onPageChanged: widget.navigationShell.goBranch,
+                children: [
+                  MediaLibraryPage(),
+                  AlbumListPage(),
+                  ArtistListPage(),
+                  SettingsPage(),
+                ],
+              ),
 
               if (mediaList.isNotEmpty)
                 PlayBar(

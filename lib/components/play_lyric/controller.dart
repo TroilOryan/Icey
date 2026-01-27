@@ -16,14 +16,14 @@ class PlayLyricController {
   void onInit() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       lyricListener = effect(() {
-        if (lyricManager.lyricModel != null) {
-          isHighlight.value = lyricManager.lyricModel!.lines.any(
+        if (lyricManager.lyricModel.value != null) {
+          isHighlight.value = lyricManager.lyricModel.value!.lines.any(
             (e) => e.words != null && e.words!.isNotEmpty,
           );
 
           lyricController
             ..loadLyric(lyricManager.rawLyric.value)
-            ..loadLyricModel(lyricManager.lyricModel!);
+            ..loadLyricModel(lyricManager.lyricModel.value!);
         }
       });
 
