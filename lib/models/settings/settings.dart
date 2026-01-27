@@ -113,6 +113,7 @@ class SettingsManager {
   final Signal<bool> _karaoke;
   final Signal<bool> _fakeEnhanced;
   final Signal<bool> _immersive;
+  final Signal<bool> _concert;
   final Signal<bool> _audioFocus;
   final Signal<bool> _autoUpdate;
 
@@ -146,6 +147,8 @@ class SettingsManager {
 
   Signal<bool> get immersive => _immersive;
 
+  Signal<bool> get concert => _concert;
+
   Signal<bool> get audioFocus => _audioFocus;
 
   Signal<bool> get autoUpdate => _autoUpdate;
@@ -166,6 +169,7 @@ class SettingsManager {
       _karaoke = signal(true),
       _fakeEnhanced = signal(false),
       _immersive = signal(false),
+      _concert = signal(false),
       _audioFocus = signal(true),
       _autoUpdate = signal(true) {
     _sortType.value = MediaSort.getByValue(
@@ -243,6 +247,11 @@ class SettingsManager {
 
     _immersive.value = _settingsBox.get(
       CacheKey.Settings.immersive,
+      defaultValue: false,
+    );
+
+    _concert.value = _settingsBox.get(
+      CacheKey.Settings.concert,
       defaultValue: false,
     );
 
@@ -347,6 +356,12 @@ class SettingsManager {
     _immersive.value = value;
 
     _settingsBox.put(CacheKey.Settings.immersive, value);
+  }
+
+  void setConcert(bool value) {
+    _concert.value = value;
+
+    _settingsBox.put(CacheKey.Settings.concert, value);
   }
 
   void setAudioFocus(bool value) {

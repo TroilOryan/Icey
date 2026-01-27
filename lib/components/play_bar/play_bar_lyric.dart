@@ -1,5 +1,5 @@
 import 'package:IceyPlayer/components/marquee/marquee.dart';
-import 'package:IceyPlayer/models/media/media.dart';
+import 'package:IceyPlayer/models/lyric/lyric.dart';
 import 'package:flutter/material.dart';
 import 'package:signals/signals_flutter.dart';
 
@@ -12,8 +12,8 @@ class PlayBarLyric extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    final currentLyricIndex = mediaManager.currentLyricIndex.watch(context),
-        parsedLyric = mediaManager.parsedLyric.watch(context);
+    final currentIndex = lyricManager.currentIndex.watch(context),
+        parsedLyric = lyricManager.parsedLyric.watch(context);
 
     return AnimatedSwitcher(
       switchInCurve: Curves.easeInSine,
@@ -31,12 +31,12 @@ class PlayBarLyric extends StatelessWidget {
           ),
       duration: AppTheme.defaultDuration,
       child: Align(
-        key: currentLyricIndex != -1 ? ValueKey(currentLyricIndex) : null,
+        key: currentIndex != -1 ? ValueKey(currentIndex) : null,
         alignment: Alignment.centerLeft,
         child: Marquee(
           child: Text(
-            currentLyricIndex != -1 && parsedLyric.isNotEmpty
-                ? parsedLyric[currentLyricIndex].text
+            currentIndex != -1 && parsedLyric.isNotEmpty
+                ? parsedLyric[currentIndex].text
                 : "暂无歌词",
             style: theme.textTheme.bodyMedium?.copyWith(
               leadingDistribution: TextLeadingDistribution.even,

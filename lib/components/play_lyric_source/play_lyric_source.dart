@@ -1,4 +1,4 @@
-import 'package:IceyPlayer/models/media/media.dart';
+import 'package:IceyPlayer/models/lyric/lyric.dart';
 import 'package:flutter/material.dart';
 
 import '../../theme/theme.dart';
@@ -42,7 +42,7 @@ class PlayLyricSource extends StatelessWidget {
       ),
       child: Center(
         child: Text(
-          mediaManager.lyricSource.value.name.substring(0, 1),
+          lyricManager.lyricSource.value.name.substring(0, 1),
           style: Theme.of(
             context,
           ).textTheme.bodyLarge?.copyWith(color: appThemeExtension.secondary),

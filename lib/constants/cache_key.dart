@@ -77,6 +77,8 @@ class _SettingsKeys {
 
   final String immersive = "settings_immersive";
 
+  final String concert = "settings_concert";
+
   final String audioFocus = "settings_audioFocus";
 
   /// 启动检查更新

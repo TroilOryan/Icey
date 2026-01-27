@@ -1,5 +1,6 @@
 import 'package:IceyPlayer/components/play_lyric_shader_mask/play_lyric_shader_mask.dart';
 import 'package:IceyPlayer/components/responsive_builder/responsive_builder.dart';
+import 'package:IceyPlayer/models/lyric/lyric.dart';
 import 'package:IceyPlayer/models/media/media.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lyric/core/lyric_model.dart';
@@ -29,11 +30,11 @@ class _PlayLyricSmallState extends State<PlayLyricSmall> {
   Widget _buildLyricItem(
     List<LyricLine> lyricList,
     int index,
-    int currentLyricIndex,
+    int currentIndex,
     TextStyle textStyle,
     AppThemeExtension theme,
   ) {
-    final isPlaying = currentLyricIndex == index;
+    final isPlaying = currentIndex == index;
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 0, vertical: 2),
@@ -73,8 +74,8 @@ class _PlayLyricSmallState extends State<PlayLyricSmall> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _listener = effect(() {
         _scrollToCurrentLyric(
-          mediaManager.currentLyricIndex.value,
-          mediaManager.parsedLyric.value.length,
+          lyricManager.currentIndex.value,
+          lyricManager.parsedLyric.value.length,
         );
       });
 
@@ -83,8 +84,8 @@ class _PlayLyricSmallState extends State<PlayLyricSmall> {
       ) {
         if (playing == true) {
           _scrollToCurrentLyric(
-            mediaManager.currentLyricIndex.value,
-            mediaManager.parsedLyric.value.length,
+            lyricManager.currentIndex.value,
+            lyricManager.parsedLyric.value.length,
           );
         }
       });
@@ -126,8 +127,8 @@ class _PlayLyricSmallState extends State<PlayLyricSmall> {
       onTap: widget.onTap,
       child: ResponsiveBuilder(
         builder: (context, screenType) {
-          final parsedLyric = mediaManager.parsedLyric.watch(context),
-              currentLyricIndex = mediaManager.currentLyricIndex.watch(context);
+          final parsedLyric = lyricManager.parsedLyric.watch(context),
+              currentIndex = lyricManager.currentIndex.watch(context);
 
           final lineHeight = textStyle.fontSize! * textStyle.height! + 2;
 
@@ -149,7 +150,7 @@ class _PlayLyricSmallState extends State<PlayLyricSmall> {
                       itemBuilder: (context, index) => _buildLyricItem(
                         parsedLyric,
                         index,
-                        currentLyricIndex,
+                        currentIndex,
                         textStyle,
                         appTheme,
                       ),

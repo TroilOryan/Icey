@@ -1,3 +1,4 @@
+import 'package:IceyPlayer/models/lyric/lyric.dart';
 import 'package:IceyPlayer/models/media/media.dart';
 import 'package:IceyPlayer/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ class LyricWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final rawLyric = mediaManager.rawLyric.watch(context);
+    final rawLyric = lyricManager.rawLyric.watch(context);
 
     final theme = Theme.of(context);
 

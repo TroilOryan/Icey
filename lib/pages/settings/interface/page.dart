@@ -36,6 +36,7 @@ class InterfacePage extends StatelessWidget {
         wakelock = settingsManager.wakelock.watch(context),
         dynamicLight = settingsManager.dynamicLight.watch(context),
         immersive = settingsManager.immersive.watch(context),
+        concert = settingsManager.concert.watch(context),
         listBg = settingsManager.listBg.watch(context);
 
     return PageWrapper(
@@ -144,6 +145,12 @@ class InterfacePage extends StatelessWidget {
                 isSwitch: true,
                 value: immersive,
                 onChanged: settingsManager.setImmersive,
+              ),
+              ListItem(
+                title: '演唱会模式',
+                isSwitch: true,
+                value: concert,
+                onChanged: settingsManager.setConcert,
               ),
             ],
           ),

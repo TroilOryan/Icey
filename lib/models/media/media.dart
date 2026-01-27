@@ -1,10 +1,12 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:IceyPlayer/models/lyric/lyric.dart';
 import 'package:audio_metadata_reader/audio_metadata_reader.dart';
 import 'package:audio_query/audio_query.dart';
 import 'package:audio_query/types/artwork_type.dart';
 import 'package:audio_service/audio_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:IceyPlayer/components/play_lyric_source/play_lyric_source.dart';
 import 'package:IceyPlayer/constants/box_key.dart';
@@ -12,14 +14,10 @@ import 'package:IceyPlayer/constants/cache_key.dart';
 import 'package:IceyPlayer/entities/album.dart';
 import 'package:IceyPlayer/entities/artist.dart';
 import 'package:IceyPlayer/entities/media.dart';
-import 'package:IceyPlayer/helpers/common.dart';
 import 'package:IceyPlayer/helpers/toast/toast.dart';
 import 'package:IceyPlayer/services/audio_service.dart';
 import 'package:IceyPlayer/services/media_state.dart';
 import 'package:IceyPlayer/services/play_mode.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter_lyric/core/lyric_model.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:signals/signals.dart';
 import 'package:rxdart/rxdart.dart' as rx;
 
@@ -57,13 +55,48 @@ class MediaManager {
   final Signal<MediaItem?> _currentMediaItem;
   final Signal<Animation<double>?> _rotationAnimation;
   late final AudioPlayerHandler _audioService;
-  final Signal<int> _currentLyricIndex;
-  final Signal<List<LyricLine>> _parsedLyric;
   final Signal<CoverColor> _coverColor;
   final Signal<Uint8List> _currentCover;
-  final Signal<String> _rawLyric;
-  final Signal<LyricSource> _lyricSource;
   final Signal<PlayMode> _playMode;
+
+  Signal<Duration> get position => _position;
+
+  Stream<Duration> get positions => _audioService.positionStream;
+
+  Signal<List<MediaEntity>> get localMediaList => _localMediaList;
+
+  Signal<List<MediaEntity>> get mediaList => _mediaList;
+
+  Computed<List<AlbumEntity>> get albumList => _albumList;
+
+  Computed<List<ArtistEntity>> get artistList => _artistList;
+
+  Signal<MediaItem?> get currentMediaItem => _currentMediaItem;
+
+  Signal<Animation<double>?> get rotationAnimation => _rotationAnimation;
+
+  bool get isPlaying => _audioService.isPlaying;
+
+  Signal<CoverColor> get coverColor => _coverColor;
+
+  Signal<Uint8List> get currentCover => _currentCover;
+
+  Signal<PlayMode> get playMode => _playMode;
+
+  rx.BehaviorSubject<MediaItem?> get mediaItem => _audioService.mediaItem;
+
+  rx.BehaviorSubject<List<MediaItem>> get queue => _audioService.queue;
+
+  rx.BehaviorSubject<PlaybackState> get playbackState =>
+      _audioService.playbackState;
+
+  Stream<MediaState> get mediaStateStream =>
+      rx.Rx.combineLatest2<MediaItem?, Duration, MediaState>(
+        mediaItem,
+        AudioService.position,
+        (mediaItem, position) =>
+            MediaState(mediaItem: mediaItem, position: position),
+      );
 
   MediaManager()
     : _position = signal(Duration.zero),
@@ -71,14 +104,10 @@ class MediaManager {
       _mediaList = signal([]),
       _currentMediaItem = signal(null),
       _rotationAnimation = signal(null),
-      _currentLyricIndex = signal(-1),
-      _parsedLyric = signal([]),
       _coverColor = signal(
         const CoverColor(primary: -1, secondary: -1, isDark: false),
       ),
       _currentCover = signal(Uint8List(0)),
-      _rawLyric = signal(""),
-      _lyricSource = signal(LyricSource.none),
       _playMode = signal(PlayMode.listLoop) {
     _playMode.value = PlayMode.getByValue(
       _settingsBox.get(
@@ -144,53 +173,6 @@ class MediaManager {
     });
   }
 
-  Signal<Duration> get position => _position;
-
-  Stream<Duration> get positions => _audioService.positionStream;
-
-  Signal<List<MediaEntity>> get localMediaList => _localMediaList;
-
-  Signal<List<MediaEntity>> get mediaList => _mediaList;
-
-  Computed<List<AlbumEntity>> get albumList => _albumList;
-
-  Computed<List<ArtistEntity>> get artistList => _artistList;
-
-  Signal<MediaItem?> get currentMediaItem => _currentMediaItem;
-
-  Signal<Animation<double>?> get rotationAnimation => _rotationAnimation;
-
-  bool get isPlaying => _audioService.isPlaying;
-
-  Signal<int> get currentLyricIndex => _currentLyricIndex;
-
-  Signal<CoverColor> get coverColor => _coverColor;
-
-  Signal<Uint8List> get currentCover => _currentCover;
-
-  Signal<String> get rawLyric => _rawLyric;
-
-  Signal<LyricSource> get lyricSource => _lyricSource;
-
-  Signal<PlayMode> get playMode => _playMode;
-
-  Signal<List<LyricLine>> get parsedLyric => _parsedLyric;
-
-  BehaviorSubject<MediaItem?> get mediaItem => _audioService.mediaItem;
-
-  BehaviorSubject<List<MediaItem>> get queue => _audioService.queue;
-
-  BehaviorSubject<PlaybackState> get playbackState =>
-      _audioService.playbackState;
-
-  Stream<MediaState> get mediaStateStream =>
-      rx.Rx.combineLatest2<MediaItem?, Duration, MediaState>(
-        mediaItem,
-        AudioService.position,
-        (mediaItem, position) =>
-            MediaState(mediaItem: mediaItem, position: position),
-      );
-
   void init({
     required List<MediaEntity> medias,
     required AudioPlayerHandler audioService,
@@ -200,26 +182,9 @@ class MediaManager {
   }
 
   void setPosition(Duration value) {
-    batch(() {
-      _position.value = value;
+    _position.value = value;
 
-      setCurrentLyricIndex(_parsedLyric.value, value);
-    });
-  }
-
-  void setCurrentLyricIndex(List<LyricLine> lyric, Duration position) {
-    if (lyric.isNotEmpty) {
-      final index = CommonHelper.findClosestIndex(
-        parsedLyric.map((e) => BigInt.from(e.start.inMilliseconds)).toList(),
-        BigInt.from(position.inMilliseconds),
-      );
-
-      if (index != -1 && index != currentLyricIndex.value) {
-        currentLyricIndex.value = index;
-      }
-    } else {
-      currentLyricIndex.value = -1;
-    }
+    lyricManager.setCurrentIndexByPosition(value);
   }
 
   void setLocalMediaList(List<MediaEntity> value, [bool? local]) {
@@ -337,10 +302,6 @@ class MediaManager {
     _audioService.seek(position);
   }
 
-  void setParsedLyric(List<LyricLine> value) {
-    _parsedLyric.value = value;
-  }
-
   Future<void> setCurrentMediaItem(MediaItem value) async {
     if (value.id == _currentMediaItem.value?.id) {
       return;
@@ -356,12 +317,14 @@ class MediaManager {
       try {
         final res = await compute(_parseLyric, {"path": path});
 
-        _rawLyric.value = res["raw"];
+        lyricManager.setLyricModel(res["raw"] as String);
 
-        _lyricSource.value = res["source"];
+        lyricManager.setLyricSource(res["source"] as LyricSource);
+      } catch (e) {
+        lyricManager.setLyricModel("");
 
-        setCurrentLyricIndex(res["model"], Duration.zero);
-      } catch (e) {}
+        lyricManager.setLyricSource(LyricSource.none);
+      }
 
       try {
         final coverRes = await AudioQuery().queryArtworkWithColor(

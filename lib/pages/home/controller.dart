@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:IceyPlayer/models/lyric/lyric.dart';
 import 'package:IceyPlayer/pages/home/bottom_bar/bottom_bar.dart';
 import 'package:audio_query/entities.dart';
 import 'package:common_utils/common_utils.dart';
@@ -465,5 +466,7 @@ class HomeController {
     mediaScanListController?.dispose();
 
     _panelOpenedListener();
+
+    lyricManager.dispose();
   }
 }
