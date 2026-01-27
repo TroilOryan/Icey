@@ -44,6 +44,12 @@
 - [x] 卡拉OK歌词
 - [x] 自定义界面
 
+## 支持歌词格式
+- [x] lrc
+- [x] lrc逐字
+- [x] ttml
+- [x] qrc
+
 <br/>
 
 ## 下载
@@ -61,6 +67,7 @@
 
 - [audio_service](https://pub.dev/packages/audio_service)
 - [signals](https://pub.dev/packages/signals)
+- [flutter_lyric](https://pub.dev/packages/flutter_lyric)
 - 等等
 
 <br/>
