@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter_lyric/core/lyric_model.dart';
 import 'package:flutter_lyric/core/lyric_parse.dart';
 
@@ -127,18 +129,30 @@ class LrcParser extends LyricParse {
           continue;
         }
 
-        final Duration startTime = lines[i].start;
+        final Duration startTime = Duration(
+          milliseconds: lines[i].start.inMilliseconds - 10,
+        );
         final String text = lines[i].text;
 
         // 计算结束时间：下一行的开始时间，如果是最后一行则使用歌曲总时长
         Duration? endTime;
+
         if (i < lines.length - 1) {
-          // 超过1.5s应该就是包含了伴奏的歌词 直接根据文本长度计算结束时间
-          if (lines[i + 1].start.inMilliseconds - startTime.inMilliseconds >
-              1500) {
-            endTime = Duration(
-              milliseconds: startTime.inMilliseconds + text.length * 100,
-            );
+          final gap =
+              lines[i + 1].start.inMilliseconds - startTime.inMilliseconds;
+
+          // 超过5s应该就是包含了伴奏的歌词 直接根据文本长度计算结束时间
+          if (gap > 5000) {
+            if (gap > 10000) {
+              endTime = Duration(
+                milliseconds: startTime.inMilliseconds + text.length * 500,
+              );
+            } else {
+              endTime = Duration(
+                milliseconds:
+                    startTime.inMilliseconds + max(gap - text.length * 100, 0),
+              );
+            }
           } else {
             endTime = Duration(
               milliseconds: lines[i + 1].start.inMilliseconds - 15,

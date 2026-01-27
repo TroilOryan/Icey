@@ -50,9 +50,9 @@ class _ConcertState extends State<Concert> {
   }
 
   void handleTap() {
-    if (hideController.value) {
-      hideController.value = false;
-    }
+    _tapTimer?.cancel();
+
+    hideController.value = !hideController.value;
   }
 
   @override
@@ -130,6 +130,9 @@ class _ConcertState extends State<Concert> {
       translationStyle: extTextStyle,
       scrollCurve: Curves.easeInOutSine,
       scrollDuration: const Duration(milliseconds: 0),
+      activeHighlightGradient: LinearGradient(
+        colors: [theme.colorScheme.primary, theme.colorScheme.secondary],
+      ),
     );
 
     return GestureDetector(
@@ -137,7 +140,7 @@ class _ConcertState extends State<Concert> {
       child: Scaffold(
         backgroundColor: Colors.black,
         body: SafeArea(
-          minimum: EdgeInsets.all(16),
+          minimum: EdgeInsets.fromLTRB(0, 0, 32, 0),
           child: Stack(
             children: [
               if (parsedLyric.isNotEmpty)
