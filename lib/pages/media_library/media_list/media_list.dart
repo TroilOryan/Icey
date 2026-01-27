@@ -63,7 +63,7 @@ class MediaList extends StatelessWidget {
         return SliverPadding(
           padding: EdgeInsets.symmetric(horizontal: 24),
           sliver: SuperSliverList.separated(
-            addAutomaticKeepAlives: false,
+            addAutomaticKeepAlives: true,
             layoutKeptAliveChildren: true,
             itemCount: mediaList.length,
             separatorBuilder: (context, index) => SizedBox(height: 16),

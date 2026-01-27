@@ -122,11 +122,15 @@ class HomeController {
     scrollableBottomSheet(
       context: context,
       builder: (context) => [
-        MediaListTile(media, obscure: false),
+        MediaListTile(
+          media,
+          obscure: false,
+          showLike: true,
+          onLike: MediaHelper.likeMedia,
+        ),
         MediaMoreSheet.addToNextPlay(media),
         MediaMoreSheet.mediaArtist(context, media),
         MediaMoreSheet.mediaAlbum(context, media),
-        MediaMoreSheet.likeMedia(context, media),
         MediaMoreSheet.openInMusicTagEditor(media),
         MediaMoreSheet.addToMediaOrder(context, media),
         MediaMoreSheet.mediaInfo(context, media),

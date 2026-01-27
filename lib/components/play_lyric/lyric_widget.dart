@@ -1,5 +1,5 @@
+import 'package:IceyPlayer/components/play_lyric/play_lyric_style.dart';
 import 'package:IceyPlayer/models/lyric/lyric.dart';
-import 'package:IceyPlayer/models/media/media.dart';
 import 'package:IceyPlayer/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lyric/flutter_lyric.dart';
@@ -28,13 +28,11 @@ class LyricWidget extends StatelessWidget {
     final textStyle = theme.textTheme.titleLarge!.copyWith(
       color: appThemeExtension.secondary,
       fontSize: isLandscape ? null : 32,
-      fontWeight: FontWeight.bold,
     );
 
     final activeTextStyle = theme.textTheme.titleLarge!.copyWith(
       color: appThemeExtension.primary,
       fontSize: isLandscape ? null : 32,
-      fontWeight: FontWeight.bold,
     );
 
     final extTextStyle = theme.textTheme.titleLarge!.copyWith(
@@ -42,28 +40,17 @@ class LyricWidget extends StatelessWidget {
       fontSize: isLandscape ? null : 20,
     );
 
-    final lyricStyle = LyricStyles.default1.copyWith(
-      textAlign: .left,
-      contentAlignment: .start,
-      contentPadding: EdgeInsets.only(top: 200),
+    final lyricStyle = PlayLyricStyle.default1.copyWith(
       textStyle: textStyle,
       activeStyle: activeTextStyle,
       translationStyle: extTextStyle,
-      // selectedColor: theme.colorScheme.primary,
-      activeHighlightGradient: isHighlight
-          ? LinearGradient(
-              colors: [
-                theme.colorScheme.primary,
-                theme.colorScheme.inversePrimary,
-              ],
-            )
-          : null,
+      activeHighlightGradient: LinearGradient(
+        colors: [theme.colorScheme.inversePrimary, theme.colorScheme.primaryContainer],
+      ),
       selectLineResumeMode: SelectionAutoResumeMode.selecting,
       activeHighlightColor: isHighlight
           ? theme.colorScheme.inversePrimary
           : null,
-      scrollCurve: Curves.easeInOutSine,
-      scrollDuration: const Duration(milliseconds: 600),
     );
 
     if (parsedLyric.isEmpty) {

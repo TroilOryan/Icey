@@ -44,10 +44,15 @@ class SheetItem extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
             child: Row(
               children: [
-                Text(
-                  label,
-                  style: textTheme.copyWith(
-                    color: active ? theme.colorScheme.primary : null,
+                Flexible(
+                  child: Text(
+                    label,
+                    style: textTheme.copyWith(
+                      color: active ? theme.colorScheme.primary : null,
+                    ),
+                    softWrap: true,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ],

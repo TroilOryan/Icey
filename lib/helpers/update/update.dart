@@ -12,7 +12,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:IceyPlayer/http/init.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'ua_type.dart';
 

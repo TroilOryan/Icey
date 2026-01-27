@@ -1,6 +1,7 @@
 import "dart:ui";
 
 import "package:IceyPlayer/components/high_material_wrapper/high_material_wrapper.dart";
+import "package:IceyPlayer/components/play_like_button/play_like_button.dart";
 import "package:IceyPlayer/helpers/common.dart";
 import "package:IceyPlayer/models/media/media.dart";
 import "package:flutter_sficon/flutter_sficon.dart";
@@ -24,6 +25,8 @@ class MediaListTile extends StatelessWidget {
   final EdgeInsetsGeometry? margin;
   final bool ghost;
   final bool isPlaying;
+  final bool showLike;
+  final Function(String? id, bool liked)? onLike;
 
   const MediaListTile(
     this.media, {
@@ -39,6 +42,8 @@ class MediaListTile extends StatelessWidget {
     this.margin,
     this.ghost = false,
     this.isPlaying = false,
+    this.showLike = false,
+    this.onLike,
   });
 
   void handleAddToQueue() {
@@ -79,7 +84,7 @@ class MediaListTile extends StatelessWidget {
           onTap: onTap,
           onLongPress: onLongPress,
           child: Container(
-            padding: EdgeInsets.fromLTRB(12, 12, 8, 12),
+            padding: EdgeInsets.fromLTRB(12, 12, showLike ? 10 : 8, 12),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -89,7 +94,7 @@ class MediaListTile extends StatelessWidget {
                     showDefault: showDefault,
                     id: media.id,
                     size: 56,
-                    borderRadius: BorderRadius.all(AppTheme.borderRadiusSm),
+                    borderRadius: BorderRadius.all(AppTheme.borderRadiusXs),
                   ),
                 ),
                 SizedBox(width: 12),
@@ -182,6 +187,16 @@ class MediaListTile extends StatelessWidget {
                         ),
                       ),
                     ],
+                  ),
+                ),
+                Offstage(
+                  offstage: !showLike,
+                  child: PlayLikeButton(
+                    key: ValueKey(media.id),
+                    id: media.id.toString(),
+                    color: theme.textTheme.bodySmall?.color,
+                    size: 23,
+                    onTap: (liked) => onLike?.call(media.id.toString(), liked),
                   ),
                 ),
               ],

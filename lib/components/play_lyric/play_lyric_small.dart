@@ -132,7 +132,7 @@ class _PlayLyricSmallState extends State<PlayLyricSmall> {
 
           final lineHeight = textStyle.fontSize! * textStyle.height! + 2;
 
-          final containerHeight = lineHeight * 2;
+          final containerHeight = lineHeight * 2.15;
 
           return PlayLyricShaderMask(
             colorStops: const [0.0, 0.05, 0.95, 1],

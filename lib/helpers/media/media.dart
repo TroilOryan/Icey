@@ -1,6 +1,7 @@
 import "dart:async";
 import "dart:io";
 
+import "package:IceyPlayer/event_bus/event_bus.dart";
 import "package:audio_query/audio_query.dart";
 import "package:IceyPlayer/constants/box_key.dart";
 import "package:IceyPlayer/constants/cache_key.dart";
@@ -19,7 +20,8 @@ const Uuid uuid = Uuid();
 
 final _mediaBox = Boxes.mediaBox,
     _settingsBox = Boxes.settingsBox,
-    _mediaCountBox = Boxes.mediaCountBox;
+    _mediaCountBox = Boxes.mediaCountBox,
+    _likedBox = Boxes.likedBox;
 
 class MediaHelper {
   /// 获取本地
@@ -155,46 +157,24 @@ class MediaHelper {
 
         return aTitle.compareTo(bTitle);
       }
-
-      // else if (sortType == MediaSort.addTime) {
-      //   return (b.dateAdded ?? 0).compareTo(a.dateAdded ?? 0);
-      // }
     });
 
     return medias;
   }
-}
 
-/// 收藏进歌单
-collectToMusicOrder({required context, required musicList, onConfirm}) {
-  Navigator.of(context, rootNavigator: false).push(
-    ModalBottomSheetRoute(
-      isScrollControlled: true,
-      builder: (context) {
-        return SizedBox();
-        // return AddToOrder(wantToCollectMusics: musicList, onConfirm: onConfirm);
-      },
-    ),
-  );
-}
-
-Future<List<MediaEntity>> findMusicFromLocalOrders({
-  required String keyword,
-}) async {
-  List<MediaEntity> musics = [];
-
-  final dbMusics = Hive.box(BoxKey.media).values.toList();
-
-  if (dbMusics.isNotEmpty) {
-    for (var dbm in dbMusics) {
-      final musicItem = dbm;
-      final index = dbm.title.contains(keyword);
-
-      if (index != -1) {
-        musics.add(musicItem);
-      }
+  static Future<bool> likeMedia(String? id, bool liked) async {
+    if (id == null) {
+      return liked;
     }
-  }
 
-  return musics;
+    if (liked) {
+      _likedBox.delete(int.parse(id));
+    } else {
+      _likedBox.put(int.parse(id), true);
+    }
+
+    eventBus.fire(LikeMediaChange(id, !liked));
+
+    return !liked;
+  }
 }

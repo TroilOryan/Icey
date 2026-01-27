@@ -73,12 +73,6 @@ class _MediaLibraryPageState extends State<MediaLibraryPage>
                       onOpenSortMenu: controller.handleOpenSortMenu,
                     ),
 
-                    // MediaSearchBar(
-                    //   mediaList: mediaList,
-                    //   offstage: mediaList.isEmpty,
-                    //   focusNode: controller.focusNode,
-                    //   onTap: () => controller.handleNavToSearch(context),
-                    // ),
                     // MediaOrder(offstage: mediaList.isEmpty),
                     MediaList(
                       showDuration: showDuration,

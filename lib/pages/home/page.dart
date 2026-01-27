@@ -86,11 +86,11 @@ class _HomePageState extends State<HomePage>
                   selectedIndex: widget.navigationShell.currentIndex,
                   onSearch: () => homeController.navToSearch(context),
                   onTabSelected: (index) {
-                    homeController.pageController.animateToPage(
-                      index,
-                      duration: AppTheme.defaultDurationMid,
-                      curve: Curves.easeInOut,
-                    );
+                    // homeController.pageController.animateToPage(
+                    //   index,
+                    //   duration: AppTheme.defaultDurationMid,
+                    //   curve: Curves.easeInOut,
+                    // );
 
                     widget.navigationShell.goBranch(index);
                   },
@@ -99,16 +99,17 @@ class _HomePageState extends State<HomePage>
           body: Stack(
             alignment: Alignment.bottomCenter,
             children: [
-              PageView(
-                controller: homeController.pageController,
-                onPageChanged: widget.navigationShell.goBranch,
-                children: [
-                  MediaLibraryPage(),
-                  AlbumListPage(),
-                  ArtistListPage(),
-                  SettingsPage(),
-                ],
-              ),
+              // PageView(
+              //   controller: homeController.pageController,
+              //   onPageChanged: widget.navigationShell.goBranch,
+              //   children: [
+              //     MediaLibraryPage(),
+              //     AlbumListPage(),
+              //     ArtistListPage(),
+              //     SettingsPage(),
+              //   ],
+              // ),
+              widget.navigationShell,
 
               if (mediaList.isNotEmpty)
                 PlayBar(

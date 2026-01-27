@@ -23,12 +23,8 @@ class MediaOrderDetailController {
     );
   }
 
-
-
   void handleUnlike(int id) {
-    _likedBox.delete(id);
-
-    eventBus.fire(LikeMediaChange(id.toString(), false));
+    MediaHelper.likeMedia(id.toString(), false);
 
     final mediaList = List<MediaEntity>.from(state.mediaList.value);
 
