@@ -42,8 +42,14 @@ class _PlayScreenPageState extends State<PlayScreenPage>
 
   @override
   Widget build(BuildContext context) {
+    final concert = settingsManager.concert.watch(context);
+
     final lyricOpened = playScreenController.state.lyricOpened.watch(context),
         offset = playScreenController.state.offset.watch(context);
+
+    if(concert){
+      return Concert();
+    }
 
     return PopScope(
       canPop: !lyricOpened,
