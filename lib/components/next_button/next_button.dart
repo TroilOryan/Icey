@@ -11,6 +11,7 @@ final Throttle _throttle = Throttle(const Duration(seconds: 1));
 class NextButton extends StatelessWidget {
   final double size;
   final Color? color;
+  final bool ghost;
 
   void skipToNext() {
     _throttle.call(mediaManager.skipToNext);
@@ -20,15 +21,21 @@ class NextButton extends StatelessWidget {
     _throttle.call(mediaManager.fastForward);
   }
 
-  const NextButton({super.key, this.size = 24.0, this.color});
+  const NextButton({
+    super.key,
+    this.ghost = false,
+    this.size = 24.0,
+    this.color,
+  });
 
   @override
   Widget build(BuildContext context) {
     final iconColor = color ?? Theme.of(context).colorScheme.onSurface;
 
     return RoundIconButton(
-      size: size * 2,
+      size: size * 2.5,
       color: iconColor,
+      ghost: ghost,
       icon: SFIcon(SFIcons.sf_forward_fill, fontSize: size),
       onTap: skipToNext,
       onLongPress: fastForward,

@@ -5,6 +5,7 @@ class RoundIconButton extends StatelessWidget {
   final Widget icon;
   final double? size;
   final double? iconSize;
+  final bool ghost;
   final VoidCallback onTap;
   final VoidCallback? onLongPress;
 
@@ -15,6 +16,7 @@ class RoundIconButton extends StatelessWidget {
     this.iconSize,
     required this.icon,
     required this.onTap,
+    this.ghost = false,
     this.onLongPress,
   });
 
@@ -25,10 +27,12 @@ class RoundIconButton extends StatelessWidget {
     return Ink(
       width: size ?? 36,
       height: size ?? 36,
-      decoration: ShapeDecoration(
-        color: theme.secondaryHeaderColor,
-        shape: const CircleBorder(),
-      ),
+      decoration: ghost
+          ? null
+          : ShapeDecoration(
+              color: theme.secondaryHeaderColor,
+              shape: const CircleBorder(),
+            ),
       child: IconButton(
         color: color,
         iconSize: iconSize ?? 16,

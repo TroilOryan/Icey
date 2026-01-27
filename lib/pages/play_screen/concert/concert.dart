@@ -1,6 +1,8 @@
 import 'package:IceyPlayer/components/marquee/marquee.dart';
+import 'package:IceyPlayer/components/next_button/next_button.dart';
 import 'package:IceyPlayer/components/play_button/play_button.dart';
 import 'package:IceyPlayer/components/play_progress_button/play_progress_button.dart';
+import 'package:IceyPlayer/components/prev_button/prev_button.dart';
 import 'package:IceyPlayer/models/lyric/lyric.dart';
 import 'package:IceyPlayer/models/media/media.dart';
 import 'package:IceyPlayer/theme/theme.dart';
@@ -115,13 +117,28 @@ class _ConcertState extends State<Concert> {
       body: SafeArea(
         child: Stack(
           children: [
-            Positioned.fill(
-              child: LyricView(controller: lyricController, style: lyricStyle),
-            ),
+            if (parsedLyric.isNotEmpty)
+              Positioned.fill(
+                child: LyricView(
+                  controller: lyricController,
+                  style: lyricStyle,
+                ),
+              )
+            else
+              Positioned.fill(
+                child: Center(child: Text('暂无歌词', style: extTextStyle)),
+              ),
             Positioned(
               right: 24,
               bottom: 24,
-              child: PlayProgressButton(size: 20, color: Colors.white),
+              child: Row(
+                mainAxisAlignment: .center,
+                children: [
+                  PrevButton(ghost: true, size: 20, color: Colors.white54),
+                  PlayProgressButton(size: 22, color: Colors.white),
+                  NextButton(ghost: true, size: 20, color: Colors.white54),
+                ],
+              ),
             ),
           ],
         ),

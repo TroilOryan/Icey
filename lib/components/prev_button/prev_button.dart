@@ -10,8 +10,14 @@ final Throttle _throttle = Throttle(const Duration(seconds: 1));
 class PrevButton extends StatelessWidget {
   final double size;
   final Color? color;
+  final bool ghost;
 
-  const PrevButton({super.key, this.size = 24.0, this.color});
+  const PrevButton({
+    super.key,
+    this.size = 24.0,
+    this.color,
+    this.ghost = false,
+  });
 
   void skipToPrevious() {
     _throttle.call(mediaManager.skipToPrevious);
@@ -27,7 +33,8 @@ class PrevButton extends StatelessWidget {
 
     return RoundIconButton(
       color: iconColor,
-      size: size * 2,
+      size: size * 2.5,
+      ghost: ghost,
       icon: SFIcon(SFIcons.sf_backward_fill, fontSize: size),
       onTap: skipToPrevious,
       onLongPress: rewind,
