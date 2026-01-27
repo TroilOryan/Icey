@@ -133,10 +133,12 @@ class LrcParser extends LyricParse {
         // 计算结束时间：下一行的开始时间，如果是最后一行则使用歌曲总时长
         Duration? endTime;
         if (i < lines.length - 1) {
-          endTime = lines[i + 1].start;
+          endTime = Duration(
+            milliseconds: lines[i + 1].start.inMilliseconds - 10,
+          );
         } else {
           // 最后一行，使用歌曲总时长
-          endTime = this.duration;
+          endTime = duration;
         }
 
         // 如果没有结束时间，跳过
