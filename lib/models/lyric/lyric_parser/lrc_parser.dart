@@ -133,9 +133,15 @@ class LrcParser extends LyricParse {
         // 计算结束时间：下一行的开始时间，如果是最后一行则使用歌曲总时长
         Duration? endTime;
         if (i < lines.length - 1) {
-          endTime = Duration(
-            milliseconds: lines[i + 1].start.inMilliseconds - 10,
-          );
+          // 超过1.5s应该就是包含了伴奏 直接加500ms
+          if (lines[i + 1].start.inMilliseconds - startTime.inMilliseconds >
+              1500) {
+            endTime = Duration(milliseconds: startTime.inMilliseconds + 1000);
+          } else {
+            endTime = Duration(
+              milliseconds: lines[i + 1].start.inMilliseconds - 15,
+            );
+          }
         } else {
           // 最后一行，使用歌曲总时长
           endTime = duration;

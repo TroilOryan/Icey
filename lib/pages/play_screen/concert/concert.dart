@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:IceyPlayer/components/marquee/marquee.dart';
 import 'package:IceyPlayer/components/next_button/next_button.dart';
 import 'package:IceyPlayer/components/play_button/play_button.dart';
@@ -10,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_lyric/flutter_lyric.dart';
 import 'package:signals_flutter/signals_flutter.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 // 演唱会模式
 class Concert extends StatefulWidget {
@@ -24,9 +27,33 @@ class _ConcertState extends State<Concert> {
 
   final isHighlight = signal(false);
 
+  final hideController = signal(false);
+
   late final EffectCleanup lyricListener;
 
   late final EffectCleanup progressListener;
+
+  Timer? _tapTimer;
+
+  void handleVisibilityChanged(VisibilityInfo info) {
+    final fraction = info.visibleFraction * 100;
+
+    if (fraction == 100) {
+      _tapTimer?.cancel();
+
+      _tapTimer = Timer(const Duration(milliseconds: 3000), () {
+        hideController.value = true;
+
+        _tapTimer?.cancel();
+      });
+    }
+  }
+
+  void handleTap() {
+    if (hideController.value) {
+      hideController.value = false;
+    }
+  }
 
   @override
   void initState() {
@@ -75,16 +102,9 @@ class _ConcertState extends State<Concert> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    final currentIndex = lyricManager.currentIndex.watch(context),
-        parsedLyric = lyricManager.parsedLyric.watch(context);
+    final _hideController = hideController.watch(context);
 
-    final hasNext = computed(
-      () => currentIndex != -1 && currentIndex < parsedLyric.length - 1,
-    );
-
-    final nextLyric = computed(
-      () => hasNext.value ? parsedLyric[currentIndex + 1] : null,
-    );
+    final parsedLyric = lyricManager.parsedLyric.watch(context);
 
     final textStyle = theme.textTheme.titleLarge!.copyWith(
       color: Colors.white,
@@ -112,35 +132,59 @@ class _ConcertState extends State<Concert> {
       scrollDuration: const Duration(milliseconds: 0),
     );
 
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: SafeArea(
-        child: Stack(
-          children: [
-            if (parsedLyric.isNotEmpty)
-              Positioned.fill(
-                child: LyricView(
-                  controller: lyricController,
-                  style: lyricStyle,
+    return GestureDetector(
+      onTap: handleTap,
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        body: SafeArea(
+          minimum: EdgeInsets.all(16),
+          child: Stack(
+            children: [
+              if (parsedLyric.isNotEmpty)
+                Positioned.fill(
+                  child: LyricView(
+                    controller: lyricController,
+                    style: lyricStyle,
+                  ),
+                )
+              else
+                Positioned.fill(
+                  child: Center(child: Text('暂无歌词', style: extTextStyle)),
                 ),
-              )
-            else
-              Positioned.fill(
-                child: Center(child: Text('暂无歌词', style: extTextStyle)),
+              Positioned(
+                right: 0,
+                bottom: 0,
+                child: VisibilityDetector(
+                  key: const Key('concert'),
+                  onVisibilityChanged: handleVisibilityChanged,
+                  child: AnimatedSlide(
+                    curve: Curves.easeInOutSine,
+                    offset: Offset(0, _hideController ? 0.5 : 0),
+                    duration: AppTheme.defaultDuration,
+                    child: Offstage(
+                      offstage: _hideController,
+                      child: Row(
+                        mainAxisAlignment: .center,
+                        children: [
+                          PrevButton(
+                            ghost: true,
+                            size: 20,
+                            color: Colors.white54,
+                          ),
+                          PlayProgressButton(size: 22, color: Colors.white),
+                          NextButton(
+                            ghost: true,
+                            size: 20,
+                            color: Colors.white54,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
               ),
-            Positioned(
-              right: 24,
-              bottom: 24,
-              child: Row(
-                mainAxisAlignment: .center,
-                children: [
-                  PrevButton(ghost: true, size: 20, color: Colors.white54),
-                  PlayProgressButton(size: 22, color: Colors.white),
-                  NextButton(ghost: true, size: 20, color: Colors.white54),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
