@@ -62,6 +62,7 @@ class _HomePageState extends State<HomePage>
                     fit: BoxFit.cover,
                     width: deviceWidth,
                     height: deviceHeight,
+                    gaplessPlayback: true,
                   ),
                   Offstage(
                     offstage: !isDarkMode,
@@ -85,30 +86,12 @@ class _HomePageState extends State<HomePage>
               ? BottomBar(
                   selectedIndex: widget.navigationShell.currentIndex,
                   onSearch: () => homeController.navToSearch(context),
-                  onTabSelected: (index) {
-                    // homeController.pageController.animateToPage(
-                    //   index,
-                    //   duration: AppTheme.defaultDurationMid,
-                    //   curve: Curves.easeInOut,
-                    // );
-
-                    widget.navigationShell.goBranch(index);
-                  },
+                  onTabSelected: widget.navigationShell.goBranch,
                 )
               : null,
           body: Stack(
             alignment: Alignment.bottomCenter,
             children: [
-              // PageView(
-              //   controller: homeController.pageController,
-              //   onPageChanged: widget.navigationShell.goBranch,
-              //   children: [
-              //     MediaLibraryPage(),
-              //     AlbumListPage(),
-              //     ArtistListPage(),
-              //     SettingsPage(),
-              //   ],
-              // ),
               widget.navigationShell,
 
               if (mediaList.isNotEmpty)

@@ -2,12 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:IceyPlayer/models/lyric/lyric.dart';
-import 'package:IceyPlayer/pages/album_list/controller.dart';
-import 'package:IceyPlayer/pages/artist_list/controller.dart';
 import 'package:IceyPlayer/pages/home/bottom_bar/bottom_bar.dart';
-import 'package:IceyPlayer/pages/media_library/controller.dart';
-import 'package:IceyPlayer/pages/settings/page.dart';
-import 'package:IceyPlayer/theme/theme.dart';
 import 'package:audio_query/entities.dart';
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
@@ -52,8 +47,6 @@ class HomeController {
   Timer? _scrollTimer;
 
   final _settingsBox = Boxes.settingsBox;
-
-  final PageController pageController = PageController();
 
   StreamController<List<AudioEntity>>? streamController;
 
