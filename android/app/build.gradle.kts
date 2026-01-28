@@ -30,6 +30,7 @@ android {
     }
 
     packagingOptions.jniLibs.useLegacyPackaging = true
+    packagingOptions.dex.useLegacyPackaging = true
 
     val keyProperties = Properties().also {
         val properties = rootProject.file("key.properties")
