@@ -71,6 +71,7 @@ class _MediaLibraryPageState extends State<MediaLibraryPage>
                     HeaderAppBar(
                       onPlayRandom: homeController.handlePlayRandom,
                       onOpenSortMenu: controller.handleOpenSortMenu,
+                      onTap: homeController.handleBackTop,
                     ),
 
                     // MediaOrder(offstage: mediaList.isEmpty),

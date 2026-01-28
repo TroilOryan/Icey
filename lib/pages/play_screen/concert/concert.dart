@@ -155,8 +155,8 @@ class _ConcertState extends State<Concert> {
                   child: Center(child: Text('暂无歌词', style: extTextStyle)),
                 ),
               Positioned(
-                right: 0,
-                bottom: 0,
+                right: 6,
+                bottom: 6,
                 child: VisibilityDetector(
                   key: const Key('concert'),
                   onVisibilityChanged: handleVisibilityChanged,

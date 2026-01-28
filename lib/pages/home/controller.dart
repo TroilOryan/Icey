@@ -42,8 +42,6 @@ part 'page.dart';
 class HomeController {
   final state = HomeState();
 
-  bool panelIsUp = false;
-
   Timer? _scrollTimer;
 
   final _settingsBox = Boxes.settingsBox;
@@ -189,6 +187,14 @@ class HomeController {
     }
 
     FlutterAppMinimizerPlus.minimizeApp();
+  }
+
+  void handleBackTop() {
+    mediaListScrollController.animateTo(
+      0,
+      duration: Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
   }
 
   Future<void> handlePlayRandom() async {

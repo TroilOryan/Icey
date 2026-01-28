@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:IceyPlayer/components/persistent_header/persistent_header.dart';
+import 'package:IceyPlayer/helpers/toast/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sficon/flutter_sficon.dart';
 import 'package:go_router/go_router.dart';
@@ -16,11 +17,13 @@ late StatefulNavigationShell nav;
 class HeaderAppBar extends StatelessWidget {
   final VoidCallback onPlayRandom;
   final VoidCallback onOpenSortMenu;
+  final VoidCallback onTap;
 
   const HeaderAppBar({
     super.key,
     required this.onPlayRandom,
     required this.onOpenSortMenu,
+    required this.onTap,
   });
 
   void handleMenuSelected(int value, BuildContext context) {
@@ -37,7 +40,6 @@ class HeaderAppBar extends StatelessWidget {
 
     final textTheme = Theme.of(context).textTheme;
 
-
     return SliverPersistentHeader(
       pinned: true,
       floating: false,
@@ -49,40 +51,44 @@ class HeaderAppBar extends StatelessWidget {
           child: BackdropFilter(
             enabled: offset > 20,
             filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
-            child: Container(
-              padding: EdgeInsets.fromLTRB(24, paddingTop, 6, 0),
-              alignment: Alignment.centerLeft,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "媒体库",
-                    style: textTheme.titleLarge!.copyWith(
-                      fontSize:
-                          textTheme.titleLarge!.fontSize! *
-                          max((1.5 - offset / 200), 0.8),
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: onTap,
+              child: Container(
+                padding: EdgeInsets.fromLTRB(24, paddingTop, 6, 0),
+                alignment: Alignment.centerLeft,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "媒体库",
+                      style: textTheme.titleLarge!.copyWith(
+                        fontSize:
+                            textTheme.titleLarge!.fontSize! *
+                            max((1.5 - offset / 200), 0.8),
+                      ),
                     ),
-                  ),
-                  Row(
-                    children: [
-                      IconButton(
-                        icon: SFIcon(SFIcons.sf_shuffle, fontSize: 20),
-                        onPressed: onPlayRandom,
-                      ),
-                      IconButton(
-                        icon: SFIcon(SFIcons.sf_list_bullet, fontSize: 20),
-                        onPressed: onOpenSortMenu,
-                      ),
-                      // PopupMenuButton(
-                      //   clipBehavior: Clip.antiAlias,
-                      //   onSelected: (value) =>
-                      //       handleMenuSelected(value, context),
-                      //   itemBuilder: (context) => menu,
-                      //   icon: SFIcon(SFIcons.sf_plus, fontSize: 22),
-                      // ),
-                    ],
-                  ),
-                ],
+                    Row(
+                      children: [
+                        IconButton(
+                          icon: SFIcon(SFIcons.sf_shuffle, fontSize: 20),
+                          onPressed: onPlayRandom,
+                        ),
+                        IconButton(
+                          icon: SFIcon(SFIcons.sf_list_bullet, fontSize: 20),
+                          onPressed: onOpenSortMenu,
+                        ),
+                        // PopupMenuButton(
+                        //   clipBehavior: Clip.antiAlias,
+                        //   onSelected: (value) =>
+                        //       handleMenuSelected(value, context),
+                        //   itemBuilder: (context) => menu,
+                        //   icon: SFIcon(SFIcons.sf_plus, fontSize: 22),
+                        // ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

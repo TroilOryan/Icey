@@ -32,9 +32,13 @@ class LrcParser extends LyricParse {
     // 用于跟踪已出现的时间戳
     final Set seenTimestamps = {};
 
-    for (var line in mainLyric.split('\n')) {
+    // 行计数器，用于前三行的特殊处理
+    int lineCount = 0;
+
+    for (String line in mainLyric.split('\n')) {
       // 提取标签内容
       final tagInfo = _extractTag(line);
+
       if (tagInfo != null) {
         final tag = tagInfo;
         idTags[tag.tag] = tag.value;
@@ -53,7 +57,7 @@ class LrcParser extends LyricParse {
       final firstMatch = matches.first;
       final minutes = firstMatch.group(1);
       final seconds = firstMatch.group(2);
-      var milliseconds = firstMatch.group(3) ?? '0';
+      String milliseconds = firstMatch.group(3) ?? '0';
       if (milliseconds.length > 3) {
         milliseconds = milliseconds.substring(0, 3);
       }
@@ -65,7 +69,7 @@ class LrcParser extends LyricParse {
 
       // 移除所有时间戳，只保留文本
       String text = line;
-      for (var match in matches) {
+      for (RegExpMatch match in matches) {
         text = text.replaceAll(match.group(0)!, '');
       }
       text = text.trim();
@@ -102,8 +106,14 @@ class LrcParser extends LyricParse {
         // 首次出现的时间戳
         seenTimestamps.add(timeMs);
 
+        // 前三行不考虑翻译（除非时间戳重复）
+        final bool disableTranslation = lineCount < 3;
+
         // 对于首次出现的时间戳，使用 extractLine 进行拆分
-        final lyricLine = extractLine(line);
+        final lyricLine = extractLine(
+          line,
+          disableTranslation: disableTranslation,
+        );
         if (lyricLine != null) {
           // 使用 extractLine 的结果
           final finalLyricLine = LyricLine(
@@ -115,6 +125,9 @@ class LrcParser extends LyricParse {
 
           timeToLyricLine[timeMs] = finalLyricLine;
           lines.add(finalLyricLine);
+
+          // 增加行计数器
+          lineCount++;
         }
       }
     }
@@ -203,7 +216,10 @@ class LrcParser extends LyricParse {
     return LyricModel(lines: lines, tags: idTags);
   }
 
-  static LyricLine? extractLine(String line) {
+  static LyricLine? extractLine(
+    String line, {
+    bool disableTranslation = false,
+  }) {
     final regexp = RegExp(
       r'\[(\d{1,}):(\d{2})(?:\.(\d{1,}))?\]',
       multiLine: true,
@@ -213,10 +229,10 @@ class LrcParser extends LyricParse {
 
     // 提取所有时间戳
     final List<Duration> durations = [];
-    for (var match in matches) {
+    for (RegExpMatch match in matches) {
       final minutes = match.group(1);
       final seconds = match.group(2);
-      var milliseconds = match.group(3) ?? '0';
+      String milliseconds = match.group(3) ?? '0';
       if (milliseconds.length > 3) {
         milliseconds = milliseconds.substring(0, 3);
       }
@@ -270,6 +286,11 @@ class LrcParser extends LyricParse {
         translation: null,
         words: words,
       );
+    }
+
+    // 如果禁用翻译检测（前三行），直接返回原歌词
+    if (disableTranslation) {
+      return LyricLine(start: start, text: mainText);
     }
 
     // 单时间戳情况，继续原有的翻译检测逻辑
