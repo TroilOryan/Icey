@@ -1,13 +1,7 @@
 import 'package:IceyPlayer/pages/album_list/controller.dart';
-import 'package:IceyPlayer/pages/album_list_detail/page.dart';
 import 'package:IceyPlayer/pages/artist_list/controller.dart';
-import 'package:IceyPlayer/pages/artist_list_detail/page.dart';
 import 'package:IceyPlayer/pages/home/controller.dart';
 import 'package:IceyPlayer/pages/media_library/controller.dart';
-import 'package:IceyPlayer/pages/media_order_detail/page.dart';
-import 'package:IceyPlayer/pages/play_screen/controller.dart';
-import 'package:IceyPlayer/pages/player_style/page.dart';
-import 'package:IceyPlayer/pages/search/page.dart';
 import 'package:IceyPlayer/pages/settings/about/logs/logs_detail/page.dart';
 import 'package:IceyPlayer/pages/settings/about/logs/page.dart';
 import 'package:IceyPlayer/pages/settings/about/page.dart';
@@ -19,9 +13,16 @@ import 'package:IceyPlayer/pages/settings/media_store/page.dart';
 import 'package:IceyPlayer/pages/settings/page.dart';
 import 'package:IceyPlayer/pages/settings/pro/page.dart';
 import 'package:IceyPlayer/pages/settings/pro/pay/page.dart';
+import 'package:IceyPlayer/pages/sub_pages/artist_list_detail/controller.dart';
+import 'package:IceyPlayer/pages/sub_pages/media_order_detail/controller.dart';
+import 'package:IceyPlayer/pages/sub_pages/play_screen/controller.dart';
+import 'package:IceyPlayer/pages/sub_pages/player_style/page.dart';
+import 'package:IceyPlayer/pages/sub_pages/search/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:go_transitions/go_transitions.dart';
+
+import '../pages/sub_pages/album_list_detail/controller.dart';
 
 final GoRouter router = GoRouter(
   initialLocation: "/",
@@ -42,14 +43,14 @@ final GoRouter router = GoRouter(
       branches: <StatefulShellBranch>[
         StatefulShellBranch(
           routes: <GoRoute>[
-            GoRoute(path: '/', builder: (_, __) => const MediaLibraryPage()),
+            GoRoute(path: '/', builder: (_, _) => const MediaLibraryPage()),
           ],
         ),
         StatefulShellBranch(
           routes: <GoRoute>[
             GoRoute(
               path: '/album_list',
-              builder: (_, __) => const AlbumListPage(),
+              builder: (_, _) => const AlbumListPage(),
             ),
           ],
         ),
@@ -57,16 +58,13 @@ final GoRouter router = GoRouter(
           routes: <GoRoute>[
             GoRoute(
               path: '/artist_list',
-              builder: (_, __) => const ArtistListPage(),
+              builder: (_, _) => const ArtistListPage(),
             ),
           ],
         ),
         StatefulShellBranch(
           routes: <GoRoute>[
-            GoRoute(
-              path: '/settings',
-              builder: (_, __) => const SettingsPage(),
-            ),
+            GoRoute(path: '/settings', builder: (_, _) => const SettingsPage()),
           ],
         ),
       ],
@@ -75,62 +73,61 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/play_screen',
       pageBuilder: GoTransitions.slide.toTop.build(
-        builder: (_, __) => const PlayScreenPage(),
+        builder: (_, _) => const PlayScreenPage(),
       ),
     ),
     GoRoute(
       path: '/album_list_detail/:id',
-      builder: (_, state) => const AlbumListDetailPage(),
+      builder: (_, _) => const AlbumListDetailPage(),
     ),
     GoRoute(
       path: '/artist_list_detail/:id',
-      builder: (_, state) => const ArtistListDetailPage(),
+      builder: (_, _) => const ArtistListDetailPage(),
     ),
     GoRoute(
       path: '/media_order_detail/:id',
-      builder: (_, state) => const MediaOrderDetailPage(),
+      builder: (_, _) => const MediaOrderDetailPage(),
     ),
-    GoRoute(path: '/search', builder: (_, __) => const SearchPage()),
-    GoRoute(path: '/player_style', builder: (_, __) => const PlayerStylePage()),
+    GoRoute(path: '/search', builder: (_, _) => const SearchPage()),
+    GoRoute(path: '/player_style', builder: (_, _) => const PlayerStylePage()),
     GoRoute(
       path: '/settings',
-      builder: (_, __) => const SettingsPage(),
       routes: [
         GoRoute(
           path: '/pro',
-          builder: (_, __) => const ProPage(),
+          builder: (_, _) => const ProPage(),
           routes: [GoRoute(path: '/pay', builder: (_, __) => const PayPage())],
         ),
         GoRoute(
           path: '/media_store',
-          builder: (_, __) => const MediaStorePage(),
+          builder: (_, _) => const MediaStorePage(),
         ),
         GoRoute(
           path: '/interface',
-          builder: (_, __) => const InterfacePage(),
+          builder: (_, _) => const InterfacePage(),
           routes: [
             GoRoute(
               path: '/high_material',
-              builder: (_, __) => const HighMaterialPage(),
+              builder: (_, _) => const HighMaterialPage(),
             ),
           ],
         ),
-        GoRoute(path: '/lyric', builder: (_, __) => const LyricPage()),
+        GoRoute(path: '/lyric', builder: (_, _) => const LyricPage()),
         GoRoute(
           path: '/audio_output',
-          builder: (_, __) => const AudioOutputPage(),
+          builder: (_, _) => const AudioOutputPage(),
         ),
         GoRoute(
           path: '/about',
-          builder: (_, __) => const AboutPage(),
+          builder: (_, _) => const AboutPage(),
           routes: [
             GoRoute(
               path: '/logs',
-              builder: (_, __) => const LogsPage(),
+              builder: (_, _) => const LogsPage(),
               routes: [
                 GoRoute(
                   path: '/detail',
-                  builder: (_, __) => const LogsDetailPage(),
+                  builder: (_, _) => const LogsDetailPage(),
                 ),
               ],
             ),

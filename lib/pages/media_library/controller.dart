@@ -21,9 +21,10 @@ import 'az_list_cursor/az_list_cursor.dart';
 import 'az_list_cursor/media_list_cursor.dart';
 import 'az_list_index_bar/media_list_index_bar.dart';
 import 'header_app_bar/header_app_bar.dart';
-import 'state.dart';
 
 part 'page.dart';
+
+part 'state.dart';
 
 class MediaLibraryController {
   final indexBarWidth = 16.0;

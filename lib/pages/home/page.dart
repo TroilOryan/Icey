@@ -15,18 +15,16 @@ class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   @override
   void initState() {
-    // TODO: implement initState
-    super.initState();
-
     homeController.onInit(context);
+
+    super.initState();
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-
     homeController.onDispose();
+
+    super.dispose();
   }
 
   @override

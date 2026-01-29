@@ -1,7 +1,4 @@
-import 'dart:typed_data';
-
-import 'package:IceyPlayer/entities/media.dart';
-import 'package:signals/signals_flutter.dart';
+part of 'controller.dart';
 
 class MediaOrderDetailState {
   final Signal<List<MediaEntity>> mediaList = signal([]);

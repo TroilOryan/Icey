@@ -1,4 +1,39 @@
-part of 'page.dart';
+import 'dart:typed_data';
+
+import 'package:IceyPlayer/helpers/media/media.dart';
+import 'package:audio_query/audio_query.dart';
+import 'package:audio_query/types/artwork_type.dart';
+import 'package:audio_service/audio_service.dart';
+import 'package:IceyPlayer/components/bottom_sheet/bottom_sheet.dart';
+import 'package:IceyPlayer/components/button/button.dart';
+import 'package:IceyPlayer/components/icey_switch/icey_switch.dart';
+import 'package:IceyPlayer/components/list_card/list_card.dart';
+import 'package:IceyPlayer/components/list_item/list_item.dart';
+import 'package:IceyPlayer/components/media_list_tile/media_list_tile.dart';
+import 'package:IceyPlayer/components/media_more_sheet/media_more_sheet.dart';
+import 'package:IceyPlayer/components/round_icon_button/round_icon_button.dart';
+import 'package:IceyPlayer/components/sheet_item/sheet_item.dart';
+import 'package:IceyPlayer/constants/box_key.dart';
+import 'package:IceyPlayer/entities/media.dart';
+import 'package:IceyPlayer/entities/media_order.dart';
+import 'package:IceyPlayer/event_bus/event_bus.dart';
+import 'package:IceyPlayer/helpers/image.dart';
+import 'package:IceyPlayer/helpers/toast/toast.dart';
+import 'package:IceyPlayer/models/media/media.dart';
+import 'package:IceyPlayer/pages/home/controller.dart';
+import 'package:IceyPlayer/theme/theme.dart';
+import 'package:extended_image/extended_image.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_sficon/flutter_sficon.dart';
+import 'package:go_router/go_router.dart';
+import 'package:signals/signals_flutter.dart';
+import 'package:sliver_tools/sliver_tools.dart';
+import 'package:super_sliver_list/super_sliver_list.dart';
+import 'dart:ui' as ui;
+
+part 'page.dart';
+
+part 'state.dart';
 
 class MediaOrderDetailController {
   final state = MediaOrderDetailState();

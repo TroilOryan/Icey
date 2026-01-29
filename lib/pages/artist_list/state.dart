@@ -1,7 +1,4 @@
-import 'dart:typed_data';
-
-import 'package:IceyPlayer/entities/artist.dart';
-import 'package:signals/signals_flutter.dart';
+part of 'controller.dart';
 
 class CoverMap {
   final BigInt id;

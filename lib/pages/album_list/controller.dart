@@ -6,12 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:IceyPlayer/components/media_cover/media_cover.dart';
 import 'package:IceyPlayer/models/media/media.dart';
-import 'package:IceyPlayer/pages/album_list/state.dart';
 import 'package:IceyPlayer/pages/home/controller.dart';
 import 'package:IceyPlayer/theme/theme.dart';
 import 'package:signals/signals_flutter.dart';
 
 part 'page.dart';
+
+part 'state.dart';
 
 class AlbumListController {
   final state = AlbumListState();
@@ -24,7 +25,5 @@ class AlbumListController {
     state.coverList.value = List.unmodifiable(coverList);
   }
 
-  void onInit() {
-
-  }
+  void onInit() {}
 }

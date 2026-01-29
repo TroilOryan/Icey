@@ -1,3 +1,4 @@
+import 'package:IceyPlayer/constants/strings.dart';
 import 'package:animated_gradient_background/animated_gradient_background.dart';
 import 'package:IceyPlayer/components/button/button.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +49,7 @@ class MediaEmpty extends StatelessWidget {
               children: [
                 Text("哈喽", style: titleStyle),
                 Text("欢迎来到", style: titleStyle),
-                Text("Icey Player", style: titleStyle),
+                Text(Strings.appName, style: titleStyle),
               ],
             ),
           ),

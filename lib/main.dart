@@ -25,44 +25,24 @@ import 'package:signals/signals_flutter.dart';
 import 'build_config.dart';
 import 'constants/box_key.dart';
 import 'constants/cache_key.dart';
+import 'constants/strings.dart';
 import 'entities/media.dart';
 import 'entities/media_order.dart';
 import 'helpers/media/media.dart';
 import 'http/init.dart';
 
-part 'main.g.dart';
-
 part 'state.dart';
 
-final appState = AppState();
+part 'controller.dart';
+
+final appController = AppController();
 
 Future<void> main() async {
-  await initServices();
-
-  // 异常捕获 logo记录
-  final customParameters = {
-    'BuildConfig':
-        '\nBuild Time: ${DateUtil.formatDateMs(BuildConfig.buildTime, format: DateFormats.full)}\n'
-        'Commit Hash: ${BuildConfig.commitHash}',
-  };
-  final fileHandler = await JsonFileHandler.init();
-  final Catcher2Options debugConfig = Catcher2Options(SilentReportMode(), [
-    ?fileHandler,
-    ConsoleHandler(
-      enableDeviceParameters: false,
-      enableApplicationParameters: false,
-      enableCustomParameters: true,
-    ),
-  ], customParameters: customParameters);
-
-  final Catcher2Options releaseConfig = Catcher2Options(SilentReportMode(), [
-    ?fileHandler,
-    ConsoleHandler(enableCustomParameters: true),
-  ], customParameters: customParameters);
+  final res = await appController.initServices();
 
   Catcher2(
-    debugConfig: debugConfig,
-    releaseConfig: releaseConfig,
+    debugConfig: res["debugConfig"],
+    releaseConfig: res["releaseConfig"],
     rootWidget: const App(),
   );
 }
@@ -75,71 +55,43 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> with WidgetsBindingObserver {
-  Future onInit() async {
-    WidgetsBinding.instance.addObserver(this);
-
-    GoTransition.defaultCurve = Curves.easeInOutSine;
-    GoTransition.defaultDuration = const Duration(milliseconds: 600);
-
-    setDisplayMode();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _brightnessThemeListener = effect(() {
-        if (settingsManager.brightnessTheme.value == BrightnessTheme.system) {
-          appState.brightness.value = MediaQuery.of(context).platformBrightness;
-        } else if (settingsManager.brightnessTheme.value ==
-            BrightnessTheme.light) {
-          appState.brightness.value = Brightness.light;
-        } else {
-          appState.brightness.value = Brightness.dark;
-        }
-      });
-    });
-  }
-
-  Future onDispose() async {
-    _brightnessThemeListener();
-
-    WidgetsBinding.instance.removeObserver(this);
-  }
-
   @override
   void didChangePlatformBrightness() {
     super.didChangePlatformBrightness();
 
-    _didChangePlatformBrightness();
+    appController.didChangePlatformBrightness();
   }
 
   @override
   void initState() {
+    WidgetsBinding.instance.addObserver(this);
+
+    appController.onInit(context);
+
     // TODO: implement initState
     super.initState();
-
-    onInit();
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+
+    appController.onDispose();
+
     // TODO: implement dispose
     super.dispose();
-
-    onDispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    precacheAssets(context);
-
     final coverColor = mediaManager.coverColor.watch(context),
-        brightness = appState.brightness.watch(context),
-        statusBarIconBrightness = appState.statusBarIconBrightness.watch(
-          context,
-        ),
+        brightness = appController.state.brightness.watch(context),
+        statusBarIconBrightness = appController.state.statusBarIconBrightness
+            .watch(context),
         artCover = settingsManager.artCover.watch(context),
         themeMode = settingsManager.brightnessTheme.watch(context),
         isMaterialScrollBehavior = settingsManager.isMaterialScrollBehavior
-            .watch(context),
-        immersive = settingsManager.immersive.watch(context);
+            .watch(context);
 
     final scrollBehavior = computed(
       () => isMaterialScrollBehavior
@@ -156,40 +108,30 @@ class _AppState extends State<App> with WidgetsBindingObserver {
         statusBarColor: Colors.transparent,
         systemNavigationBarColor: Colors.transparent,
       ),
-      child: OrientationBuilder(
-        builder: (context, orientation) {
-          SystemChrome.setEnabledSystemUIMode(
-            orientation == Orientation.landscape || immersive
-                ? SystemUiMode.immersive
-                : SystemUiMode.edgeToEdge,
-          );
-
-          return MaterialApp.router(
-            restorationScopeId: 'mainApp',
-            themeMode: BrightnessTheme.toThemeMode(themeMode.value),
-            scrollBehavior: scrollBehavior.value,
-            routerConfig: router,
-            title: 'Icey Player',
-            theme: AppTheme.theme(
-              isLightCover: !coverColor.isDark,
-              artCover: artCover,
-              colorScheme: SeedColorScheme.fromSeeds(
-                primaryKey: Color(coverColor.primary),
-                brightness: brightness,
-                tones: FlexTones.highContrast(brightness),
-              ),
-            ).useSystemChineseFont(brightness),
-            darkTheme: AppTheme.theme(
-              isLightCover: !coverColor.isDark,
-              artCover: artCover,
-              colorScheme: SeedColorScheme.fromSeeds(
-                primaryKey: Color(coverColor.primary),
-                brightness: brightness,
-                tones: FlexTones.highContrast(brightness),
-              ),
-            ).useSystemChineseFont(brightness),
-          );
-        },
+      child: MaterialApp.router(
+        restorationScopeId: 'mainApp',
+        themeMode: BrightnessTheme.toThemeMode(themeMode.value),
+        scrollBehavior: scrollBehavior.value,
+        routerConfig: router,
+        title: Strings.appName,
+        theme: AppTheme.theme(
+          isLightCover: !coverColor.isDark,
+          artCover: artCover,
+          colorScheme: SeedColorScheme.fromSeeds(
+            primaryKey: Color(coverColor.primary),
+            brightness: brightness,
+            tones: FlexTones.highContrast(brightness),
+          ),
+        ).useSystemChineseFont(brightness),
+        darkTheme: AppTheme.theme(
+          isLightCover: !coverColor.isDark,
+          artCover: artCover,
+          colorScheme: SeedColorScheme.fromSeeds(
+            primaryKey: Color(coverColor.primary),
+            brightness: brightness,
+            tones: FlexTones.highContrast(brightness),
+          ),
+        ).useSystemChineseFont(brightness),
       ),
     );
   }

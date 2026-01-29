@@ -1,19 +1,6 @@
-import 'package:extended_image/extended_image.dart';
-import 'package:IceyPlayer/components/media_list_tile/media_list_tile.dart';
-import 'package:IceyPlayer/components/page_wrapper/page_wrapper.dart';
-import 'package:IceyPlayer/entities/media.dart';
-import 'package:IceyPlayer/models/media/media.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_sficon/flutter_sficon.dart';
-import 'package:IceyPlayer/pages/home/controller.dart';
-import 'package:pinyin/pinyin.dart';
-import 'package:signals/signals_flutter.dart';
-import 'package:sliver_tools/sliver_tools.dart';
-import 'package:super_sliver_list/super_sliver_list.dart';
 
-import 'state.dart';
 
-part 'controller.dart';
+part of 'controller.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});

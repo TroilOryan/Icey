@@ -1,5 +1,4 @@
-import 'package:IceyPlayer/entities/media.dart';
-import 'package:signals/signals_flutter.dart';
+part of 'controller.dart';
 
 class SearchState {
   final keyword = signal("");

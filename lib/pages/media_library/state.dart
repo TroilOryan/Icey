@@ -1,6 +1,4 @@
-import 'package:signals/signals_flutter.dart';
-
-import 'az_list_cursor/az_list_cursor.dart';
+part of 'controller.dart';
 
 class MediaLibraryState {
   final focused = signal(false);

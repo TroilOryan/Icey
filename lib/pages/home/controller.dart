@@ -396,16 +396,18 @@ class HomeController {
   void setStatusBarIconBrightness(bool isDark) {
     final brightness = isDark ? Brightness.light : Brightness.dark;
 
-    if (appState.statusBarIconBrightness.value == null ||
-        (appState.statusBarIconBrightness.value != null &&
-            appState.statusBarIconBrightness.value != brightness)) {
+    final statusBarIconBrightness =
+        appController.state.statusBarIconBrightness.value;
+
+    if (statusBarIconBrightness == null ||
+        statusBarIconBrightness != brightness) {
       SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle(
           statusBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
         ),
       );
 
-      appState.statusBarIconBrightness.value = brightness;
+      appController.state.statusBarIconBrightness.value = brightness;
     }
   }
 

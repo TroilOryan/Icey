@@ -1,30 +1,11 @@
-import 'dart:typed_data';
-import 'dart:ui' as ui;
+part of 'controller.dart';
 
-import 'package:audio_query/types/artwork_type.dart';
-import 'package:blur/blur.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_sficon/flutter_sficon.dart';
-import 'package:go_router/go_router.dart';
-import 'package:IceyPlayer/components/label_value/label_value.dart';
-import 'package:IceyPlayer/components/media_cover/media_cover.dart';
-import 'package:IceyPlayer/components/media_list_tile/media_list_tile.dart';
-import 'package:IceyPlayer/components/page_wrapper/page_wrapper.dart';
-import 'package:IceyPlayer/helpers/common.dart';
-import 'package:IceyPlayer/models/media/media.dart';
-import 'package:IceyPlayer/pages/artist_list_detail/controller.dart';
-import 'package:IceyPlayer/pages/home/controller.dart';
-import 'package:IceyPlayer/theme/theme.dart';
-import 'package:signals/signals_flutter.dart';
-import 'package:sliver_tools/sliver_tools.dart';
-import 'package:super_sliver_list/super_sliver_list.dart';
-
-class ArtistListDetailPage extends StatelessWidget {
-  const ArtistListDetailPage({super.key});
+class AlbumListDetailPage extends StatelessWidget {
+  const AlbumListDetailPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = ArtistListDetailController();
+    final controller = AlbumListDetailController();
 
     final theme = Theme.of(context);
 
@@ -33,22 +14,22 @@ class ArtistListDetailPage extends StatelessWidget {
     final deviceWidth = mediaQuery.size.width,
         deviceHeight = mediaQuery.size.height;
 
-    final extra = GoRouterState.of(context).extra as Map<String, dynamic>?;
+    final extra = GoRouterState.of(context).extra as Map<String, dynamic>;
 
-    final name = extra?["name"] as String,
-        cover = extra?["cover"] as Uint8List?,
-        mediaIDs = extra?["mediaIDs"] as List<int>;
+    final name = extra["name"] as String,
+        cover = extra["cover"] as Uint8List?,
+        mediaIDs = extra["mediaIDs"] as List<int>;
 
     final id = int.parse(GoRouterState.of(context).pathParameters["id"]!);
 
     final mediaList = mediaManager.mediaList.watch(context);
 
-    final artistList = computed(
+    final albumList = computed(
       () => mediaList.where((e) => mediaIDs.contains(e.id)).toList(),
     );
 
     final duration = computed(
-      () => artistList
+      () => albumList
           .map((e) => e.duration)
           .reduce((a, b) => (a ?? 0) + (b ?? 0)),
     );
@@ -59,7 +40,6 @@ class ArtistListDetailPage extends StatelessWidget {
         children: [
           Blur(
             blur: 32,
-            blurColor: theme.scaffoldBackgroundColor,
             child: cover != null
                 ? Image.memory(
                     cover,
@@ -72,7 +52,7 @@ class ArtistListDetailPage extends StatelessWidget {
                     size: deviceWidth,
                     width: deviceWidth,
                     height: deviceHeight,
-                    type: ArtworkType.ARTIST,
+                    type: ArtworkType.ALBUM,
                   ),
           ),
 
@@ -86,7 +66,7 @@ class ArtistListDetailPage extends StatelessWidget {
                   spacing: 16,
                   children: [
                     Hero(
-                      tag: "artistCover_$id",
+                      tag: "albumCover_$id",
                       child: Container(
                         height: 156,
                         clipBehavior: Clip.antiAlias,
@@ -99,7 +79,7 @@ class ArtistListDetailPage extends StatelessWidget {
                             ? Image.memory(cover, fit: BoxFit.cover)
                             : MediaCover(
                                 id: id,
-                                type: ArtworkType.ARTIST,
+                                type: ArtworkType.ALBUM,
                                 size: 156,
                                 borderRadius: BorderRadius.all(
                                   AppTheme.borderRadiusSm,
@@ -108,7 +88,7 @@ class ArtistListDetailPage extends StatelessWidget {
                       ),
                     ),
                     Hero(
-                      tag: "artistTitle_$id",
+                      tag: "albumTitle_$id",
                       child: Text(
                         name,
                         style: theme.textTheme.titleMedium,
@@ -135,9 +115,9 @@ class ArtistListDetailPage extends StatelessWidget {
                         LabelValue(
                           label: "年份",
                           value:
-                              artistList().first.year != null &&
-                                  artistList().first.year != 0
-                              ? artistList().first.year.toString()
+                              albumList().first.year != null &&
+                                  albumList().first.year != 0
+                              ? albumList().first.year.toString()
                               : "-",
                         ),
                       ],
@@ -159,7 +139,7 @@ class ArtistListDetailPage extends StatelessWidget {
                           child: Ink(
                             child: InkWell(
                               onTap: () =>
-                                  controller.handlePlayAll(artistList()),
+                                  controller.handlePlayAll(albumList()),
                               child: Padding(
                                 padding: EdgeInsets.symmetric(
                                   horizontal: 6,
@@ -190,7 +170,7 @@ class ArtistListDetailPage extends StatelessWidget {
                                         alignment:
                                             ui.PlaceholderAlignment.middle,
                                         child: Text(
-                                          "(${artistList().length})",
+                                          "(${albumList().length})",
                                           style: theme.textTheme.bodyLarge!
                                               .copyWith(height: 1),
                                         ),
@@ -209,9 +189,9 @@ class ArtistListDetailPage extends StatelessWidget {
 
                 SuperSliverList.separated(
                   separatorBuilder: (context, index) => SizedBox(height: 16),
-                  itemCount: artistList().length,
+                  itemCount: albumList().length,
                   itemBuilder: (context, index) {
-                    final media = artistList()[index];
+                    final media = albumList()[index];
 
                     return MediaListTile(
                       media,
