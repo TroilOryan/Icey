@@ -98,7 +98,7 @@ class AppController {
     // 异常捕获 logo记录
     final customParameters = {
       'BuildConfig':
-          '\nBuild Time: ${DateUtil.formatDateMs(BuildConfig.buildTime, format: DateFormats.full)}\n'
+          '\nBuild Time: ${DateUtil.formatDateMs(BuildConfig.buildTime, isUtc: true, format: DateFormats.full)}\n'
           'Commit Hash: ${BuildConfig.commitHash}',
     };
     final fileHandler = await JsonFileHandler.init();
@@ -176,5 +176,6 @@ class AppController {
 
   void onDispose() {
     _brightnessThemeListener();
+    _immersiveListener();
   }
 }
