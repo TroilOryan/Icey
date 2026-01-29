@@ -44,6 +44,7 @@ class LyricManager {
       _lyricSource = signal(LyricSource.none),
       _currentIndex = signal(-1) {
     lyricListener = effect(() {
+      lyricParser.karaoke = settingsManager.karaoke.value;
       lyricParser.fakeEnhanced = settingsManager.fakeEnhanced.value;
       lyricParser.duration =
           mediaManager.currentMediaItem.value?.duration ?? Duration.zero;

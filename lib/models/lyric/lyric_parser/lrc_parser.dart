@@ -12,6 +12,9 @@ LyricTag? _extractTag(String line) {
 
 class LrcParser extends LyricParse {
   bool fakeEnhanced = false;
+
+  bool karaoke = true;
+
   Duration duration = Duration.zero;
 
   @override
@@ -120,7 +123,7 @@ class LrcParser extends LyricParse {
             start: lyricLine.start,
             text: lyricLine.text,
             translation: lyricLine.translation,
-            words: lyricLine.words,
+            words: karaoke ? lyricLine.words : null,
           );
 
           timeToLyricLine[timeMs] = finalLyricLine;

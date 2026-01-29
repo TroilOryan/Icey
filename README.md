@@ -4,15 +4,37 @@
 
 <div align="center">
     <h1>Icey Player</h1>
-<div  align="center">
-
-![GitHub repo size](https://img.shields.io/github/repo-size/TroilOryan/Icey)
-![GitHub Repo stars](https://img.shields.io/github/stars/TroilOryan/Icey)
-![GitHub all releases](https://img.shields.io/github/downloads/TroilOryan/Icey/total)
+<div align="center">
+    <!-- release version -->
+    <a href="https://github.com/SeakMengs/Windowpet/releases/latest" target="_blank">
+        <img src="https://img.shields.io/github/v/release/TroilOryan/Icey" alt="release-version">
+    </a>
+    <!-- total download -->
+    <a href="https://github.com/SeakMengs/Windowpet/releases/latest" target="_blank">
+        <img src="https://img.shields.io/github/downloads/TroilOryan/Icey/total" alt="downloads">
+    </a>
+    <!-- stars -->
+    <a href="https://github.com/SeakMengs/WindowPet/stargazers" target="_blank">
+        <img src="https://img.shields.io/github/stars/TroilOryan/Icey?" alt="stars">
+    </a>
+    <!-- forks -->
+    <a href="https://github.com/SeakMengs/WindowPet/network/members" target="_blank">
+        <img src="https://img.shields.io/github/forks/TroilOryan/Icey.svg?" alt="fork">
+    </a>
+    <!-- visitors -->
+    <a href="https://github.com/SeakMengs/WindowPet" target="_blank">
+        <img src="https://api.visitorbadge.io/api/visitors?path=https%3a%2f%2fgithub.com%2fTroilOryan%2fIcey&countColor=%23263759&style=flat"
+            alt="visitors">
+    </a>
+    <!-- license -->
+    <a href="https://github.com/TroilOryan/Icey/blob/main/LICENSE.md" target="_blank">
+        <img src="https://img.shields.io/github/license/TroilOryan/Icey" alt="license">
+    </a>
 </div>
 
-<div style="margin-bottom:16px">使用Flutter开发的本地音乐播放器</div>
+<br/>
 
+<div style="margin-bottom:16px">使用Flutter开发的本地音乐播放器</div>
 
 <img src="assets/screenshots/播放页-圆形.jpg" width="24%" alt="home" />
 <img src="assets/screenshots/播放页-沉浸.jpg" width="24%" alt="home" />
@@ -47,6 +69,7 @@
 - [x] 演唱会模式
 
 ## 支持歌词格式
+
 - [x] lrc
 - [x] lrc逐字
 - [x] ttml
@@ -84,4 +107,8 @@
    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=TroilOryan/Icey&type=Date" />
    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=TroilOryan/Icey&type=Date" />
  </picture>
+
+ ## ✨ License
+
+MIT License Copyright (c) 2025 TroilOryan
 </a>

@@ -64,7 +64,7 @@ class SearchController {
     focusNode = FocusNode();
 
     Future.delayed(
-      const Duration(milliseconds: 200),
+      const Duration(milliseconds: 400),
     ).then((_) => focusNode.requestFocus());
   }
 

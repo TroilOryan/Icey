@@ -6,6 +6,9 @@ import 'lrc_parser.dart';
 
 class LyricParser extends LyricParse {
   bool fakeEnhanced = false;
+
+  bool karaoke = true;
+
   Duration duration = Duration.zero;
 
   final lrcParser = LrcParser();
@@ -28,6 +31,10 @@ class LyricParser extends LyricParse {
   @override
   LyricModel parseRaw(String mainLyric, {String? translationLyric}) {
     lrcParser.fakeEnhanced = fakeEnhanced;
+
+    lrcParser.karaoke = karaoke;
+
+    lrcParser.duration = duration;
 
     final isLrc = lrcParser.isMatch(mainLyric);
 
