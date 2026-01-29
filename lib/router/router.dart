@@ -92,6 +92,7 @@ final GoRouter router = GoRouter(
     GoRoute(path: '/player_style', builder: (_, _) => const PlayerStylePage()),
     GoRoute(
       path: '/settings',
+      builder: (_, _) => const SettingsPage(),
       routes: [
         GoRoute(
           path: '/pro',

@@ -397,7 +397,7 @@ class HomeController {
     final brightness = isDark ? Brightness.light : Brightness.dark;
 
     final statusBarIconBrightness =
-        appController.state.statusBarIconBrightness.value;
+        appState.statusBarIconBrightness.value;
 
     if (statusBarIconBrightness == null ||
         statusBarIconBrightness != brightness) {
@@ -407,7 +407,7 @@ class HomeController {
         ),
       );
 
-      appController.state.statusBarIconBrightness.value = brightness;
+      appState.statusBarIconBrightness.value = brightness;
     }
   }
 
