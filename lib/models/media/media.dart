@@ -333,9 +333,7 @@ class MediaManager {
           size: 1024,
         );
 
-        _currentCover.value = coverRes != null
-            ? coverRes["cover"]
-            : Uint8List(0);
+        _currentCover.value = coverRes["cover"] ?? Uint8List(0);
 
         if (coverRes["primaryColor"] != null) {
           _coverColor.value = CoverColor(

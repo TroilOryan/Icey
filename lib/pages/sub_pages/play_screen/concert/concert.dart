@@ -53,6 +53,8 @@ class _ConcertState extends State<Concert> {
     _tapTimer?.cancel();
 
     hideController.value = !hideController.value;
+
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
   }
 
   @override
