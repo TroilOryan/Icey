@@ -47,7 +47,7 @@ class AudioQuery {
     return status;
   }
 
-  Future<Map<String, dynamic>> queryArtworkWithColor(
+  Future<Map<String, dynamic>>? queryArtworkWithColor(
     int id,
     ArtworkType type, {
     ArtworkFormat? format,

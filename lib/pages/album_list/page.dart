@@ -52,7 +52,7 @@ class _AlbumListPageState extends State<AlbumListPage>
         //   onPlayRandom: () => {},
         //   onOpenSortMenu: () => {},
         // ),
-        HeaderAppBar(),
+        HeaderAppBar(onTap: homeController.handleBackTop),
         SliverPadding(
           padding: EdgeInsets.fromLTRB(24, 0, 24, paddingBottom + 64),
           sliver: SliverGrid(

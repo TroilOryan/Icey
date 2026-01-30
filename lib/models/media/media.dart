@@ -333,9 +333,9 @@ class MediaManager {
           size: 1024,
         );
 
-        _currentCover.value = coverRes["cover"] ?? Uint8List(0);
+        _currentCover.value = coverRes?["cover"] ?? Uint8List(0);
 
-        if (coverRes["primaryColor"] != null) {
+        if (coverRes != null && coverRes["primaryColor"] != null) {
           _coverColor.value = CoverColor(
             primary: coverRes["primaryColor"],
             secondary: coverRes["secondaryColor"],
@@ -349,6 +349,13 @@ class MediaManager {
           );
         }
       } catch (e) {
+        _currentCover.value = Uint8List(0);
+
+        _coverColor.value = const CoverColor(
+          primary: -1,
+          secondary: -1,
+          isDark: false,
+        );
         print(e);
       }
     });

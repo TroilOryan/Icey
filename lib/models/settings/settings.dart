@@ -78,29 +78,9 @@ enum BrightnessTheme {
   }
 }
 
-enum ListType {
-  media(value: "media", name: "媒体列表"),
-  album(value: "album", name: "专辑列表"),
-  artist(value: "artist", name: "艺术家列表");
-
-  final String value;
-  final String name;
-
-  const ListType({required this.value, required this.name});
-
-  static ListType getByValue(String value) {
-    return values.firstWhere((element) => element.value == value);
-  }
-
-  static ListType getByName(String value) {
-    return values.firstWhere((element) => element.name == value);
-  }
-}
-
 class SettingsManager {
   final Signal<MediaSort> _sortType;
   final Signal<BrightnessTheme> _brightnessTheme;
-  final Signal<ListType> _listType;
   final Signal<bool> _liquidGlass;
   final Signal<bool> _isMaterialScrollBehavior;
   final Signal<bool> _scrollHidePlayBar;
@@ -120,8 +100,6 @@ class SettingsManager {
   Signal<MediaSort> get sortType => _sortType;
 
   Signal<BrightnessTheme> get brightnessTheme => _brightnessTheme;
-
-  Signal<ListType> get listType => _listType;
 
   Signal<bool> get liquidGlass => _liquidGlass;
 
@@ -156,7 +134,6 @@ class SettingsManager {
   SettingsManager()
     : _sortType = signal(MediaSort.title),
       _brightnessTheme = signal(BrightnessTheme.system),
-      _listType = signal(ListType.media),
       _liquidGlass = signal(true),
       _scrollHidePlayBar = signal(true),
       _isMaterialScrollBehavior = signal(false),
@@ -183,13 +160,6 @@ class SettingsManager {
       _settingsBox.get(
         CacheKey.Settings.brightnessTheme,
         defaultValue: BrightnessTheme.system.value,
-      ),
-    );
-
-    _listType.value = ListType.getByValue(
-      _settingsBox.get(
-        CacheKey.Settings.listType,
-        defaultValue: ListType.media.value,
       ),
     );
 
@@ -278,12 +248,6 @@ class SettingsManager {
     _brightnessTheme.value = value;
 
     _settingsBox.put(CacheKey.Settings.brightnessTheme, value.value);
-  }
-
-  void setListType(ListType value) {
-    _listType.value = value;
-
-    _settingsBox.put(CacheKey.Settings.listType, value.value);
   }
 
   void setLiquidGlass(bool value) {

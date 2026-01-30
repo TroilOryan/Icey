@@ -42,6 +42,8 @@ part 'page.dart';
 class HomeController {
   final state = HomeState();
 
+  late final StatefulNavigationShell navigationShell;
+
   Timer? _scrollTimer;
 
   final _settingsBox = Boxes.settingsBox;
@@ -84,6 +86,12 @@ class HomeController {
 
   void navToSearch(BuildContext context) {
     context.push("/search");
+  }
+
+  void handleGoBranch(int index) {
+    navigationShell.goBranch(index);
+
+    state.currentIndex.value = index;
   }
 
   void handleMediaTap(MediaEntity media) {
@@ -163,20 +171,6 @@ class HomeController {
     );
   }
 
-  void handleSelected(int v, BuildContext context) {
-    DefaultTabController.of(context).animateTo(v);
-
-    settingsManager.setListType(ListType.values[v]);
-
-    _settingsBox.put(CacheKey.Settings.listType, ListType.values[v].value);
-
-    state.scrollDirection.value = ScrollDirection.idle;
-
-    state.hidePlayBar.value = false;
-
-    state.lastScrollOffset.value = 0;
-  }
-
   void handlePopInvokedWithResult(bool didPop, Object? result) {
     if (didPop) return;
 
@@ -190,7 +184,17 @@ class HomeController {
   }
 
   void handleBackTop() {
-    mediaListScrollController.animateTo(
+    late final ScrollController controller;
+
+    if (state.currentIndex.value == 0) {
+      controller = mediaListScrollController;
+    } else if (state.currentIndex.value == 1) {
+      controller = albumListScrollController;
+    } else if (state.currentIndex.value == 2) {
+      controller = artistListScrollController;
+    }
+
+    controller.animateTo(
       0,
       duration: Duration(milliseconds: 300),
       curve: Curves.easeInOut,
@@ -339,11 +343,11 @@ class HomeController {
 
     late final double currentOffset;
 
-    if (settingsManager.listType.value == ListType.media) {
+    if (state.currentIndex.value == 0) {
       currentOffset = mediaListScrollController.offset;
-    } else if (settingsManager.listType.value == ListType.album) {
+    } else if (state.currentIndex.value == 1) {
       currentOffset = albumListScrollController.offset;
-    } else if (settingsManager.listType.value == ListType.artist) {
+    } else if (state.currentIndex.value == 2) {
       currentOffset = artistListScrollController.offset;
     }
 
@@ -396,8 +400,7 @@ class HomeController {
   void setStatusBarIconBrightness(bool isDark) {
     final brightness = isDark ? Brightness.light : Brightness.dark;
 
-    final statusBarIconBrightness =
-        appState.statusBarIconBrightness.value;
+    final statusBarIconBrightness = appState.statusBarIconBrightness.value;
 
     if (statusBarIconBrightness == null ||
         statusBarIconBrightness != brightness) {
@@ -411,7 +414,9 @@ class HomeController {
     }
   }
 
-  void onInit(BuildContext context) {
+  void onInit(BuildContext context, StatefulNavigationShell navi) {
+    navigationShell = navi;
+
     WidgetsBinding.instance.addPostFrameCallback((callback) {
       UpdateHelper.checkUpdate(context);
 

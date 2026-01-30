@@ -13,4 +13,6 @@ class HomeState {
   final lastScrollOffset = signal(0.0);
 
   final scrollDirection = signal(ScrollDirection.idle);
+
+  final currentIndex = signal(0);
 }

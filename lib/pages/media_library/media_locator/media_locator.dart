@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:IceyPlayer/components/high_material_wrapper/high_material_wrapper.dart';
+import 'package:IceyPlayer/constants/glass_settings.dart';
 import 'package:IceyPlayer/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sficon/flutter_sficon.dart';
@@ -25,14 +26,12 @@ class MediaLocator extends StatelessWidget {
       child: FrameSeparateWidget(
         child: Offstage(
           offstage: offstage,
-          child: HighMaterialWrapper(
-            clipBehavior: (highMaterial) =>
-                highMaterial ? Clip.antiAlias : Clip.none,
-            builder: (highMaterial) => FloatingActionButton(
-              backgroundColor: highMaterial
-                  ? Colors.transparent
-                  : theme.cardTheme.color,
-              elevation: highMaterial ? 0 : 6,
+          child: GlassPanel(
+            padding: EdgeInsets.zero,
+            settings: RecommendedGlassSettings.bottomBar,
+            child: FloatingActionButton(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
               onPressed: onTap,
               child: SFIcon(
                 SFIcons.sf_dot_radiowaves_left_and_right,

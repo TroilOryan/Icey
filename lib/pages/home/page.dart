@@ -15,7 +15,7 @@ class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   @override
   void initState() {
-    homeController.onInit(context);
+    homeController.onInit(context, widget.navigationShell);
 
     super.initState();
   }
@@ -37,10 +37,7 @@ class _HomePageState extends State<HomePage>
 
     final mediaList = mediaManager.mediaList.watch(context);
 
-    final listBg = settingsManager.listBg.watch(context),
-        listType = settingsManager.listType.watch(context);
-
-    final isMediaList = computed(() => listType == ListType.media);
+    final listBg = settingsManager.listBg.watch(context);
 
     final panelOpened = homeController.state.panelOpened.watch(context),
         hidePlayBar = homeController.state.hidePlayBar.watch(context);
@@ -84,7 +81,8 @@ class _HomePageState extends State<HomePage>
               ? BottomBar(
                   selectedIndex: widget.navigationShell.currentIndex,
                   onSearch: () => homeController.navToSearch(context),
-                  onTabSelected: widget.navigationShell.goBranch,
+                  onTabSelected: (index) =>
+                      homeController.handleGoBranch(index),
                 )
               : null,
           body: Stack(
