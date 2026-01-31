@@ -48,7 +48,7 @@ class _LyricPageState extends State<LyricPage> {
 
       controllerVisibleTimer?.cancel();
 
-      controllerVisibleTimer = Timer(const Duration(milliseconds: 1000), () {
+      controllerVisibleTimer = Timer(const Duration(milliseconds: 3000), () {
         controllerVisible.value = false;
       });
     }
@@ -59,7 +59,7 @@ class _LyricPageState extends State<LyricPage> {
       if (playing == true) {
         controllerVisibleTimer?.cancel();
 
-        controllerVisibleTimer = Timer(const Duration(milliseconds: 1000), () {
+        controllerVisibleTimer = Timer(const Duration(milliseconds: 3000), () {
           controllerVisible.value = false;
         });
       } else {
@@ -117,11 +117,9 @@ class _LyricPageState extends State<LyricPage> {
                     Align(
                       alignment: Alignment.bottomCenter,
                       child: IgnorePointer(
-                        // ignoring: !_visible,
-                        ignoring: false,
+                        ignoring: !_visible,
                         child: AnimatedOpacity(
-                          // opacity: _visible ? 1 : 0,
-                          opacity: 1,
+                          opacity: _visible ? 1 : 0,
                           duration: AppTheme.defaultDurationMid,
                           child: Row(
                             spacing: 32,

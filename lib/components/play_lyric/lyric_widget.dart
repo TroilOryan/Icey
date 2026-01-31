@@ -1,5 +1,6 @@
 import 'package:IceyPlayer/components/play_lyric/play_lyric_style.dart';
 import 'package:IceyPlayer/models/lyric/lyric.dart';
+import 'package:IceyPlayer/models/settings/settings.dart';
 import 'package:IceyPlayer/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lyric/flutter_lyric.dart';
@@ -45,7 +46,10 @@ class LyricWidget extends StatelessWidget {
       activeStyle: activeTextStyle,
       translationStyle: extTextStyle,
       activeHighlightGradient: LinearGradient(
-        colors: [theme.colorScheme.inversePrimary, theme.colorScheme.primaryContainer],
+        colors: [
+          theme.colorScheme.inversePrimary,
+          theme.colorScheme.primaryContainer,
+        ],
       ),
       selectLineResumeMode: SelectionAutoResumeMode.selecting,
       activeHighlightColor: isHighlight
@@ -62,6 +66,7 @@ class LyricWidget extends StatelessWidget {
         LyricSelectionContentBackground(
           controller: controller,
           style: lyricStyle,
+          color: theme.cardTheme.color!.withAlpha(100),
         ),
         LyricView(controller: controller, style: lyricStyle),
         LyricSelectionProgress(

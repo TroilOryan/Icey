@@ -12,6 +12,8 @@ final lyricManager = LyricManager();
 class LyricManager {
   late final EffectCleanup lyricListener;
 
+  late final EffectCleanup lyricDurationListener;
+
   final lyricParser = LyricParser();
 
   final Signal<LyricModel?> _lyricModel;
@@ -44,8 +46,17 @@ class LyricManager {
       _lyricSource = signal(LyricSource.none),
       _currentIndex = signal(-1) {
     lyricListener = effect(() {
-      lyricParser.karaoke = settingsManager.karaoke.value;
-      lyricParser.fakeEnhanced = settingsManager.fakeEnhanced.value;
+      batch(() {
+        lyricParser.karaoke = settingsManager.karaoke.value;
+        lyricParser.fakeEnhanced = settingsManager.fakeEnhanced.value;
+
+        final model = lyricParser.parseRaw(_rawLyric.value);
+
+        _lyricModel.value = model;
+      });
+    });
+
+    lyricDurationListener = effect(() {
       lyricParser.duration =
           mediaManager.currentMediaItem.value?.duration ?? Duration.zero;
     });

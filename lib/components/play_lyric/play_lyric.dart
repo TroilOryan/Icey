@@ -20,7 +20,7 @@ class _PlayLyricState extends State<PlayLyric> {
   void initState() {
     super.initState();
 
-    controller.onInit();
+    controller.onInit(onScroll: widget.onScroll);
   }
 
   @override

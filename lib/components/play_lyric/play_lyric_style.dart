@@ -19,8 +19,10 @@ class PlayLyricStyle {
     scrollCurve: Curves.easeInOutSine,
     scrollDuration: Duration(milliseconds: 240),
     scrollDurations: {
-      500: Duration(milliseconds: 500),
-      1000: Duration(milliseconds: 1000),
+      100: Duration(milliseconds: 200),  // 小距离
+      300: Duration(milliseconds: 350),  // 中等距离
+      500: Duration(milliseconds: 500),  // 大距离
+      1000: Duration(milliseconds: 700), // 超大距离
     },
     enableSwitchAnimation: false,
     selectionAutoResumeMode: SelectionAutoResumeMode.selecting,

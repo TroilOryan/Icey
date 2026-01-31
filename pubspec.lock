@@ -455,10 +455,9 @@ packages:
   flutter_lyric:
     dependency: "direct main"
     description:
-      name: flutter_lyric
-      sha256: "5a031fdcf656b6c93e59ab7f2f65b4e14f7de44e761b1a540564b34e8d3de728"
-      url: "https://pub.dev"
-    source: hosted
+      path: "plugins/flutter_lyric"
+      relative: true
+    source: path
     version: "3.0.2"
   flutter_mailer:
     dependency: transitive

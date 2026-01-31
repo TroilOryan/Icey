@@ -2,7 +2,7 @@
 description: "A new Flutter project."
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.24+25
+version: 1.0.25+26
 
 environment:
   sdk: ">=3.10.0"
@@ -27,7 +27,8 @@ dependencies:
   blur: ^4.0.2
   easy_refresh: ^3.4.0
   flex_seed_scheme: ^4.0.1
-  flutter_lyric: ^3.0.2
+  flutter_lyric:
+    path: plugins/flutter_lyric
   flutter_sficon: ^1.2.1
   fluentui_system_icons: ^1.1.273
   keframe: ^3.0.0

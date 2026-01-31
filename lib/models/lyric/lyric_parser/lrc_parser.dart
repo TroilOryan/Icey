@@ -110,7 +110,7 @@ class LrcParser extends LyricParse {
         seenTimestamps.add(timeMs);
 
         // 前三行不考虑翻译（除非时间戳重复）
-        final bool disableTranslation = lineCount < 3;
+        final bool disableTranslation = lineCount < 1;
 
         // 对于首次出现的时间戳，使用 extractLine 进行拆分
         final lyricLine = extractLine(
