@@ -125,9 +125,7 @@ class MediaMoreSheet {
                         ? MediaCover(
                             id: e.mediaIDs.last,
                             size: 50,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(10),
-                            ),
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
                           )
                         : ExtendedImage.asset(
                             'assets/images/no_cover.png',
@@ -256,6 +254,7 @@ class MediaMoreSheet {
             ListItem(title: "标题", desc: media.title),
             ListItem(title: "艺术家", desc: media.artist ?? "未知艺术家"),
             ListItem(title: "专辑", desc: media.album ?? "未知专辑"),
+            ListItem(title: "音轨号", desc: (media.track ?? "未知专辑").toString()),
           ],
         ),
         ListCard(

@@ -188,18 +188,29 @@ class ArtistListDetailPage extends StatelessWidget {
                   ),
                 ),
 
-                SuperSliverList.separated(
-                  separatorBuilder: (context, index) => SizedBox(height: 16),
-                  itemCount: artistList().length,
-                  itemBuilder: (context, index) {
-                    final media = artistList()[index];
+                StreamBuilder(
+                  stream: mediaManager.mediaItem,
+                  builder: (context, snapshot) {
+                    final mediaItem = snapshot.data;
 
-                    return MediaListTile(
-                      media,
-                      forceObscure: true,
-                      onTap: () => homeController.handleMediaTap(media),
-                      onLongPress: () =>
-                          homeController.handleMediaLongPress(media, context),
+                    return SuperSliverList.separated(
+                      separatorBuilder: (context, index) =>
+                          SizedBox(height: 16),
+                      itemCount: artistList().length,
+                      itemBuilder: (context, index) {
+                        final media = artistList()[index];
+
+                        final isPlaying = mediaItem?.id == media.id.toString();
+
+                        return MediaListTile(
+                          media,
+                          forceObscure: true,
+                          isPlaying: isPlaying,
+                          onTap: () => homeController.handleMediaTap(media),
+                          onLongPress: () => homeController
+                              .handleMediaLongPress(media, context),
+                        );
+                      },
                     );
                   },
                 ),

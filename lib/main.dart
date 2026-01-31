@@ -165,6 +165,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
           );
 
           return MaterialApp.router(
+            debugShowCheckedModeBanner: false,
             restorationScopeId: 'mainApp',
             themeMode: BrightnessTheme.toThemeMode(themeMode.value),
             scrollBehavior: scrollBehavior.value,

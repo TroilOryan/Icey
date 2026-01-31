@@ -25,7 +25,7 @@ class AlbumListDetailPage extends StatelessWidget {
     final mediaList = mediaManager.mediaList.watch(context);
 
     final albumList = computed(
-      () => mediaList.where((e) => mediaIDs.contains(e.id)).toList(),
+      () => mediaList.where((e) => mediaIDs.contains(e.id)).toList()..sort((a,b)=>(a.track ?? -1) - (b.track ?? -1)),
     );
 
     final duration = computed(
@@ -187,18 +187,29 @@ class AlbumListDetailPage extends StatelessWidget {
                   ),
                 ),
 
-                SuperSliverList.separated(
-                  separatorBuilder: (context, index) => SizedBox(height: 16),
-                  itemCount: albumList().length,
-                  itemBuilder: (context, index) {
-                    final media = albumList()[index];
+                StreamBuilder(
+                  stream: mediaManager.mediaItem,
+                  builder: (context, snapshot) {
+                    final mediaItem = snapshot.data;
 
-                    return MediaListTile(
-                      media,
-                      forceObscure: true,
-                      onTap: () => homeController.handleMediaTap(media),
-                      onLongPress: () =>
-                          homeController.handleMediaLongPress(media, context),
+                    return SuperSliverList.separated(
+                      separatorBuilder: (context, index) =>
+                          SizedBox(height: 16),
+                      itemCount: albumList().length,
+                      itemBuilder: (context, index) {
+                        final media = albumList()[index];
+
+                        final isPlaying = mediaItem?.id == media.id.toString();
+
+                        return MediaListTile(
+                          media,
+                          forceObscure: true,
+                          isPlaying: isPlaying,
+                          onTap: () => homeController.handleMediaTap(media),
+                          onLongPress: () => homeController
+                              .handleMediaLongPress(media, context),
+                        );
+                      },
                     );
                   },
                 ),
