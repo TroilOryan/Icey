@@ -46,7 +46,7 @@ dependencies:
 
   ## 对话框等
   bottom_sheet: ^4.0.4
-  flutter_smart_dialog: ^4.9.8+9
+  fluttertoast: ^9.0.0
 
   ## app跳转
   open_app:

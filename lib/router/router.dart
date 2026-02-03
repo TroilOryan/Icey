@@ -19,7 +19,6 @@ import 'package:IceyPlayer/pages/sub_pages/play_screen/controller.dart';
 import 'package:IceyPlayer/pages/sub_pages/player_style/page.dart';
 import 'package:IceyPlayer/pages/sub_pages/search/controller.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:go_router/go_router.dart';
 import 'package:go_transitions/go_transitions.dart';
 
@@ -27,7 +26,6 @@ import '../pages/sub_pages/album_list_detail/controller.dart';
 
 final GoRouter router = GoRouter(
   initialLocation: "/",
-  observers: [FlutterSmartDialog.observer],
   routes: <RouteBase>[
     StatefulShellRoute.indexedStack(
       restorationScopeId: 'appShell',

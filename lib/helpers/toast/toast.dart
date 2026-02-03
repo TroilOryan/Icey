@@ -1,5 +1,14 @@
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 void showToast(String msg) {
-  SmartDialog.showToast(msg);
+  Fluttertoast.showToast(
+    msg: msg,
+    toastLength: Toast.LENGTH_SHORT,
+    gravity: ToastGravity.BOTTOM,
+    timeInSecForIosWeb: 1,
+    backgroundColor: const Color(0x80000000),
+    textColor: Colors.white,
+    fontSize: 14.0,
+  );
 }
