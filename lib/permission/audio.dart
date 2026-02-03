@@ -21,7 +21,7 @@ Future<bool> requestPermissions() async {
     return permission.isGranted;
   } else if (deviceInfo.version.sdkInt >= 29) {
     // Android 10+
-    final permission = await Permission.manageExternalStorage.request();
+    final permission = await Permission.storage.request();
     if (permission.isPermanentlyDenied) {
       showToast("请打开音频读取权限");
 
