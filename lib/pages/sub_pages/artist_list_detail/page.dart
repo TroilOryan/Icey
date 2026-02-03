@@ -126,7 +126,7 @@ class ArtistListDetailPage extends StatelessWidget {
                   ],
                 ),
 
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
 
                 SliverToBoxAdapter(
                   child: Container(
@@ -195,7 +195,7 @@ class ArtistListDetailPage extends StatelessWidget {
 
                     return SuperSliverList.separated(
                       separatorBuilder: (context, index) =>
-                          SizedBox(height: 16),
+                          const SizedBox(height: 16),
                       itemCount: artistList().length,
                       itemBuilder: (context, index) {
                         final media = artistList()[index];
@@ -215,7 +215,7 @@ class ArtistListDetailPage extends StatelessWidget {
                   },
                 ),
 
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
               ],
             ),
           ),

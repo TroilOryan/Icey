@@ -2,7 +2,7 @@
 description: "A new Flutter project."
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.25+26
+version: 1.0.26+27
 
 environment:
   sdk: ">=3.10.0"
@@ -46,7 +46,7 @@ dependencies:
 
   ## 对话框等
   bottom_sheet: ^4.0.4
-  fluttertoast: ^9.0.0
+  flutter_smart_dialog: ^4.9.8+9
 
   ## app跳转
   open_app:
@@ -106,12 +106,17 @@ dependencies:
   ## 字体
   chinese_font_library: ^1.2.0
 
+  ## 桌面端
+  file_picker: ^10.3.10
+  window_manager: ^0.5.1
+
 dependency_overrides:
   rxdart: ^0.28.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.14.4
   flutter_lints: ^6.0.0
 
 flutter:

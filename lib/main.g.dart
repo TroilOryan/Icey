@@ -40,6 +40,23 @@ void setDisplayMode() {
   }
 }
 
+Future<void> initDesktop() async {
+  await windowManager.ensureInitialized();
+
+  WindowOptions windowOptions = WindowOptions(
+    size: Size(400, 600),
+    center: true,
+    backgroundColor: Colors.transparent,
+    skipTaskbar: false,
+    titleBarStyle: TitleBarStyle.hidden,
+  );
+
+  windowManager.waitUntilReadyToShow(windowOptions, () async {
+    await windowManager.show();
+    await windowManager.focus();
+  });
+}
+
 Future<void> initServices() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
 
@@ -50,6 +67,10 @@ Future<void> initServices() async {
   GestureBinding.instance.resamplingEnabled = true;
 
   await initHive();
+
+  if (PlatformHelper.isDesktop) {
+    await initDesktop();
+  }
 
   final medias = MediaHelper.queryLocalMedia(init: true);
 
@@ -79,7 +100,7 @@ Future<void> initServices() async {
       child: Center(
         child: Text(
           "发生未预见的错误\n请通知开发者"
-              "${flutterErrorDetails.exceptionAsString()}",
+          "${flutterErrorDetails.exceptionAsString()}",
           textAlign: TextAlign.center,
         ),
       ),

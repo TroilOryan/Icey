@@ -106,43 +106,39 @@ class PlayBar extends StatelessWidget {
                                       child: Offstage(
                                         offstage: isNext != -1 || queue.isEmpty,
                                         child: SizedBox(
-                                          child: SizedBox(
-                                            width: constraints.maxWidth / 3,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  queue.isNotEmpty
-                                                      ? queue[prevIndex].title
-                                                      : "",
-                                                  style: theme
-                                                      .textTheme
-                                                      .titleSmall,
-                                                  textAlign: TextAlign.right,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  maxLines: 1,
-                                                  softWrap: true,
-                                                ),
-                                                Text(
-                                                  "上一首",
-                                                  textAlign: TextAlign.right,
-                                                  style: theme
-                                                      .textTheme
-                                                      .bodyMedium
-                                                      ?.copyWith(
-                                                        leadingDistribution:
-                                                            TextLeadingDistribution
-                                                                .even,
-                                                        decoration:
-                                                            TextDecoration.none,
-                                                      ),
-                                                ),
-                                              ],
-                                            ),
+                                          width: constraints.maxWidth / 3,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                queue.isNotEmpty
+                                                    ? queue[prevIndex].title
+                                                    : "",
+                                                style:
+                                                    theme.textTheme.titleSmall,
+                                                textAlign: TextAlign.right,
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 1,
+                                                softWrap: true,
+                                              ),
+                                              Text(
+                                                "上一首",
+                                                textAlign: TextAlign.right,
+                                                style: theme
+                                                    .textTheme
+                                                    .bodyMedium
+                                                    ?.copyWith(
+                                                      leadingDistribution:
+                                                          TextLeadingDistribution
+                                                              .even,
+                                                      decoration:
+                                                          TextDecoration.none,
+                                                    ),
+                                              ),
+                                            ],
                                           ),
                                         ),
                                       ),

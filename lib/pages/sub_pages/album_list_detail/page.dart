@@ -25,7 +25,9 @@ class AlbumListDetailPage extends StatelessWidget {
     final mediaList = mediaManager.mediaList.watch(context);
 
     final albumList = computed(
-      () => mediaList.where((e) => mediaIDs.contains(e.id)).toList()..sort((a,b)=>(a.track ?? -1) - (b.track ?? -1)),
+      () =>
+          mediaList.where((e) => mediaIDs.contains(e.id)).toList()
+            ..sort((a, b) => (a.track ?? -1) - (b.track ?? -1)),
     );
 
     final duration = computed(
@@ -125,7 +127,7 @@ class AlbumListDetailPage extends StatelessWidget {
                   ],
                 ),
 
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
 
                 SliverToBoxAdapter(
                   child: Container(
@@ -194,7 +196,7 @@ class AlbumListDetailPage extends StatelessWidget {
 
                     return SuperSliverList.separated(
                       separatorBuilder: (context, index) =>
-                          SizedBox(height: 16),
+                          const SizedBox(height: 16),
                       itemCount: albumList().length,
                       itemBuilder: (context, index) {
                         final media = albumList()[index];
@@ -214,7 +216,7 @@ class AlbumListDetailPage extends StatelessWidget {
                   },
                 ),
 
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
               ],
             ),
           ),

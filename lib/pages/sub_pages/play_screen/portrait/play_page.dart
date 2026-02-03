@@ -66,12 +66,12 @@ class PlayPage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 24),
+                      const SizedBox(height: 24),
                       PlayLyricSmall(
                         color: appThemeExtension.primary,
                         onTap: () => onOpenLyric(context),
                       ),
-                      SizedBox(height: 24),
+                      const SizedBox(height: 24),
                       StreamBuilder(
                         stream: mediaManager.mediaItem,
                         builder: (context, snapshot) {
@@ -87,7 +87,7 @@ class PlayPage extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Flexible(
                 child: AnimatedSlide(
                   curve: Curves.easeInOutSine,
@@ -149,7 +149,7 @@ class PlayPage extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(height: 6),
+                      const SizedBox(height: 6),
                     ],
                   ),
                 ),

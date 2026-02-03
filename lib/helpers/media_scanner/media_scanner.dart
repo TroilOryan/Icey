@@ -1,3 +1,4 @@
+import "package:IceyPlayer/helpers/platform.dart";
 import "package:audio_query/audio_query.dart";
 import "package:audio_query/entities.dart" hide ArtworkColorEntity;
 import "package:IceyPlayer/constants/box_key.dart";
@@ -7,6 +8,7 @@ import "package:IceyPlayer/event_bus/event_bus.dart";
 import "package:IceyPlayer/helpers/common.dart";
 import "package:IceyPlayer/helpers/toast/toast.dart";
 import "package:IceyPlayer/permission/audio.dart";
+import "package:file_picker/file_picker.dart";
 
 const MEDIA_EXTENSTIONS = [
   ".mp3",
@@ -25,6 +27,16 @@ final _mediaBox = Boxes.mediaBox, _settingsBox = Boxes.settingsBox;
 class MediaScanner {
   /// 扫描音频文件
   static void scanMedias([bool? silent]) async {
+    if (PlatformHelper.isDesktop) {
+      String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
+
+      if (selectedDirectory == null) {
+        // User canceled the picker
+      }
+
+      return;
+    }
+
     final hasPermission = await requestPermissions();
 
     if (!hasPermission) {

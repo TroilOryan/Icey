@@ -3,11 +3,22 @@ import 'dart:ui';
 
 import 'package:IceyPlayer/components/persistent_header/persistent_header.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_sficon/flutter_sficon.dart';
+
+const menu = [
+  PopupMenuItem(value: 1, child: Text("媒体排序")),
+  PopupMenuItem(value: 2, child: Text("设置中心")),
+];
 
 class HeaderAppBar extends StatelessWidget {
   final VoidCallback onTap;
 
   const HeaderAppBar({super.key, required this.onTap});
+
+  void handleMenuSelected(int value, BuildContext context) {
+    if (value == 1) {
+    } else if (value == 2) {}
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +53,18 @@ class HeaderAppBar extends StatelessWidget {
                             textTheme.titleLarge!.fontSize! *
                             max((1.5 - offset / 200), 0.8),
                       ),
+                    ),
+
+                    Row(
+                      children: [
+                        PopupMenuButton(
+                          clipBehavior: Clip.antiAlias,
+                          onSelected: (value) =>
+                              handleMenuSelected(value, context),
+                          itemBuilder: (context) => menu,
+                          icon: SFIcon(SFIcons.sf_plus, fontSize: 22),
+                        ),
+                      ],
                     ),
                   ],
                 ),

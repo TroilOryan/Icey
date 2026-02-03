@@ -147,7 +147,7 @@ class HomeController {
         return Column(
           children: [
             Text("媒体排序", style: Theme.of(context).textTheme.titleMedium),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Flexible(
               child: GridView.count(
                 crossAxisCount: 2,
@@ -231,7 +231,7 @@ class HomeController {
                 Text(
                   'Start: ${DateUtil.formatDate(start, format: DateFormats.full)}',
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Flexible(
                   child: StreamBuilder(
                     stream: streamController?.stream,
@@ -252,7 +252,7 @@ class HomeController {
                               ),
                             ),
                           ),
-                          SizedBox(height: 16),
+                          const SizedBox(height: 16),
                           Text(
                             scanEnded
                                 ? "End: ${DateUtil.formatDate(scanEndTime, format: DateFormats.full)} 共${queriedSongs?.length ?? 0}首媒体"
@@ -263,7 +263,7 @@ class HomeController {
                     },
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Button(
                   block: true,
                   disabled: !scanEnded,

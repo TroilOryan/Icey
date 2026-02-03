@@ -19,15 +19,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:go_transitions/go_transitions.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:signals/signals_flutter.dart';
+import 'package:window_manager/window_manager.dart';
 import 'build_config.dart';
 import 'constants/box_key.dart';
 import 'constants/cache_key.dart';
 import 'entities/media.dart';
 import 'entities/media_order.dart';
 import 'helpers/media/media.dart';
+import 'helpers/platform.dart';
 import 'http/init.dart';
 
 part 'main.g.dart';
@@ -166,6 +169,20 @@ class _AppState extends State<App> with WidgetsBindingObserver {
 
           return MaterialApp.router(
             debugShowCheckedModeBanner: false,
+            builder: FlutterSmartDialog.init(
+              //custom default toast widget
+              // toastBuilder: (String msg) => CustomToastWidget(msg: msg),
+              // //custom default loading widget
+              // loadingBuilder: (String msg) => CustomLoadingWidget(msg: msg),
+              // //custom default notify widget
+              // notifyStyle: FlutterSmartNotifyStyle(
+              //   successBuilder: (String msg) => CustomSuccessWidget(msg: msg),
+              //   failureBuilder: (String msg) => CustomFailureWidget(msg: msg),
+              //   warningBuilder: (String msg) => CustomWarningWidget(msg: msg),
+              //   alertBuilder: (String msg) => CustomAlertWidget(msg: msg),
+              //   errorBuilder: (String msg) => CustomErrorWidget(msg: msg),
+              // ),
+            ),
             restorationScopeId: 'mainApp',
             themeMode: BrightnessTheme.toThemeMode(themeMode.value),
             scrollBehavior: scrollBehavior.value,

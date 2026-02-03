@@ -7,11 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sficon/flutter_sficon.dart';
 import 'package:go_router/go_router.dart';
 
-const menu = [
-  PopupMenuItem(value: 1, child: Text("媒体排序")),
-  PopupMenuItem(value: 2, child: Text("设置中心")),
-];
-
 late StatefulNavigationShell nav;
 
 class HeaderAppBar extends StatelessWidget {
@@ -34,11 +29,38 @@ class HeaderAppBar extends StatelessWidget {
     }
   }
 
+  Widget _buildTitle({required ThemeData theme, required double offset}) {
+    final textTheme = theme.textTheme;
+
+    return Text(
+      "媒体库",
+      style: textTheme.titleLarge!.copyWith(
+        fontSize:
+            textTheme.titleLarge!.fontSize! * max((1.5 - offset / 200), 0.8),
+      ),
+    );
+  }
+
+  Widget _buildAction({required ThemeData theme}) {
+    return Row(
+      children: [
+        IconButton(
+          icon: SFIcon(SFIcons.sf_shuffle, fontSize: 20),
+          onPressed: onPlayRandom,
+        ),
+        IconButton(
+          icon: SFIcon(SFIcons.sf_list_bullet, fontSize: 20),
+          onPressed: onOpenSortMenu,
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final paddingTop = MediaQuery.of(context).padding.top;
+    final theme = Theme.of(context);
 
-    final textTheme = Theme.of(context).textTheme;
+    final paddingTop = MediaQuery.of(context).padding.top;
 
     return SliverPersistentHeader(
       pinned: true,
@@ -60,33 +82,8 @@ class HeaderAppBar extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      "媒体库",
-                      style: textTheme.titleLarge!.copyWith(
-                        fontSize:
-                            textTheme.titleLarge!.fontSize! *
-                            max((1.5 - offset / 200), 0.8),
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        IconButton(
-                          icon: SFIcon(SFIcons.sf_shuffle, fontSize: 20),
-                          onPressed: onPlayRandom,
-                        ),
-                        IconButton(
-                          icon: SFIcon(SFIcons.sf_list_bullet, fontSize: 20),
-                          onPressed: onOpenSortMenu,
-                        ),
-                        // PopupMenuButton(
-                        //   clipBehavior: Clip.antiAlias,
-                        //   onSelected: (value) =>
-                        //       handleMenuSelected(value, context),
-                        //   itemBuilder: (context) => menu,
-                        //   icon: SFIcon(SFIcons.sf_plus, fontSize: 22),
-                        // ),
-                      ],
-                    ),
+                    _buildTitle(theme: theme, offset: offset),
+                    _buildAction(theme: theme),
                   ],
                 ),
               ),

@@ -104,7 +104,7 @@ class _AlbumListPageState extends State<AlbumListPage>
                             ),
                     ),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Hero(
                     tag: "albumTitle_${album.id}",
                     child: Text(

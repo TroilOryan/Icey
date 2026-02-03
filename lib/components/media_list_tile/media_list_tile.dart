@@ -97,7 +97,7 @@ class MediaListTile extends StatelessWidget {
                     borderRadius: BorderRadius.all(AppTheme.borderRadiusXs),
                   ),
                 ),
-                SizedBox(width: 12),
+                const SizedBox(width: 12),
                 Flexible(
                   child: Column(
                     spacing: 3,

@@ -43,7 +43,7 @@ class _AzListIndexBarState extends State<AzListIndexBar> {
         final primary = Theme.of(context).colorScheme.primary;
 
         return ListView.separated(
-          separatorBuilder: (context, index) => SizedBox(height: 6),
+          separatorBuilder: (context, index) => const SizedBox(height: 6),
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemBuilder: (context, index) {

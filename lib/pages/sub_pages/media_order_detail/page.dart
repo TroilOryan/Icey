@@ -188,7 +188,7 @@ class _MediaOrderDetailPageState extends State<MediaOrderDetailPage> {
                     return SuperSliverList.separated(
                       itemCount: mediaList.length,
                       separatorBuilder: (context, index) =>
-                          SizedBox(height: 16),
+                          const SizedBox(height: 16),
                       itemBuilder: (context, index) => controller.buildItem(
                         context,
                         index,

@@ -107,7 +107,7 @@ class _PlayListState extends State<PlayList> {
                       height: 55,
                       borderRadius: BorderRadius.all(AppTheme.borderRadiusSm),
                     ),
-                    SizedBox(width: 8),
+                    const SizedBox(width: 8),
                     Flexible(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

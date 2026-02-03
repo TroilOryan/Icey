@@ -103,7 +103,7 @@ class _ArtistListPageState extends State<ArtistListPage>
                               ),
                       ),
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Hero(
                       tag: "artistTitle_${artist.id}",
                       child: Text(

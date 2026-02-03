@@ -16,7 +16,6 @@ import '../play_info/play_info.dart' show PlayInfo;
 import '../play_shaped_cover/play_shaped_cover.dart';
 
 class Landscape extends StatelessWidget {
-
   const Landscape({super.key});
 
   Widget buildPlayCover({
@@ -64,9 +63,9 @@ class Landscape extends StatelessWidget {
             child: Column(
               children: [
                 PlayInfo(),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Flexible(child: PlayLyric()),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 StreamBuilder(
                   stream: mediaManager.mediaItem,
                   builder: (context, snapshot) {
@@ -83,9 +82,9 @@ class Landscape extends StatelessWidget {
                   children: [
                     PlayListButton(size: 24, color: appThemeExtension.primary),
                     PrevButton(size: 24, color: appThemeExtension.primary),
-                    SizedBox(width: 8),
+                    const SizedBox(width: 8),
                     PlayButton(size: 40, color: appThemeExtension.primary),
-                    SizedBox(width: 8),
+                    const SizedBox(width: 8),
                     NextButton(size: 24, color: appThemeExtension.primary),
                     PlayMenuButton(size: 24, color: appThemeExtension.primary),
                   ],

@@ -10,12 +10,12 @@ class MediaItemListTile extends StatelessWidget {
   final VoidCallback? onRemove;
 
   const MediaItemListTile(
-      this.media, {
-        super.key,
-        this.active = false,
-        this.onTap,
-        this.onRemove,
-      });
+    this.media, {
+    super.key,
+    this.active = false,
+    this.onTap,
+    this.onRemove,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -49,13 +49,13 @@ class MediaItemListTile extends StatelessWidget {
                               media.title,
                               style: theme.listTileTheme.titleTextStyle
                                   ?.copyWith(
-                                color: active
-                                    ? theme.colorScheme.primary
-                                    : null,
-                              ),
+                                    color: active
+                                        ? theme.colorScheme.primary
+                                        : null,
+                                  ),
                             ),
                           ),
-                          SizedBox(width: 10),
+                          const SizedBox(width: 10),
                         ],
                       ),
                       Text(
@@ -69,7 +69,7 @@ class MediaItemListTile extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(width: 12),
+                const SizedBox(width: 12),
                 Row(
                   children: [
                     InkWell(

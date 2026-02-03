@@ -51,7 +51,7 @@ class LogsDetailPage extends StatelessWidget {
                 ),
               ],
             )
-          : SizedBox(),
+          : const SizedBox(),
     );
   }
 }

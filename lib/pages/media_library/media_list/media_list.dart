@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:audio_service/audio_service.dart';
 import 'package:IceyPlayer/components/media_list_tile/media_list_tile.dart';
 import 'package:IceyPlayer/entities/media.dart';
@@ -21,12 +23,12 @@ class MediaList extends StatelessWidget {
     required this.onLongPress,
   });
 
-  Widget buildItem(
-    BuildContext context,
-    int index,
-    MediaItem? mediaItem,
-    double paddingBottom,
-  ) {
+  Widget buildItem({
+    required BuildContext context,
+    required int index,
+    required MediaItem? mediaItem,
+    required double paddingBottom,
+  }) {
     if (sliverContextMap[index] == null) {
       sliverContextMap[index] = context;
     }
@@ -51,9 +53,7 @@ class MediaList extends StatelessWidget {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
 
-    final double paddingBottom = mediaQuery.padding.bottom != 0
-        ? mediaQuery.padding.bottom
-        : 16;
+    final double paddingBottom = max(mediaQuery.padding.bottom, 16);
 
     return StreamBuilder(
       stream: mediaManager.mediaItem,
@@ -61,14 +61,18 @@ class MediaList extends StatelessWidget {
         final mediaItem = snapshot.data;
 
         return SliverPadding(
-          padding: EdgeInsets.symmetric(horizontal: 24),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           sliver: SuperSliverList.separated(
             addAutomaticKeepAlives: true,
             layoutKeptAliveChildren: true,
             itemCount: mediaList.length,
-            separatorBuilder: (context, index) => SizedBox(height: 16),
-            itemBuilder: (context, index) =>
-                buildItem(context, index, mediaItem, paddingBottom),
+            separatorBuilder: (context, index) => const SizedBox(height: 16),
+            itemBuilder: (context, index) => buildItem(
+              context: context,
+              index: index,
+              mediaItem: mediaItem,
+              paddingBottom: paddingBottom,
+            ),
           ),
         );
       },

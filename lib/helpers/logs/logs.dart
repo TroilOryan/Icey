@@ -15,7 +15,7 @@ abstract final class LogsHelper {
     if (_logFile != null) return _logFile!;
 
     String dir = (await getApplicationDocumentsDirectory()).path;
-    final String filename = p.join(dir, '.pili_logs.json');
+    final String filename = p.join(dir, '.icey_logs.json');
     final File file = File(filename);
     if (!file.existsSync()) {
       await file.create(recursive: true);

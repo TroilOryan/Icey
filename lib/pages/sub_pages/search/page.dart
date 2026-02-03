@@ -1,5 +1,3 @@
-
-
 part of 'controller.dart';
 
 class SearchPage extends StatefulWidget {
@@ -93,7 +91,8 @@ class _SearchPageState extends State<SearchPage> {
                         controller.handleMediaLongPress(media, context),
                   );
                 },
-                separatorBuilder: (context, index) => SizedBox(height: 16),
+                separatorBuilder: (context, index) =>
+                    const SizedBox(height: 16),
                 itemCount: mediaList.length,
               );
             },

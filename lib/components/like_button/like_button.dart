@@ -287,9 +287,9 @@ class LikeButtonState extends State<LikeButton> with TickerProviderStateMixin {
                       ? _scaleAnimation.value
                       : 1.0,
                   child: SizedBox(
-                    child: likeWidget,
                     height: widget.size,
                     width: widget.size,
+                    child: likeWidget,
                   ),
                 ),
               ),
