@@ -8,7 +8,7 @@ class MediaLibraryPage extends StatefulWidget {
 }
 
 class _MediaLibraryPageState extends State<MediaLibraryPage>
-    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+    with SingleTickerProviderStateMixin {
   final controller = MediaLibraryController();
 
   @override
@@ -19,8 +19,6 @@ class _MediaLibraryPageState extends State<MediaLibraryPage>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-
     final theme = Theme.of(context);
 
     final mediaList = mediaManager.mediaList.watch(context);
@@ -37,8 +35,6 @@ class _MediaLibraryPageState extends State<MediaLibraryPage>
     );
 
     final cursorInfo = controller.state.cursorInfo.watch(context);
-
-    final paddingBottom = MediaQuery.of(context).padding.bottom;
 
     if (mediaList.isEmpty) {
       return MediaEmpty(onScan: MediaScanner.scanMedias);
@@ -66,13 +62,13 @@ class _MediaLibraryPageState extends State<MediaLibraryPage>
               slivers: [
                 MultiSliver(
                   children: <Widget>[
-                    HeaderLocator.sliver(),
-
                     HeaderAppBar(
                       onPlayRandom: homeController.handlePlayRandom,
                       onOpenSortMenu: controller.handleOpenSortMenu,
                       onTap: homeController.handleBackTop,
                     ),
+
+                    HeaderLocator.sliver(),
 
                     // MediaOrder(offstage: mediaList.isEmpty),
                     MediaList(
@@ -110,8 +106,4 @@ class _MediaLibraryPageState extends State<MediaLibraryPage>
       ],
     );
   }
-
-  @override
-  // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
 }

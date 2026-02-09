@@ -9,8 +9,9 @@ class MediaQuality extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: const EdgeInsets.only(right: 6),
-        child: Builder(builder: (context) {
+      margin: const EdgeInsets.only(right: 6),
+      child: Builder(
+        builder: (context) {
           if (quality == "HR") {
             return ExtendedImage.asset(
               'assets/images/hr.png',
@@ -32,6 +33,8 @@ class MediaQuality extends StatelessWidget {
           }
 
           return const SizedBox();
-        }));
+        },
+      ),
+    );
   }
 }

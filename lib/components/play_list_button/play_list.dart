@@ -88,93 +88,87 @@ class _PlayListState extends State<PlayList> {
       builder: (context, snapshot) {
         final queue = snapshot.data;
 
-        return Container(
-          margin: EdgeInsets.only(top: 16),
-          child: Column(
-            spacing: 16,
-            children: [
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 12),
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                decoration: BoxDecoration(
-                  color: theme.cardTheme.color,
-                  borderRadius: BorderRadius.all(AppTheme.borderRadiusSm),
-                ),
-                child: Row(
-                  children: [
-                    PlayCover(
-                      width: 55,
-                      height: 55,
-                      borderRadius: BorderRadius.all(AppTheme.borderRadiusSm),
-                    ),
-                    const SizedBox(width: 8),
-                    Flexible(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          StreamBuilder(
-                            stream: mediaManager.mediaItem,
-                            builder: (context, snapshot) {
-                              final mediaItem = snapshot.data;
-
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    mediaItem?.title ?? "暂无歌曲",
-                                    style: theme.textTheme.titleSmall,
-                                    maxLines: 2,
-                                    softWrap: true,
-                                  ),
-                                  const SizedBox(width: 12),
-                                  Text(
-                                    mediaItem?.artist ?? "暂无歌手",
-                                    style: theme.textTheme.bodyMedium,
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+        return Column(
+          spacing: 16,
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: BoxDecoration(
+                color: theme.cardTheme.color,
+                borderRadius: BorderRadius.all(AppTheme.borderRadiusSm),
               ),
-              Flexible(
-                child: MediaQuery.removePadding(
-                  removeTop: true,
-                  context: context,
-                  child: SuperListView.builder(
-                    listController: listController,
-                    controller: scrollController,
-                    padding: EdgeInsets.symmetric(horizontal: 12),
-                    itemCount: queue?.length ?? 0,
-                    itemBuilder: (context, index) => Container(
-                      margin: EdgeInsets.only(
-                        bottom: queue != null
-                            ? index == queue.length - 1
-                                  ? 16
-                                  : 8
-                            : 8,
-                      ),
-                      child: MediaItemListTile(
-                        queue![index],
-                        active:
-                            mediaManager.mediaItem.value?.id ==
-                                queue[index].id &&
-                            mediaManager.mediaItem.value?.extras?['uuid'] ==
-                                queue[index].extras?['uuid'],
-                        onTap: () => mediaManager.skipToQueueItem(index),
-                        onRemove: () => mediaManager.removeQueue(index),
-                      ),
+              child: Row(
+                children: [
+                  PlayCover(
+                    width: 55,
+                    height: 55,
+                    borderRadius: BorderRadius.all(AppTheme.borderRadiusSm),
+                  ),
+                  const SizedBox(width: 8),
+                  Flexible(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        StreamBuilder(
+                          stream: mediaManager.mediaItem,
+                          builder: (context, snapshot) {
+                            final mediaItem = snapshot.data;
+
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  mediaItem?.title ?? "暂无歌曲",
+                                  style: theme.textTheme.titleSmall,
+                                  maxLines: 2,
+                                  softWrap: true,
+                                ),
+                                const SizedBox(width: 12),
+                                Text(
+                                  mediaItem?.artist ?? "暂无歌手",
+                                  style: theme.textTheme.bodyMedium,
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Flexible(
+              child: MediaQuery.removePadding(
+                removeTop: true,
+                context: context,
+                child: SuperListView.builder(
+                  listController: listController,
+                  controller: scrollController,
+                  itemCount: queue?.length ?? 0,
+                  itemBuilder: (context, index) => Container(
+                    margin: EdgeInsets.only(
+                      bottom: queue != null
+                          ? index == queue.length - 1
+                                ? 16
+                                : 8
+                          : 8,
+                    ),
+                    child: MediaItemListTile(
+                      queue![index],
+                      active:
+                          mediaManager.mediaItem.value?.id == queue[index].id &&
+                          mediaManager.mediaItem.value?.extras?['uuid'] ==
+                              queue[index].extras?['uuid'],
+                      onTap: () => mediaManager.skipToQueueItem(index),
+                      onRemove: () => mediaManager.removeQueue(index),
                     ),
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         );
       },
     );

@@ -5,7 +5,7 @@ class PersistentHeaderBuilder extends SliverPersistentHeaderDelegate {
   final double min;
   final Widget Function(BuildContext context, double offset) builder;
 
-  PersistentHeaderBuilder({
+  const PersistentHeaderBuilder({
     this.max = 120,
     this.min = 80,
     required this.builder,

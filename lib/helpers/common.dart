@@ -1,5 +1,4 @@
 import 'package:IceyPlayer/helpers/toast/toast.dart';
-import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import "package:path/path.dart" as path;
@@ -11,26 +10,23 @@ class CommonHelper {
     Color? color,
     TextStyle? textStyle,
   ]) {
-    String format = DateFormats.h_m_s;
-
-    if (duration.inHours <= 0) {
-      format = "mm:ss";
-    }
-
     return Text(
-      DateUtil.formatDateMs(duration.inMilliseconds, format: format),
+      buildDurationText(duration),
       style: textStyle?.copyWith(color: color),
     );
   }
 
   static String buildDurationText(Duration duration) {
-    String format = DateFormats.h_m_s;
+    final int totalSeconds = duration.inSeconds;
+    final int hours = totalSeconds ~/ 3600;
+    final int minutes = (totalSeconds % 3600) ~/ 60;
+    final int seconds = totalSeconds % 60;
 
-    if (duration.inHours <= 0) {
-      format = "mm:ss";
+    if (hours <= 0) {
+      return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+    } else {
+      return '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
     }
-
-    return DateUtil.formatDateMs(duration.inMilliseconds, format: format);
   }
 
   static int findClosestIndex(List<BigInt?> bigInts, BigInt? target) {

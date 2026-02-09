@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:IceyPlayer/event_bus/event_bus.dart';
 import 'package:IceyPlayer/pages/media_library/media_locator/media_locator.dart';
 import 'package:easy_refresh/easy_refresh.dart';
