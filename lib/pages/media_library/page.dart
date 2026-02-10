@@ -30,7 +30,7 @@ class _MediaLibraryPageState extends State<MediaLibraryPage>
 
     final noAzList = computed(
       () =>
-          mediaList.isEmpty ||
+      mediaList.isEmpty ||
           (sortType != MediaSort.title && sortType != MediaSort.artist),
     );
 
@@ -100,7 +100,6 @@ class _MediaLibraryPageState extends State<MediaLibraryPage>
         ),
 
         MediaLocator(
-          offstage: mediaList.isEmpty,
           onTap: homeController.handleLocate,
         ),
       ],

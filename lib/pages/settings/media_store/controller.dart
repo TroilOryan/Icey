@@ -31,8 +31,10 @@ void handleSwitchScanDirStatus(String dir) {
 
   state.scanDir.value = scanDirRes;
 
-  _settingsBox.put(CacheKey.Settings.scanDir, scanDirRes);
-  _settingsBox.put(CacheKey.Settings.filterDir, filterDirRes);
+  _settingsBox.putAll({
+    CacheKey.Settings.scanDir: scanDirRes,
+    CacheKey.Settings.filterDir: filterDirRes,
+  });
 
   List<MediaEntity> mediaList = mediaManager.mediaList.value.where((media) {
     final isFiltered = filterDirRes.contains(path.dirname(media.data));
@@ -52,8 +54,10 @@ void handleSwitchFilterDirStatus(String dir) {
 
   state.scanDir.value = scanDirRes;
 
-  _settingsBox.put(CacheKey.Settings.scanDir, scanDirRes);
-  _settingsBox.put(CacheKey.Settings.filterDir, filterDirRes);
+  _settingsBox.putAll({
+    CacheKey.Settings.scanDir: scanDirRes,
+    CacheKey.Settings.filterDir: filterDirRes,
+  });
 
   List<MediaEntity> mediaList = mediaManager.localMediaList.value.where((
     media,
