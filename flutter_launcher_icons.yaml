@@ -9,6 +9,10 @@ flutter_launcher_icons:
   adaptive_icon_foreground: assets/images/logo.png
   adaptive_icon_foreground_inset: 12
   adaptive_icon_monochrome: assets/images/logo.png
+  windows:
+    generate: true
+    image_path: assets/images/logo.png
+    icon_size: 48
   macos:
     generate: true
     image_path: assets/images/logo.png

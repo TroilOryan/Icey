@@ -8,7 +8,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:audio_query_example/main.dart';
+import 'package:audio_query_example/t.dart';
 
 void main() {
   testWidgets('Verify Platform version', (WidgetTester tester) async {

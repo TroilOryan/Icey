@@ -1,12 +1,11 @@
-﻿name: IceyPlayer
+name: IceyPlayer
 description: "A new Flutter project."
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: 'none'
 
 version: 1.0.27+28
 
 environment:
-  sdk: ">=3.10.0"
-  flutter: 3.38.6 # update `.fvmrc` config
+  sdk: ^3.10.7
 
 dependencies:
   flutter:
@@ -109,6 +108,9 @@ dependencies:
   ## 桌面端
   file_picker: ^10.3.10
   window_manager: ^0.5.1
+  rust_lib_icey:
+    path: rust_builder
+  flutter_rust_bridge: 2.11.1
 
 dependency_overrides:
   rxdart: ^0.28.0
@@ -119,10 +121,12 @@ dev_dependencies:
   flutter_launcher_icons: ^0.14.4
   flutter_lints: ^6.0.0
 
+  integration_test:
+    sdk: flutter
+
 flutter:
   uses-material-design: true
 
   assets:
     - assets/
     - assets/images/
-

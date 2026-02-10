@@ -16,14 +16,12 @@ import 'package:IceyPlayer/components/media_more_sheet/media_more_sheet.dart';
 import 'package:IceyPlayer/components/play_bar/play_bar.dart';
 import 'package:IceyPlayer/components/sheet_item/sheet_item.dart';
 import 'package:IceyPlayer/constants/box_key.dart';
-import 'package:IceyPlayer/constants/cache_key.dart';
 import 'package:IceyPlayer/entities/media.dart';
 import 'package:IceyPlayer/event_bus/event_bus.dart';
 import 'package:IceyPlayer/helpers/media/media.dart';
 import 'package:IceyPlayer/helpers/media_scanner/media_sort.dart';
 import 'package:IceyPlayer/helpers/toast/toast.dart';
 import 'package:IceyPlayer/helpers/update/update.dart';
-import 'package:IceyPlayer/main.dart';
 import 'package:IceyPlayer/models/media/media.dart';
 import 'package:IceyPlayer/models/settings/settings.dart';
 import 'package:go_router/go_router.dart';
@@ -33,6 +31,7 @@ import 'package:signals/signals_flutter.dart';
 import 'package:super_sliver_list/super_sliver_list.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
+import '../../main.dart';
 import 'state.dart';
 
 import 'package:path/path.dart' as path;

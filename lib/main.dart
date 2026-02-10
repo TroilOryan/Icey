@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:IceyPlayer/helpers/logs/json_file_handler.dart';
+import 'package:IceyPlayer/src/rust/frb_generated.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:catcher_2/catcher_2.dart';
 import 'package:chinese_font_library/chinese_font_library.dart';

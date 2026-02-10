@@ -32,28 +32,12 @@ migrate_working_dir/
 .pub/
 /build/
 /coverage/
-screen.png
-
-icey_release.json
-
-.fvm/
 
 # Symbolication related
 app.*.symbols
 
 # Obfuscation related
 app.*.map.json
-
-# Android related
-**/android/**/gradle-wrapper.jar
-.gradle/
-**/android/captures/
-**/android/gradlew
-**/android/gradlew.bat
-**/android/local.properties
-**/android/**/GeneratedPluginRegistrant.java
-**/android/key.properties
-*.jks
 
 # Android Studio will place build artifacts here
 /android/app/debug

@@ -41,6 +41,8 @@ void setDisplayMode() {
 }
 
 Future<void> initDesktop() async {
+  await RustLib.init();
+
   await windowManager.ensureInitialized();
 
   WindowOptions windowOptions = WindowOptions(
