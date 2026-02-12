@@ -42,10 +42,10 @@ class _MediaOrderTileState extends State<MediaOrderTile> {
   _mediaOrderCoverChangeListener;
 
   Future<void> handleCover() async {
-    List<int> mediaIDs = [];
+    List<String> mediaIDs = [];
 
     if (widget.mediaOrder.id == '0') {
-      mediaIDs = _likedBox.keys.toList().cast<int>();
+      mediaIDs = _likedBox.keys.toList().cast<String>();
     } else {
       if (widget.mediaOrder.cover != null) {
         cover.value = widget.mediaOrder.cover!;

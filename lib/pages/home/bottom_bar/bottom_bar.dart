@@ -1,14 +1,17 @@
+import 'package:IceyPlayer/pages/home/controller.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 
 class BottomBar extends StatelessWidget {
+  final List<MenuData> menu;
   final int selectedIndex;
   final VoidCallback onSearch;
   final Function(int) onTabSelected;
 
   const BottomBar({
     super.key,
+    required this.menu,
     required this.selectedIndex,
     required this.onSearch,
     required this.onTabSelected,
@@ -42,28 +45,15 @@ class BottomBar extends StatelessWidget {
         onTap: onSearch,
         label: "",
       ),
-      tabs: [
-        GlassBottomBarTab(
-          label: '媒体库',
-          icon: FluentIcons.music_note_1_20_regular,
-          selectedIcon: FluentIcons.music_note_1_20_filled,
-        ),
-        GlassBottomBarTab(
-          label: '专辑',
-          icon: FluentIcons.connected_16_regular,
-          selectedIcon: FluentIcons.connected_16_filled,
-        ),
-        GlassBottomBarTab(
-          label: '艺术家',
-          icon: FluentIcons.person_head_hint_16_regular,
-          selectedIcon: FluentIcons.person_head_hint_16_filled,
-        ),
-        GlassBottomBarTab(
-          label: '设置',
-          icon: FluentIcons.status_16_regular,
-          selectedIcon: FluentIcons.status_16_filled,
-        ),
-      ],
+      tabs: menu
+          .map(
+            (e) => GlassBottomBarTab(
+              label: e.label,
+              icon: e.icon,
+              selectedIcon: e.selectedIcon,
+            ),
+          )
+          .toList(),
       selectedIndex: selectedIndex,
       onTabSelected: onTabSelected,
     );

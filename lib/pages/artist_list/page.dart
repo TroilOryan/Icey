@@ -28,7 +28,7 @@ class _ArtistListPageState extends State<ArtistListPage>
     final artistList = mediaManager.artistList.watch(context),
         coverList = artistListController.state.coverList.watch(context);
 
-    Uint8List? cover(BigInt id) {
+    Uint8List? cover(String id) {
       final index = coverList.indexWhere((e) => e.id == id);
 
       if (index != -1) {
@@ -92,7 +92,7 @@ class _ArtistListPageState extends State<ArtistListPage>
                                 ),
                               )
                             : MediaCover(
-                                id: artist.id.toInt(),
+                                id: artist.id,
                                 size: 156,
                                 type: ArtworkType.ARTIST,
                                 borderRadius: BorderRadius.all(

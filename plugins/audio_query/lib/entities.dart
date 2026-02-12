@@ -1,21 +1,20 @@
-import 'dart:typed_data';
-
 class AudioEntity {
   AudioEntity(this._info);
 
   final Map<dynamic, dynamic> _info;
 
-  int get id => _info["_id"];
+  String get id =>
+      _info["_id"] != null ? _info["_id"].toString() : _info["path"];
 
   String get title => _info["title"];
 
   String? get artist => _info["artist"];
 
-  BigInt get artistID => BigInt.from(_info["artist_id"] ?? 0);
+  String get artistID => (_info["artist_id"] ?? 0).toString();
 
   String? get album => _info["album"];
 
-  BigInt get albumID => BigInt.from(_info["album_id"] ?? 0);
+  String get albumID => (_info["album_id"] ?? 0).toString();
 
   int? get track => _info["track"];
 
@@ -24,23 +23,27 @@ class AudioEntity {
   // ms
   int? get duration => _info["duration"];
 
-  String get data => _info["_data"];
+  String get data => _info["_data"] ?? _info["path"];
 
-  String get uri => _info["_uri"];
-
-  // s
-  int? get dateAdded => _info["date_added"];
+  String get uri => _info["_uri"] ?? _info["path"];
 
   // s
-  int? get dateModified => _info["date_modified"];
+  int? get dateAdded => _info["date_added"] ?? _info["created"];
+
+  // s
+  int? get dateModified => _info["date_modified"] ?? _info["modified"];
 
   int? get bitRate => _info["bitRate"];
 
-  int? get sampleRate => _info["sampleRate"];
+  int? get sampleRate => _info["sampleRate"] ?? _info["sample_rate"];
 
-  int? get bitDepth => _info["bitDepth"];
+  int? get bitDepth => _info["bitDepth"] ?? _info["bit_depth"];
 
   String get quality => _info["quality"];
+
+  String? get by => _info["by"];
+
+  int? get channels => _info["channels"];
 
   /// Return a map with all [keys] and [values] from specific song.
   Map get getMap => _info;

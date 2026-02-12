@@ -1,7 +1,7 @@
 part of 'controller.dart';
 
 class CoverMap {
-  final BigInt id;
+  final String id;
 
   final Uint8List cover;
 

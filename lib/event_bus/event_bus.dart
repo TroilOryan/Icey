@@ -36,7 +36,7 @@ class MediaOrderChange {
   final String id;
   final String name;
   final bool isDelete;
-  final List<int>? mediaIDs;
+  final List<String>? mediaIDs;
   final Uint8List? cover;
 
   MediaOrderChange({

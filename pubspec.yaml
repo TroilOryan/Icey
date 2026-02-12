@@ -5,7 +5,8 @@ publish_to: 'none'
 version: 1.0.27+28
 
 environment:
-  sdk: ^3.10.7
+  sdk: ">=3.10.0"
+  flutter: 3.41.0 # update `.fvmrc` config
 
 dependencies:
   flutter:
@@ -19,12 +20,14 @@ dependencies:
   audio_service: ^0.18.18
   audio_session: ^0.2.2
   just_audio: ^0.10.5
+  just_audio_windows: ^0.2.2
 
   ## UI
   animated_gradient_background: ^0.0.1
   animated_toggle_switch: ^0.8.7
   blur: ^4.0.2
   easy_refresh: ^3.4.0
+  flutter_advanced_drawer: ^1.5.0
   flex_seed_scheme: ^4.0.1
   flutter_lyric:
     path: plugins/flutter_lyric
@@ -32,6 +35,7 @@ dependencies:
   fluentui_system_icons: ^1.1.273
   keframe: ^3.0.0
   liquid_glass_widgets: ^0.3.0-dev.1
+  material_symbols_icons: ^4.2892.0
   scrollview_observer: ^1.26.2
   sliver_tools: ^0.2.12
   super_sliver_list:
@@ -45,7 +49,7 @@ dependencies:
 
   ## 对话框等
   bottom_sheet: ^4.0.4
-  fluttertoast: ^9.0.0
+  flutter_smart_dialog: ^4.9.8+9
 
   ## app跳转
   open_app:

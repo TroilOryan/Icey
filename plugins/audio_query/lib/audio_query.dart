@@ -48,7 +48,7 @@ class AudioQuery {
   }
 
   Future<Map<String, dynamic>>? queryArtworkWithColor(
-    int id,
+    String id,
     ArtworkType type, {
     ArtworkFormat? format,
     int? size,
@@ -71,7 +71,7 @@ class AudioQuery {
   }
 
   Future<Uint8List?> queryArtwork(
-    int id,
+    String id,
     ArtworkType type, {
     ArtworkFormat? format,
     int? size,

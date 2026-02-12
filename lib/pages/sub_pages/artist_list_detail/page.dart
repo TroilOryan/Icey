@@ -20,7 +20,7 @@ class ArtistListDetailPage extends StatelessWidget {
         cover = extra?["cover"] as Uint8List?,
         mediaIDs = extra?["mediaIDs"] as List<int>;
 
-    final id = int.parse(GoRouterState.of(context).pathParameters["id"]!);
+    final id = GoRouterState.of(context).pathParameters["id"]!;
 
     final mediaList = mediaManager.mediaList.watch(context);
 

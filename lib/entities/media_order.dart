@@ -13,7 +13,7 @@ class MediaOrderEntity {
   final String name;
 
   @HiveField(2)
-  final List<int> mediaIDs;
+  final List<String> mediaIDs;
 
   /// 自定义封面
   @HiveField(3)
@@ -29,7 +29,7 @@ class MediaOrderEntity {
   MediaOrderEntity copyWith({
     String? id,
     String? name,
-    List<int>? mediaIDs,
+    List<String>? mediaIDs,
     Uint8List? cover,
   }) {
     return MediaOrderEntity(

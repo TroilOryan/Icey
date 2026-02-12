@@ -1,13 +1,20 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:IceyPlayer/components/sliding_up_panel/sliding_up_panel.dart';
+import 'package:IceyPlayer/helpers/platform.dart';
 import 'package:IceyPlayer/models/lyric/lyric.dart';
 import 'package:IceyPlayer/pages/home/bottom_bar/bottom_bar.dart';
+import 'package:IceyPlayer/pages/home/side_bar/side_bar.dart';
+import 'package:IceyPlayer/pages/home/title_bar_action/title_bar_action.dart';
+import 'package:IceyPlayer/pages/media_library/media_empty/media_empty.dart';
 import 'package:audio_query/entities.dart';
 import 'package:common_utils/common_utils.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:flutter_app_minimizer_plus/flutter_app_minimizer_plus.dart';
 import 'package:IceyPlayer/components/bottom_sheet/bottom_sheet.dart';
 import 'package:IceyPlayer/components/button/button.dart';
@@ -38,6 +45,20 @@ import 'package:path/path.dart' as path;
 
 part 'page.dart';
 
+class MenuData {
+  final String label;
+
+  final IconData icon;
+
+  final IconData selectedIcon;
+
+  const MenuData({
+    required this.label,
+    required this.icon,
+    required this.selectedIcon,
+  });
+}
+
 class HomeController {
   final state = HomeState();
 
@@ -46,6 +67,29 @@ class HomeController {
   Timer? _scrollTimer;
 
   final _settingsBox = Boxes.settingsBox;
+
+  final List<MenuData> menu = [
+    MenuData(
+      label: '媒体库',
+      icon: FluentIcons.music_note_1_20_regular,
+      selectedIcon: FluentIcons.music_note_1_20_filled,
+    ),
+    MenuData(
+      label: '专辑',
+      icon: FluentIcons.connected_16_regular,
+      selectedIcon: FluentIcons.connected_16_filled,
+    ),
+    MenuData(
+      label: '艺术家',
+      icon: FluentIcons.person_head_hint_16_regular,
+      selectedIcon: FluentIcons.person_head_hint_16_filled,
+    ),
+    MenuData(
+      label: '设置',
+      icon: FluentIcons.status_16_regular,
+      selectedIcon: FluentIcons.status_16_filled,
+    ),
+  ];
 
   StreamController<List<AudioEntity>>? streamController;
 

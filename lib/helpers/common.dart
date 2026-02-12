@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:IceyPlayer/helpers/toast/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import "package:path/path.dart" as path;
 import 'package:url_launcher/url_launcher.dart';
+import 'package:path_provider/path_provider.dart';
 
 class CommonHelper {
   static Text buildDuration(
@@ -128,5 +131,13 @@ class CommonHelper {
     } catch (e) {
       showToast(e.toString());
     }
+  }
+
+  Future<Directory> getAppDataDir() async {
+    final dir = await getApplicationDocumentsDirectory();
+
+    return Directory(
+      path.join(dir.path, "icey_player"),
+    ).create(recursive: true);
   }
 }

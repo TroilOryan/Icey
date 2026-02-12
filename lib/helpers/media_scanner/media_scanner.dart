@@ -1,4 +1,8 @@
+import "dart:convert";
+import "dart:io";
+
 import "package:IceyPlayer/helpers/platform.dart";
+import "package:IceyPlayer/src/rust/api/tag_reader.dart";
 import "package:audio_query/audio_query.dart";
 import "package:audio_query/entities.dart" hide ArtworkColorEntity;
 import "package:IceyPlayer/constants/box_key.dart";
@@ -25,18 +29,107 @@ final audioQuery = AudioQuery();
 final _mediaBox = Boxes.mediaBox, _settingsBox = Boxes.settingsBox;
 
 class MediaScanner {
-  /// 扫描音频文件
-  static void scanMedias([bool? silent]) async {
+  static Future<void> _scanMediasDesktop([bool? silent]) async {
     if (PlatformHelper.isDesktop) {
       String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
 
       if (selectedDirectory == null) {
-        // User canceled the picker
+        return;
       }
+
+      await _mediaBox.clear();
+
+      eventBus.fire(ScanMediaStatus(true, silent));
+
+      final applicationSupportDirectory = await CommonHelper().getAppDataDir();
+
+      final stream = buildIndexFromFoldersRecursively(
+        folders: [selectedDirectory],
+        indexPath: applicationSupportDirectory.path,
+      );
+
+      List<AudioEntity> audios = [];
+
+      stream.listen(
+        (res) {},
+        onDone: () async {
+          final List<String> filterDir = _settingsBox.get(
+            CacheKey.Settings.filterDir,
+            defaultValue: <String>[],
+          );
+
+          final filterShort = _settingsBox.get(
+            CacheKey.Settings.filterShort,
+            defaultValue: true,
+          );
+
+          final supportPath = applicationSupportDirectory.path;
+
+          final indexPath = "$supportPath\\index.json";
+
+          final indexStr = File(indexPath).readAsStringSync();
+
+          final Map indexJson = json.decode(indexStr);
+          final List foldersJson = indexJson["folders"];
+          // final List<AudioFolder> folders = [];
+
+          for (Map folderMap in foldersJson) {
+            final List audiosJson = folderMap["audios"];
+            for (Map audioMap in audiosJson) {
+              audios.add(AudioEntity(audioMap));
+              eventBus.fire(ScanMediaAdd(audios));
+            }
+
+            // folders.add(AudioFolder.fromMap(folderMap, audios));
+          }
+
+          if (audios.isEmpty) {
+            showToast("本地没有音乐或者系统拒绝访问 QAQ");
+
+            return;
+          }
+
+          late List<MediaEntity> mediaList;
+
+          if (filterShort == true) {
+            mediaList = audios
+                .map((MediaEntity.fromMediaStore))
+                .where(
+                  (audio) =>
+                      (audio.duration ?? 0) > 5 &&
+                      filterDir.every((dir) => !audio.data.contains(dir)),
+                )
+                .toList();
+          } else {
+            mediaList = audios
+                .map((MediaEntity.fromMediaStore))
+                .where(
+                  (audio) =>
+                      filterDir.every((dir) => !audio.data.contains(dir)),
+                )
+                .toList();
+          }
+
+          print("来了");
+          print(mediaList.length);
+
+          await _mediaBox.addAll(mediaList);
+
+          final scanDir = CommonHelper.getParentFolders(
+            mediaList.map((e) => e.data).toList(),
+          );
+
+          eventBus.fire(ScanMediaStatus(false, silent));
+
+          _settingsBox.put(CacheKey.Settings.scanDir, scanDir);
+        },
+      );
 
       return;
     }
+  }
 
+  static Future<void> _scanMediasMobile([bool? silent]) async {
     final hasPermission = await requestPermissions();
 
     if (!hasPermission) {
@@ -57,6 +150,12 @@ class MediaScanner {
         audios = res;
       },
       onDone: () async {
+        if (audios.isEmpty) {
+          showToast("本地没有音乐或者系统拒绝访问 QAQ");
+
+          return;
+        }
+
         eventBus.fire(ScanMediaStatus(false, silent));
 
         final List<String> filterDir = _settingsBox.get(
@@ -68,12 +167,6 @@ class MediaScanner {
           CacheKey.Settings.filterShort,
           defaultValue: true,
         );
-
-        if (audios.isEmpty) {
-          showToast("本地没有音乐或者系统拒绝访问 QAQ");
-
-          return;
-        }
 
         late List<MediaEntity> mediaList;
 
@@ -102,28 +195,18 @@ class MediaScanner {
         );
 
         _settingsBox.put(CacheKey.Settings.scanDir, scanDir);
-
-        // final executor = Executor(concurrency: 100);
-        //
-        // for (var audio in audios) {
-        //   executor.scheduleTask(() async {
-        //     await _artworkColorBox.put(
-        //       audio.id,
-        //       ArtworkColorEntity(
-        //         primary: audio.color != null ? audio.color!.primaryColor! : -1,
-        //         secondary: audio.color != null
-        //             ? audio.color!.secondaryColor!
-        //             : -1,
-        //         isDark: audio.color != null ? audio.color!.isDark! : false,
-        //       ),
-        //     );
-        //   });
-        // }
-        //
-        // await executor.join(withWaiting: true);
-        //
-        // await executor.close();
       },
     );
+  }
+
+  /// 扫描音频文件
+  static void scanMedias([bool? silent]) async {
+    if (PlatformHelper.isDesktop) {
+      _scanMediasDesktop(silent);
+
+      return;
+    }
+
+    _scanMediasMobile();
   }
 }

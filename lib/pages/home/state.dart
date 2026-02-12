@@ -15,4 +15,6 @@ class HomeState {
   final scrollDirection = signal(ScrollDirection.idle);
 
   final currentIndex = signal(0);
+
+  final sideBarOpened = signal(true);
 }

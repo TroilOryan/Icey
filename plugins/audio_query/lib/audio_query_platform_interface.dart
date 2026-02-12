@@ -39,7 +39,7 @@ abstract class AudioQueryPlatform extends PlatformInterface {
   }
 
   Future queryArtworkWithColor(
-    int id,
+    String id,
     ArtworkType type, {
     ArtworkFormat? format,
     int? size,
@@ -51,7 +51,7 @@ abstract class AudioQueryPlatform extends PlatformInterface {
   }
 
   Future<Uint8List?> queryArtwork(
-    int id,
+    String id,
     ArtworkType type, {
     ArtworkFormat? format,
     int? size,

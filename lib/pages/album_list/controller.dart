@@ -17,7 +17,7 @@ part 'state.dart';
 class AlbumListController {
   final state = AlbumListState();
 
-  void handleQueried(Uint8List v, BigInt id) {
+  void handleQueried(Uint8List v, String id) {
     final coverList = List.from(state.coverList.value);
 
     coverList.add(CoverMap(id: id, cover: v));

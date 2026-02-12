@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 
+import 'package:IceyPlayer/helpers/platform.dart';
+import 'package:IceyPlayer/src/rust/api/tag_reader.dart';
 import 'package:audio_query/query_artwork_widget/query_artwork_widget.dart';
 import 'package:audio_query/types/artwork_type.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +9,7 @@ import 'package:flutter/material.dart';
 import '../media_default_cover/media_default_cover.dart';
 
 class MediaCover extends StatelessWidget {
-  final int? id;
+  final String? id;
   final double size;
   final double? width;
   final double? height;
@@ -37,6 +39,35 @@ class MediaCover extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (showDefault != true && id != null) {
+      if (PlatformHelper.isDesktop) {
+        return FutureBuilder(
+          future: getPictureFromPath(
+            path: id!,
+            width: (width ?? size).toInt(),
+            height: (height ?? size).toInt(),
+          ),
+          builder: (context, snapshot) {
+            return Container(
+              clipBehavior: Clip.antiAlias,
+              decoration: BoxDecoration(borderRadius: borderRadius),
+              child: snapshot.data == null
+                  ? Container(
+                      width: width ?? size,
+                      height: height ?? size,
+                      clipBehavior: Clip.antiAlias,
+                      decoration: BoxDecoration(borderRadius: borderRadius),
+                      child: MediaDefaultCover(
+                        size: Size(width ?? size, height ?? size),
+                        isDarkMode: isDarkMode,
+                        borderRadius: borderRadius,
+                      ),
+                    )
+                  : Image.memory(snapshot.data!, gaplessPlayback: true),
+            );
+          },
+        );
+      }
+
       return QueryArtworkWidget(
         keepOldArtwork: keepOldArtwork,
         id: id!,

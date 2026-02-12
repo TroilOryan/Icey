@@ -40,10 +40,42 @@ class _HomePageState extends State<HomePage>
     final listBg = settingsManager.listBg.watch(context);
 
     final panelOpened = homeController.state.panelOpened.watch(context),
+        sideBarOpened = homeController.state.sideBarOpened.watch(context),
         hidePlayBar = homeController.state.hidePlayBar.watch(context);
 
     final isDarkMode =
         MediaQuery.of(context).platformBrightness == Brightness.dark;
+
+    if (PlatformHelper.isDesktop) {
+      if (mediaList.isEmpty) {
+        return widget.navigationShell;
+      }
+
+      return Stack(
+        children: [
+          AdvancedDrawer(
+            openRatio: 0.3,
+            openScale: 1,
+            initialDrawerScale: 1,
+            drawer: SideBar(
+              menu: homeController.menu,
+              opened: sideBarOpened,
+              selectedIndex: widget.navigationShell.currentIndex,
+              onTabSelected: (index) => homeController.handleGoBranch(index),
+            ),
+            child: SlidingUpPanel(
+              panel: Text("ss"),
+              body: widget.navigationShell,
+              collapsed: PlayBar(
+                hidePlayBar: hidePlayBar,
+                onTap: () => homeController.handleOpenPanel(context),
+              ),
+            ),
+          ),
+          TitleBarAction(),
+        ],
+      );
+    }
 
     return PopScope(
       canPop: !panelOpened,
@@ -79,6 +111,7 @@ class _HomePageState extends State<HomePage>
               : theme.scaffoldBackgroundColor,
           bottomNavigationBar: mediaList.isNotEmpty
               ? BottomBar(
+                  menu: homeController.menu,
                   selectedIndex: widget.navigationShell.currentIndex,
                   onSearch: () => homeController.navToSearch(context),
                   onTabSelected: (index) =>

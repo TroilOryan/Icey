@@ -1,9 +1,9 @@
 class AlbumEntity {
-  final BigInt id;
+  final String id;
   final String name;
-  final List<int> mediaIDs;
+  final List<String> mediaIDs;
 
-  AlbumEntity copyWith({BigInt? id, String? name, List<int>? mediaIDs}) {
+  AlbumEntity copyWith({String? id, String? name, List<String>? mediaIDs}) {
     return AlbumEntity(
       id: id ?? this.id,
       name: name ?? this.name,

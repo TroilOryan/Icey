@@ -1,9 +1,9 @@
 class ArtistEntity {
-  final BigInt id;
+  final String id;
   final String name;
-  final List<int> mediaIDs;
+  final List<String> mediaIDs;
 
-  ArtistEntity copyWith({BigInt? id, String? name, List<int>? mediaIDs}) {
+  ArtistEntity copyWith({String? id, String? name, List<String>? mediaIDs}) {
     return ArtistEntity(
       id: id ?? this.id,
       name: name ?? this.name,

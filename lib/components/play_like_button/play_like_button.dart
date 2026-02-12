@@ -34,7 +34,7 @@ class _PlayLikeButtonState extends State<PlayLikeButton> {
     }
 
     setState(() {
-      isLiked = _likedBox.get(int.parse(widget.id!), defaultValue: false);
+      isLiked = _likedBox.get(widget.id!, defaultValue: false);
     });
   }
 

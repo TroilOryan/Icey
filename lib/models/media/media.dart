@@ -54,7 +54,7 @@ class MediaManager {
   late final Computed<List<ArtistEntity>> _artistList;
   final Signal<MediaItem?> _currentMediaItem;
   final Signal<Animation<double>?> _rotationAnimation;
-  late final AudioPlayerHandler _audioService;
+  late final AudioServiceHandler _audioService;
   final Signal<CoverColor> _coverColor;
   final Signal<Uint8List> _currentCover;
   final Signal<PlayMode> _playMode;
@@ -127,7 +127,7 @@ class MediaManager {
         if (index == -1) {
           albumList.add(
             AlbumEntity(
-              id: media.albumID ?? BigInt.from(-1),
+              id: (media.albumID ?? BigInt.from(-1)).toString(),
               name: media.album ?? "未知专辑",
               mediaIDs: [media.id],
             ),
@@ -155,7 +155,7 @@ class MediaManager {
         if (index == -1) {
           artistList.add(
             ArtistEntity(
-              id: media.artistID ?? BigInt.from(-1),
+              id: (media.artistID ?? BigInt.from(-1)).toString(),
               name: media.artist ?? "未知艺术家",
               mediaIDs: [media.id],
             ),
@@ -175,7 +175,7 @@ class MediaManager {
 
   void init({
     required List<MediaEntity> medias,
-    required AudioPlayerHandler audioService,
+    required AudioServiceHandler audioService,
   }) {
     _audioService = audioService;
     setLocalMediaList(medias, true);
@@ -230,7 +230,7 @@ class MediaManager {
   }
 
   Future<void> loadPlaylist(List<MediaItem> value) async {
-    await _audioService.loadPlaylist(value);
+    // await _audioService.loadPlaylist(value);
   }
 
   void addToQueue(int index, MediaEntity media) {
@@ -259,7 +259,7 @@ class MediaManager {
     _audioService.pause();
   }
 
-  void play([int? id]) {
+  void play([String? id]) {
     if (id != null) {
       final index = _audioService.queue.value.indexWhere(
         (item) => item.id == id.toString(),
@@ -270,8 +270,7 @@ class MediaManager {
       }
     }
 
-    if (_audioService.isPlaying &&
-        id.toString() == _audioService.mediaItem.value?.id) {
+    if (_audioService.isPlaying && id == _audioService.mediaItem.value?.id) {
       _audioService.pause();
     } else {
       _audioService.play();
@@ -310,7 +309,7 @@ class MediaManager {
     batch(() async {
       final String path = value.extras?["path"];
 
-      final id = int.parse(value.id);
+      final id = value.id;
 
       _currentMediaItem.value = value;
 

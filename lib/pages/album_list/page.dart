@@ -28,7 +28,7 @@ class _AlbumListPageState extends State<AlbumListPage>
     final albumList = mediaManager.albumList.watch(context),
         coverList = albumListController.state.coverList.watch(context);
 
-    Uint8List? cover(BigInt id) {
+    Uint8List? cover(String id) {
       final index = coverList.indexWhere((e) => e.id == id);
 
       if (index != -1) {
@@ -93,7 +93,7 @@ class _AlbumListPageState extends State<AlbumListPage>
                               ),
                             )
                           : MediaCover(
-                              id: album.id.toInt(),
+                              id: album.id,
                               size: 156,
                               type: ArtworkType.ALBUM,
                               borderRadius: BorderRadius.all(

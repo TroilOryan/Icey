@@ -9,7 +9,7 @@ import 'package:IceyPlayer/services/play_mode.dart';
 import 'audio_session.dart';
 import 'custom_shuffle_order.dart';
 
-class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
+class AudioServiceHandler extends BaseAudioHandler with SeekHandler {
   final _player = AudioPlayer();
 
   final _settingsBox = Boxes.settingsBox;
@@ -30,7 +30,7 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
 
   final audioSessionHandler = AudioSessionHandler();
 
-  AudioPlayerHandler() {
+  AudioServiceHandler() {
     _listenForPositionChanges();
     _listenForCurrentSongIndexChanges();
     _listenForDurationChanges();

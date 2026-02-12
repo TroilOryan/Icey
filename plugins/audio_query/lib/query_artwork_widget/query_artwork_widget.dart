@@ -33,7 +33,7 @@ class QueryArtworkWidget extends StatelessWidget {
   /// Used to find and get image.
   ///
   /// All Audio/Song has a unique [id].
-  final int id;
+  final String id;
 
   /// Used to call the platform specific method.
   ///

@@ -13,7 +13,7 @@ class MediaEntity {
   final bool favorite;
 
   @HiveField(1)
-  final int id;
+  final String id;
 
   @HiveField(2)
   final String title;
@@ -22,13 +22,13 @@ class MediaEntity {
   final String? artist;
 
   @HiveField(4)
-  final BigInt? artistID;
+  final String? artistID;
 
   @HiveField(5)
   final String? album;
 
   @HiveField(6)
-  final BigInt? albumID;
+  final String? albumID;
 
   @HiveField(7)
   final int? track;
@@ -90,12 +90,12 @@ class MediaEntity {
 
   MediaEntity copyWith({
     bool? favorite,
-    int? id,
+    String? id,
     String? title,
     String? artist,
-    BigInt? artistID,
+    String? artistID,
     String? album,
-    BigInt? albumID,
+    String? albumID,
     int? track,
     int? year,
     int? duration,

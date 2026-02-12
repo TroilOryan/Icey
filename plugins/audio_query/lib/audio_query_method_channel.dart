@@ -38,14 +38,14 @@ class MethodChannelAudioQuery extends AudioQueryPlatform {
 
   @override
   Future queryArtworkWithColor(
-    int id,
+    String id,
     ArtworkType type, {
     ArtworkFormat? format,
     int? size,
     int? quality,
   }) async {
     final res = await methodChannel.invokeMethod('queryArtworkWithColor', {
-      "id": id,
+      "id": int.parse(id),
       "type": type.index,
       "format": format != null ? format.index : ArtworkFormat.JPEG.index,
       "size": size ?? 200,
@@ -57,14 +57,14 @@ class MethodChannelAudioQuery extends AudioQueryPlatform {
 
   @override
   Future<Uint8List?> queryArtwork(
-    int id,
+    String id,
     ArtworkType type, {
     ArtworkFormat? format,
     int? size,
     int? quality,
   }) async {
     return await methodChannel.invokeMethod('queryArtwork', {
-      "id": id,
+      "id": int.parse(id),
       "type": type.index,
       "format": format != null ? format.index : ArtworkFormat.JPEG.index,
       "size": size ?? 200,

@@ -1,4 +1,5 @@
 import 'package:IceyPlayer/constants/strings.dart';
+import 'package:IceyPlayer/src/rust/api/utils.dart';
 import 'package:animated_gradient_background/animated_gradient_background.dart';
 import 'package:IceyPlayer/components/button/button.dart';
 import 'package:flutter/material.dart';

@@ -1,7 +1,9 @@
 part of 'main.dart';
 
 Future<void> initHive() async {
-  await Hive.initFlutter();
+  final dir = await CommonHelper().getAppDataDir();
+
+  await Hive.initFlutter(path.join(dir.path, 'hive'));
 
   Hive.registerAdapter(MediaEntityAdapter(), override: true);
   Hive.registerAdapter(MediaOrderEntityAdapter(), override: true);
@@ -46,7 +48,7 @@ Future<void> initDesktop() async {
   await windowManager.ensureInitialized();
 
   WindowOptions windowOptions = WindowOptions(
-    size: Size(400, 600),
+    size: const Size(1600, 900),
     center: true,
     backgroundColor: Colors.transparent,
     skipTaskbar: false,
@@ -76,10 +78,10 @@ Future<void> initServices() async {
 
   final medias = MediaHelper.queryLocalMedia(init: true);
 
-  final audioPlayerHandler = AudioPlayerHandler();
+  final audioServiceHandler = AudioServiceHandler();
 
   final audioService = await AudioService.init(
-    builder: () => audioPlayerHandler,
+    builder: () => audioServiceHandler,
     config: const AudioServiceConfig(
       androidNotificationChannelId: "com.IceyPlayer.channel.audio",
       androidNotificationChannelName: "Audio playback",

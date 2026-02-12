@@ -83,7 +83,7 @@ class _MediaOrderState extends State<MediaOrder> {
     final hasLikedOrder = state.mediaOrder.value.indexWhere((e) => e.id == '0');
 
     if (_likedBox.values.isNotEmpty && hasLikedOrder == -1) {
-      final List<int> mediaIDs = _likedBox.keys.toList().cast<int>();
+      final List<String> mediaIDs = _likedBox.keys.toList().cast<String>();
 
       final mediaOrder = List.from(state.mediaOrder.value);
 

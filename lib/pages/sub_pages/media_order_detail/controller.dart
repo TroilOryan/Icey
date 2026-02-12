@@ -58,7 +58,7 @@ class MediaOrderDetailController {
     );
   }
 
-  void handleUnlike(int id) {
+  void handleUnlike(String id) {
     MediaHelper.likeMedia(id.toString(), false);
 
     final mediaList = List<MediaEntity>.from(state.mediaList.value);
