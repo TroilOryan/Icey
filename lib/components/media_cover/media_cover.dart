@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:IceyPlayer/components/scroll_aware_future_builder/scroll_aware_future_builder.dart';
 import 'package:IceyPlayer/helpers/platform.dart';
 import 'package:IceyPlayer/src/rust/api/tag_reader.dart';
 import 'package:audio_query/query_artwork_widget/query_artwork_widget.dart';
@@ -40,29 +41,33 @@ class MediaCover extends StatelessWidget {
   Widget build(BuildContext context) {
     if (showDefault != true && id != null) {
       if (PlatformHelper.isDesktop) {
-        return FutureBuilder(
-          future: getPictureFromPath(
+        return ScrollAwareFutureBuilder(
+          future: () => getPictureFromPath(
             path: id!,
             width: (width ?? size).toInt(),
             height: (height ?? size).toInt(),
           ),
           builder: (context, snapshot) {
+            if (snapshot.data == null) {
+              return Container(
+                width: width ?? size,
+                height: height ?? size,
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(borderRadius: borderRadius),
+                child: MediaDefaultCover(
+                  size: Size(width ?? size, height ?? size),
+                  isDarkMode: isDarkMode,
+                  borderRadius: borderRadius,
+                ),
+              );
+            }
+
             return Container(
               clipBehavior: Clip.antiAlias,
+              width: width ?? size,
+              height: height ?? size,
               decoration: BoxDecoration(borderRadius: borderRadius),
-              child: snapshot.data == null
-                  ? Container(
-                      width: width ?? size,
-                      height: height ?? size,
-                      clipBehavior: Clip.antiAlias,
-                      decoration: BoxDecoration(borderRadius: borderRadius),
-                      child: MediaDefaultCover(
-                        size: Size(width ?? size, height ?? size),
-                        isDarkMode: isDarkMode,
-                        borderRadius: borderRadius,
-                      ),
-                    )
-                  : Image.memory(snapshot.data!, gaplessPlayback: true),
+              child: Image.memory(snapshot.data!, gaplessPlayback: true),
             );
           },
         );

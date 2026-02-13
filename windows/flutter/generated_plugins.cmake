@@ -3,6 +3,7 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  audio_service_win
   file_selector_windows
   just_audio_windows
   permission_handler_windows

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:IceyPlayer/helpers/platform.dart';
 import 'package:IceyPlayer/models/lyric/lyric.dart';
 import 'package:audio_metadata_reader/audio_metadata_reader.dart';
 import 'package:audio_query/audio_query.dart';
@@ -201,7 +202,7 @@ class MediaManager {
       _playMode.value = mode;
     } else {
       const l = [
-        PlayMode.signalLoop,
+        PlayMode.singleLoop,
         PlayMode.listLoop,
         PlayMode.random,
         PlayMode.listOrder,
@@ -230,7 +231,10 @@ class MediaManager {
   }
 
   Future<void> loadPlaylist(List<MediaItem> value) async {
-    // await _audioService.loadPlaylist(value);
+    if (PlatformHelper.isDesktop) {
+      return;
+    }
+    await _audioService.loadPlaylist(value);
   }
 
   void addToQueue(int index, MediaEntity media) {

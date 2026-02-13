@@ -9,7 +9,8 @@ import 'package:IceyPlayer/services/play_mode.dart';
 import 'audio_session.dart';
 import 'custom_shuffle_order.dart';
 
-class AudioServiceHandler extends BaseAudioHandler with SeekHandler {
+class AudioServiceHandler extends BaseAudioHandler
+    with QueueHandler, SeekHandler {
   final _player = AudioPlayer();
 
   final _settingsBox = Boxes.settingsBox;
@@ -173,7 +174,7 @@ class AudioServiceHandler extends BaseAudioHandler with SeekHandler {
 
   void setPlayMode(PlayMode playMode) {
     switch (playMode) {
-      case PlayMode.signalLoop:
+      case PlayMode.singleLoop:
         setRepeatMode(AudioServiceRepeatMode.one);
         setShuffleMode(AudioServiceShuffleMode.none);
         break;

@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:IceyPlayer/components/persistent_header/persistent_header.dart';
+import 'package:IceyPlayer/helpers/platform.dart';
 import 'package:IceyPlayer/helpers/toast/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sficon/flutter_sficon.dart';
@@ -63,7 +64,7 @@ class HeaderAppBar extends StatelessWidget {
     final paddingTop = MediaQuery.of(context).padding.top;
 
     return SliverPersistentHeader(
-      pinned: true,
+      pinned: !PlatformHelper.isDesktop,
       floating: false,
       delegate: PersistentHeaderBuilder(
         min: kToolbarHeight + paddingTop,

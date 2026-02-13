@@ -1,3 +1,4 @@
+import 'package:IceyPlayer/helpers/platform.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:IceyPlayer/models/media/media.dart';
 import 'package:IceyPlayer/models/settings/settings.dart';
@@ -11,6 +12,8 @@ class AudioSessionHandler {
   }
 
   AudioSessionHandler() {
+    if (PlatformHelper.isDesktop) return;
+
     initSession();
   }
 

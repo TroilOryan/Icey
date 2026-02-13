@@ -3,7 +3,7 @@ import 'package:flutter_sficon/flutter_sficon.dart';
 
 /// 播放模式
 enum PlayMode {
-  signalLoop(
+  singleLoop(
     value: 1,
     name: "单曲循环",
     icon: SFIcons.sf_repeat_1,

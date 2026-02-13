@@ -78,9 +78,16 @@ class _TitleBarActionState extends State<TitleBarAction> with WindowListener {
   Widget build(BuildContext context) {
     return Positioned(
       right: 16,
-      top: 8,
+      top: 0,
+      height: 60,
+      width: MediaQuery.of(context).size.width,
       child: Row(
         children: [
+          Flexible(
+            child: DragToMoveArea(
+              child: SizedBox(width: double.infinity, height: 60),
+            ),
+          ),
           IconButton(
             tooltip: "最小化",
             onPressed: handleMinimize,

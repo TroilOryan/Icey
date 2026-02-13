@@ -1,3 +1,4 @@
+import 'package:IceyPlayer/helpers/platform.dart';
 import 'package:audio_query/entities.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:hive_ce/hive.dart';
@@ -132,7 +133,7 @@ class MediaEntity {
     );
   }
 
-  static MediaEntity fromMediaStore(AudioEntity audio) {
+  static MediaEntity fromMediaStore(AudioEntity audio, {bool? isSecond}) {
     return MediaEntity(
       id: audio.id,
       favorite: false,
@@ -143,7 +144,9 @@ class MediaEntity {
       albumID: audio.albumID,
       track: audio.track,
       year: audio.year,
-      duration: audio.duration,
+      duration: isSecond == true
+          ? (audio.duration ?? 0) * 1000
+          : audio.duration,
       data: audio.data,
       uri: audio.uri,
       dateAdded: audio.dateAdded,
@@ -157,18 +160,19 @@ class MediaEntity {
   }
 
   static MediaItem toMediaItem(MediaEntity media) => MediaItem(
-          id: media.id.toString(),
-          album: media.album ?? '',
-          title: media.title,
-          artist: media.artist,
-          duration: Duration(milliseconds: media.duration ?? 0),
-          artUri: media.artUri != null ? Uri.parse(media.artUri!) : null,
-          extras: {
-            "uuid": _uuid.v4(),
-            "quality": media.quality,
-            'path': media.data,
-            "uri": media.uri
-          });
+    id: media.id,
+    album: media.album ?? '',
+    title: media.title,
+    artist: media.artist,
+    duration: Duration(milliseconds: media.duration ?? 0),
+    artUri: media.artUri != null ? Uri.parse(media.artUri!) : null,
+    extras: {
+      "uuid": _uuid.v4(),
+      "quality": media.quality,
+      'path': media.data,
+      "uri": media.uri,
+    },
+  );
 }
 
 class MediaEntityAdapter extends TypeAdapter<MediaEntity> {

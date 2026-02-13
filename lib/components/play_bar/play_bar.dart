@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:IceyPlayer/helpers/platform.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 import 'package:signals/signals_flutter.dart';
 
@@ -27,7 +30,7 @@ class PlayBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    final paddingBottom = MediaQuery.of(context).viewPadding.bottom;
+    final paddingBottom = max(MediaQuery.of(context).viewPadding.bottom, 16);
 
     final delta = playBarController.state.delta.watch(context),
         isNext = playBarController.state.isNext.watch(context);
@@ -61,7 +64,7 @@ class PlayBar extends StatelessWidget {
               16,
               0,
               16,
-              paddingBottom == 0 ? 16 + 64 + 12 : paddingBottom + 64 + 12,
+              PlatformHelper.isDesktop ? 16 : paddingBottom + 64 + 12,
             ),
             child: Container(
               height: 64,

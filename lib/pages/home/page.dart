@@ -51,29 +51,32 @@ class _HomePageState extends State<HomePage>
         return widget.navigationShell;
       }
 
-      return Stack(
-        children: [
-          AdvancedDrawer(
-            openRatio: 0.3,
-            openScale: 1,
-            initialDrawerScale: 1,
-            drawer: SideBar(
-              menu: homeController.menu,
-              opened: sideBarOpened,
-              selectedIndex: widget.navigationShell.currentIndex,
-              onTabSelected: (index) => homeController.handleGoBranch(index),
+      return Scaffold(
+        backgroundColor: listBg.isNotEmpty
+            ? Colors.transparent
+            : theme.scaffoldBackgroundColor,
+        body: Stack(
+          alignment: Alignment.bottomCenter,
+          children: [
+            Row(
+              children: [
+                SideBar(
+                  menu: homeController.menu,
+                  opened: sideBarOpened,
+                  selectedIndex: widget.navigationShell.currentIndex,
+                  onTabSelected: (index) =>
+                      homeController.handleGoBranch(index),
+                ),
+                Flexible(child: widget.navigationShell),
+              ],
             ),
-            child: SlidingUpPanel(
-              panel: Text("ss"),
-              body: widget.navigationShell,
-              collapsed: PlayBar(
-                hidePlayBar: hidePlayBar,
-                onTap: () => homeController.handleOpenPanel(context),
-              ),
+            PlayBar(
+              hidePlayBar: hidePlayBar,
+              onTap: () => homeController.handleOpenPanel(context),
             ),
-          ),
-          TitleBarAction(),
-        ],
+            TitleBarAction(),
+          ],
+        ),
       );
     }
 

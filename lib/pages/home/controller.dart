@@ -14,7 +14,6 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:flutter_app_minimizer_plus/flutter_app_minimizer_plus.dart';
 import 'package:IceyPlayer/components/bottom_sheet/bottom_sheet.dart';
 import 'package:IceyPlayer/components/button/button.dart';
@@ -133,6 +132,10 @@ class HomeController {
 
   void handleGoBranch(int index) {
     navigationShell.goBranch(index);
+
+    if (index == state.currentIndex.value) {
+      state.sideBarOpened.value = !state.sideBarOpened.value;
+    }
 
     state.currentIndex.value = index;
   }

@@ -18,6 +18,8 @@ dependencies:
   audio_query:
     path: plugins/audio_query
   audio_service: ^0.18.18
+  audio_service_win:
+    path: plugins/audio_service_win
   audio_session: ^0.2.2
   just_audio: ^0.10.5
   just_audio_windows: ^0.2.2
@@ -27,7 +29,6 @@ dependencies:
   animated_toggle_switch: ^0.8.7
   blur: ^4.0.2
   easy_refresh: ^3.4.0
-  flutter_advanced_drawer: ^1.5.0
   flex_seed_scheme: ^4.0.1
   flutter_lyric:
     path: plugins/flutter_lyric
@@ -37,6 +38,7 @@ dependencies:
   liquid_glass_widgets: ^0.3.0-dev.1
   material_symbols_icons: ^4.2892.0
   scrollview_observer: ^1.26.2
+  sidebarx: ^0.17.2
   sliver_tools: ^0.2.12
   super_sliver_list:
     path: plugins/super_sliver_list

@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:IceyPlayer/components/high_material_wrapper/high_material_wrapper.dart';
 import 'package:IceyPlayer/constants/glass_settings.dart';
+import 'package:IceyPlayer/helpers/platform.dart';
 import 'package:IceyPlayer/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sficon/flutter_sficon.dart';
@@ -20,7 +21,7 @@ class MediaLocator extends StatelessWidget {
     final paddingBottom = MediaQuery.of(context).viewPadding.bottom;
 
     return Positioned(
-      bottom: max(144 + paddingBottom, 166),
+      bottom: PlatformHelper.isDesktop ? 100 : max(144 + paddingBottom, 166),
       right: 20,
       child: FrameSeparateWidget(
         child: GlassPanel(

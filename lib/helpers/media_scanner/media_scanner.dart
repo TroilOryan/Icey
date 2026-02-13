@@ -93,7 +93,9 @@ class MediaScanner {
 
           if (filterShort == true) {
             mediaList = audios
-                .map((MediaEntity.fromMediaStore))
+                .map(
+                  (audio) => MediaEntity.fromMediaStore(audio, isSecond: true),
+                )
                 .where(
                   (audio) =>
                       (audio.duration ?? 0) > 5 &&
@@ -102,16 +104,15 @@ class MediaScanner {
                 .toList();
           } else {
             mediaList = audios
-                .map((MediaEntity.fromMediaStore))
+                .map(
+                  (audio) => MediaEntity.fromMediaStore(audio, isSecond: true),
+                )
                 .where(
                   (audio) =>
                       filterDir.every((dir) => !audio.data.contains(dir)),
                 )
                 .toList();
           }
-
-          print("来了");
-          print(mediaList.length);
 
           await _mediaBox.addAll(mediaList);
 
