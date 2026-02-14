@@ -11,6 +11,12 @@ flutter_rust_bridge = "=2.11.1"
 lofty = "0.21.1"
 serde_json = "1.0.117"
 phf = { version = "0.11", features = ["macros"] }
+anyhow = "1.0.86"
+ttf-parser = "0.24.1"
+image = "0.25.2"
+
+# 仅在 Windows 平台启用 Windows API 依赖
+[target.'cfg(windows)'.dependencies]
 windows = { version = "0.57.0", features = [
     "Media_Playback",
     "Storage",
@@ -23,10 +29,7 @@ windows = { version = "0.57.0", features = [
     "Win32_UI_Shell",
     "Win32_UI_WindowsAndMessaging",
     "UI_ViewManagement",
-] }
-anyhow = "1.0.86"
-ttf-parser = "0.24.1"
-image = "0.25.2"
+]}
 
 [lints.rust]
 unexpected_cfgs = { level = "warn", check-cfg = ['cfg(frb_expand)'] }
