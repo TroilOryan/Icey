@@ -52,8 +52,8 @@
 
 - [x] Android
 - [ ] iOS
-- [ ] Pad
-- [ ] Windows
+- [x] Pad
+- [x] Windows(开始适配中)
 - [ ] Linux
 
 ## feat
