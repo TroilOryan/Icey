@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sficon/flutter_sficon.dart';
 import 'package:keframe/keframe.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 class MediaLocator extends StatelessWidget {
   final VoidCallback onTap;
@@ -20,25 +21,32 @@ class MediaLocator extends StatelessWidget {
 
     final paddingBottom = MediaQuery.of(context).viewPadding.bottom;
 
-    return Positioned(
-      bottom: PlatformHelper.isDesktop ? 100 : max(144 + paddingBottom, 166),
-      right: 20,
-      child: FrameSeparateWidget(
-        child: GlassPanel(
-          padding: EdgeInsets.zero,
-          settings: RecommendedGlassSettings.bottomBar,
-          child: FloatingActionButton(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            onPressed: onTap,
-            child: SFIcon(
-              SFIcons.sf_dot_radiowaves_left_and_right,
-              color: theme.colorScheme.onSurface.withAlpha(
-                AppTheme.defaultAlpha,
-              ),
-            ),
+    final resultWidget = FrameSeparateWidget(
+      child: GlassPanel(
+        padding: EdgeInsets.zero,
+        settings: RecommendedGlassSettings.bottomBar,
+        child: FloatingActionButton(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          onPressed: onTap,
+          child: SFIcon(
+            SFIcons.sf_dot_radiowaves_left_and_right,
+            color: theme.colorScheme.onSurface.withAlpha(AppTheme.defaultAlpha),
           ),
         ),
+      ),
+    );
+
+    return OrientationLayoutBuilder(
+      portrait: (context) => Positioned(
+        bottom: PlatformHelper.isDesktop ? 100 : max(144 + paddingBottom, 166),
+        right: 20,
+        child: resultWidget,
+      ),
+      landscape: (context) => Positioned(
+        bottom: paddingBottom + 64 + 12 + 16,
+        right: 20,
+        child: resultWidget,
       ),
     );
   }

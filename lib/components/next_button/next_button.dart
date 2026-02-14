@@ -23,7 +23,7 @@ class NextButton extends StatelessWidget {
 
   const NextButton({
     super.key,
-    this.ghost = false,
+    this.ghost = true,
     this.size = 24.0,
     this.color,
   });

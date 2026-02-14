@@ -47,12 +47,7 @@ class _AlbumListPageState extends State<AlbumListPage>
     return CustomScrollView(
       controller: homeController.albumListScrollController,
       slivers: [
-        // HeaderAppBar(
-        //   offstage: albumList.isEmpty,
-        //   onPlayRandom: () => {},
-        //   onOpenSortMenu: () => {},
-        // ),
-        HeaderAppBar(onTap: homeController.handleBackTop),
+        HeaderAppBar(title: "专辑", onTap: homeController.handleBackTop),
         SliverPadding(
           padding: EdgeInsets.fromLTRB(24, 0, 24, paddingBottom + 64),
           sliver: SliverGrid(

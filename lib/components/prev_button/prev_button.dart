@@ -16,7 +16,7 @@ class PrevButton extends StatelessWidget {
     super.key,
     this.size = 24.0,
     this.color,
-    this.ghost = false,
+    this.ghost = true,
   });
 
   void skipToPrevious() {

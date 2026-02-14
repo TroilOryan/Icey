@@ -1,10 +1,5 @@
-import 'dart:math';
-import 'dart:ui';
-
-import 'package:IceyPlayer/components/persistent_header/persistent_header.dart';
+import 'package:IceyPlayer/components/header_app_bar/header_app_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:IceyPlayer/components/round_icon_button/round_icon_button.dart';
-import 'package:go_router/go_router.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 class PageWrapper extends StatelessWidget {
@@ -20,59 +15,6 @@ class PageWrapper extends StatelessWidget {
     this.backgroundColor,
     this.padding,
   });
-
-  Widget _buildAppBar({required BuildContext context}) {
-    final paddingTop = MediaQuery.of(context).padding.top;
-
-    return SliverPersistentHeader(
-      pinned: true,
-      floating: false,
-      delegate: PersistentHeaderBuilder(
-        min: kToolbarHeight + paddingTop,
-        max: 150,
-        builder: (ctx, offset) => ClipRect(
-          clipBehavior: Clip.antiAlias,
-          child: BackdropFilter(
-            enabled: offset > 20,
-            filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
-            child: Container(
-              padding: EdgeInsets.fromLTRB(0, paddingTop, 0, 0),
-              alignment: Alignment.centerLeft,
-              child: Stack(
-                children: [
-                  if (context.canPop())
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Container(
-                        height: 36,
-                        margin: EdgeInsets.fromLTRB(24, 4, 0, 0),
-                        child: RoundIconButton(
-                          icon: const Icon(Icons.arrow_back),
-                          onTap: context.pop,
-                        ),
-                      ),
-                    ),
-                  Center(
-                    child: Text(
-                      title,
-                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        fontSize:
-                            Theme.of(context).textTheme.titleLarge!.fontSize! *
-                            max((1.5 - offset / 200), 0.8),
-                      ),
-                      textAlign: TextAlign.center,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 
   Widget _buildBody({required BuildContext context}) {
     final paddingBottom = MediaQuery.of(context).padding.bottom;
@@ -98,7 +40,7 @@ class PageWrapper extends StatelessWidget {
         slivers: [
           MultiSliver(
             children: [
-              _buildAppBar(context: context),
+              HeaderAppBar(title: title, centerTitle: true),
               _buildBody(context: context),
             ],
           ),

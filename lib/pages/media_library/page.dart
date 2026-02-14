@@ -30,7 +30,7 @@ class _MediaLibraryPageState extends State<MediaLibraryPage>
 
     final noAzList = computed(
       () =>
-      mediaList.isEmpty ||
+          mediaList.isEmpty ||
           (sortType != MediaSort.title && sortType != MediaSort.artist),
     );
 
@@ -63,8 +63,8 @@ class _MediaLibraryPageState extends State<MediaLibraryPage>
                 MultiSliver(
                   children: <Widget>[
                     HeaderAppBar(
-                      onPlayRandom: homeController.handlePlayRandom,
-                      onOpenSortMenu: controller.handleOpenSortMenu,
+                      title: "媒体库",
+                      action: controller.headerAppBarAction,
                       onTap: homeController.handleBackTop,
                     ),
 
@@ -99,9 +99,7 @@ class _MediaLibraryPageState extends State<MediaLibraryPage>
           onSelectionEnd: controller.handleSelectionEnd,
         ),
 
-        MediaLocator(
-          onTap: homeController.handleLocate,
-        ),
+        MediaLocator(onTap: homeController.handleLocate),
       ],
     );
   }

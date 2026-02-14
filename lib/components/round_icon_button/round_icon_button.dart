@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 class RoundIconButton extends StatelessWidget {
   final Color? color;
   final Widget icon;
-  final double? size;
-  final double? iconSize;
+  final double size;
+  final double iconSize;
   final bool ghost;
   final VoidCallback onTap;
   final VoidCallback? onLongPress;
@@ -12,11 +12,11 @@ class RoundIconButton extends StatelessWidget {
   const RoundIconButton({
     super.key,
     this.color,
-    this.size,
-    this.iconSize,
+    this.size = 36,
+    this.iconSize = 16,
     required this.icon,
     required this.onTap,
-    this.ghost = false,
+    this.ghost = true,
     this.onLongPress,
   });
 
@@ -24,21 +24,21 @@ class RoundIconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Ink(
-      width: size ?? 36,
-      height: size ?? 36,
-      decoration: ghost
-          ? null
-          : ShapeDecoration(
-              color: theme.secondaryHeaderColor,
-              shape: const CircleBorder(),
-            ),
-      child: IconButton(
-        color: color,
-        iconSize: iconSize ?? 16,
-        icon: icon,
-        onPressed: onTap,
-        onLongPress: onLongPress,
+    return Material(
+      color: ghost ? Colors.transparent : theme.appBarTheme.backgroundColor,
+      elevation: 6,
+      shadowColor: theme.textTheme.titleLarge!.color!.withAlpha(55),
+      shape: const CircleBorder(),
+      child: Ink(
+        width: size,
+        height: size,
+        child: IconButton(
+          color: color,
+          iconSize: iconSize,
+          icon: icon,
+          onPressed: onTap,
+          onLongPress: onLongPress,
+        ),
       ),
     );
   }

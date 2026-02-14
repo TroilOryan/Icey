@@ -71,10 +71,11 @@ Future<void> main() async {
   Catcher2(
     debugConfig: debugConfig,
     releaseConfig: releaseConfig,
-    rootWidget: DevicePreview(
-      enabled: !kReleaseMode,
-      builder: (context) => const App(),
-    ),
+    // rootWidget: DevicePreview(
+    //   enabled: !kReleaseMode,
+    //   builder: (context) => const App(),
+    // ),
+    rootWidget: const App(),
   );
 }
 

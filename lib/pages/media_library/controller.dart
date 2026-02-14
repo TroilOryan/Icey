@@ -1,7 +1,9 @@
+import 'package:IceyPlayer/components/header_app_bar/header_app_bar.dart';
 import 'package:IceyPlayer/event_bus/event_bus.dart';
 import 'package:IceyPlayer/helpers/platform.dart';
 import 'package:IceyPlayer/pages/media_library/media_locator/media_locator.dart';
 import 'package:easy_refresh/easy_refresh.dart';
+import 'package:flutter_sficon/flutter_sficon.dart';
 import 'package:go_router/go_router.dart';
 import 'package:IceyPlayer/helpers/media_scanner/media_scanner.dart';
 import 'package:IceyPlayer/helpers/media_scanner/media_sort.dart';
@@ -19,7 +21,6 @@ import 'package:sliver_tools/sliver_tools.dart';
 import 'az_list_cursor/az_list_cursor.dart';
 import 'az_list_cursor/media_list_cursor.dart';
 import 'az_list_index_bar/media_list_index_bar.dart';
-import 'header_app_bar/header_app_bar.dart';
 
 part 'page.dart';
 
@@ -31,6 +32,17 @@ class MediaLibraryController {
   final state = MediaLibraryState();
 
   final FocusNode focusNode = FocusNode();
+
+  late final headerAppBarAction = [
+    HeaderAppBarAction(
+      icon: SFIcons.sf_shuffle,
+      onTap: homeController.handlePlayRandom,
+    ),
+    HeaderAppBarAction(
+      icon: SFIcons.sf_list_bullet,
+      onTap: handleOpenSortMenu
+    ),
+  ];
 
   void handleNavToSearch(BuildContext context) {
     context.push("/search");

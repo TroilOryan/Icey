@@ -1,7 +1,12 @@
+import 'package:IceyPlayer/helpers/platform.dart';
 import 'package:IceyPlayer/pages/home/controller.dart';
 import 'package:IceyPlayer/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:sidebarx/sidebarx.dart';
+import 'package:responsive_builder/responsive_builder.dart';
+
+final _isDesktop = PlatformHelper.isDesktop;
+
+final double _maxWidth = _isDesktop ? 300 : 150;
 
 class SideBar extends StatelessWidget {
   final List<MenuData> menu;
@@ -31,29 +36,39 @@ class SideBar extends StatelessWidget {
       width: 44,
     );
 
+    final logoArea = [
+      logo,
+      Text("Icey Player", style: theme.textTheme.titleMedium),
+    ];
+
+    final paddingLeft = MediaQuery.of(context).viewPadding.left;
+
     return AnimatedContainer(
       duration: AppTheme.defaultDuration,
       curve: Curves.easeInOutSine,
-      width: opened ? 300 : 60,
+      width: (opened ? _maxWidth : 60) + paddingLeft,
       color: theme.cardTheme.color,
       padding: opened
-          ? const EdgeInsets.symmetric(horizontal: 16, vertical: 16)
-          : const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+          ? EdgeInsets.fromLTRB(paddingLeft + 16, 16, 16, 16)
+          : EdgeInsets.fromLTRB(paddingLeft + 8, 16, 8, 16),
       child: Column(
         spacing: 16,
         children: [
-          Container(
-            height: 60,
-            child: opened
-                ? Row(
-                    spacing: 12,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      logo,
-                      Text("Icey Player", style: theme.textTheme.titleMedium),
-                    ],
-                  )
-                : logo,
+          OrientationLayoutBuilder(
+            portrait: (context) => SizedBox(
+              height: 60,
+              child: opened
+                  ? Row(
+                      spacing: 12,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: logoArea,
+                    )
+                  : logo,
+            ),
+            landscape: (context) => SizedBox(
+              height: opened ? 80 : 60,
+              child: opened ? Column(children: logoArea) : logo,
+            ),
           ),
           ...menu.map((e) {
             final selected = selectedIndex == menu.indexOf(e);

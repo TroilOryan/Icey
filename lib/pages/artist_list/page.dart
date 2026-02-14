@@ -47,12 +47,7 @@ class _ArtistListPageState extends State<ArtistListPage>
     return CustomScrollView(
       controller: homeController.artistListScrollController,
       slivers: [
-        // HeaderAppBar(
-        //   offstage: artistList.isEmpty,
-        //   onPlayRandom: () => {},
-        //   onOpenSortMenu: () => {},
-        // ),
-        HeaderAppBar(onTap: homeController.handleBackTop),
+        HeaderAppBar(title: "艺术家", onTap: homeController.handleBackTop),
         SliverPadding(
           padding: EdgeInsets.fromLTRB(24, 0, 24, paddingBottom + 64),
           sliver: SliverGrid(
