@@ -46,95 +46,95 @@ class _HomePageState extends State<HomePage>
     final isDarkMode =
         MediaQuery.of(context).platformBrightness == Brightness.dark;
 
-    if (PlatformHelper.isDesktop) {
-      if (mediaList.isEmpty) {
-        return widget.navigationShell;
-      }
-
-      return Scaffold(
-        backgroundColor: listBg.isNotEmpty
-            ? Colors.transparent
-            : theme.scaffoldBackgroundColor,
-        body: Stack(
-          alignment: Alignment.bottomCenter,
-          children: [
-            Row(
+    return ResponsiveBuilder(
+      builder: (context, sizing) {
+        if (sizing.deviceScreenType == DeviceScreenType.desktop) {
+          return Scaffold(
+            backgroundColor: listBg.isNotEmpty
+                ? Colors.transparent
+                : theme.scaffoldBackgroundColor,
+            body: Stack(
+              alignment: Alignment.bottomCenter,
               children: [
-                SideBar(
-                  menu: homeController.menu,
-                  opened: sideBarOpened,
-                  selectedIndex: widget.navigationShell.currentIndex,
-                  onTabSelected: (index) =>
-                      homeController.handleGoBranch(index),
-                ),
-                Flexible(child: widget.navigationShell),
-              ],
-            ),
-            PlayBar(
-              hidePlayBar: hidePlayBar,
-              onTap: () => homeController.handleOpenPanel(context),
-            ),
-            TitleBarAction(),
-          ],
-        ),
-      );
-    }
-
-    return PopScope(
-      canPop: !panelOpened,
-      onPopInvokedWithResult: homeController.handlePopInvokedWithResult,
-      child: LiquidGlassScope.stack(
-        background: listBg.isNotEmpty
-            ? Stack(
-                children: [
-                  Image.memory(
-                    listBg,
-                    fit: BoxFit.cover,
-                    width: deviceWidth,
-                    height: deviceHeight,
-                    gaplessPlayback: true,
-                  ),
-                  Offstage(
-                    offstage: !isDarkMode,
-                    child: Container(
-                      color: Colors.black45,
-                      width: deviceWidth,
-                      height: deviceHeight,
+                Row(
+                  children: [
+                    SideBar(
+                      menu: homeController.menu,
+                      opened: sideBarOpened,
+                      selectedIndex: widget.navigationShell.currentIndex,
+                      onTabSelected: (index) =>
+                          homeController.handleGoBranch(index),
                     ),
-                  ),
-                ],
-              )
-            : Container(),
-        content: Scaffold(
-          extendBodyBehindAppBar: true,
-          extendBody: true,
-          resizeToAvoidBottomInset: false,
-          backgroundColor: listBg.isNotEmpty
-              ? Colors.transparent
-              : theme.scaffoldBackgroundColor,
-          bottomNavigationBar: mediaList.isNotEmpty
-              ? BottomBar(
-                  menu: homeController.menu,
-                  selectedIndex: widget.navigationShell.currentIndex,
-                  onSearch: () => homeController.navToSearch(context),
-                  onTabSelected: (index) =>
-                      homeController.handleGoBranch(index),
-                )
-              : null,
-          body: Stack(
-            alignment: Alignment.bottomCenter,
-            children: [
-              widget.navigationShell,
-
-              if (mediaList.isNotEmpty)
+                    Flexible(child: widget.navigationShell),
+                  ],
+                ),
                 PlayBar(
                   hidePlayBar: hidePlayBar,
                   onTap: () => homeController.handleOpenPanel(context),
                 ),
-            ],
+                TitleBarAction(),
+              ],
+            ),
+          );
+        }
+
+        return PopScope(
+          canPop: !panelOpened,
+          onPopInvokedWithResult: homeController.handlePopInvokedWithResult,
+          child: LiquidGlassScope.stack(
+            background: listBg.isNotEmpty
+                ? Stack(
+                    children: [
+                      Image.memory(
+                        listBg,
+                        fit: BoxFit.cover,
+                        width: deviceWidth,
+                        height: deviceHeight,
+                        gaplessPlayback: true,
+                      ),
+                      Offstage(
+                        offstage: !isDarkMode,
+                        child: Container(
+                          color: Colors.black45,
+                          width: deviceWidth,
+                          height: deviceHeight,
+                        ),
+                      ),
+                    ],
+                  )
+                : Container(),
+            content: Scaffold(
+              extendBodyBehindAppBar: true,
+              extendBody: true,
+              resizeToAvoidBottomInset: false,
+              backgroundColor: listBg.isNotEmpty
+                  ? Colors.transparent
+                  : theme.scaffoldBackgroundColor,
+              bottomNavigationBar: mediaList.isNotEmpty
+                  ? BottomBar(
+                      menu: homeController.menu,
+                      selectedIndex: widget.navigationShell.currentIndex,
+                      onSearch: () => homeController.navToSearch(context),
+                      onTabSelected: (index) =>
+                          homeController.handleGoBranch(index),
+                    )
+                  : null,
+              body: Stack(
+                alignment: Alignment.bottomCenter,
+                children: [
+                  widget.navigationShell,
+
+                  if (mediaList.isNotEmpty)
+                    PlayBar(
+                      hidePlayBar: hidePlayBar,
+                      onTap: () => homeController.handleOpenPanel(context),
+                    ),
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

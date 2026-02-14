@@ -1,13 +1,11 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:IceyPlayer/components/sliding_up_panel/sliding_up_panel.dart';
 import 'package:IceyPlayer/helpers/platform.dart';
 import 'package:IceyPlayer/models/lyric/lyric.dart';
 import 'package:IceyPlayer/pages/home/bottom_bar/bottom_bar.dart';
 import 'package:IceyPlayer/pages/home/side_bar/side_bar.dart';
 import 'package:IceyPlayer/pages/home/title_bar_action/title_bar_action.dart';
-import 'package:IceyPlayer/pages/media_library/media_empty/media_empty.dart';
 import 'package:audio_query/entities.dart';
 import 'package:common_utils/common_utils.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
@@ -36,7 +34,7 @@ import 'package:scrollview_observer/scrollview_observer.dart';
 import 'package:signals/signals_flutter.dart';
 import 'package:super_sliver_list/super_sliver_list.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
-
+import 'package:responsive_builder/responsive_builder.dart';
 import '../../main.dart';
 import 'state.dart';
 

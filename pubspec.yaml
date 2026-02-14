@@ -58,6 +58,9 @@ dependencies:
     path: plugins/open_app
   url_launcher: ^6.3.2
 
+  ## 屏幕适配
+  responsive_builder: ^0.7.1
+
   ## 高帧率
   flutter_displaymode: ^0.7.0
 
@@ -73,6 +76,7 @@ dependencies:
 
   ## 日志
   catcher_2: ^2.1.5
+  device_preview_plus: ^2.6.1
   logger: ^2.6.2
 
   ## 设备信息

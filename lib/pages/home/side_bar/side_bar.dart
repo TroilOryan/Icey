@@ -32,7 +32,8 @@ class SideBar extends StatelessWidget {
     );
 
     return AnimatedContainer(
-      duration: AppTheme.defaultDurationMid,
+      duration: AppTheme.defaultDuration,
+      curve: Curves.easeInOutSine,
       width: opened ? 300 : 60,
       color: theme.cardTheme.color,
       padding: opened

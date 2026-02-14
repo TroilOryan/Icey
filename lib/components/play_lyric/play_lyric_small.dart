@@ -1,5 +1,4 @@
 import 'package:IceyPlayer/components/play_lyric_shader_mask/play_lyric_shader_mask.dart';
-import 'package:IceyPlayer/components/responsive_builder/responsive_builder.dart';
 import 'package:IceyPlayer/models/lyric/lyric.dart';
 import 'package:IceyPlayer/models/media/media.dart';
 import 'package:flutter/material.dart';
@@ -125,8 +124,8 @@ class _PlayLyricSmallState extends State<PlayLyricSmall> {
 
     return GestureDetector(
       onTap: widget.onTap,
-      child: ResponsiveBuilder(
-        builder: (context, screenType) {
+      child: Builder(
+        builder: (context) {
           final parsedLyric = lyricManager.parsedLyric.watch(context),
               currentIndex = lyricManager.currentIndex.watch(context);
 

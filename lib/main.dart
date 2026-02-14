@@ -14,8 +14,10 @@ import 'package:IceyPlayer/router/router.dart';
 import 'package:IceyPlayer/services/audio_service.dart';
 import 'package:IceyPlayer/theme/theme.dart';
 import 'package:common_utils/common_utils.dart';
+import 'package:device_preview_plus/device_preview_plus.dart';
 import 'package:flex_seed_scheme/flex_seed_scheme.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -69,7 +71,10 @@ Future<void> main() async {
   Catcher2(
     debugConfig: debugConfig,
     releaseConfig: releaseConfig,
-    rootWidget: const App(),
+    rootWidget: DevicePreview(
+      enabled: !kReleaseMode,
+      builder: (context) => const App(),
+    ),
   );
 }
 
