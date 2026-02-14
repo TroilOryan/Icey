@@ -26,6 +26,22 @@ jobs:
           channel: stable
           flutter-version-file: pubspec.yaml
 
+      - name: 设置Rust环境
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-ios,x86_64-apple-ios,aarch64-apple-darwin,x86_64-apple-darwin
+
+      - name: Rust缓存
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('** /Cargo.lock') }}
+
       - name: Set and Extract version
         shell: pwsh
         run: ./build.ps1

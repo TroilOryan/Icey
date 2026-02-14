@@ -26,6 +26,11 @@ jobs:
           channel: stable
           flutter-version-file: pubspec.yaml
 
+      - name: 设置Rust环境
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-pc-windows-msvc
+
       - name: Add fastforge and Inno Setup
         run: |
           dart pub global activate fastforge

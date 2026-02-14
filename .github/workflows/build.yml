@@ -82,6 +82,24 @@ jobs:
                   dry-run: false
                   git-source: https://github.com/flutter/flutter.git
 
+            - name: 设置Rust环境
+              uses: dtolnay/rust-toolchain@stable
+              with:
+                  targets: aarch64-linux-android,armv7-linux-androideabi,x86_64-linux-android
+
+            - name: Rust缓存
+              uses: actions/cache@v4
+              with:
+                  path: |
+                      ~/.cargo/bin/
+                      ~/.cargo/registry/index/
+                      ~/.cargo/registry/cache/
+                      ~/.cargo/git/db/
+                      target/
+                  key: ${{ runner.os }}-cargo-${{ hashFiles(' **/Cargo.lock') }}
+                  restore-keys: |
+                      ${{ runner.os }}-cargo-
+
             - name: 写入签名
               if: github.event_name == 'workflow_dispatch'
               run: |

@@ -47,6 +47,11 @@ jobs:
           flutter-version-file: pubspec.yaml
           cache: true
 
+      - name: 设置Rust环境
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-unknown-linux-gnu
+
       - name: Set and Extract version
         shell: pwsh
         run: ./build.ps1
