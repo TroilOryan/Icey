@@ -26,7 +26,7 @@ class RoundIconButton extends StatelessWidget {
 
     return Material(
       color: ghost ? Colors.transparent : theme.appBarTheme.backgroundColor,
-      elevation: 6,
+      elevation: ghost ? 0 : 3,
       shadowColor: theme.textTheme.titleLarge!.color!.withAlpha(55),
       shape: const CircleBorder(),
       child: Ink(

@@ -2,7 +2,7 @@ name: IceyPlayer
 description: "A new Flutter project."
 publish_to: 'none'
 
-version: 1.0.28+29
+version: 1.0.29+30
 
 environment:
   sdk: ">=3.10.0"
@@ -119,7 +119,7 @@ dependencies:
   window_manager: ^0.5.1
   rust_lib_icey:
     path: rust_builder
-  flutter_rust_bridge: 2.11.1
+  flutter_rust_bridge: 2.9.0
 
 dependency_overrides:
   rxdart: ^0.28.0

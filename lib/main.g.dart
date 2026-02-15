@@ -12,11 +12,11 @@ Future<void> initHive() async {
 
   await Hive.openBox(BoxKey.settings);
 
-  Hive.openBox(BoxKey.liked);
+  await Hive.openBox(BoxKey.liked);
 
-  Hive.openBox(BoxKey.mediaCount);
+  await Hive.openBox(BoxKey.mediaCount);
 
-  Hive.openBox(BoxKey.mediaOrder);
+  await Hive.openBox(BoxKey.mediaOrder);
 }
 
 void setDisplayMode() {

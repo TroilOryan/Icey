@@ -5,6 +5,7 @@ import 'package:sliver_tools/sliver_tools.dart';
 class PageWrapper extends StatelessWidget {
   final String title;
   final Widget body;
+  final bool ghost;
   final Color? backgroundColor;
   final EdgeInsetsGeometry? padding;
 
@@ -12,6 +13,7 @@ class PageWrapper extends StatelessWidget {
     super.key,
     required this.title,
     required this.body,
+    this.ghost = false,
     this.backgroundColor,
     this.padding,
   });
@@ -40,7 +42,7 @@ class PageWrapper extends StatelessWidget {
         slivers: [
           MultiSliver(
             children: [
-              HeaderAppBar(title: title, centerTitle: true),
+              HeaderAppBar(title: title, ghost: ghost, centerTitle: true),
               _buildBody(context: context),
             ],
           ),

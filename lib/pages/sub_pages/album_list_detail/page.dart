@@ -60,6 +60,7 @@ class AlbumListDetailPage extends StatelessWidget {
 
           PageWrapper(
             title: "",
+            ghost: true,
             backgroundColor: Colors.transparent,
             body: MultiSliver(
               children: [

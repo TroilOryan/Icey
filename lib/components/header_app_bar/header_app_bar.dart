@@ -18,6 +18,7 @@ class HeaderAppBarAction {
 class HeaderAppBar extends StatelessWidget {
   final String title;
   final bool centerTitle;
+  final bool ghost;
   final List<HeaderAppBarAction>? action;
   final VoidCallback? onTap;
 
@@ -25,6 +26,7 @@ class HeaderAppBar extends StatelessWidget {
     super.key,
     required this.title,
     this.centerTitle = false,
+    this.ghost = false,
     this.action,
     this.onTap,
   });
@@ -70,13 +72,15 @@ class HeaderAppBar extends StatelessWidget {
         builder: (ctx, offset) => ClipRect(
           clipBehavior: Clip.antiAlias,
           child: BackdropFilter(
-            enabled: offset > 20,
+            enabled: !ghost && offset > 20,
             filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
             child: GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: onTap,
               child: Container(
-                color: theme.scaffoldBackgroundColor.withAlpha(200),
+                color: ghost
+                    ? null
+                    : theme.scaffoldBackgroundColor.withAlpha(200),
                 alignment: Alignment.centerLeft,
                 padding: centerTitle
                     ? EdgeInsets.only(top: paddingTop)
