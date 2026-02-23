@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:IceyPlayer/models/settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:signals/signals_flutter.dart';
@@ -52,7 +54,7 @@ class Portrait extends StatelessWidget {
     final deviceWidth = MediaQuery.of(context).size.width;
 
     return Padding(
-      padding: EdgeInsets.only(bottom: paddingBottom == 0 ? 16 : paddingBottom),
+      padding: EdgeInsets.only(bottom: max(paddingBottom, 16)),
       child: Stack(
         children: [
           buildPlayCover(
@@ -60,12 +62,9 @@ class Portrait extends StatelessWidget {
             onTap: () => onOpenLyric(context),
             deviceWidth: deviceWidth,
           ),
-          PlayInfo( lyricOpened: lyricOpened),
+          PlayInfo(lyricOpened: lyricOpened),
           LyricPage(lyricOpened: lyricOpened),
-          PlayPage(
-            lyricOpened: lyricOpened,
-            onOpenLyric: onOpenLyric,
-          ),
+          PlayPage(lyricOpened: lyricOpened, onOpenLyric: onOpenLyric),
           ActionBar(),
         ],
       ),
