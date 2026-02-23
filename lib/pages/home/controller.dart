@@ -365,7 +365,8 @@ class HomeController {
 
       state.scanEnded.value = true;
 
-      if (mediaScanListController?.position != null) {
+      if (mediaScanListController!.hasClients &&
+          mediaScanListController?.position != null) {
         mediaScanListController!.jumpTo(
           mediaScanListController!.position.maxScrollExtent,
         );
