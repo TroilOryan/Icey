@@ -47,30 +47,11 @@ final appState = AppState();
 Future<void> main() async {
   await initServices();
 
-  // 异常捕获 logo记录
-  final customParameters = {
-    'BuildConfig':
-        '\nBuild Time: ${DateUtil.formatDateMs(BuildConfig.buildTime, isUtc: true, format: DateFormats.full)}\n'
-        'Commit Hash: ${BuildConfig.commitHash}',
-  };
-  final fileHandler = await JsonFileHandler.init();
-  final Catcher2Options debugConfig = Catcher2Options(SilentReportMode(), [
-    ?fileHandler,
-    ConsoleHandler(
-      enableDeviceParameters: false,
-      enableApplicationParameters: false,
-      enableCustomParameters: true,
-    ),
-  ], customParameters: customParameters);
-
-  final Catcher2Options releaseConfig = Catcher2Options(SilentReportMode(), [
-    ?fileHandler,
-    ConsoleHandler(enableCustomParameters: true),
-  ], customParameters: customParameters);
+  final config = await initCatcher();
 
   Catcher2(
-    debugConfig: debugConfig,
-    releaseConfig: releaseConfig,
+    debugConfig: config["debugConfig"],
+    releaseConfig: config["releaseConfig"],
     // rootWidget: DevicePreview(
     //   enabled: !kReleaseMode,
     //   builder: (context) => const App(),

@@ -57,31 +57,39 @@ class _MediaLibraryPageState extends State<MediaLibraryPage>
               textStyle: theme.textTheme.bodyMedium,
             ),
             onRefresh: () => MediaScanner.scanMedias(true),
-            child: CustomScrollView(
-              controller: homeController.mediaListScrollController,
-              slivers: [
-                MultiSliver(
-                  children: <Widget>[
-                    HeaderAppBar(
-                      title: "媒体库",
-                      action: controller.headerAppBarAction,
-                      onTap: homeController.handleBackTop,
-                    ),
+            child: ProgressiveScrollview(
+              centerTitle: false,
+              title: "媒体库",
+              action: controller.headerAppBarAction,
+              onTap: homeController.handleBackTop,
+              builder: (appbarHeight) => CustomScrollView(
+                controller: homeController.mediaListScrollController,
+                slivers: [
+                  MultiSliver(
+                    children: <Widget>[
+                      // HeaderAppBar(
+                      //   title: "媒体库",
+                      //   action: controller.headerAppBarAction,
+                      //   onTap: homeController.handleBackTop,
+                      // ),
+                      HeaderLocator.sliver(),
 
-                    HeaderLocator.sliver(),
-
-                    // MediaOrder(offstage: mediaList.isEmpty),
-                    MediaList(
-                      showDuration: showDuration,
-                      mediaList: mediaList,
-                      sliverContextMap: homeController.sliverContextMap,
-                      onTap: homeController.handleMediaTap,
-                      onLongPress: (media) =>
-                          homeController.handleMediaLongPress(media, context),
-                    ),
-                  ],
-                ),
-              ],
+                      // MediaOrder(offstage: mediaList.isEmpty),
+                      SliverPadding(
+                        padding: EdgeInsetsGeometry.only(top: appbarHeight),
+                        sliver: MediaList(
+                          showDuration: showDuration,
+                          mediaList: mediaList,
+                          sliverContextMap: homeController.sliverContextMap,
+                          onTap: homeController.handleMediaTap,
+                          onLongPress: (media) => homeController
+                              .handleMediaLongPress(media, context),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),

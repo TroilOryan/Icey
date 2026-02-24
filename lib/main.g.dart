@@ -1,5 +1,9 @@
 part of 'main.dart';
 
+late final EffectCleanup _brightnessThemeListener;
+
+final _settingsBox = Hive.box(BoxKey.settings);
+
 Future<void> initHive() async {
   final dir = await CommonHelper().getAppDataDir();
 
@@ -34,6 +38,7 @@ void setDisplayMode() {
       if (_displayMode != null) {
         displayMode = modes.firstWhere((e) => e.toString() == _displayMode);
       }
+
       displayMode ??= DisplayMode.auto;
       FlutterDisplayMode.setPreferredMode(displayMode);
 
@@ -112,9 +117,30 @@ Future<void> initServices() async {
   };
 }
 
-late final EffectCleanup _brightnessThemeListener;
+Future<Map<String, Catcher2Options>> initCatcher() async {
+  // 异常捕获 logo记录
+  final customParameters = {
+    'BuildConfig':
+        '\nBuild Time: ${DateUtil.formatDateMs(BuildConfig.buildTime, isUtc: true, format: DateFormats.full)}\n'
+        'Commit Hash: ${BuildConfig.commitHash}',
+  };
+  final fileHandler = await JsonFileHandler.init();
+  final Catcher2Options debugConfig = Catcher2Options(SilentReportMode(), [
+    ?fileHandler,
+    ConsoleHandler(
+      enableDeviceParameters: false,
+      enableApplicationParameters: false,
+      enableCustomParameters: true,
+    ),
+  ], customParameters: customParameters);
 
-final _settingsBox = Hive.box(BoxKey.settings);
+  final Catcher2Options releaseConfig = Catcher2Options(SilentReportMode(), [
+    ?fileHandler,
+    ConsoleHandler(enableCustomParameters: true),
+  ], customParameters: customParameters);
+
+  return {"debugConfig": debugConfig, "releaseConfig": releaseConfig};
+}
 
 void _didChangePlatformBrightness() {
   if (settingsManager.brightnessTheme.value != BrightnessTheme.system) {

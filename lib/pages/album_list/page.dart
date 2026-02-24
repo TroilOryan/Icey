@@ -44,89 +44,93 @@ class _AlbumListPageState extends State<AlbumListPage>
         ? mediaQuery.padding.bottom
         : 16;
 
-    return CustomScrollView(
-      controller: homeController.albumListScrollController,
-      slivers: [
-        HeaderAppBar(title: "专辑", onTap: homeController.handleBackTop),
-        SliverPadding(
-          padding: EdgeInsets.fromLTRB(24, 0, 24, paddingBottom + 64),
-          sliver: SliverGrid(
-            delegate: SliverChildBuilderDelegate(childCount: albumList.length, (
-              context,
-              index,
-            ) {
-              final album = albumList[index];
+    return ProgressiveScrollview(
+      title: "专辑",
+      onTap: homeController.handleBackTop,
+      child: CustomScrollView(
+        controller: homeController.albumListScrollController,
+        slivers: [
+          // HeaderAppBar(title: "专辑", onTap: homeController.handleBackTop),
+          SliverPadding(
+            padding: EdgeInsets.fromLTRB(24, 0, 24, paddingBottom + 64),
+            sliver: SliverGrid(
+              delegate: SliverChildBuilderDelegate(
+                childCount: albumList.length,
+                (context, index) {
+                  final album = albumList[index];
 
-              final albumCover = cover(album.id);
+                  final albumCover = cover(album.id);
 
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  GestureDetector(
-                    onTap: () => context.push(
-                      "/album_list_detail/${album.id}",
-                      extra: {
-                        "name": album.name,
-                        "cover": cover(album.id),
-                        "mediaIDs": album.mediaIDs,
-                      },
-                    ),
-                    child: Hero(
-                      tag: "albumCover_${album.id}",
-                      child: albumCover != null
-                          ? Container(
-                              height: 156,
-                              clipBehavior: Clip.antiAlias,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(
-                                  AppTheme.borderRadiusSm,
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                        onTap: () => context.push(
+                          "/album_list_detail/${album.id}",
+                          extra: {
+                            "name": album.name,
+                            "cover": cover(album.id),
+                            "mediaIDs": album.mediaIDs,
+                          },
+                        ),
+                        child: Hero(
+                          tag: "albumCover_${album.id}",
+                          child: albumCover != null
+                              ? Container(
+                                  height: 156,
+                                  clipBehavior: Clip.antiAlias,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(
+                                      AppTheme.borderRadiusSm,
+                                    ),
+                                  ),
+                                  child: Image.memory(
+                                    albumCover,
+                                    fit: BoxFit.cover,
+                                  ),
+                                )
+                              : MediaCover(
+                                  id: album.id,
+                                  size: 156,
+                                  type: ArtworkType.ALBUM,
+                                  borderRadius: BorderRadius.all(
+                                    AppTheme.borderRadiusSm,
+                                  ),
+                                  onQueried: (v) => albumListController
+                                      .handleQueried(v, album.id),
                                 ),
-                              ),
-                              child: Image.memory(
-                                albumCover,
-                                fit: BoxFit.cover,
-                              ),
-                            )
-                          : MediaCover(
-                              id: album.id,
-                              size: 156,
-                              type: ArtworkType.ALBUM,
-                              borderRadius: BorderRadius.all(
-                                AppTheme.borderRadiusSm,
-                              ),
-                              onQueried: (v) => albumListController
-                                  .handleQueried(v, album.id),
-                            ),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Hero(
-                    tag: "albumTitle_${album.id}",
-                    child: Text(
-                      album.name,
-                      style: theme.textTheme.titleMedium,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      softWrap: true,
-                    ),
-                  ),
-                  Text(
-                    '${album.mediaIDs.length}首',
-                    style: theme.textTheme.bodyMedium,
-                  ),
-                ],
-              );
-            }),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 12,
-              crossAxisSpacing: 12,
-              childAspectRatio: 0.7,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Hero(
+                        tag: "albumTitle_${album.id}",
+                        child: Text(
+                          album.name,
+                          style: theme.textTheme.titleMedium,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          softWrap: true,
+                        ),
+                      ),
+                      Text(
+                        '${album.mediaIDs.length}首',
+                        style: theme.textTheme.bodyMedium,
+                      ),
+                    ],
+                  );
+                },
+              ),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 12,
+                crossAxisSpacing: 12,
+                childAspectRatio: 0.7,
+              ),
+              // gridDelegate: _mySliverGridDelegateWithMaxCrossAxisExtent(),
             ),
-            // gridDelegate: _mySliverGridDelegateWithMaxCrossAxisExtent(),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

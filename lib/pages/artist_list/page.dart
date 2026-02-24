@@ -44,89 +44,93 @@ class _ArtistListPageState extends State<ArtistListPage>
         ? mediaQuery.padding.bottom
         : 16;
 
-    return CustomScrollView(
-      controller: homeController.artistListScrollController,
-      slivers: [
-        HeaderAppBar(title: "艺术家", onTap: homeController.handleBackTop),
-        SliverPadding(
-          padding: EdgeInsets.fromLTRB(24, 0, 24, paddingBottom + 64),
-          sliver: SliverGrid(
-            delegate: SliverChildBuilderDelegate(
-              childCount: artistList.length,
-              (context, index) {
-                final artist = artistList[index];
+    return ProgressiveScrollview(
+      title: "艺术家",
+      onTap: homeController.handleBackTop,
+      child: CustomScrollView(
+        controller: homeController.artistListScrollController,
+        slivers: [
+          // HeaderAppBar(title: "艺术家", onTap: homeController.handleBackTop),
+          SliverPadding(
+            padding: EdgeInsets.fromLTRB(24, 0, 24, paddingBottom + 64),
+            sliver: SliverGrid(
+              delegate: SliverChildBuilderDelegate(
+                childCount: artistList.length,
+                (context, index) {
+                  final artist = artistList[index];
 
-                final artistCover = cover(artist.id);
+                  final artistCover = cover(artist.id);
 
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                      onTap: () => context.push(
-                        "/artist_list_detail/${artist.id}",
-                        extra: {
-                          "name": artist.name,
-                          "cover": cover(artist.id),
-                          "mediaIDs": artist.mediaIDs,
-                        },
-                      ),
-                      child: Hero(
-                        tag: "artistCover_${artist.id}",
-                        child: artistCover != null
-                            ? Container(
-                                height: 156,
-                                clipBehavior: Clip.antiAlias,
-                                decoration: BoxDecoration(
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                        onTap: () => context.push(
+                          "/artist_list_detail/${artist.id}",
+                          extra: {
+                            "name": artist.name,
+                            "cover": cover(artist.id),
+                            "mediaIDs": artist.mediaIDs,
+                          },
+                        ),
+                        child: Hero(
+                          tag: "artistCover_${artist.id}",
+                          child: artistCover != null
+                              ? Container(
+                                  height: 156,
+                                  clipBehavior: Clip.antiAlias,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(
+                                      AppTheme.borderRadiusSm,
+                                    ),
+                                  ),
+                                  child: Image.memory(
+                                    artistCover,
+                                    fit: BoxFit.cover,
+                                  ),
+                                )
+                              : MediaCover(
+                                  id: artist.id,
+                                  size: 156,
+                                  type: ArtworkType.ARTIST,
                                   borderRadius: BorderRadius.all(
                                     AppTheme.borderRadiusSm,
                                   ),
+                                  onQueried: (v) => artistListController
+                                      .handleQueried(v, artist.id),
                                 ),
-                                child: Image.memory(
-                                  artistCover,
-                                  fit: BoxFit.cover,
-                                ),
-                              )
-                            : MediaCover(
-                                id: artist.id,
-                                size: 156,
-                                type: ArtworkType.ARTIST,
-                                borderRadius: BorderRadius.all(
-                                  AppTheme.borderRadiusSm,
-                                ),
-                                onQueried: (v) => artistListController
-                                    .handleQueried(v, artist.id),
-                              ),
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    Hero(
-                      tag: "artistTitle_${artist.id}",
-                      child: Text(
-                        artist.name,
-                        style: theme.textTheme.titleMedium,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        softWrap: true,
+                      const SizedBox(height: 8),
+                      Hero(
+                        tag: "artistTitle_${artist.id}",
+                        child: Text(
+                          artist.name,
+                          style: theme.textTheme.titleMedium,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          softWrap: true,
+                        ),
                       ),
-                    ),
-                    Text(
-                      '${artist.mediaIDs.length}首',
-                      style: theme.textTheme.bodyMedium,
-                    ),
-                  ],
-                );
-              },
+                      Text(
+                        '${artist.mediaIDs.length}首',
+                        style: theme.textTheme.bodyMedium,
+                      ),
+                    ],
+                  );
+                },
+              ),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 12,
+                crossAxisSpacing: 12,
+                childAspectRatio: 0.7,
+              ),
+              // gridDelegate: _mySliverGridDelegateWithMaxCrossAxisExtent(),
             ),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 12,
-              crossAxisSpacing: 12,
-              childAspectRatio: 0.7,
-            ),
-            // gridDelegate: _mySliverGridDelegateWithMaxCrossAxisExtent(),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

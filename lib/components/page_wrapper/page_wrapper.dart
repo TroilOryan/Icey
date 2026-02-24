@@ -1,4 +1,4 @@
-import 'package:IceyPlayer/components/header_app_bar/header_app_bar.dart';
+import 'package:IceyPlayer/components/progressive_scrollview/progressive_scrollview.dart';
 import 'package:flutter/material.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
@@ -18,35 +18,41 @@ class PageWrapper extends StatelessWidget {
     this.padding,
   });
 
-  Widget _buildBody({required BuildContext context}) {
+  Widget _buildBody({
+    required BuildContext context,
+    required double appbarHeight,
+  }) {
     final paddingBottom = MediaQuery.of(context).padding.bottom;
 
     if (body is MultiSliver) {
       return SliverPadding(
-        padding: padding ?? EdgeInsets.fromLTRB(16, 12, 16, paddingBottom + 12),
+        padding:
+            padding ??
+            EdgeInsets.fromLTRB(16, 12 + appbarHeight, 16, paddingBottom + 12),
         sliver: body,
       );
     }
 
     return SliverPadding(
-      padding: padding ?? EdgeInsets.fromLTRB(16, 12, 16, paddingBottom + 12),
+      padding:
+          padding ??
+          EdgeInsets.fromLTRB(16, 12 + appbarHeight, 16, paddingBottom + 12),
       sliver: SliverToBoxAdapter(child: body),
     );
   }
 
+  void listenScroll() {}
+
+  void onInit() {}
+
+  void onDispose() {}
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: backgroundColor,
-      body: CustomScrollView(
-        slivers: [
-          MultiSliver(
-            children: [
-              HeaderAppBar(title: title, ghost: ghost, centerTitle: true),
-              _buildBody(context: context),
-            ],
-          ),
-        ],
+    return ProgressiveScrollview(
+      title: title,
+      builder: (appbarHeight) => CustomScrollView(
+        slivers: [_buildBody(context: context, appbarHeight: appbarHeight)],
       ),
     );
   }

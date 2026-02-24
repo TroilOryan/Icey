@@ -2,7 +2,7 @@ name: IceyPlayer
 description: "A new Flutter project."
 publish_to: 'none'
 
-version: 1.0.30+31
+version: 1.0.31+32
 
 environment:
   sdk: ">=3.10.0"
@@ -39,6 +39,7 @@ dependencies:
   material_symbols_icons: ^4.2892.0
   scrollview_observer: ^1.26.2
   sliver_tools: ^0.2.12
+  soft_edge_blur: ^0.1.3
   super_sliver_list:
     path: plugins/super_sliver_list
   xml: ^6.6.1
