@@ -347,8 +347,6 @@ class SettingsManager {
           startPosition: const OverlayPosition(0, -96),
         );
       } else {
-        showToast("请给予Icey Player悬浮窗权限");
-
         await FlutterOverlayWindow.requestPermission();
       }
     } else {
