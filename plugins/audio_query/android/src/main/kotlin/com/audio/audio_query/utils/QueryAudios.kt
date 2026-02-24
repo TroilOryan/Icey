@@ -122,7 +122,7 @@ class QueryAudios {
         )
 
         // Android 10+ (API 29+) 才有 BITRATE 字段
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        return if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
             baseProjection + MediaStore.Audio.Media.BITRATE
         } else {
             baseProjection
@@ -351,7 +351,7 @@ class QueryAudios {
                 val albumId = getColumnValue(cursor, MediaStore.Audio.Media.ALBUM_ID)
 
                 // 获取比特率（Android 10+ 才有此字段）
-                val bitRate = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                val bitRate = if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
                     safeGetInt(cursor, MediaStore.Audio.Media.BITRATE, 0)
                 } else {
                     0  // Android 9 及以下，bitrate 将从 MediaMetadataRetriever 提取
