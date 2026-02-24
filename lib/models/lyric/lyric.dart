@@ -1,6 +1,7 @@
 import 'package:IceyPlayer/components/play_lyric_source/play_lyric_source.dart';
 import 'package:IceyPlayer/constants/box_key.dart';
 import 'package:IceyPlayer/constants/cache_key.dart';
+import 'package:IceyPlayer/constants/settings.dart';
 import 'package:IceyPlayer/helpers/common.dart';
 import 'package:IceyPlayer/models/media/media.dart';
 import 'package:IceyPlayer/models/settings/settings.dart';
@@ -72,7 +73,7 @@ class LyricManager {
       _currentIndex = signal(-1),
       _overlayLyricSize = signal(16.0),
       _overlayLyricWidth = signal(100.0),
-      _overlayLyricColor = signal(0),
+      _overlayLyricColor = signal(Settings.textColor.first.color.toARGB32()),
       _overlayLyricX = signal(0.0),
       _overlayLyricY = signal(0.0) {
     setOverlayLyricSize(
@@ -87,7 +88,10 @@ class LyricManager {
     );
 
     setOverlayLyricColor(
-      _settingsBox.get(CacheKey.Settings.overlayLyricColor, defaultValue: 0),
+      _settingsBox.get(
+        CacheKey.Settings.overlayLyricColor,
+        defaultValue: Settings.textColor.first.color.toARGB32(),
+      ),
     );
 
     setOverlayLyricX(

@@ -1,11 +1,12 @@
 import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:signals/signals_flutter.dart';
 import 'package:soft_edge_blur/soft_edge_blur.dart';
+
 import '../round_icon_button/round_icon_button.dart';
 
-/// AppBar 动作项
 class HeaderAppBarAction {
   final IconData icon;
   final VoidCallback onTap;
@@ -13,33 +14,28 @@ class HeaderAppBarAction {
   const HeaderAppBarAction({required this.icon, required this.onTap});
 }
 
-/// 滚动控制器 - 每个组件实例独立
 class ProgressiveScrollViewController {
-  final Signal<double> offset = signal(0.0);
+  final offset = signal(0.0);
 
   bool handleNotification(Object? notification) {
     if (notification is ScrollUpdateNotification) {
-      offset.value = notification.metrics.pixels;
-      return false;
-    }
-    return false;
-  }
+      final double scrollOffset = notification.metrics.pixels;
 
-  void dispose() {
-    offset.dispose();
+      offset.value = scrollOffset;
+    }
+
+    return false;
   }
 }
 
-/// 渐进式滚动视图组件
 class ProgressiveScrollview extends StatefulWidget {
   final String title;
   final bool centerTitle;
   final CustomScrollView? child;
-  final Widget Function(double)? builder;
+  final Function(double)? builder;
   final List<HeaderAppBarAction>? action;
   final Color? backgroundColor;
   final VoidCallback? onTap;
-  final ProgressiveScrollViewController? controller;
 
   const ProgressiveScrollview({
     super.key,
@@ -50,7 +46,6 @@ class ProgressiveScrollview extends StatefulWidget {
     this.action,
     this.backgroundColor,
     this.onTap,
-    this.controller,
   });
 
   @override
@@ -58,66 +53,15 @@ class ProgressiveScrollview extends StatefulWidget {
 }
 
 class _ProgressiveScrollviewState extends State<ProgressiveScrollview> {
-  late final ProgressiveScrollViewController _controller;
-
-  // Computed 在 initState 中创建，避免每次 build 都创建新的
-  late final Computed<double> _appbarHeight;
-  late final Computed<double> _fontSize;
-
-  @override
-  void initState() {
-    super.initState();
-
-    // 使用传入的 controller 或创建新的
-    _controller = widget.controller ?? ProgressiveScrollViewController();
-
-    // 在 initState 中创建 computed，避免内存泄漏
-    _appbarHeight = computed(() {
-      final paddingTop = MediaQuery.of(context).viewPadding.top;
-      final offset = _controller.offset.value;
-      return max(150 - offset, kToolbarHeight + paddingTop);
-    });
-
-    _fontSize = computed(() {
-      final titleLargeFontSize =
-          Theme.of(context).textTheme.titleLarge?.fontSize ?? 20;
-      final offset = _controller.offset.value;
-      return titleLargeFontSize * max((1.5 - offset / 200), 0.8);
-    });
-  }
-
-  @override
-  void didUpdateWidget(ProgressiveScrollview oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
-    // 如果 controller 发生变化，需要处理旧的 controller
-    if (widget.controller != oldWidget.controller &&
-        widget.controller != null) {
-      // 清理旧的 computed（如果需要）
-      // 注意：这里需要根据实际情况处理
-    }
-  }
-
-  @override
-  void dispose() {
-    // 只在组件自己创建 controller 时才释放
-    if (widget.controller == null) {
-      _controller.dispose();
-    }
-    // 释放 computed
-    _appbarHeight.dispose();
-    _fontSize.dispose();
-    super.dispose();
-  }
+  final controller = ProgressiveScrollViewController();
 
   /// 构建主体内容
-  Widget _buildBody(ThemeData theme) {
+  Widget _buildBody(ThemeData theme, double appbarHeight) {
     return Scaffold(
       backgroundColor: widget.backgroundColor,
       body: SoftEdgeBlur(
         edges: [
           EdgeBlur(
-            tintColor: Colors.white,
             type: EdgeType.topEdge,
             size: 125,
             sigma: 12,
@@ -128,12 +72,12 @@ class _ProgressiveScrollviewState extends State<ProgressiveScrollview> {
           ),
         ],
         child: NotificationListener(
-          onNotification: _controller.handleNotification,
+          onNotification: controller.handleNotification,
           child:
               widget.child ??
               Builder(
                 builder: (context) => widget.builder != null
-                    ? widget.builder!(_appbarHeight())
+                    ? widget.builder!(appbarHeight)
                     : const SizedBox(),
               ),
         ),
@@ -142,7 +86,12 @@ class _ProgressiveScrollviewState extends State<ProgressiveScrollview> {
   }
 
   /// 构建 AppBar
-  Widget _buildAppBar(ThemeData theme, double paddingTop) {
+  Widget _buildAppBar(
+    ThemeData theme,
+    double paddingTop,
+    double appbarHeight,
+    double fontSize,
+  ) {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: widget.onTap,
@@ -150,16 +99,20 @@ class _ProgressiveScrollviewState extends State<ProgressiveScrollview> {
         padding: widget.centerTitle
             ? EdgeInsets.only(top: paddingTop)
             : EdgeInsets.fromLTRB(24, paddingTop, 6, 0),
-        height: _appbarHeight(),
+        height: appbarHeight,
         child: widget.centerTitle
-            ? _buildCenterTitleAppBar(theme, paddingTop)
-            : _buildLeftTitleAppBar(theme),
+            ? _buildCenterTitleAppBar(theme, paddingTop, fontSize)
+            : _buildLeftTitleAppBar(theme, fontSize),
       ),
     );
   }
 
   /// 居中标题的 AppBar
-  Widget _buildCenterTitleAppBar(ThemeData theme, double paddingTop) {
+  Widget _buildCenterTitleAppBar(
+    ThemeData theme,
+    double paddingTop,
+    double fontSize,
+  ) {
     return Stack(
       children: [
         if (context.canPop())
@@ -176,19 +129,19 @@ class _ProgressiveScrollviewState extends State<ProgressiveScrollview> {
             ),
           ),
         Center(
-          child: _buildTitle(theme: theme, fontSize: _fontSize()),
+          child: _buildTitle(theme: theme, fontSize: fontSize),
         ),
       ],
     );
   }
 
   /// 左侧标题的 AppBar
-  Widget _buildLeftTitleAppBar(ThemeData theme) {
+  Widget _buildLeftTitleAppBar(ThemeData theme, double fontSize) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Expanded(
-          child: _buildTitle(theme: theme, fontSize: _fontSize()),
+          child: _buildTitle(theme: theme, fontSize: fontSize),
         ),
         _buildAction(theme),
       ],
@@ -213,7 +166,11 @@ class _ProgressiveScrollviewState extends State<ProgressiveScrollview> {
       mainAxisSize: MainAxisSize.min,
       children: widget.action!
           .map(
-            (e) => IconButton(onPressed: e.onTap, icon: Icon(e.icon, size: 20)),
+            (e) => IconButton(
+              onPressed: e.onTap,
+              icon: Icon(e.icon, size: 20),
+              tooltip: 'Action', // 添加 tooltip 提升可访问性
+            ),
           )
           .toList(),
     );
@@ -222,11 +179,23 @@ class _ProgressiveScrollviewState extends State<ProgressiveScrollview> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
+    final offset = controller.offset.watch(context);
     final paddingTop = MediaQuery.of(context).viewPadding.top;
+    final appbarHeight = computed(
+      () => max(150 - offset, kToolbarHeight + paddingTop),
+    );
+
+    final fontSize = computed(
+      () =>
+          Theme.of(context).textTheme.titleLarge!.fontSize! *
+          max((1.5 - offset / 200), 0.8),
+    );
 
     return Stack(
-      children: [_buildBody(theme), _buildAppBar(theme, paddingTop)],
+      children: [
+        _buildBody(theme, appbarHeight()),
+        _buildAppBar(theme, paddingTop, appbarHeight(), fontSize()),
+      ],
     );
   }
 }
