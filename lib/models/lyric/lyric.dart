@@ -66,16 +66,16 @@ class LyricManager {
   Signal<double> get overlayLyricY => _overlayLyricY;
 
   LyricManager()
-    : _lyricModel = signal(null),
-      _rawLyric = signal(""),
-      _parsedLyric = signal([]),
-      _lyricSource = signal(LyricSource.none),
-      _currentIndex = signal(-1),
-      _overlayLyricSize = signal(16.0),
-      _overlayLyricWidth = signal(100.0),
-      _overlayLyricColor = signal(Settings.textColor.first.color.toARGB32()),
-      _overlayLyricX = signal(0.0),
-      _overlayLyricY = signal(0.0) {
+      : _lyricModel = signal(null),
+        _rawLyric = signal(""),
+        _parsedLyric = signal([]),
+        _lyricSource = signal(LyricSource.none),
+        _currentIndex = signal(-1),
+        _overlayLyricSize = signal(16.0),
+        _overlayLyricWidth = signal(100.0),
+        _overlayLyricColor = signal(Settings.textColor.first.color.toARGB32()),
+        _overlayLyricX = signal(0.0),
+        _overlayLyricY = signal(0.0) {
     setOverlayLyricSize(
       _settingsBox.get(CacheKey.Settings.overlayLyricSize, defaultValue: 16.0),
     );
@@ -163,7 +163,8 @@ class LyricManager {
   void setCurrentIndex(int value) {
     _currentIndex.value = value;
 
-    FlutterOverlayWindow.shareData({"lyric": _parsedLyric.value[value].text});
+    FlutterOverlayWindow.shareData(
+        {"lyric": value == -1 ? "" : _parsedLyric.value[value].text});
   }
 
   void setOverlayLyricSize(double value) {

@@ -20,6 +20,8 @@ class _PlayLyricOverlayState extends State<PlayLyricOverlay> {
 
   final width = signal(50.0);
 
+  final playing = signal(false);
+
   void onInit() {
     FlutterOverlayWindow.overlayListener.listen((event) {
       if (event?["lyric"] != null) {
@@ -36,6 +38,10 @@ class _PlayLyricOverlayState extends State<PlayLyricOverlay> {
 
       if (event?["color"] != null) {
         color.value = Color(event["color"]);
+      }
+
+      if (event?["playing"] != null) {
+        playing.value = event["playing"];
       }
     });
   }
@@ -64,7 +70,8 @@ class _PlayLyricOverlayState extends State<PlayLyricOverlay> {
     final _lyric = lyric.watch(context),
         _color = color.watch(context),
         _fontSize = fontSize.watch(context),
-        _width = width.watch(context);
+        _width = width.watch(context),
+        _playing = playing.watch(context);
 
     final textStyle = computed(
       () => TextStyle(
@@ -84,6 +91,7 @@ class _PlayLyricOverlayState extends State<PlayLyricOverlay> {
             SizedBox(
               width: _width,
               child: Marquee(
+                disableAnimation: !_playing,
                 child: Text(
                   _lyric.isEmpty ? "暂无歌词" : _lyric,
                   style: textStyle(),

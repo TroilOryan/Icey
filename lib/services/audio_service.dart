@@ -1,6 +1,7 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:IceyPlayer/models/media/media.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:IceyPlayer/constants/box_key.dart';
 import 'package:IceyPlayer/constants/cache_key.dart';
@@ -202,10 +203,7 @@ class AudioServiceHandler extends BaseAudioHandler
       audioSessionHandler.setActive(true);
     }
 
-    // bool liked = false;
-    // if (mediaItem.value != null) {
-    //   liked = checkPlaylist('Favorite Songs', mediaItem.value!.id);
-    // }
+    FlutterOverlayWindow.shareData({"playing": playing});
 
     playbackState.add(
       playbackState.value.copyWith(
