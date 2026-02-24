@@ -69,6 +69,18 @@ class _SettingsKeys {
 
   final String fakeEnhanced = "settings_fake_enhanced";
 
+  final String lyricOverlay = "settings_lyric_overlay";
+
+  final String overlayLyricSize = "settings_overlay_lyric_size";
+
+  final String overlayLyricWidth = "settings_overlay_lyric_width";
+
+  final String overlayLyricColor = "settings_overlay_lyric_color";
+
+  final String overlayLyricX = "settings_overlay_lyric_x";
+
+  final String overlayLyricY = "settings_overlay_lyric_y";
+
   final String panelOpened = "settings_panel_opened";
 
   final String listBg = "settings_list_bg";

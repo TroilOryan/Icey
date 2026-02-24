@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:IceyPlayer/components/play_lyric/play_lyric_overlay.dart';
 import 'package:IceyPlayer/helpers/common.dart';
 import 'package:IceyPlayer/helpers/logs/json_file_handler.dart';
 import 'package:IceyPlayer/src/rust/frb_generated.dart';
@@ -23,6 +24,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:go_transitions/go_transitions.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
@@ -43,6 +45,17 @@ part 'main.g.dart';
 part 'state.dart';
 
 final appState = AppState();
+
+@pragma("vm:entry-point")
+void overlayMain() {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(
+    const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: PlayLyricOverlay(),
+    ),
+  );
+}
 
 Future<void> main() async {
   await initServices();
@@ -159,7 +172,6 @@ class _AppState extends State<App> with WidgetsBindingObserver {
 
           return MaterialApp.router(
             builder: FlutterSmartDialog.init(),
-            debugShowCheckedModeBanner: false,
             restorationScopeId: 'mainApp',
             themeMode: BrightnessTheme.toThemeMode(themeMode.value),
             scrollBehavior: scrollBehavior.value,

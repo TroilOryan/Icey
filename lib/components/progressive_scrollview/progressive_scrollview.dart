@@ -9,10 +9,8 @@ import '../round_icon_button/round_icon_button.dart';
 class HeaderAppBarAction {
   final IconData icon;
   final VoidCallback onTap;
-  const HeaderAppBarAction({
-    required this.icon,
-    required this.onTap,
-  });
+
+  const HeaderAppBarAction({required this.icon, required this.onTap});
 }
 
 /// 滚动控制器 - 每个组件实例独立
@@ -22,7 +20,7 @@ class ProgressiveScrollViewController {
   bool handleNotification(Object? notification) {
     if (notification is ScrollUpdateNotification) {
       offset.value = notification.metrics.pixels;
-      return false; // 不阻止通知继续传播
+      return false;
     }
     return false;
   }
@@ -81,7 +79,8 @@ class _ProgressiveScrollviewState extends State<ProgressiveScrollview> {
     });
 
     _fontSize = computed(() {
-      final titleLargeFontSize = Theme.of(context).textTheme.titleLarge?.fontSize ?? 20;
+      final titleLargeFontSize =
+          Theme.of(context).textTheme.titleLarge?.fontSize ?? 20;
       final offset = _controller.offset.value;
       return titleLargeFontSize * max((1.5 - offset / 200), 0.8);
     });
@@ -92,7 +91,8 @@ class _ProgressiveScrollviewState extends State<ProgressiveScrollview> {
     super.didUpdateWidget(oldWidget);
 
     // 如果 controller 发生变化，需要处理旧的 controller
-    if (widget.controller != oldWidget.controller && widget.controller != null) {
+    if (widget.controller != oldWidget.controller &&
+        widget.controller != null) {
       // 清理旧的 computed（如果需要）
       // 注意：这里需要根据实际情况处理
     }
@@ -110,20 +110,6 @@ class _ProgressiveScrollviewState extends State<ProgressiveScrollview> {
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final offset = _controller.offset.watch(context);
-    final paddingTop = MediaQuery.of(context).viewPadding.top;
-
-    return Stack(
-      children: [
-        _buildBody(theme),
-        _buildAppBar(theme, paddingTop),
-      ],
-    );
-  }
-
   /// 构建主体内容
   Widget _buildBody(ThemeData theme) {
     return Scaffold(
@@ -131,6 +117,7 @@ class _ProgressiveScrollviewState extends State<ProgressiveScrollview> {
       body: SoftEdgeBlur(
         edges: [
           EdgeBlur(
+            tintColor: Colors.white,
             type: EdgeType.topEdge,
             size: 125,
             sigma: 12,
@@ -142,7 +129,8 @@ class _ProgressiveScrollviewState extends State<ProgressiveScrollview> {
         ],
         child: NotificationListener(
           onNotification: _controller.handleNotification,
-          child: widget.child ??
+          child:
+              widget.child ??
               Builder(
                 builder: (context) => widget.builder != null
                     ? widget.builder!(_appbarHeight())
@@ -199,7 +187,9 @@ class _ProgressiveScrollviewState extends State<ProgressiveScrollview> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Expanded(child: _buildTitle(theme: theme, fontSize: _fontSize())),
+        Expanded(
+          child: _buildTitle(theme: theme, fontSize: _fontSize()),
+        ),
         _buildAction(theme),
       ],
     );
@@ -222,12 +212,21 @@ class _ProgressiveScrollviewState extends State<ProgressiveScrollview> {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: widget.action!
-          .map((e) => IconButton(
-        onPressed: e.onTap,
-        icon: Icon(e.icon, size: 20),
-        tooltip: 'Action', // 添加 tooltip 提升可访问性
-      ))
+          .map(
+            (e) => IconButton(onPressed: e.onTap, icon: Icon(e.icon, size: 20)),
+          )
           .toList(),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    final paddingTop = MediaQuery.of(context).viewPadding.top;
+
+    return Stack(
+      children: [_buildBody(theme), _buildAppBar(theme, paddingTop)],
     );
   }
 }

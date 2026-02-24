@@ -6,6 +6,7 @@ import 'package:IceyPlayer/constants/cache_key.dart';
 import 'package:IceyPlayer/helpers/media/media.dart';
 import 'package:IceyPlayer/helpers/media_scanner/media_sort.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:flutter_sficon/flutter_sficon.dart';
 import 'package:signals/signals.dart';
 
@@ -92,6 +93,7 @@ class SettingsManager {
   final Signal<bool> _highMaterial;
   final Signal<bool> _karaoke;
   final Signal<bool> _fakeEnhanced;
+  final Signal<bool> _lyricOverlay;
   final Signal<bool> _immersive;
   final Signal<bool> _concert;
   final Signal<bool> _audioFocus;
@@ -123,6 +125,8 @@ class SettingsManager {
 
   Signal<bool> get fakeEnhanced => _fakeEnhanced;
 
+  Signal<bool> get lyricOverlay => _lyricOverlay;
+
   Signal<bool> get immersive => _immersive;
 
   Signal<bool> get concert => _concert;
@@ -145,6 +149,7 @@ class SettingsManager {
       _highMaterial = signal(true),
       _karaoke = signal(true),
       _fakeEnhanced = signal(false),
+      _lyricOverlay = signal(false),
       _immersive = signal(false),
       _concert = signal(false),
       _audioFocus = signal(true),
@@ -213,6 +218,10 @@ class SettingsManager {
     _fakeEnhanced.value = _settingsBox.get(
       CacheKey.Settings.fakeEnhanced,
       defaultValue: false,
+    );
+
+    setLyricOverlay(
+      _settingsBox.get(CacheKey.Settings.lyricOverlay, defaultValue: false),
     );
 
     _immersive.value = _settingsBox.get(
@@ -314,6 +323,36 @@ class SettingsManager {
     _fakeEnhanced.value = value;
 
     _settingsBox.put(CacheKey.Settings.fakeEnhanced, value);
+  }
+
+  Future<void> setLyricOverlay(bool value) async {
+    _lyricOverlay.value = value;
+
+    _settingsBox.put(CacheKey.Settings.lyricOverlay, value);
+
+    if (value) {
+      final res = await FlutterOverlayWindow.isPermissionGranted();
+
+      if (res == true) {
+        await FlutterOverlayWindow.showOverlay(
+          enableDrag: false,
+          overlayTitle: "X-SLAYER",
+          overlayContent: 'Overlay Enabled',
+          flag: OverlayFlag.clickThrough,
+          visibility: NotificationVisibility.visibilityPublic,
+          positionGravity: PositionGravity.auto,
+          height: WindowSize.matchParent,
+          width: WindowSize.matchParent,
+          startPosition: const OverlayPosition(0, -96),
+        );
+      } else {
+        await FlutterOverlayWindow.requestPermission();
+      }
+    } else {
+      if (await FlutterOverlayWindow.isActive()) {
+        await FlutterOverlayWindow.closeOverlay();
+      }
+    }
   }
 
   void setImmersive(bool value) {

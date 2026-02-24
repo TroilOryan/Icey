@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:IceyPlayer/components/header_app_bar/header_app_bar.dart';
 import 'package:IceyPlayer/components/progressive_scrollview/progressive_scrollview.dart';
 import 'package:audio_query/types/artwork_type.dart';
 import 'package:flutter/material.dart';

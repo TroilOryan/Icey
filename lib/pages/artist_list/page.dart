@@ -46,13 +46,18 @@ class _ArtistListPageState extends State<ArtistListPage>
 
     return ProgressiveScrollview(
       title: "艺术家",
+      centerTitle: false,
       onTap: homeController.handleBackTop,
-      child: CustomScrollView(
+      builder: (appbarHeight) => CustomScrollView(
         controller: homeController.artistListScrollController,
         slivers: [
-          // HeaderAppBar(title: "艺术家", onTap: homeController.handleBackTop),
           SliverPadding(
-            padding: EdgeInsets.fromLTRB(24, 0, 24, paddingBottom + 64),
+            padding: EdgeInsets.fromLTRB(
+              24,
+              appbarHeight,
+              24,
+              paddingBottom + 64,
+            ),
             sliver: SliverGrid(
               delegate: SliverChildBuilderDelegate(
                 childCount: artistList.length,

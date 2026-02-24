@@ -71,7 +71,6 @@ final GoRouter router = GoRouter(
         ),
       ],
     ),
-    // GoRoute(path: '/', builder: (_, state) => const HomePage()),
     GoRoute(
       path: '/play_screen',
       pageBuilder: GoTransitions.slide.toTop.build(

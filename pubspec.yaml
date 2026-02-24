@@ -2,7 +2,7 @@ name: IceyPlayer
 description: "A new Flutter project."
 publish_to: 'none'
 
-version: 1.0.31+32
+version: 1.0.32+33
 
 environment:
   sdk: ">=3.10.0"
@@ -93,6 +93,9 @@ dependencies:
   extended_image: ^10.0.1
   image_gallery_saver_plus: ^4.0.1
   image_picker: ^1.2.1
+
+  ## 悬浮窗
+  flutter_overlay_window: ^0.5.0
 
   ## 小工具
   async: ^2.13.0

@@ -48,6 +48,7 @@ class _MediaLibraryPageState extends State<MediaLibraryPage>
           sliverContexts: () => homeController.sliverContextMap.values.toList(),
           child: EasyRefresh(
             header: ClassicHeader(
+              clamping: false,
               armedText: "松手即可刷新",
               dragText: "下拉刷新媒体库",
               readyText: "刷新中",
@@ -65,19 +66,14 @@ class _MediaLibraryPageState extends State<MediaLibraryPage>
               builder: (appbarHeight) => CustomScrollView(
                 controller: homeController.mediaListScrollController,
                 slivers: [
-                  MultiSliver(
-                    children: <Widget>[
-                      // HeaderAppBar(
-                      //   title: "媒体库",
-                      //   action: controller.headerAppBarAction,
-                      //   onTap: homeController.handleBackTop,
-                      // ),
-                      HeaderLocator.sliver(),
+                  // MediaOrder(offstage: mediaList.isEmpty),
+                  SliverPadding(
+                    padding: EdgeInsetsGeometry.only(top: appbarHeight),
+                    sliver: MultiSliver(
+                      children: [
+                        HeaderLocator.sliver(),
 
-                      // MediaOrder(offstage: mediaList.isEmpty),
-                      SliverPadding(
-                        padding: EdgeInsetsGeometry.only(top: appbarHeight),
-                        sliver: MediaList(
+                        MediaList(
                           showDuration: showDuration,
                           mediaList: mediaList,
                           sliverContextMap: homeController.sliverContextMap,
@@ -85,8 +81,8 @@ class _MediaLibraryPageState extends State<MediaLibraryPage>
                           onLongPress: (media) => homeController
                               .handleMediaLongPress(media, context),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),
