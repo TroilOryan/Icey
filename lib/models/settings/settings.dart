@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:IceyPlayer/helpers/toast/toast.dart';
 import 'package:flutter/services.dart';
 import 'package:IceyPlayer/constants/box_key.dart';
 import 'package:IceyPlayer/constants/cache_key.dart';
@@ -346,6 +347,8 @@ class SettingsManager {
           startPosition: const OverlayPosition(0, -96),
         );
       } else {
+        showToast("请给予Icey Player悬浮窗权限");
+
         await FlutterOverlayWindow.requestPermission();
       }
     } else {
