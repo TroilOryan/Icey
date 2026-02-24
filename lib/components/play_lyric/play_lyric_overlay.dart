@@ -1,3 +1,4 @@
+import 'package:IceyPlayer/components/marquee/marquee.dart';
 import 'package:IceyPlayer/constants/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
@@ -82,10 +83,12 @@ class _PlayLyricOverlayState extends State<PlayLyricOverlay> {
           children: [
             SizedBox(
               width: _width,
-              child: Text(
-                _lyric.isEmpty ? "暂无歌词" : _lyric,
-                style: textStyle(),
-                maxLines: 1,
+              child: Marquee(
+                child: Text(
+                  _lyric.isEmpty ? "暂无歌词" : _lyric,
+                  style: textStyle(),
+                  maxLines: 1,
+                ),
               ),
             ),
           ],
