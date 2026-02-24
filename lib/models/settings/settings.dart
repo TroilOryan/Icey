@@ -326,6 +326,20 @@ class SettingsManager {
     _settingsBox.put(CacheKey.Settings.fakeEnhanced, value);
   }
 
+  Future<void> showLyricOverlay() async {
+    await FlutterOverlayWindow.showOverlay(
+      enableDrag: false,
+      overlayTitle: "Icey Player",
+      overlayContent: 'Overlay Lyric',
+      flag: OverlayFlag.clickThrough,
+      visibility: NotificationVisibility.visibilityPublic,
+      positionGravity: PositionGravity.auto,
+      height: WindowSize.matchParent,
+      width: WindowSize.matchParent,
+      startPosition: const OverlayPosition(0, 0),
+    );
+  }
+
   Future<void> setLyricOverlay(bool value) async {
     _lyricOverlay.value = value;
 
@@ -335,19 +349,17 @@ class SettingsManager {
       final res = await FlutterOverlayWindow.isPermissionGranted();
 
       if (res == true) {
-        await FlutterOverlayWindow.showOverlay(
-          enableDrag: false,
-          overlayTitle: "X-SLAYER",
-          overlayContent: 'Overlay Enabled',
-          flag: OverlayFlag.clickThrough,
-          visibility: NotificationVisibility.visibilityPublic,
-          positionGravity: PositionGravity.auto,
-          height: WindowSize.matchParent,
-          width: WindowSize.matchParent,
-          startPosition: const OverlayPosition(0, -96),
-        );
+        await showLyricOverlay();
       } else {
-        await FlutterOverlayWindow.requestPermission();
+        showToast("请给予Icey Player悬浮窗权限");
+
+        Future.delayed(const Duration(milliseconds: 500)).then((_) {
+          FlutterOverlayWindow.requestPermission().then((res) async {
+            if (res == true) {
+              await showLyricOverlay();
+            }
+          });
+        });
       }
     } else {
       if (await FlutterOverlayWindow.isActive()) {

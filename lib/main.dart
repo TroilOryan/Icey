@@ -106,7 +106,30 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   Future onDispose() async {
     _brightnessThemeListener();
 
+    if (await FlutterOverlayWindow.isActive()) {
+      FlutterOverlayWindow.closeOverlay();
+    }
+
     WidgetsBinding.instance.removeObserver(this);
+  }
+
+  Future<void> onDidChangeAppLifecycleState(AppLifecycleState state) async {
+    if (state == AppLifecycleState.resumed) {
+      final res = await FlutterOverlayWindow.isPermissionGranted();
+
+      if (!res) {
+        settingsManager.setLyricOverlay(false);
+      }
+
+      if (res) {
+        settingsManager.showLyricOverlay();
+      }
+    } else if (state == AppLifecycleState.paused) {}
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    onDidChangeAppLifecycleState(state);
   }
 
   @override

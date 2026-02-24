@@ -65,6 +65,7 @@ class _ProgressiveScrollviewState extends State<ProgressiveScrollview> {
             type: EdgeType.topEdge,
             size: 125,
             sigma: 12,
+            tintColor: Colors.white,
             controlPoints: [
               ControlPoint(position: 0.5, type: ControlPointType.visible),
               ControlPoint(position: 1, type: ControlPointType.transparent),
