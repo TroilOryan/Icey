@@ -77,10 +77,10 @@ class MediaCover extends StatelessWidget {
         keepOldArtwork: keepOldArtwork,
         id: id!,
         type: type,
-        size: (size * 4).round(),
+        size: (size * 2.5).round(),
         artworkWidth: width ?? size,
         artworkHeight: height ?? size,
-        quality: 100,
+        quality: 50,
         artworkBorder: borderRadius,
         frameBuilder:
             (
