@@ -21,8 +21,10 @@ import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.io.FileInputStream
 import com.audio.audio_query.utils.QueryArtworkColor
-import java.util.*
 
+/**
+ * 优化后的 QueryArtwork（保持原调用逻辑）
+ */
 class QueryArtwork : ViewModel() {
 
     companion object {
@@ -30,11 +32,11 @@ class QueryArtwork : ViewModel() {
     }
 
     private val helper = QueryHelper()
+
     private var type: Int = -1
     private var id: Number = 0
     private var quality: Int = 100
     private var size: Int = 200
-
     private lateinit var uri: Uri
     private lateinit var resolver: ContentResolver
     private lateinit var format: Bitmap.CompressFormat
@@ -46,32 +48,16 @@ class QueryArtwork : ViewModel() {
         val call = PluginProvider.call()
         val result = PluginProvider.result()
         val context = PluginProvider.context()
+
         this.resolver = context.contentResolver
-
-        id = call.argument<Number>("id")!!
-
-        // If the 'size' is null, will be '200'.
-        size = call.argument<Int>("size")!!
-
-        // The 'quality' value cannot be greater than 100 so, we check and if is, set to '50'.
-        quality = call.argument<Int>("quality")!!
+        id = call.argument("id")!!
+        size = call.argument("size")!!
+        quality = call.argument("quality")!!
         if (quality > 100) quality = 50
 
-        // Check format:
-        //   * 0 -> JPEG
-        //   * 1 -> PNG
-        format = checkArtworkFormat(call.argument<Int>("format")!!)
-
-        // Check uri:
-        //   * 0 -> Song.
-        //   * 1 -> Album.
-        //   * 2 -> Playlist.
-        //   * 3 -> Artist.
-        //   * 4 -> Genre.
-        uri = checkArtworkType(call.argument<Int>("type")!!)
-
-        // This query is 'universal' will work for multiple types (audio, album, artist, etc...).
-        type = call.argument<Int>("type")!!
+        format = checkArtworkFormat(call.argument("format")!!)
+        uri = checkArtworkType(call.argument("type")!!)
+        type = call.argument("type")!!
 
         Log.d(TAG, "Query config: ")
         Log.d(TAG, "\tid: $id")
@@ -82,15 +68,19 @@ class QueryArtwork : ViewModel() {
 
         // Query everything in background for a better performance.
         viewModelScope.launch {
-            var resultArtList = loadArt()
+            try {
+                var resultArtList = loadArt()
 
-            // Sometimes android will extract a 'wrong' or 'empty' artwork. Just set as null.
-            if (resultArtList != null && resultArtList.isEmpty()) {
-                Log.i(TAG, "Artwork for '$id' is empty. Returning null")
-                resultArtList = null
+                // Sometimes android will extract a 'wrong' or 'empty' artwork. Just set as null.
+                if (resultArtList != null && resultArtList.isEmpty()) {
+                    Log.i(TAG, "Artwork for '$id' is empty. Returning null")
+                    resultArtList = null
+                }
+                result.success(resultArtList)
+            } catch (e: Exception) {
+                Log.e(TAG, "queryArtwork failed: ${e.message}", e)
+                result.error("QUERY_ERROR", e.message, null)
             }
-
-            result.success(resultArtList)
         }
     }
 
@@ -98,32 +88,16 @@ class QueryArtwork : ViewModel() {
         val call = PluginProvider.call()
         val result = PluginProvider.result()
         val context = PluginProvider.context()
+
         this.resolver = context.contentResolver
-
-        id = call.argument<Number>("id")!!
-
-        // If the 'size' is null, will be '200'.
-        size = call.argument<Int>("size")!!
-
-        // The 'quality' value cannot be greater than 100 so, we check and if is, set to '50'.
-        quality = call.argument<Int>("quality")!!
+        id = call.argument("id")!!
+        size = call.argument("size")!!
+        quality = call.argument("quality")!!
         if (quality > 100) quality = 50
 
-        // Check format:
-        //   * 0 -> JPEG
-        //   * 1 -> PNG
-        format = checkArtworkFormat(call.argument<Int>("format")!!)
-
-        // Check uri:
-        //   * 0 -> Song.
-        //   * 1 -> Album.
-        //   * 2 -> Playlist.
-        //   * 3 -> Artist.
-        //   * 4 -> Genre.
-        uri = checkArtworkType(call.argument<Int>("type")!!)
-
-        // This query is 'universal' will work for multiple types (audio, album, artist, etc...).
-        type = call.argument<Int>("type")!!
+        format = checkArtworkFormat(call.argument("format")!!)
+        uri = checkArtworkType(call.argument("type")!!)
+        type = call.argument("type")!!
 
         Log.d(TAG, "Query config: ")
         Log.d(TAG, "\tid: $id")
@@ -134,112 +108,153 @@ class QueryArtwork : ViewModel() {
 
         // Query everything in background for a better performance.
         viewModelScope.launch {
-            var resultArtList = loadArt()
+            try {
+                var resultArtList = loadArt()
 
-            // Sometimes android will extract a 'wrong' or 'empty' artwork. Just set as null.
-            if (resultArtList != null && resultArtList.isEmpty()) {
-                Log.i(TAG, "Artwork for '$id' is empty. Returning null")
-                resultArtList = null
+                // Sometimes android will extract a 'wrong' or 'empty' artwork. Just set as null.
+                if (resultArtList != null && resultArtList.isEmpty()) {
+                    Log.i(TAG, "Artwork for '$id' is empty. Returning null")
+                    resultArtList = null
+                }
+
+                val color = if (resultArtList != null) {
+                    QueryArtworkColor().queryArtworkColorSync(resultArtList, id.toString())
+                } else {
+                    null
+                }
+
+                result.success(mapOf("data" to resultArtList, "color" to color))
+            } catch (e: Exception) {
+                Log.e(TAG, "queryArtworkWithColor failed: ${e.message}", e)
+                result.error("QUERY_ERROR", e.message, null)
             }
-
-            val color = if (resultArtList != null) {
-                QueryArtworkColor().queryArtworkColorSync(resultArtList, id.toString())
-            } else {
-                null
-            }
-
-            result.success(mapOf("data" to resultArtList, "color" to color))
         }
     }
 
-    //Loading in Background
+    // Loading in Background (优化版)
     private suspend fun loadArt(): ByteArray? = withContext(Dispatchers.IO) {
-        var artData: ByteArray? = null
+        var bitmap: Bitmap? = null
 
-        // If 'Android' >= 29/Q:
-        //   * Limited access to files/folders. Use 'loadThumbnail'.
-        // If 'Android' < 29/Q:
-        //   * Use the 'embeddedPicture' from 'MediaMetadataRetriever' to get the image.
-        if (Build.VERSION.SDK_INT >= 29) {
-            try {
-                // If 'type' is 2, 3 or 4, Get the first item from playlist or artist.
-                // Use the first artist song to 'simulate' the artwork.
-                //
-                // Type:
-                //   * 2 -> Playlist.
-                //   * 3 -> Artist.
-                //   * 4 -> Genre.
-                //
-                // OBS: The 'id' is defined as 'Number'. Convert to 'Long'
+        try {
+            if (Build.VERSION.SDK_INT >= 29) {
+                // Android 10+: 使用 loadThumbnail（已经返回正确尺寸）
                 val query = if (type == 2 || type == 3 || type == 4) {
-                    val item = helper.loadFirstItem(type, id, resolver) ?: return@withContext null
+                    val item = helper.loadFirstItem(type, id, resolver)
+                    if (item == null) return@withContext null
                     ContentUris.withAppendedId(uri, item.toLong())
                 } else {
                     ContentUris.withAppendedId(uri, id.toLong())
                 }
 
-                val bitmap = resolver.loadThumbnail(query, Size(size, size), null)
-                artData = convertOrResize(bitmap = bitmap)!!
-            } catch (e: Exception) {
-                // This may produce a lot of logging on console so, will required a explicit request
-                // to show the errors.
-                Log.w(TAG, "($id) Message: $e")
-            }
-        } else {
-            // If 'uri == Audio':
-            //   * Load the first 'item' from cursor using the 'id' as filter.
-            // else:
-            //   * Load the first 'item' from 'album' using the 'id' as filter.
-            //
-            // If 'item' return null, no song/album has found, return null.
-            val item = helper.loadFirstItem(type, id, resolver) ?: return@withContext null
+                bitmap = resolver.loadThumbnail(query, Size(size, size), null)
 
-            try {
-                val file = FileInputStream(item)
-                val metadata = MediaMetadataRetriever()
-
-                metadata.setDataSource(file.fd)
-                val image = metadata.embeddedPicture
-
-                // Convert image. If null, return
-                artData = convertOrResize(byteArray = image) ?: return@withContext null
-
-                // 'close' can only be called using 'Android' >= 29/Q.
-                if (Build.VERSION.SDK_INT >= 29) metadata.close()
-            } catch (e: Exception) {
-                // This may produce a lot of logging on console so, will required a explicit request
-                // to show the errors.
-                Log.w(TAG, "($id) Message: $e")
-            }
-        }
-
-        return@withContext artData
-    }
-
-    //
-    private fun convertOrResize(bitmap: Bitmap? = null, byteArray: ByteArray? = null): ByteArray? {
-        val convertedBytes: ByteArray?
-        val byteArrayBase = ByteArrayOutputStream()
-
-        try {
-            // If 'bitmap' isn't null:
-            //   * The image(bitmap) is from first method. (Android >= 29/Q).
-            // else:
-            //   * The image(bytearray) is from second method. (Android < 29/Q).
-            if (bitmap != null) {
-                bitmap.compress(format, quality, byteArrayBase)
+                // 直接转换，不重复压缩
+                return@withContext bitmapToByteArray(bitmap, format, quality)
             } else {
-                val convertedBitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray!!.size)
-                convertedBitmap.compress(format, quality, byteArrayBase)
+                // Android 9 及以下：使用 MediaMetadataRetriever
+                val item = helper.loadFirstItem(type, id, resolver)
+                if (item == null) return@withContext null
+
+                try {
+                    val file = FileInputStream(item)
+                    val metadata = MediaMetadataRetriever()
+                    metadata.setDataSource(file.fd)
+                    val image = metadata.embeddedPicture
+
+                    var result: ByteArray? = null
+                    if (image != null) {
+                        // 计算采样率，减少内存占用
+                        val options = BitmapFactory.Options().apply {
+                            inJustDecodeBounds = true
+                        }
+                        BitmapFactory.decodeByteArray(image, 0, image.size, options)
+
+                        options.inSampleSize = calculateInSampleSize(options, size, size)
+                        options.inJustDecodeBounds = false
+                        options.inPreferredConfig = Bitmap.Config.RGB_565
+
+                        val convertedBitmap = BitmapFactory.decodeByteArray(image, 0, image.size, options)
+                        result = bitmapToByteArray(convertedBitmap, format, quality)
+                        convertedBitmap?.recycle()
+                    }
+
+                    // 兼容所有 Android 版本的资源释放
+                    file.close()
+                    try {
+                        if (Build.VERSION.SDK_INT >= 29) {
+                            metadata.close()
+                        } else {
+                            metadata.release()
+                        }
+                    } catch (e: Exception) {
+                        Log.w(TAG, "Failed to close MediaMetadataRetriever: ${e.message}")
+                    }
+
+                    return@withContext result
+                } catch (e: Exception) {
+                    Log.w(TAG, "($id) Message: $e")
+                    return@withContext null
+                }
             }
         } catch (e: Exception) {
-            // This may produce a lot of logging on console so, will required a explicit request
-            // to show the errors.
             Log.w(TAG, "($id) Message: $e")
+            return@withContext null
+        } finally {
+            // 确保回收 Bitmap
+            bitmap?.recycle()
+        }
+    }
+
+    /**
+     * Bitmap 转换为 ByteArray（优化版）
+     */
+    private fun bitmapToByteArray(
+        bitmap: Bitmap?,
+        format: Bitmap.CompressFormat,
+        quality: Int
+    ): ByteArray? {
+        if (bitmap == null) return null
+
+        val byteArrayBase = ByteArrayOutputStream()
+        try {
+            bitmap.compress(format, quality, byteArrayBase)
+        } catch (e: Exception) {
+            Log.w(TAG, "bitmapToByteArray failed: ${e.message}")
+            return null
         }
 
-        convertedBytes = byteArrayBase.toByteArray()
-        byteArrayBase.close()
-        return convertedBytes
+        return try {
+            byteArrayBase.toByteArray()
+        } finally {
+            try {
+                byteArrayBase.close()
+            } catch (e: Exception) {
+                Log.w(TAG, "Failed to close ByteArrayOutputStream: ${e.message}")
+            }
+        }
+    }
+
+    /**
+     * 计算采样率（减少内存占用）
+     */
+    private fun calculateInSampleSize(
+        options: BitmapFactory.Options,
+        reqWidth: Int,
+        reqHeight: Int
+    ): Int {
+        val (width, height) = options.outWidth to options.outHeight
+        var inSampleSize = 1
+
+        if (height > reqHeight || width > reqWidth) {
+            val halfHeight = height / 2
+            val halfWidth = width / 2
+
+            while (halfHeight / inSampleSize >= reqHeight &&
+                halfWidth / inSampleSize >= reqWidth) {
+                inSampleSize *= 2
+            }
+        }
+
+        return inSampleSize
     }
 }

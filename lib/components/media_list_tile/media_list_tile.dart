@@ -21,7 +21,6 @@ class MediaListTile extends StatelessWidget {
   final bool showAddIcon;
   final bool showDuration;
   final bool showCover;
-  final bool showDefault;
   final EdgeInsetsGeometry? margin;
   final bool ghost;
   final bool isPlaying;
@@ -38,7 +37,6 @@ class MediaListTile extends StatelessWidget {
     this.showAddIcon = true,
     this.showDuration = false,
     this.showCover = true,
-    this.showDefault = false,
     this.margin,
     this.ghost = false,
     this.isPlaying = false,
@@ -91,7 +89,6 @@ class MediaListTile extends StatelessWidget {
                 Offstage(
                   offstage: !showCover,
                   child: MediaCover(
-                    showDefault: showDefault,
                     id: media.id,
                     size: 56,
                     borderRadius: BorderRadius.all(AppTheme.borderRadiusXs),
