@@ -328,6 +328,10 @@ class SettingsManager {
   }
 
   Future<void> showLyricOverlay() async {
+    if (await FlutterOverlayWindow.isActive()) {
+      return;
+    }
+
     await FlutterOverlayWindow.showOverlay(
       enableDrag: false,
       overlayTitle: "Icey Player",
@@ -342,8 +346,8 @@ class SettingsManager {
 
     await FlutterOverlayWindow.moveOverlay(
       OverlayPosition(
-        lyricManager.overlayLyricX.value,
-        lyricManager.overlayLyricY.value,
+        _settingsBox.get(CacheKey.Settings.overlayLyricX, defaultValue: 0.0),
+        _settingsBox.get(CacheKey.Settings.overlayLyricY, defaultValue: 0.0),
       ),
     );
   }
@@ -362,11 +366,7 @@ class SettingsManager {
         showToast("请给予Icey Player悬浮窗权限");
 
         Future.delayed(const Duration(milliseconds: 500)).then((_) {
-          FlutterOverlayWindow.requestPermission().then((res) async {
-            if (res == true) {
-              await showLyricOverlay();
-            }
-          });
+          FlutterOverlayWindow.requestPermission();
         });
       }
     } else {

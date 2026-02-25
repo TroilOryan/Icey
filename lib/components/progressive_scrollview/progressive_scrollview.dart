@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:IceyPlayer/models/settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:signals/signals_flutter.dart';
@@ -57,6 +58,8 @@ class _ProgressiveScrollviewState extends State<ProgressiveScrollview> {
 
   /// 构建主体内容
   Widget _buildBody(ThemeData theme, double appbarHeight) {
+    final listBg = settingsManager.listBg.watch(context);
+
     return Scaffold(
       backgroundColor: widget.backgroundColor,
       body: SoftEdgeBlur(
@@ -65,7 +68,7 @@ class _ProgressiveScrollviewState extends State<ProgressiveScrollview> {
             type: EdgeType.topEdge,
             size: 125,
             sigma: 12,
-            tintColor: Colors.white,
+            tintColor: listBg.isEmpty ? theme.cardTheme.color : null,
             controlPoints: [
               ControlPoint(position: 0.5, type: ControlPointType.visible),
               ControlPoint(position: 1, type: ControlPointType.transparent),

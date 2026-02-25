@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:IceyPlayer/constants/glass_settings.dart';
 import 'package:IceyPlayer/helpers/platform.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 import 'package:responsive_builder/responsive_builder.dart';
@@ -197,18 +198,7 @@ class PlayBar extends StatelessWidget {
             portrait: (context) => GlassPanel(
               shape: LiquidRoundedRectangle(borderRadius: 16),
               padding: EdgeInsets.zero,
-              settings: LiquidGlassSettings(
-                blur: 3,
-                thickness: 16,
-                glassColor: Color.fromRGBO(255, 255, 255, 0.01),
-                lightAngle: 135,
-                lightIntensity: 0.7,
-                ambientStrength: 0.4,
-                saturation: 1.2,
-                refractiveIndex: 0.7,
-                // Thin rim (standard) / subtle refraction (premium)
-                chromaticAberration: 0.0,
-              ),
+              settings: RecommendedGlassSettings.bottomBar,
               margin: EdgeInsets.fromLTRB(
                 16,
                 0,

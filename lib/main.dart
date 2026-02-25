@@ -106,9 +106,9 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   Future onDispose() async {
     _brightnessThemeListener();
 
-    // if (await FlutterOverlayWindow.isActive()) {
-    //   FlutterOverlayWindow.closeOverlay();
-    // }
+    if (await FlutterOverlayWindow.isActive()) {
+      FlutterOverlayWindow.closeOverlay();
+    }
 
     WidgetsBinding.instance.removeObserver(this);
   }

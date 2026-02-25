@@ -36,6 +36,8 @@ class _MediaLibraryPageState extends State<MediaLibraryPage>
 
     final cursorInfo = controller.state.cursorInfo.watch(context);
 
+    final showBackTop = homeController.state.showBackTop.watch(context);
+
     if (mediaList.isEmpty) {
       return MediaEmpty(onScan: MediaScanner.scanMedias);
     }
@@ -59,6 +61,7 @@ class _MediaLibraryPageState extends State<MediaLibraryPage>
             ),
             onRefresh: () => MediaScanner.scanMedias(true),
             child: ProgressiveScrollview(
+              backgroundColor: Colors.transparent,
               centerTitle: false,
               title: "媒体库",
               action: controller.headerAppBarAction,
@@ -104,7 +107,11 @@ class _MediaLibraryPageState extends State<MediaLibraryPage>
           onSelectionEnd: controller.handleSelectionEnd,
         ),
 
-        MediaLocator(onTap: homeController.handleLocate),
+        MediaLocator(
+          showBackTop: showBackTop,
+          onLocate: homeController.handleLocate,
+          onBackTop: homeController.handleBackTop,
+        ),
       ],
     );
   }

@@ -11,9 +11,16 @@ import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class MediaLocator extends StatelessWidget {
-  final VoidCallback onTap;
+  final bool showBackTop;
+  final VoidCallback onLocate;
+  final VoidCallback onBackTop;
 
-  const MediaLocator({super.key, required this.onTap});
+  const MediaLocator({
+    super.key,
+    required this.showBackTop,
+    required this.onLocate,
+    required this.onBackTop,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,18 +29,45 @@ class MediaLocator extends StatelessWidget {
     final paddingBottom = MediaQuery.of(context).viewPadding.bottom;
 
     final resultWidget = FrameSeparateWidget(
-      child: GlassPanel(
-        padding: EdgeInsets.zero,
-        settings: RecommendedGlassSettings.bottomBar,
-        child: FloatingActionButton(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          onPressed: onTap,
-          child: SFIcon(
-            SFIcons.sf_dot_radiowaves_left_and_right,
-            color: theme.colorScheme.onSurface.withAlpha(AppTheme.defaultAlpha),
+      child: Row(
+        spacing: 8,
+        children: [
+          AnimatedSlide(
+            offset: Offset(showBackTop ? 0 : 3, 0),
+            curve: Curves.easeInOutSine,
+            duration: AppTheme.defaultDurationMid,
+            child: GlassPanel(
+              padding: EdgeInsets.zero,
+              settings: RecommendedGlassSettings.bottomBar,
+              child: FloatingActionButton(
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                onPressed: onBackTop,
+                child: SFIcon(
+                  SFIcons.sf_arrow_up,
+                  color: theme.colorScheme.onSurface.withAlpha(
+                    AppTheme.defaultAlpha,
+                  ),
+                ),
+              ),
+            ),
           ),
-        ),
+          GlassPanel(
+            padding: EdgeInsets.zero,
+            settings: RecommendedGlassSettings.bottomBar,
+            child: FloatingActionButton(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              onPressed: onLocate,
+              child: SFIcon(
+                SFIcons.sf_dot_radiowaves_left_and_right,
+                color: theme.colorScheme.onSurface.withAlpha(
+                  AppTheme.defaultAlpha,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
 

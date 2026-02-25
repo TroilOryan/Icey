@@ -385,8 +385,6 @@ class HomeController {
   }
 
   void _listenMediaListScroll() {
-    if (!settingsManager.scrollHidePlayBar.value) return;
-
     late final double currentOffset;
 
     if (state.currentIndex.value == 0) {
@@ -396,6 +394,10 @@ class HomeController {
     } else if (state.currentIndex.value == 2) {
       currentOffset = artistListScrollController.offset;
     }
+
+    state.showBackTop.value = currentOffset > 0;
+
+    if (!settingsManager.scrollHidePlayBar.value) return;
 
     if (currentOffset != state.lastScrollOffset.value && currentOffset > 0) {
       final newDirection = currentOffset > state.lastScrollOffset.value

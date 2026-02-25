@@ -45,6 +45,7 @@ class _AlbumListPageState extends State<AlbumListPage>
         : 16;
 
     return ProgressiveScrollview(
+      backgroundColor: Colors.transparent,
       title: "专辑",
       centerTitle: false,
       onTap: homeController.handleBackTop,

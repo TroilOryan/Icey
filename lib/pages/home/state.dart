@@ -10,6 +10,8 @@ class HomeState {
 
   final hidePlayBar = signal(false);
 
+  final showBackTop = signal(false);
+
   final lastScrollOffset = signal(0.0);
 
   final scrollDirection = signal(ScrollDirection.idle);

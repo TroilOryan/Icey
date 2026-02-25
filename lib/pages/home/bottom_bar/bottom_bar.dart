@@ -3,6 +3,8 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 
+import '../../../constants/glass_settings.dart';
+
 class BottomBar extends StatelessWidget {
   final List<MenuData> menu;
   final int selectedIndex;
@@ -23,20 +25,9 @@ class BottomBar extends StatelessWidget {
 
     return GlassBottomBar(
       horizontalPadding: 16,
-      quality: GlassQuality.premium,
+      quality: GlassQuality.standard,
       indicatorColor: theme.colorScheme.primary.withAlpha(55),
-      glassSettings: LiquidGlassSettings(
-        blur: 3,
-        thickness: 12,
-        glassColor: Color.fromRGBO(255, 255, 255, 0.08),
-        lightAngle: 135,
-        lightIntensity: 0.7,
-        ambientStrength: 0.4,
-        saturation: 1.2,
-        refractiveIndex: 0.7,
-        // Thin rim (standard) / subtle refraction (premium)
-        chromaticAberration: 0.0,
-      ),
+      glassSettings: RecommendedGlassSettings.bottomBar,
       iconSize: 20,
       selectedIconColor: theme.colorScheme.primary,
       unselectedIconColor: theme.iconTheme.color!,

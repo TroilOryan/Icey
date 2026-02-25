@@ -45,6 +45,7 @@ class _ArtistListPageState extends State<ArtistListPage>
         : 16;
 
     return ProgressiveScrollview(
+      backgroundColor: Colors.transparent,
       title: "艺术家",
       centerTitle: false,
       onTap: homeController.handleBackTop,
