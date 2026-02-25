@@ -63,7 +63,14 @@ bottomSheet({
     bottomSheetBorderRadius: BorderRadius.all(AppTheme.borderRadiusLg),
     context: context,
     builder: (context, controller, _) => Padding(
-      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      padding: EdgeInsets.fromLTRB(
+        24,
+        16,
+        24,
+        16 +
+            MediaQuery.of(context).viewInsets.bottom +
+            MediaQuery.of(context).padding.bottom,
+      ),
       child: Builder(builder: (context) => builder(context, controller)),
     ),
   );

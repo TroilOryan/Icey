@@ -37,13 +37,17 @@ class MediaList extends StatelessWidget {
 
     final isPlaying = mediaItem?.id == item.id.toString();
 
+    EdgeInsets? margin;
+
+    if (index == mediaList.length - 1) {
+      margin = EdgeInsets.only(bottom: paddingBottom + 64);
+    }
+
     return MediaListTile(
       item,
       showDuration: showDuration,
       isPlaying: isPlaying,
-      margin: index == mediaList.length - 1
-          ? EdgeInsets.only(bottom: paddingBottom + 64)
-          : null,
+      margin: margin,
       onTap: () => onTap(item),
       onLongPress: () => onLongPress(item),
     );
@@ -63,7 +67,7 @@ class MediaList extends StatelessWidget {
         return SliverPadding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           sliver: SuperSliverList.separated(
-            addAutomaticKeepAlives: true,
+            layoutKeptAliveChildren: true,
             itemCount: mediaList.length,
             separatorBuilder: (context, index) => const SizedBox(height: 16),
             itemBuilder: (context, index) => buildItem(

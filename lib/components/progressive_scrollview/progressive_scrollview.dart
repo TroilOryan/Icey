@@ -31,7 +31,7 @@ class ProgressiveScrollViewController {
 class ProgressiveScrollview extends StatefulWidget {
   final String title;
   final bool centerTitle;
-  final CustomScrollView? child;
+  final Widget? child;
   final Function(double)? builder;
   final List<HeaderAppBarAction>? action;
   final Color? backgroundColor;

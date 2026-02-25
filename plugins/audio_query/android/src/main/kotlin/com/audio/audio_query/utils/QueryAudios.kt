@@ -35,6 +35,26 @@ class QueryAudios {
     // 原子整数用于计数已处理项
     private val processedCount = AtomicInteger(0)
 
+    private fun buildSelection(): String {
+        return when {
+            Build.VERSION.SDK_INT > Build.VERSION_CODES.Q -> {
+                // Android 10+：包含所有音频类型
+                """
+            ${MediaStore.Audio.Media.IS_MUSIC} != 0 OR 
+            ${MediaStore.Audio.Media.IS_AUDIOBOOK} != 0 OR 
+            ${MediaStore.Audio.Media.IS_PODCAST} != 0 OR 
+            ${MediaStore.Audio.Media.IS_RINGTONE} != 0 OR 
+            ${MediaStore.Audio.Media.IS_NOTIFICATION} != 0 OR 
+            ${MediaStore.Audio.Media.IS_ALARM} != 0
+            """.trimIndent().replace("\n", "")
+            }
+            else -> {
+                // Android 9：只过滤 MIME 类型
+                "${MediaStore.Audio.Media.MIME_TYPE} LIKE 'audio/%'"
+            }
+        }
+    }
+
     fun queryAudios() {
         val result = PluginProvider.result()
         val context = PluginProvider.context() ?: run {
@@ -50,14 +70,15 @@ class QueryAudios {
             return
         }
 
-        // 根据Android版本构建projection，避免查询不存在的字段
         val projection = buildProjection()
 
         try {
+            val selection = buildSelection()
+
             val cursor = contentResolver.query(
                 MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 projection,
-                "${MediaStore.Audio.Media.IS_MUSIC} != 0",
+                selection,  // 使用动态构建的条件
                 null,
                 MediaStore.Audio.Media.DEFAULT_SORT_ORDER
             )

@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:IceyPlayer/helpers/toast/toast.dart';
+import 'package:IceyPlayer/models/lyric/lyric.dart';
 import 'package:flutter/services.dart';
 import 'package:IceyPlayer/constants/box_key.dart';
 import 'package:IceyPlayer/constants/cache_key.dart';
@@ -337,6 +338,13 @@ class SettingsManager {
       height: WindowSize.matchParent,
       width: WindowSize.matchParent,
       startPosition: const OverlayPosition(0, 0),
+    );
+
+    await FlutterOverlayWindow.moveOverlay(
+      OverlayPosition(
+        lyricManager.overlayLyricX.value,
+        lyricManager.overlayLyricY.value,
+      ),
     );
   }
 

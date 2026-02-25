@@ -49,6 +49,7 @@ class _ArtistListPageState extends State<ArtistListPage>
       centerTitle: false,
       onTap: homeController.handleBackTop,
       builder: (appbarHeight) => CustomScrollView(
+        cacheExtent: 700,
         controller: homeController.artistListScrollController,
         slivers: [
           SliverPadding(

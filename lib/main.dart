@@ -106,9 +106,9 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   Future onDispose() async {
     _brightnessThemeListener();
 
-    if (await FlutterOverlayWindow.isActive()) {
-      FlutterOverlayWindow.closeOverlay();
-    }
+    // if (await FlutterOverlayWindow.isActive()) {
+    //   FlutterOverlayWindow.closeOverlay();
+    // }
 
     WidgetsBinding.instance.removeObserver(this);
   }
@@ -149,10 +149,10 @@ class _AppState extends State<App> with WidgetsBindingObserver {
 
   @override
   void dispose() {
+    onDispose();
+
     // TODO: implement dispose
     super.dispose();
-
-    onDispose();
   }
 
   @override
@@ -181,6 +181,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
         statusBarIconBrightness: statusBarIconBrightness,
         systemStatusBarContrastEnforced: false,
         systemNavigationBarContrastEnforced: false,
+        systemNavigationBarIconBrightness: statusBarIconBrightness,
         systemNavigationBarDividerColor: Colors.transparent,
         statusBarColor: Colors.transparent,
         systemNavigationBarColor: Colors.transparent,

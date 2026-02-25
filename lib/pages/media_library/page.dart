@@ -64,6 +64,7 @@ class _MediaLibraryPageState extends State<MediaLibraryPage>
               action: controller.headerAppBarAction,
               onTap: homeController.handleBackTop,
               builder: (appbarHeight) => CustomScrollView(
+                cacheExtent: 700,
                 controller: homeController.mediaListScrollController,
                 slivers: [
                   // MediaOrder(offstage: mediaList.isEmpty),
