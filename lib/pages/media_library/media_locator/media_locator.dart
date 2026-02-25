@@ -37,6 +37,7 @@ class MediaLocator extends StatelessWidget {
             curve: Curves.easeInOutSine,
             duration: AppTheme.defaultDurationMid,
             child: GlassPanel(
+              shape: const LiquidOval(),
               padding: EdgeInsets.zero,
               settings: RecommendedGlassSettings.bottomBar,
               child: FloatingActionButton(
@@ -53,6 +54,7 @@ class MediaLocator extends StatelessWidget {
             ),
           ),
           GlassPanel(
+            shape: const LiquidOval(),
             padding: EdgeInsets.zero,
             settings: RecommendedGlassSettings.bottomBar,
             child: FloatingActionButton(

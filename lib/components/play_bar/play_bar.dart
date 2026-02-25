@@ -158,13 +158,11 @@ class PlayBar extends StatelessWidget {
           ),
           Container(
             clipBehavior: Clip.antiAlias,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(AppTheme.borderRadiusXxs),
-            ),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(66)),
             child: PlayCover(
               width: 48,
               height: 48,
-              borderRadius: BorderRadius.all(AppTheme.borderRadiusXxs),
+              borderRadius: BorderRadius.circular(66),
               transitionBuilder: (Widget child, Animation<double> animation) =>
                   FadeTransition(
                     opacity: animation,
@@ -196,9 +194,9 @@ class PlayBar extends StatelessWidget {
           duration: AppTheme.defaultDurationLong,
           child: OrientationLayoutBuilder(
             portrait: (context) => GlassPanel(
-              shape: LiquidRoundedRectangle(borderRadius: 16),
+              shape: LiquidRoundedRectangle(borderRadius: 66),
               padding: EdgeInsets.zero,
-              settings: RecommendedGlassSettings.bottomBar,
+              settings: RecommendedGlassSettings.bottomBar.copyWith(blur: 5),
               margin: EdgeInsets.fromLTRB(
                 16,
                 0,
@@ -208,20 +206,9 @@ class PlayBar extends StatelessWidget {
               child: playBar,
             ),
             landscape: (context) => GlassPanel(
-              shape: LiquidRoundedRectangle(borderRadius: 16),
+              shape: LiquidRoundedRectangle(borderRadius: 66),
               padding: EdgeInsets.zero,
-              settings: LiquidGlassSettings(
-                blur: 3,
-                thickness: 16,
-                glassColor: Color.fromRGBO(255, 255, 255, 0.01),
-                lightAngle: 135,
-                lightIntensity: 0.7,
-                ambientStrength: 0.4,
-                saturation: 1.2,
-                refractiveIndex: 0.7,
-                // Thin rim (standard) / subtle refraction (premium)
-                chromaticAberration: 0.0,
-              ),
+              settings: RecommendedGlassSettings.bottomBar,
               margin: EdgeInsets.fromLTRB(16, 0, 16, paddingBottom),
               child: playBar,
             ),

@@ -46,9 +46,38 @@ class _HomePageState extends State<HomePage>
     final isDarkMode =
         MediaQuery.of(context).platformBrightness == Brightness.dark;
 
-    final mobile = LiquidGlassScope.stack(
-      background: listBg.isNotEmpty
-          ? Stack(
+    final content = Scaffold(
+      extendBodyBehindAppBar: true,
+      extendBody: true,
+      resizeToAvoidBottomInset: false,
+      backgroundColor: listBg.isNotEmpty
+          ? Colors.transparent
+          : theme.scaffoldBackgroundColor,
+      bottomNavigationBar: mediaList.isNotEmpty
+          ? BottomBar(
+              menu: homeController.menu,
+              selectedIndex: widget.navigationShell.currentIndex,
+              onSearch: () => homeController.navToSearch(context),
+              onTabSelected: (index) => homeController.handleGoBranch(index),
+            )
+          : null,
+      body: Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          widget.navigationShell,
+
+          if (mediaList.isNotEmpty)
+            PlayBar(
+              hidePlayBar: hidePlayBar,
+              onTap: () => homeController.handleOpenPanel(context),
+            ),
+        ],
+      ),
+    );
+
+    final mobile = listBg.isNotEmpty
+        ? LiquidGlassScope.stack(
+            background: Stack(
               children: [
                 Image.memory(
                   listBg,
@@ -66,37 +95,10 @@ class _HomePageState extends State<HomePage>
                   ),
                 ),
               ],
-            )
-          : Container(),
-      content: Scaffold(
-        extendBodyBehindAppBar: true,
-        extendBody: true,
-        resizeToAvoidBottomInset: false,
-        backgroundColor: listBg.isNotEmpty
-            ? Colors.transparent
-            : theme.scaffoldBackgroundColor,
-        bottomNavigationBar: mediaList.isNotEmpty
-            ? BottomBar(
-                menu: homeController.menu,
-                selectedIndex: widget.navigationShell.currentIndex,
-                onSearch: () => homeController.navToSearch(context),
-                onTabSelected: (index) => homeController.handleGoBranch(index),
-              )
-            : null,
-        body: Stack(
-          alignment: Alignment.bottomCenter,
-          children: [
-            widget.navigationShell,
-
-            if (mediaList.isNotEmpty)
-              PlayBar(
-                hidePlayBar: hidePlayBar,
-                onTap: () => homeController.handleOpenPanel(context),
-              ),
-          ],
-        ),
-      ),
-    );
+            ),
+            content: content,
+          )
+        : content;
 
     return AdaptiveBuilder(
       mobile: (context) => PopScope(
