@@ -121,7 +121,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
         settingsManager.setLyricOverlay(false);
       }
 
-      if (res) {
+      if (res && settingsManager.lyricOverlay.value) {
         settingsManager.showLyricOverlay();
       }
     } else if (state == AppLifecycleState.paused) {}

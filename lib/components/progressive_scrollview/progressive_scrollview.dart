@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:IceyPlayer/models/settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:keframe/keframe.dart';
 import 'package:signals/signals_flutter.dart';
 import 'package:soft_edge_blur/soft_edge_blur.dart';
 
@@ -93,19 +92,17 @@ class _ProgressiveScrollviewState extends State<ProgressiveScrollview> {
     double appbarHeight,
     double fontSize,
   ) {
-    return FrameSeparateWidget(
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: widget.onTap,
-        child: Container(
-          padding: widget.centerTitle
-              ? EdgeInsets.only(top: paddingTop)
-              : EdgeInsets.fromLTRB(24, paddingTop, 6, 0),
-          height: appbarHeight,
-          child: widget.centerTitle
-              ? _buildCenterTitleAppBar(theme, paddingTop, fontSize)
-              : _buildLeftTitleAppBar(theme, fontSize),
-        ),
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: widget.onTap,
+      child: Container(
+        padding: widget.centerTitle
+            ? EdgeInsets.only(top: paddingTop)
+            : EdgeInsets.fromLTRB(24, paddingTop, 6, 0),
+        height: appbarHeight,
+        child: widget.centerTitle
+            ? _buildCenterTitleAppBar(theme, paddingTop, fontSize)
+            : _buildLeftTitleAppBar(theme, fontSize),
       ),
     );
   }
