@@ -33,7 +33,6 @@ class ProgressiveScrollViewController {
 class ProgressiveScrollview extends StatefulWidget {
   final String title;
   final bool centerTitle;
-  final Widget? child;
   final Function(double)? builder;
   final List<HeaderAppBarAction>? action;
   final Color? backgroundColor;
@@ -43,7 +42,6 @@ class ProgressiveScrollview extends StatefulWidget {
     super.key,
     required this.title,
     this.centerTitle = true,
-    this.child,
     this.builder,
     this.action,
     this.backgroundColor,
@@ -78,13 +76,11 @@ class _ProgressiveScrollviewState extends State<ProgressiveScrollview> {
         ],
         child: NotificationListener(
           onNotification: controller.handleNotification,
-          child:
-              widget.child ??
-              Builder(
-                builder: (context) => widget.builder != null
-                    ? widget.builder!(appbarHeight)
-                    : const SizedBox(),
-              ),
+          child: Builder(
+            builder: (context) => widget.builder != null
+                ? widget.builder!(appbarHeight)
+                : const SizedBox(),
+          ),
         ),
       ),
     );
