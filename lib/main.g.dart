@@ -48,8 +48,6 @@ void setDisplayMode() {
 }
 
 Future<void> initDesktop() async {
-  await RustLib.init();
-
   await windowManager.ensureInitialized();
 
   WindowOptions windowOptions = WindowOptions(
@@ -74,6 +72,8 @@ Future<void> initServices() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   GestureBinding.instance.resamplingEnabled = true;
+
+  await RustLib.init();
 
   await initHive();
 

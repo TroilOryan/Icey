@@ -1,6 +1,8 @@
 // 跨平台模块：正常导入
 pub mod logger;
 
+pub mod lyric_parser;
+
 // Windows 平台：导入完整的实现
 #[cfg(windows)]
 pub mod smtc_flutter;

@@ -6,14 +6,35 @@ edition = "2021"
 [lib]
 crate-type = ["cdylib", "staticlib"]
 
+[features]
+default = ["ass", "lrc", "yrc", "qrc", "lys", "eslrc", "ttml", "eqrc", "serde"]
+ass = []
+lrc = ["dep:nom"]
+yrc = ["dep:nom"]
+qrc = ["dep:nom"]
+lys = ["dep:nom"]
+eslrc = ["dep:nom", "lrc"]
+ttml = ["dep:quick-xml", "dep:thiserror", "dep:nom"]
+eqrc = ["dep:miniz_oxide"]
+serde = ["dep:serde"]
+
 [dependencies]
-flutter_rust_bridge = "=2.9.0"
+flutter_rust_bridge = "=2.11.1"
 lofty = "0.21.1"
 serde_json = "1.0.117"
 phf = { version = "0.11", features = ["macros"] }
 anyhow = "1.0.86"
 ttf-parser = "0.24.1"
 image = "0.25.2"
+
+# 歌词解析
+nom = { version = "^8.0", optional = true }
+serde = { version = "^1.0", features = ["derive"], optional = true }
+cipher = { version = "0.4", optional = true }
+miniz_oxide = { version = "^0.8", optional = true }
+quick-xml = { version = "^0.38", optional = true }
+thiserror = { version = "^2", optional = true }
+# rayon = { version = "^1.7", optional = true }
 
 # 仅在 Windows 平台启用 Windows API 依赖
 [target.'cfg(windows)'.dependencies]
