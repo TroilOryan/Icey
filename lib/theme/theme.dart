@@ -196,9 +196,7 @@ class AppTheme {
         ),
       ),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: isDark
-            ? const Color(0xff212121)
-            : const Color(0xfff2f3f4),
+        backgroundColor: isDark ? Colors.black : Colors.white,
       ),
       iconTheme: IconThemeData(size: 16, color: colorScheme.onSurface),
       inputDecorationTheme: InputDecorationTheme(

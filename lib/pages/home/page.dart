@@ -116,6 +116,25 @@ class _HomePageState extends State<HomePage>
           body: Stack(
             alignment: Alignment.bottomCenter,
             children: [
+              Stack(
+                children: [
+                  Image.memory(
+                    listBg,
+                    fit: BoxFit.cover,
+                    width: deviceWidth,
+                    height: deviceHeight,
+                    gaplessPlayback: true,
+                  ),
+                  Offstage(
+                    offstage: !isDarkMode,
+                    child: Container(
+                      color: Colors.black45,
+                      width: deviceWidth,
+                      height: deviceHeight,
+                    ),
+                  ),
+                ],
+              ),
               Row(
                 children: [
                   SideBar(

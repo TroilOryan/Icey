@@ -22,7 +22,9 @@ class ProgressiveScrollViewController {
     if (notification is ScrollUpdateNotification) {
       final double scrollOffset = notification.metrics.pixels;
 
-      offset.value = scrollOffset;
+      if (scrollOffset <= 75) {
+        offset.value = scrollOffset;
+      }
     }
 
     return false;
@@ -64,9 +66,11 @@ class _ProgressiveScrollviewState extends State<ProgressiveScrollview> {
         edges: [
           EdgeBlur(
             type: EdgeType.topEdge,
-            size: 125,
+            size: 100,
             sigma: 12,
-            tintColor: listBg.isEmpty ? theme.cardTheme.color : null,
+            tintColor: listBg.isEmpty
+                ? theme.floatingActionButtonTheme.backgroundColor
+                : null,
             controlPoints: [
               ControlPoint(position: 0.5, type: ControlPointType.visible),
               ControlPoint(position: 1, type: ControlPointType.transparent),
@@ -182,13 +186,13 @@ class _ProgressiveScrollviewState extends State<ProgressiveScrollview> {
     final offset = controller.offset.watch(context);
     final paddingTop = MediaQuery.of(context).viewPadding.top;
     final appbarHeight = computed(
-      () => max(150 - offset, kToolbarHeight + paddingTop),
+      () => max(75 - offset, kToolbarHeight + paddingTop),
     );
 
     final fontSize = computed(
       () =>
           Theme.of(context).textTheme.titleLarge!.fontSize! *
-          max((1.5 - offset / 200), 0.8),
+          max((1.5 - 75 / 150), 0.8),
     );
 
     return Stack(
