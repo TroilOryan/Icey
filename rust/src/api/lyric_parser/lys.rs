@@ -3,7 +3,7 @@
 #[cfg(target_arch = "wasm32")]
 use wasm_bindgen::prelude::*;
 
-use crate::{LyricLine, LyricWord, utils::process_lyrics};
+use crate::{LyricLine, LyricLineOwned, LyricWord, utils::process_lyrics};
 
 use std::fmt::Write;
 use std::{borrow::Cow, str::FromStr};
@@ -38,7 +38,7 @@ fn process_time<'a>(
     Ok((src, (start_time, duration)))
 }
 
-pub fn parse_property(src: &str) -> IResult<&str, (bool, bool)> {
+fn parse_property(src: &str) -> IResult<&str, (bool, bool)> {
     let (src, _) = tag("[")(src)?;
     let (src, prop) = nom::character::complete::digit1(src)?;
     let (src, _) = tag("]")(src)?;
@@ -62,7 +62,7 @@ pub fn parse_property(src: &str) -> IResult<&str, (bool, bool)> {
     ))
 }
 
-pub fn parse_word_time(src: &str) -> IResult<&str, (u64, u64)> {
+fn parse_word_time(src: &str) -> IResult<&str, (u64, u64)> {
     let (src, _) = tag("(")(src)?;
     let (src, start_time) = take_until1(",")(src)?;
     let (src, _) = tag(",")(src)?;
@@ -72,7 +72,7 @@ pub fn parse_word_time(src: &str) -> IResult<&str, (u64, u64)> {
     process_time(src, start_time, duration)
 }
 
-pub fn parse_word(src: &str) -> IResult<&str, LyricWord<'_>> {
+fn parse_word(src: &str) -> IResult<&str, LyricWord<'_>> {
     for (i, _c) in src.char_indices() {
         if let Ok((nsrc, (start_time, duration))) = parse_word_time(&src[i..]) {
             return Ok((
@@ -98,12 +98,12 @@ fn test_word() {
     let _ = dbg!(parse_word("Counting(0,18) (18,18)Stars(36,18)"));
 }
 
-pub fn parse_words(src: &str) -> IResult<&str, Vec<LyricWord<'_>>> {
+fn parse_words(src: &str) -> IResult<&str, Vec<LyricWord<'_>>> {
     let (src, words) = many0(parse_word).parse(src)?;
     Ok((src, words))
 }
 
-pub fn parse_line(src: &str) -> IResult<&str, LyricLine<'_>> {
+fn parse_line(src: &str) -> IResult<&str, LyricLine<'_>> {
     let (src, (is_bg, is_duet)) = parse_property(src)?;
     match is_not("\r\n")(src) {
         Ok((src, line)) => {
@@ -138,7 +138,16 @@ pub fn parse_line(src: &str) -> IResult<&str, LyricLine<'_>> {
     }
 }
 
-pub fn parse_lys<'a>(src: &'a str) -> Vec<LyricLine<'a>> {
+/// LYS 格式（Lyricify）
+#[cfg(feature = "lys")]
+pub fn parse_lys(content: String) -> Vec<LyricLineOwned> {
+    _parse_lys(&content)
+        .into_iter()
+        .map(|line| line.to_owned())
+        .collect()
+}
+
+fn _parse_lys<'a>(src: &'a str) -> Vec<LyricLine<'a>> {
     let lines = src.lines();
     let mut result = Vec::with_capacity(lines.size_hint().1.unwrap_or(1024).min(1024));
 
@@ -153,7 +162,15 @@ pub fn parse_lys<'a>(src: &'a str) -> Vec<LyricLine<'a>> {
     result
 }
 
-pub fn stringify_lys(lines: &[LyricLine]) -> String {
+#[cfg(feature = "lys")]
+pub fn stringify_lys(lines: Vec<LyricLineOwned>) -> String {
+    let lines_ref: Vec<LyricLine> = lines.iter()
+        .map(|line| line.to_ref())
+        .collect();
+    _stringify_lys(&lines_ref)
+}
+
+fn _stringify_lys(lines: &[LyricLine]) -> String {
     let capacity: usize = lines
         .iter()
         .map(|x| x.words.iter().map(|y| y.word.len()).sum::<usize>() + 32)
@@ -182,19 +199,6 @@ pub fn stringify_lys(lines: &[LyricLine]) -> String {
     result
 }
 
-#[cfg(all(target_arch = "wasm32", feature = "serde"))]
-#[wasm_bindgen(js_name = "parseLys", skip_typescript)]
-pub fn parse_lys_js(src: &str) -> JsValue {
-    serde_wasm_bindgen::to_value(&parse_lys(src)).unwrap()
-}
-
-#[cfg(all(target_arch = "wasm32", feature = "serde"))]
-#[wasm_bindgen(js_name = "stringifyLys", skip_typescript)]
-pub fn stringify_lys_js(lrc: JsValue) -> String {
-    let lines: Vec<LyricLine> = serde_wasm_bindgen::from_value(lrc).unwrap();
-    stringify_lys(&lines)
-}
-
 #[test]
 fn test_props() {
     let line = parse_line("[0]Test(1234,567)").unwrap().1;
@@ -211,6 +215,6 @@ fn test_props() {
     assert!(line.is_duet);
     assert_eq!(
         "[8]Test(1234,567)\n",
-        stringify_lys(&parse_lys("[8]Test(1234,567)"))
+        stringify_lys(&_parse_lys("[8]Test(1234,567)"))
     );
 }

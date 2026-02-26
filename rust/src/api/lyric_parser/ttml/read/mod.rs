@@ -1,6 +1,3 @@
-#[cfg(target_arch = "wasm32")]
-use wasm_bindgen::prelude::*;
-
 use std::io::BufRead;
 
 pub mod error;
@@ -10,15 +7,15 @@ pub mod utils;
 pub use error::TTMLError;
 use super::TTMLLyric;
 
-pub fn parse_ttml<'a>(data: impl BufRead) -> std::result::Result<TTMLLyric<'a>, TTMLError> {
-    let parser = parser::TTMLParser::new(data);
-    parser.parse()
+/// TTML 格式
+#[cfg(feature = "ttml")]
+pub fn parse_ttml(content: String) -> TTMLLyricOwned {
+    _parse_ttml(&content)
 }
 
-#[cfg(all(target_arch = "wasm32", feature = "serde"))]
-#[wasm_bindgen(js_name = "parseTTML", skip_typescript)]
-pub fn parse_ttml_js(src: &str) -> JsValue {
-    serde_wasm_bindgen::to_value(&parse_ttml(src.as_bytes()).unwrap()).unwrap()
+pub fn _parse_ttml<'a>(data: impl BufRead) -> std::result::Result<TTMLLyric<'a>, TTMLError> {
+    let parser = parser::TTMLParser::new(data);
+    parser.parse()
 }
 
 #[cfg(test)]
@@ -30,7 +27,7 @@ mod tests {
     fn test_ttml() {
         const TEST_TTML: &str = include_str!("../../../test/test.ttml");
         let t = std::time::Instant::now();
-        let r = parse_ttml(TEST_TTML.as_bytes());
+        let r = _parse_ttml(TEST_TTML.as_bytes());
         let t = t.elapsed();
         match r {
             Ok(ttml) => {
@@ -82,7 +79,7 @@ mod tests {
     fn test_parse_ttml_basic() {
         const TTML_WITH_ENTITIES: &str = r#"<tt xmlns="http://www.w3.org/ns/ttml" xmlns:itunes="http://music.apple.com/lyric-ttml-internal" xmlns:ttm="http://www.w3.org/ns/ttml#metadata" itunes:timing="Word" xml:lang="ja"><head><metadata><ttm:agent type="person" xml:id="v1"/><ttm:agent type="other" xml:id="v2000"/><iTunesMetadata xmlns="http://music.apple.com/lyric-ttml-internal" leadingSilence="0.640"><translations/><songwriters><songwriter>Ayase</songwriter></songwriters><transliterations><transliteration automaticallyCreated="true" xml:lang="ja-Latn"><text for="L51"><span xmlns="http://www.w3.org/ns/ttml">sorede</span><span xmlns="http://www.w3.org/ns/ttml">mo</span></text></transliteration></transliterations></iTunesMetadata></metadata></head><body><div><p begin="2:33.455" end="2:35.307" itunes:key="L51" ttm:agent="v1"><span begin="2:33.455" end="2:34.068">それで</span><span begin="2:34.068" end="2:35.307">も</span></p></div></body></tt>"#;
 
-        let ttml = parse_ttml(TTML_WITH_ENTITIES.as_bytes()).unwrap();
+        let ttml = _parse_ttml(TTML_WITH_ENTITIES.as_bytes()).unwrap();
         assert_eq!(ttml.lines.len(), 1);
         let line = &ttml.lines[0];
         assert_eq!(line.words.len(), 2);
@@ -94,7 +91,7 @@ mod tests {
     fn test_parse_ttml_with_entities() {
         const TTML_WITH_ENTITIES: &str = r#"<tt><body><div><p begin="0" end="5"><span begin="0" end="5">Test: &lt; &gt; &amp; &quot; &apos;</span></p></div></body></tt>"#;
 
-        let result = parse_ttml(TTML_WITH_ENTITIES.as_bytes());
+        let result = _parse_ttml(TTML_WITH_ENTITIES.as_bytes());
 
         assert!(result.is_ok(), "解析TTML应该成功");
         let ttml_lyric = result.unwrap();
@@ -113,7 +110,7 @@ mod tests {
     fn test_parse_apple_music_word_by_word_lyrics() {
         const TTML_EXAMPLE: &str = r##"<tt xmlns="http://www.w3.org/ns/ttml" xmlns:itunes="http://music.apple.com/lyric-ttml-internal" xml:lang="ja"><head><metadata><iTunesMetadata xmlns="http://music.apple.com/lyric-ttml-internal"><translations><translation type="replacement" xml:lang="en"><text for="L1"><span xmlns="http://www.w3.org/ns/ttml">This</span> <span xmlns="http://www.w3.org/ns/ttml">is</span></text><text for="L2"><span xmlns="http://www.w3.org/ns/ttml">a test</span></text></translation></translations><transliterations><transliteration xml:lang="ja-Latn"><text for="L1"><span xmlns="http://www.w3.org/ns/ttml">ko</span><span xmlns="http://www.w3.org/ns/ttml">re</span><span xmlns="http://www.w3.org/ns/ttml">wa</span></text><text for="L2"><span xmlns="http://www.w3.org/ns/ttml">tesuto</span></text></transliteration></transliterations></iTunesMetadata></metadata></head><body><div><p begin="10s" end="12s" itunes:key="L1"><span begin="10s" end="12s">これは</span></p><p begin="13s" end="15s" itunes:key="L2"><span begin="13s" end="15s">テスト</span></p><p begin="16s" end="18s" itunes:key="L3"><span begin="16s" end="18s">未翻译行</span></p></div></body></tt>"##;
 
-        let result = parse_ttml(TTML_EXAMPLE.as_bytes());
+        let result = _parse_ttml(TTML_EXAMPLE.as_bytes());
 
         let ttml_lyric = result.unwrap();
 

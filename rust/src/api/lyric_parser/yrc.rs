@@ -1,7 +1,7 @@
 #[cfg(target_arch = "wasm32")]
 use wasm_bindgen::prelude::*;
 
-use crate::{LyricLine, LyricWord, utils::process_lyrics};
+use crate::{LyricLine, LyricLineOwned, LyricWord, utils::process_lyrics};
 
 use std::fmt::Write;
 use std::{borrow::Cow, str::FromStr};
@@ -34,7 +34,7 @@ fn process_time<'a>(
     Ok((src, (start_time, duration)))
 }
 
-pub fn parse_time(src: &str) -> IResult<&str, (u64, u64)> {
+fn parse_time(src: &str) -> IResult<&str, (u64, u64)> {
     let (src, _) = tag("[")(src)?;
     let (src, start_time) = nom::character::complete::digit1(src)?;
     let (src, _) = tag(",")(src)?;
@@ -44,7 +44,7 @@ pub fn parse_time(src: &str) -> IResult<&str, (u64, u64)> {
     process_time(src, start_time, duration)
 }
 
-pub fn parse_word_time(src: &str) -> IResult<&str, (u64, u64)> {
+fn parse_word_time(src: &str) -> IResult<&str, (u64, u64)> {
     let (src, _) = tag("(")(src)?;
     let (src, start_time) = take_until1(",")(src)?;
     let (src, _) = tag(",")(src)?;
@@ -54,7 +54,7 @@ pub fn parse_word_time(src: &str) -> IResult<&str, (u64, u64)> {
     process_time(src, start_time, duration)
 }
 
-pub fn parse_words(src: &str) -> IResult<&str, Vec<LyricWord<'_>>> {
+fn parse_words(src: &str) -> IResult<&str, Vec<LyricWord<'_>>> {
     let (src, words) = many0(pair(
         parse_word_time,
         take_till(|x| x == '(' || x == '\n' || x == '\r'),
@@ -72,7 +72,7 @@ pub fn parse_words(src: &str) -> IResult<&str, Vec<LyricWord<'_>>> {
     Ok((src, words))
 }
 
-pub fn parse_line(src: &str) -> IResult<&str, LyricLine<'_>> {
+fn parse_line(src: &str) -> IResult<&str, LyricLine<'_>> {
     let (src, _) = parse_time(src)?;
     match is_not("\r\n")(src) {
         Ok((src, line)) => {
@@ -103,7 +103,16 @@ pub fn parse_line(src: &str) -> IResult<&str, LyricLine<'_>> {
     }
 }
 
-pub fn parse_yrc<'a>(src: &'a str) -> Vec<LyricLine<'a>> {
+/// YRC 格式（网易云）
+#[cfg(feature = "yrc")]
+pub fn parse_yrc(content: String) -> Vec<LyricLineOwned> {
+    _parse_yrc(&content)
+        .into_iter()
+        .map(|line| line.to_owned())
+        .collect()
+}
+
+fn _parse_yrc<'a>(src: &'a str) -> Vec<LyricLine<'a>> {
     let lines = src.lines();
     let mut result = Vec::with_capacity(lines.size_hint().1.unwrap_or(1024).min(1024));
 
@@ -118,7 +127,15 @@ pub fn parse_yrc<'a>(src: &'a str) -> Vec<LyricLine<'a>> {
     result
 }
 
-pub fn stringify_yrc(lines: &[LyricLine]) -> String {
+#[cfg(feature = "yrc")]
+pub fn stringify_yrc(lines: Vec<LyricLineOwned>) -> String {
+    let lines_ref: Vec<LyricLine> = lines.iter()
+        .map(|line| line.to_ref())
+        .collect();
+    _stringify_yrc(&lines_ref)
+}
+
+fn _stringify_yrc(lines: &[LyricLine]) -> String {
     let capacity: usize = lines
         .iter()
         .map(|x| x.words.iter().map(|y| y.word.len()).sum::<usize>() + 32)
@@ -150,17 +167,4 @@ pub fn stringify_yrc(lines: &[LyricLine]) -> String {
     }
 
     result
-}
-
-#[cfg(all(target_arch = "wasm32", feature = "serde"))]
-#[wasm_bindgen(js_name = "parseYrc", skip_typescript)]
-pub fn parse_yrc_js(src: &str) -> JsValue {
-    serde_wasm_bindgen::to_value(&parse_yrc(src)).unwrap()
-}
-
-#[cfg(all(target_arch = "wasm32", feature = "serde"))]
-#[wasm_bindgen(js_name = "stringifyYrc", skip_typescript)]
-pub fn stringify_yrc_js(lrc: JsValue) -> String {
-    let lines: Vec<LyricLine> = serde_wasm_bindgen::from_value(lrc).unwrap();
-    stringify_yrc(&lines)
 }

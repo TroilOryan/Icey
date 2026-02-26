@@ -1,7 +1,7 @@
 #[cfg(target_arch = "wasm32")]
 use wasm_bindgen::prelude::*;
 
-use crate::{LyricLine, LyricWord, utils::process_lyrics};
+use crate::{LyricLine, LyricLineOwned, LyricWord, utils::process_lyrics};
 
 use std::fmt::Write;
 use std::{borrow::Cow, str::FromStr};
@@ -10,7 +10,7 @@ use nom::{IResult, Parser, character::complete::line_ending};
 use nom::{bytes::complete::*, combinator::opt, multi::many1};
 
 #[inline]
-pub fn parse_time(src: &str) -> IResult<&str, u64> {
+fn parse_time(src: &str) -> IResult<&str, u64> {
     let (src, _start) = tag("[")(src)?;
 
     let (src, min) = take_until1(":")(src)?;
@@ -70,7 +70,7 @@ fn time_test() {
 }
 
 #[inline]
-pub fn parse_line(src: &str) -> IResult<&str, Vec<LyricLine<'_>>> {
+fn parse_line(src: &str) -> IResult<&str, Vec<LyricLine<'_>>> {
     let (src, times) = many1(parse_time).parse(src)?;
     match is_not("\r\n")(src) {
         Ok((src, line)) => {
@@ -134,7 +134,7 @@ fn lyric_line_test() {
             }]
         ))
     );
-    parse_lrc("[by: username]\n[00:01.00] \n");
+    _parse_lrc("[by: username]\n[00:01.00] \n");
     assert_eq!(
         parse_line("[00:10.254][00:10.254] sssxxx\nrestline"),
         Ok((
@@ -197,8 +197,16 @@ fn lyric_line_test() {
     );
 }
 
+#[cfg(feature = "lrc")]
+pub fn parse_lrc(content: String) -> Vec<LyricLineOwned> {
+    _parse_lrc(&content)
+        .into_iter()
+        .map(|line| line.to_owned())
+        .collect()
+}
+
 #[inline]
-pub fn parse_lrc<'a>(src: &'a str) -> Vec<LyricLine<'a>> {
+fn _parse_lrc<'a>(src: &'a str) -> Vec<LyricLine<'a>> {
     let lines = src.lines();
     let mut result = Vec::with_capacity(lines.size_hint().1.unwrap_or(1024).min(1024));
     let mut last_end_time = u64::MAX as _;
@@ -221,7 +229,7 @@ pub fn parse_lrc<'a>(src: &'a str) -> Vec<LyricLine<'a>> {
     result
 }
 
-pub fn write_timestamp(result: &mut String, time: u64) {
+fn write_timestamp(result: &mut String, time: u64) {
     let ms = time % 1000;
     let sec = (time - ms) / 1000;
     let min = (sec - sec % 60) / 60;
@@ -229,8 +237,16 @@ pub fn write_timestamp(result: &mut String, time: u64) {
     write!(result, "[{:02}:{:02}.{:03}]", min, sec % 60, ms).unwrap()
 }
 
+#[cfg(feature = "lrc")]
+pub fn stringify_lrc(lines: Vec<LyricLineOwned>) -> String {
+    let lines_ref: Vec<LyricLine> = lines.iter()
+        .map(|line| line.to_ref())
+        .collect();
+    _stringify_lrc(&lines_ref)
+}
+
 #[inline]
-pub fn stringify_lrc(lines: &[LyricLine]) -> String {
+fn _stringify_lrc(lines: &[LyricLine]) -> String {
     let capacity: usize = lines
         .iter()
         .map(|x| x.words.iter().map(|y| y.word.len()).sum::<usize>() + 13)
@@ -252,24 +268,11 @@ pub fn stringify_lrc(lines: &[LyricLine]) -> String {
 
 #[test]
 fn stringify_lrc_test() {
-    let lrc = parse_lrc("[00:01.12] test LyRiC\n[00:10.254] sssxxx");
+    let lrc = _parse_lrc("[00:01.12] test LyRiC\n[00:10.254] sssxxx");
     assert_eq!(
         stringify_lrc(&lrc),
         "[00:01.120] test LyRiC\n[00:10.254] sssxxx\n"
     );
-}
-
-#[cfg(all(target_arch = "wasm32", feature = "serde"))]
-#[wasm_bindgen(js_name = "parseLrc", skip_typescript)]
-pub fn parse_lrc_js(src: &str) -> JsValue {
-    serde_wasm_bindgen::to_value(&parse_lrc(src)).unwrap()
-}
-
-#[cfg(all(target_arch = "wasm32", feature = "serde"))]
-#[wasm_bindgen(js_name = "stringifyLrc", skip_typescript)]
-pub fn stringify_lrc_js(lrc: JsValue) -> String {
-    let lines: Vec<LyricLine> = serde_wasm_bindgen::from_value(lrc).unwrap();
-    stringify_lrc(&lines)
 }
 
 #[test]
@@ -282,7 +285,7 @@ fn lrc_bench_test() {
     let mut times = Vec::with_capacity(1024);
     for _ in 0..1024 {
         let t = std::time::Instant::now();
-        let _l = parse_lrc("[00:01.12] test LyRiC");
+        let _l = _parse_lrc("[00:01.12] test LyRiC");
         times.push(t.elapsed());
     }
     let times = times.into_iter().map(|x| x.as_micros()).collect::<Vec<_>>();

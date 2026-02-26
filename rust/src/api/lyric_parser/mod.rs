@@ -1,4 +1,18 @@
-pub mod api;
+pub mod lrc;
+
+pub mod eslrc;
+
+pub mod yrc;
+
+pub mod qrc;
+
+pub mod lys;
+
+pub mod ass;
+
+pub mod ttml;
+
+pub mod eqrc;
 
 pub mod utils;
 

@@ -21,7 +21,15 @@ fn write_timestamp(result: &mut String, time: u64) {
     write!(result, "{}:{:02}:{:02}.{:02}", hour, min, sec % 60, ms / 10).unwrap()
 }
 
-pub fn stringify_ass(lines: &[LyricLine]) -> String {
+#[cfg(feature = "ass")]
+pub fn stringify_ass(lines: Vec<LyricLineOwned>) -> String {
+    let lines_ref: Vec<LyricLine> = lines.iter()
+        .map(|line| line.to_ref())
+        .collect();
+    _stringify_ass(&lines_ref)
+}
+
+fn _stringify_ass(lines: &[LyricLine]) -> String {
     let mut result = String::with_capacity(
         lines
             .iter()
@@ -133,11 +141,4 @@ pub fn stringify_ass(lines: &[LyricLine]) -> String {
     }
 
     result
-}
-
-#[cfg(target_arch = "wasm32")]
-#[wasm_bindgen(js_name = "stringifyAss", skip_typescript)]
-pub fn stringify_ass_js(lrc: JsValue) -> String {
-    let lines: Vec<LyricLine> = serde_wasm_bindgen::from_value(lrc).unwrap();
-    stringify_ass(&lines)
 }

@@ -14,9 +14,9 @@ use nom::{IResult, bytes::complete::take_until1};
 #[cfg(target_arch = "wasm32")]
 use wasm_bindgen::prelude::*;
 
-use crate::{LyricLine, utils::process_lyrics};
+use crate::{LyricLine, LyricLineOwned, utils::process_lyrics};
 
-pub fn parse_line(src: &str) -> IResult<&str, LyricLine<'_>> {
+fn parse_line(src: &str) -> IResult<&str, LyricLine<'_>> {
     let (mut src, mut start_time) = crate::lrc::parse_time(src)?;
     let mut result = LyricLine::default();
     while !src.trim().is_empty() {
@@ -34,7 +34,17 @@ pub fn parse_line(src: &str) -> IResult<&str, LyricLine<'_>> {
     Ok((src, result))
 }
 
-pub fn parse_eslrc<'a>(src: &'a str) -> Vec<LyricLine<'a>> {
+/// ESLyric 格式
+#[cfg(feature = "eslrc")]
+pub fn parse_eslrc(content: String) -> Vec<LyricLineOwned> {
+    _parse_eslrc(&content)
+        .into_iter()
+        .map(|line| line.to_owned())
+        .collect()
+}
+
+
+fn _parse_eslrc<'a>(src: &'a str) -> Vec<LyricLine<'a>> {
     let lines = src.lines();
     let mut result = Vec::with_capacity(lines.size_hint().1.unwrap_or(1024).min(1024));
 
@@ -52,7 +62,15 @@ pub fn parse_eslrc<'a>(src: &'a str) -> Vec<LyricLine<'a>> {
     result
 }
 
-pub fn stringify_eslrc(lines: &[LyricLine]) -> String {
+#[cfg(feature = "eslrc")]
+pub fn stringify_eslrc(lines: Vec<LyricLineOwned>) -> String {
+    let lines_ref: Vec<LyricLine> = lines.iter()
+        .map(|line| line.to_ref())
+        .collect();
+    _stringify_eslrc(&lines_ref)
+}
+
+fn _stringify_eslrc(lines: &[LyricLine]) -> String {
     let capacity: usize = lines
         .iter()
         .map(|x| x.words.iter().map(|y| y.word.len()).sum::<usize>() + 13)
@@ -73,15 +91,3 @@ pub fn stringify_eslrc(lines: &[LyricLine]) -> String {
     result
 }
 
-#[cfg(all(target_arch = "wasm32", feature = "serde"))]
-#[wasm_bindgen(js_name = "parseEslrc", skip_typescript)]
-pub fn parse_eslrc_js(src: &str) -> wasm_bindgen::JsValue {
-    serde_wasm_bindgen::to_value(&parse_eslrc(src)).unwrap()
-}
-
-#[cfg(all(target_arch = "wasm32", feature = "serde"))]
-#[wasm_bindgen(js_name = "stringifyEslrc", skip_typescript)]
-pub fn stringify_eslrc_js(lrc: wasm_bindgen::JsValue) -> String {
-    let lines: Vec<LyricLine> = serde_wasm_bindgen::from_value(lrc).unwrap();
-    stringify_eslrc(&lines)
-}

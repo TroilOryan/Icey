@@ -7,7 +7,12 @@ use quick_xml::{Writer, events::*};
 
 use super::TTMLLyric;
 
-pub fn stringify_ttml(lyric: &TTMLLyric) -> Result<String, quick_xml::Error> {
+#[cfg(feature = "ttml")]
+pub fn stringify_ttml(ttml: TTMLLyricOwned) -> String {
+    _stringify_ttml(ttml)
+}
+
+pub fn _stringify_ttml(lyric: &TTMLLyric) -> Result<String, quick_xml::Error> {
     // let mut writer =
     //     Writer::new_with_indent(Cursor::new(Vec::<u8>::with_capacity(64 * 1024)), b' ', 4);
     let mut writer = Writer::new(Cursor::new(Vec::<u8>::with_capacity(64 * 1024)));
@@ -200,21 +205,14 @@ pub fn stringify_ttml(lyric: &TTMLLyric) -> Result<String, quick_xml::Error> {
     Ok(String::from_utf8(writer.into_inner().into_inner()).unwrap())
 }
 
-#[cfg(all(target_arch = "wasm32", feature = "serde"))]
-#[wasm_bindgen(js_name = "stringifyTTML", skip_typescript)]
-pub fn stringify_ttml_js(lrc: JsValue) -> String {
-    let lyric: TTMLLyric = serde_wasm_bindgen::from_value(lrc).unwrap();
-    stringify_ttml(&lyric).unwrap()
-}
-
 #[test]
 fn test_write_ttml() {
     const TEST_TTML: &str = include_str!("../../test/test.ttml");
     let ttml = super::parse_ttml(TEST_TTML.as_bytes()).unwrap();
-    let ttml_str = stringify_ttml(&ttml).unwrap();
+    let ttml_str = _stringify_ttml(&ttml).unwrap();
     println!("ttml_str: {ttml_str}");
     let ttml = super::parse_ttml(ttml_str.as_bytes()).unwrap();
-    let new_ttml_str = stringify_ttml(&ttml).unwrap();
+    let new_ttml_str = _stringify_ttml(&ttml).unwrap();
     println!("new_ttml_str: {new_ttml_str}");
     assert_eq!(ttml_str, new_ttml_str);
 }

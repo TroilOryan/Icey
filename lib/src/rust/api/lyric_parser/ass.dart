@@ -4,10 +4,10 @@
 // ignore_for_file: invalid_use_of_internal_member, unused_import, unnecessary_import
 
 import '../../frb_generated.dart';
+import '../lyric_parser.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
-Future<void> processLyrics({required LyricLine lines}) =>
-    RustLib.instance.api.crateApiLyricParserUtilsProcessLyrics(lines: lines);
+// These functions are ignored because they are not marked as `pub`: `_stringify_ass`, `write_timestamp`
 
-// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<[LyricLine]>>
-abstract class LyricLine implements RustOpaqueInterface {}
+Future<String> stringifyAss({required List<LyricLineOwned> lines}) =>
+    RustLib.instance.api.crateApiLyricParserAssStringifyAss(lines: lines);
