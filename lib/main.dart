@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:IceyPlayer/components/play_lyric/play_lyric_overlay.dart';
 import 'package:IceyPlayer/helpers/common.dart';
 import 'package:IceyPlayer/helpers/logs/json_file_handler.dart';
+import 'package:IceyPlayer/helpers/overlay/overlay.dart';
 import 'package:IceyPlayer/src/rust/frb_generated.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:catcher_2/catcher_2.dart';
@@ -106,8 +107,8 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   Future onDispose() async {
     _brightnessThemeListener();
 
-    if (await FlutterOverlayWindow.isActive()) {
-      FlutterOverlayWindow.closeOverlay();
+    if (await OverlayHelper.isActive()) {
+      OverlayHelper.closeOverlay();
     }
 
     WidgetsBinding.instance.removeObserver(this);
@@ -115,7 +116,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
 
   Future<void> onDidChangeAppLifecycleState(AppLifecycleState state) async {
     if (state == AppLifecycleState.resumed) {
-      final res = await FlutterOverlayWindow.isPermissionGranted();
+      final res = await OverlayHelper.isPermissionGranted();
 
       if (!res) {
         settingsManager.setLyricOverlay(false);

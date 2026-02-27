@@ -147,10 +147,11 @@ class _HomePageState extends State<HomePage>
                   Flexible(child: widget.navigationShell),
                 ],
               ),
-              PlayBar(
-                hidePlayBar: hidePlayBar,
-                onTap: () => homeController.handleOpenPanel(context),
-              ),
+              if (mediaList.isNotEmpty)
+                PlayBar(
+                  hidePlayBar: hidePlayBar,
+                  onTap: () => homeController.handleOpenPanel(context),
+                ),
               if (PlatformHelper.isDesktop) TitleBarAction(),
             ],
           ),

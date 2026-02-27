@@ -1,3 +1,4 @@
+import 'package:IceyPlayer/helpers/overlay/overlay.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:IceyPlayer/models/media/media.dart';
 import 'package:flutter/services.dart';
@@ -203,7 +204,7 @@ class AudioServiceHandler extends BaseAudioHandler
       audioSessionHandler.setActive(true);
     }
 
-    FlutterOverlayWindow.shareData({"playing": playing});
+    OverlayHelper.shareData({"playing": playing});
 
     playbackState.add(
       playbackState.value.copyWith(

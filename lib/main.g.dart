@@ -73,13 +73,13 @@ Future<void> initServices() async {
 
   GestureBinding.instance.resamplingEnabled = true;
 
-  await RustLib.init();
-
-  await initHive();
-
   if (PlatformHelper.isDesktop) {
     await initDesktop();
   }
+
+  await RustLib.init();
+
+  await initHive();
 
   final medias = MediaHelper.queryLocalMedia(init: true);
 
@@ -121,7 +121,7 @@ Future<Map<String, Catcher2Options>> initCatcher() async {
   // 异常捕获 logo记录
   final customParameters = {
     'BuildConfig':
-        '\nBuild Time: ${DateUtil.formatDateMs(BuildConfig.buildTime, isUtc: true, format: DateFormats.full)}\n'
+        '\nBuild Time: ${DateUtil.formatDateMs(BuildConfig.buildTime * 1000, isUtc: true, format: DateFormats.full)}\n'
         'Commit Hash: ${BuildConfig.commitHash}',
   };
   final fileHandler = await JsonFileHandler.init();

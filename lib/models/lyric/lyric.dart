@@ -3,6 +3,7 @@ import 'package:IceyPlayer/constants/box_key.dart';
 import 'package:IceyPlayer/constants/cache_key.dart';
 import 'package:IceyPlayer/constants/settings.dart';
 import 'package:IceyPlayer/helpers/common.dart';
+import 'package:IceyPlayer/helpers/overlay/overlay.dart';
 import 'package:IceyPlayer/models/media/media.dart';
 import 'package:IceyPlayer/models/settings/settings.dart';
 import 'package:flutter_lyric/core/lyric_model.dart';
@@ -103,13 +104,9 @@ class LyricManager {
     );
 
     lyricListener = effect(() {
-      batch(() {
+      batch(() async {
         lyricParser.karaoke = settingsManager.karaoke.value;
         lyricParser.fakeEnhanced = settingsManager.fakeEnhanced.value;
-
-        final model = lyricParser.parseRaw(_rawLyric.value);
-
-        _lyricModel.value = model;
       });
     });
 
@@ -123,7 +120,7 @@ class LyricManager {
     lyricListener();
   }
 
-  void setLyricModel(String value) {
+  Future<void> setLyricModel(String value) async {
     setCurrentIndex(-1);
 
     _rawLyric.value = value;
@@ -165,7 +162,7 @@ class LyricManager {
   void setCurrentIndex(int value) {
     _currentIndex.value = value;
 
-    FlutterOverlayWindow.shareData({
+    OverlayHelper.shareData({
       "lyric": value == -1 ? "" : _parsedLyric.value[value].text,
     });
   }
@@ -175,7 +172,7 @@ class LyricManager {
 
     _settingsBox.put(CacheKey.Settings.overlayLyricSize, value);
 
-    FlutterOverlayWindow.shareData({"fontSize": value});
+    OverlayHelper.shareData({"fontSize": value});
   }
 
   void setOverlayLyricWidth(double value) {
@@ -183,7 +180,7 @@ class LyricManager {
 
     _settingsBox.put(CacheKey.Settings.overlayLyricWidth, value);
 
-    FlutterOverlayWindow.shareData({"width": value});
+    OverlayHelper.shareData({"width": value});
   }
 
   void setOverlayLyricColor(int value) {
@@ -191,7 +188,7 @@ class LyricManager {
 
     _settingsBox.put(CacheKey.Settings.overlayLyricColor, value);
 
-    FlutterOverlayWindow.shareData({"color": value});
+    OverlayHelper.shareData({"color": value});
   }
 
   void setOverlayLyricX(double value) {
@@ -199,9 +196,7 @@ class LyricManager {
 
     _settingsBox.put(CacheKey.Settings.overlayLyricX, value);
 
-    FlutterOverlayWindow.moveOverlay(
-      OverlayPosition(value, _overlayLyricY.value),
-    );
+    OverlayHelper.moveOverlay(OverlayPosition(value, _overlayLyricY.value));
   }
 
   void setOverlayLyricY(double value) {
@@ -209,7 +204,7 @@ class LyricManager {
 
     _settingsBox.put(CacheKey.Settings.overlayLyricY, value);
 
-    FlutterOverlayWindow.moveOverlay(
+    OverlayHelper.moveOverlay(
       OverlayPosition(_overlayLyricX.value, value),
     );
   }

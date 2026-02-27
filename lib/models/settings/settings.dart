@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:IceyPlayer/helpers/overlay/overlay.dart';
 import 'package:IceyPlayer/helpers/toast/toast.dart';
 import 'package:IceyPlayer/models/lyric/lyric.dart';
 import 'package:flutter/services.dart';
@@ -328,11 +329,11 @@ class SettingsManager {
   }
 
   Future<void> showLyricOverlay() async {
-    if (await FlutterOverlayWindow.isActive()) {
+    if (await OverlayHelper.isActive()) {
       return;
     }
 
-    await FlutterOverlayWindow.showOverlay(
+    await OverlayHelper.showOverlay(
       enableDrag: false,
       overlayTitle: "Icey Player",
       overlayContent: 'Overlay Lyric',
@@ -344,7 +345,7 @@ class SettingsManager {
       startPosition: const OverlayPosition(0, 0),
     );
 
-    await FlutterOverlayWindow.moveOverlay(
+    await OverlayHelper.moveOverlay(
       OverlayPosition(
         _settingsBox.get(CacheKey.Settings.overlayLyricX, defaultValue: 0.0),
         _settingsBox.get(CacheKey.Settings.overlayLyricY, defaultValue: 0.0),
@@ -358,7 +359,7 @@ class SettingsManager {
     _settingsBox.put(CacheKey.Settings.lyricOverlay, value);
 
     if (value) {
-      final res = await FlutterOverlayWindow.isPermissionGranted();
+      final res = await OverlayHelper.isPermissionGranted();
 
       if (res == true) {
         await showLyricOverlay();
@@ -366,12 +367,12 @@ class SettingsManager {
         showToast("请给予Icey Player悬浮窗权限");
 
         Future.delayed(const Duration(milliseconds: 500)).then((_) {
-          FlutterOverlayWindow.requestPermission();
+          OverlayHelper.requestPermission();
         });
       }
     } else {
-      if (await FlutterOverlayWindow.isActive()) {
-        await FlutterOverlayWindow.closeOverlay();
+      if (await OverlayHelper.isActive()) {
+        await OverlayHelper.closeOverlay();
       }
     }
   }

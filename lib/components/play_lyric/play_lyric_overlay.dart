@@ -1,5 +1,6 @@
 import 'package:IceyPlayer/components/marquee/marquee.dart';
 import 'package:IceyPlayer/constants/settings.dart';
+import 'package:IceyPlayer/helpers/overlay/overlay.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:signals/signals_flutter.dart';
@@ -23,7 +24,7 @@ class _PlayLyricOverlayState extends State<PlayLyricOverlay> {
   final playing = signal(false);
 
   void onInit() {
-    FlutterOverlayWindow.overlayListener.listen((event) {
+    OverlayHelper.overlayListener?.listen((event) {
       if (event?["lyric"] != null) {
         lyric.value = event["lyric"];
       }
@@ -47,7 +48,7 @@ class _PlayLyricOverlayState extends State<PlayLyricOverlay> {
   }
 
   void onDispose() {
-    FlutterOverlayWindow.disposeOverlayListener();
+    OverlayHelper.disposeOverlayListener();
   }
 
   @override

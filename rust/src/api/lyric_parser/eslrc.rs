@@ -1,93 +1,42 @@
-//! 一个来自 Foobar2000 的 ESLyric 插件特有的逐词歌词文件格式，后缀名仍为 `.lrc`
-//!
-//! 在 LyRiC 文件格式的基础上，每行歌词的单词使用和开头一样的时间戳格式代表每个单词的结束时间。
-//! 且似乎不允许重复定义时间戳，即每行歌词只能有一个时间戳。
-//!
-//! 例子：
-//!
-//! ```text
-//! [00:10.82]Test[00:10.97] Word[00:12.62]
-//! ```
-//!
+use crate::api::lyric_parser::{LyricLineParsed, LyricWordParsed, ParseResult};
 
-use nom::{IResult, bytes::complete::take_until1};
-#[cfg(target_arch = "wasm32")]
-use wasm_bindgen::prelude::*;
+pub fn parse_eslrc(lyric_content: String) -> ParseResult {
+    use amll_lyric::eslrc;
 
-use crate::{LyricLine, LyricLineOwned, utils::process_lyrics};
+    let lyric_vec = eslrc::parse_eslrc(&lyric_content);
 
-fn parse_line(src: &str) -> IResult<&str, LyricLine<'_>> {
-    let (mut src, mut start_time) = crate::lrc::parse_time(src)?;
-    let mut result = LyricLine::default();
-    while !src.trim().is_empty() {
-        let (s, word) = take_until1("[")(src)?;
-        let (s, end_time) = crate::lrc::parse_time(s)?;
-        result.words.push(crate::LyricWord {
-            start_time,
-            end_time,
-            word: word.into(),
-            roman_word: std::borrow::Cow::Borrowed(""),
-        });
-        src = s;
-        start_time = end_time;
+    if lyric_vec.is_empty() {
+        return ParseResult {
+            lines: vec![],
+            format: "error".to_string(),
+        };
     }
-    Ok((src, result))
-}
 
-/// ESLyric 格式
-#[cfg(feature = "eslrc")]
-pub fn parse_eslrc(content: String) -> Vec<LyricLineOwned> {
-    _parse_eslrc(&content)
+    let lines: Vec<LyricLineParsed> = lyric_vec
         .into_iter()
-        .map(|line| line.to_owned())
-        .collect()
-}
-
-
-fn _parse_eslrc<'a>(src: &'a str) -> Vec<LyricLine<'a>> {
-    let lines = src.lines();
-    let mut result = Vec::with_capacity(lines.size_hint().1.unwrap_or(1024).min(1024));
-
-    for line in lines {
-        if line.trim().is_empty() {
-            continue;
-        }
-        if let Ok(line) = parse_line(line.trim()) {
-            result.push(line.1);
-        }
-    }
-
-    process_lyrics(&mut result);
-
-    result
-}
-
-#[cfg(feature = "eslrc")]
-pub fn stringify_eslrc(lines: Vec<LyricLineOwned>) -> String {
-    let lines_ref: Vec<LyricLine> = lines.iter()
-        .map(|line| line.to_ref())
+        .map(|line| LyricLineParsed {
+            start: line.start_time as u64,
+            end: line.end_time as u64,
+            text: line
+              .words
+              .iter()
+              .map(|x| x.word.to_string())
+              .collect(),
+            words: line
+                .words
+                .into_iter()
+                .map(|word| LyricWordParsed {
+                    text: word.word.to_string(),
+                    start: word.start_time as u64,
+                    end: word.end_time as u64,
+                })
+                .collect(),
+            translation: line.translated_lyric.to_string(),
+        })
         .collect();
-    _stringify_eslrc(&lines_ref)
-}
 
-fn _stringify_eslrc(lines: &[LyricLine]) -> String {
-    let capacity: usize = lines
-        .iter()
-        .map(|x| x.words.iter().map(|y| y.word.len()).sum::<usize>() + 13)
-        .sum();
-    let mut result = String::with_capacity(capacity);
-
-    for line in lines {
-        if !line.words.is_empty() {
-            crate::lrc::write_timestamp(&mut result, line.words[0].start_time);
-            for word in line.words.iter() {
-                result.push_str(&word.word);
-                crate::lrc::write_timestamp(&mut result, word.end_time);
-            }
-            result.push('\n');
-        }
+    ParseResult {
+        lines,
+        format: "ESLRC".to_string(),
     }
-
-    result
 }
-
