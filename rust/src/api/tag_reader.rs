@@ -8,6 +8,7 @@ use std::{
 
 use image::imageops;
 use lofty::prelude::{Accessor, AudioFile, ItemKey, TaggedFileExt};
+
 use windows::{
     core::Interface,
     core::HSTRING,
@@ -548,59 +549,93 @@ pub fn get_picture_from_path(path: String, width: u32, height: u32) -> Option<Ve
     pic_option
 }
 
-fn _get_lyric_from_lofty(path: &String) -> Option<String> {
+/// 歌词结果结构体，包含歌词内容和来源信息
+pub struct LyricResult {
+    pub lyrics: String,
+    pub source: String,  // "tag" 表示来自音乐文件标签，"file" 表示来自外部 .lrc 文件
+}
+
+fn _get_lyric_from_lofty(path: &String) -> Option<LyricResult> {
     if let Ok(tagged_file) = lofty::read_from_path(&path) {
         let tag = tagged_file
             .primary_tag()
             .or_else(|| tagged_file.first_tag())?;
         let lyric_tag = tag.get(&ItemKey::Lyrics)?;
         let lyric = lyric_tag.value().text()?;
-
-        return Some(lyric.to_string());
+        return Some(LyricResult {
+            lyrics: lyric.to_string(),
+            source: "tag".to_string(),
+        });
     }
-
     None
 }
 
-fn _get_lyric_from_lrc_file(path: &String) -> anyhow::Result<String> {
-    let mut lrc_file_path = PathBuf::from(path);
-    lrc_file_path.set_extension("lrc");
+fn _get_lyric_from_lrc_file(path: &String) -> Option<LyricResult> {
+    // 支持多种歌词文件格式
+    let supported_extensions = ["lrc", "qrc", "ttml", "yrc", "lys", "eslrc"];
 
-    let lrc_bytes = fs::read(lrc_file_path)?;
+    for ext in &supported_extensions {
+        let mut lyric_file_path = PathBuf::from(path);
+        lyric_file_path.set_extension(ext);
 
-    let is_le = lrc_bytes.starts_with(&[0xFF, 0xFE]);
-    let is_utf16 = (is_le || lrc_bytes.starts_with(&[0xFE, 0xFF])) && lrc_bytes.len() % 2 == 0;
+        // 检查文件是否存在
+        if lyric_file_path.exists() {
+            match fs::read(&lyric_file_path) {
+                Ok(lyric_bytes) => {
+                    let is_le = lyric_bytes.starts_with(&[0xFF, 0xFE]);
+                    let is_utf16 = (is_le || lyric_bytes.starts_with(&[0xFE, 0xFF])) && lyric_bytes.len() % 2 == 0;
 
-    if is_utf16 {
-        let convert_fn = match is_le {
-            true => u16::from_le_bytes,
-            false => u16::from_be_bytes,
-        };
+                    let lyric = if is_utf16 {
+                        let convert_fn = match is_le {
+                            true => u16::from_le_bytes,
+                            false => u16::from_be_bytes,
+                        };
+                        let mut u16_bytes: Vec<u16> = vec![];
+                        let mut chunk_iter = lyric_bytes.chunks_exact(2);
+                        chunk_iter.next();
+                        for chunk in chunk_iter {
+                            u16_bytes.push(convert_fn([chunk[0], chunk[1]]));
+                        }
+                        match String::from_utf16(&u16_bytes) {
+                            Ok(text) => text,
+                            Err(_) => continue, // 解码失败，尝试下一个扩展名
+                        }
+                    } else {
+                        match String::from_utf8(lyric_bytes) {
+                            Ok(text) => text,
+                            Err(_) => continue, // 解码失败，尝试下一个扩展名
+                        }
+                    };
 
-        let mut u16_bytes: Vec<u16> = vec![];
-        let mut chunk_iter = lrc_bytes.chunks_exact(2);
-        chunk_iter.next();
-
-        for chunk in chunk_iter {
-            u16_bytes.push(convert_fn([chunk[0], chunk[1]]));
+                    return Some(LyricResult {
+                        lyrics: lyric,
+                        source: "file".to_string(),
+                    });
+                }
+                Err(_) => continue, // 读取失败，尝试下一个扩展名
+            }
         }
-        return Ok(String::from_utf16(&u16_bytes)?);
     }
 
-    return Ok(String::from_utf8(lrc_bytes)?);
+    // 如果所有格式都不存在，返回 None
+    None
 }
 
 /// for Flutter
 /// 只支持读取 ID3V2, VorbisComment, Mp4Ilst 存储的内嵌歌词
 /// 以及相同目录相同文件名的 .lrc 外挂歌词（utf-8 or utf-16）
-pub fn get_lyric_from_path(path: String) -> Option<String> {
-    return _get_lyric_from_lofty(&path).or_else(|| match _get_lyric_from_lrc_file(&path) {
-        Ok(val) => Some(val),
-        Err(err) => {
-            log_to_dart(format!("fail to get lrc: {}", err.to_string()));
-            None
-        }
-    });
+/// 返回值：Option<LyricResult>
+/// - lyrics: 歌词内容
+/// - source: "tag" 表示来自音乐文件标签，"file" 表示来自外部 .lrc 文件
+pub fn get_lyric_from_path(path: String) -> Option<LyricResult> {
+    _get_lyric_from_lofty(&path).or_else(|| {
+        _get_lyric_from_lrc_file(&path)
+            .map_err(|err| {
+                log_to_dart(format!("fail to get lrc: {}", err.to_string()));
+                err
+            })
+            .ok()
+    })
 }
 
 /// for Flutter

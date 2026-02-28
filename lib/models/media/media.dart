@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:IceyPlayer/helpers/platform.dart';
 import 'package:IceyPlayer/models/lyric/lyric.dart';
+import 'package:IceyPlayer/src/rust/api/tag_reader.dart';
 import 'package:audio_metadata_reader/audio_metadata_reader.dart';
 import 'package:audio_query/audio_query.dart';
 import 'package:audio_query/types/artwork_type.dart';
@@ -317,17 +318,19 @@ class MediaManager {
 
       _currentMediaItem.value = value;
 
-      try {
-        final res = await compute(_parseLyric, {"path": path});
+      final res = await getLyricFromPath(path: path);
 
-        lyricManager.setLyricModel(res["raw"] as String);
-
-        lyricManager.setLyricSource(res["source"] as LyricSource);
-      } catch (e) {
+      if (res == null) {
         lyricManager.setLyricModel("");
 
         lyricManager.setLyricSource(LyricSource.none);
+
+        return;
       }
+
+      lyricManager.setLyricModel(res.lyrics);
+
+      lyricManager.setLyricSource(res.source as LyricSource);
 
       try {
         final coverRes = await AudioQuery().queryArtworkWithColor(

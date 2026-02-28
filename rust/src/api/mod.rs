@@ -63,12 +63,20 @@ pub mod utils {
 }
 
 #[cfg(not(windows))]
+pub use tag_reader::{ get_lyric_from_path, LyricResult};
+
+#[cfg(not(windows))]
 pub mod tag_reader {
     use crate::frb_generated::StreamSink;
 
     pub struct IndexActionState {
         pub progress: f64,
         pub message: String,
+    }
+
+    pub struct LyricResult {
+        pub lyrics: String,
+        pub source: String,  // "tag" 表示来自音乐文件标签，"file" 表示来自外部 .lrc 文件
     }
 
     pub fn get_picture_from_path(_path: String, _width: u32, _height: u32) -> Option<Vec<u8>> { None }

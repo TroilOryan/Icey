@@ -25,7 +25,10 @@ Future<Uint8List?> getPictureFromPath({
 /// for Flutter
 /// 只支持读取 ID3V2, VorbisComment, Mp4Ilst 存储的内嵌歌词
 /// 以及相同目录相同文件名的 .lrc 外挂歌词（utf-8 or utf-16）
-Future<String?> getLyricFromPath({required String path}) =>
+/// 返回值：Option<LyricResult>
+/// - lyrics: 歌词内容
+/// - source: "tag" 表示来自音乐文件标签，"file" 表示来自外部 .lrc 文件
+Future<LyricResult?> getLyricFromPath({required String path}) =>
     RustLib.instance.api.crateApiTagReaderGetLyricFromPath(path: path);
 
 /// for Flutter
@@ -73,4 +76,23 @@ class IndexActionState {
           runtimeType == other.runtimeType &&
           progress == other.progress &&
           message == other.message;
+}
+
+/// 歌词结果结构体，包含歌词内容和来源信息
+class LyricResult {
+  final String lyrics;
+  final String source;
+
+  const LyricResult({required this.lyrics, required this.source});
+
+  @override
+  int get hashCode => lyrics.hashCode ^ source.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is LyricResult &&
+          runtimeType == other.runtimeType &&
+          lyrics == other.lyrics &&
+          source == other.source;
 }
