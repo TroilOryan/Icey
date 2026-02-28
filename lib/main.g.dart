@@ -58,7 +58,7 @@ Future<void> initDesktop() async {
     titleBarStyle: TitleBarStyle.hidden,
   );
 
-  windowManager.waitUntilReadyToShow(windowOptions, () async {
+  await windowManager.waitUntilReadyToShow(windowOptions, () async {
     await windowManager.show();
     await windowManager.focus();
   });
@@ -67,9 +67,11 @@ Future<void> initDesktop() async {
 Future<void> initServices() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
 
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+  if (!PlatformHelper.isDesktop) {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+    FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  }
 
   GestureBinding.instance.resamplingEnabled = true;
 
@@ -99,7 +101,9 @@ Future<void> initServices() async {
 
   mediaManager.init(medias: medias, audioService: audioService);
 
-  FlutterNativeSplash.remove();
+  if (!PlatformHelper.isDesktop) {
+    FlutterNativeSplash.remove();
+  }
 
   Request();
 
@@ -157,6 +161,12 @@ void _didChangePlatformBrightness() {
 }
 
 void precacheAssets(BuildContext context) {
+  final listBg = _settingsBox.get(CacheKey.Settings.listBg, defaultValue: null);
+
+  if (listBg != null) {
+    precacheImage(MemoryImage(listBg), context);
+  }
+
   // precacheImage(AssetImage("assets/images/no_cover.png"), context);
   // precacheImage(AssetImage("assets/images/hires.png"), context);
   // precacheImage(AssetImage("assets/images/hq.png"), context);

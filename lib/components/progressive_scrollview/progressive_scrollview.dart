@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:IceyPlayer/helpers/platform.dart';
 import 'package:IceyPlayer/models/settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -34,7 +35,7 @@ class ProgressiveScrollViewController {
 class ProgressiveScrollview extends StatefulWidget {
   final String title;
   final bool centerTitle;
-  final Function(double)? builder;
+  final Function(double) builder;
   final List<HeaderAppBarAction>? action;
   final Color? backgroundColor;
   final VoidCallback? onTap;
@@ -43,7 +44,7 @@ class ProgressiveScrollview extends StatefulWidget {
     super.key,
     required this.title,
     this.centerTitle = true,
-    this.builder,
+    required this.builder,
     this.action,
     this.backgroundColor,
     this.onTap,
@@ -79,11 +80,7 @@ class _ProgressiveScrollviewState extends State<ProgressiveScrollview> {
         ],
         child: NotificationListener(
           onNotification: controller.handleNotification,
-          child: Builder(
-            builder: (context) => widget.builder != null
-                ? widget.builder!(appbarHeight)
-                : const SizedBox(),
-          ),
+          child: Builder(builder: (context) => widget.builder(appbarHeight)),
         ),
       ),
     );

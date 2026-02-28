@@ -14,16 +14,6 @@ import "package:IceyPlayer/helpers/toast/toast.dart";
 import "package:IceyPlayer/permission/audio.dart";
 import "package:file_picker/file_picker.dart";
 
-const MEDIA_EXTENSTIONS = [
-  ".mp3",
-  ".wav",
-  ".flac",
-  ".m4a",
-  ".aac",
-  ".ogg",
-  ".opus",
-];
-
 final audioQuery = AudioQuery();
 
 final _mediaBox = Boxes.mediaBox, _settingsBox = Boxes.settingsBox;
@@ -201,6 +191,6 @@ class MediaScanner {
       return;
     }
 
-    _scanMediasMobile();
+    _scanMediasMobile(silent);
   }
 }
