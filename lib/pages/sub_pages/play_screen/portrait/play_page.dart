@@ -42,6 +42,8 @@ class PlayPage extends StatelessWidget {
 
     final immersive = settingsManager.immersive.watch(context);
 
+    final deviceWidth = MediaQuery.of(context).size.width;
+
     return IgnorePointer(
       ignoring: lyricOpened,
       child: AnimatedOpacity(
@@ -59,7 +61,7 @@ class PlayPage extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.fromLTRB(
                     32,
-                    MediaQuery.of(context).size.width * 1.2 + 46,
+                    deviceWidth * 1.2 + 46,
                     32,
                     0,
                   ),

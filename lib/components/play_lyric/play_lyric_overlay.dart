@@ -23,6 +23,8 @@ class _PlayLyricOverlayState extends State<PlayLyricOverlay> {
 
   final playing = signal(false);
 
+  final visible = signal(true);
+
   void onInit() {
     OverlayHelper.overlayListener?.listen((event) {
       if (event?["lyric"] != null) {
@@ -43,6 +45,10 @@ class _PlayLyricOverlayState extends State<PlayLyricOverlay> {
 
       if (event?["playing"] != null) {
         playing.value = event["playing"];
+      }
+
+      if (event?["visible"] != null) {
+        visible.value = event["visible"];
       }
     });
   }
@@ -72,7 +78,8 @@ class _PlayLyricOverlayState extends State<PlayLyricOverlay> {
         _color = color.watch(context),
         _fontSize = fontSize.watch(context),
         _width = width.watch(context),
-        _playing = playing.watch(context);
+        _playing = playing.watch(context),
+        _visible = visible.watch(context);
 
     final textStyle = computed(
       () => TextStyle(
@@ -82,25 +89,28 @@ class _PlayLyricOverlayState extends State<PlayLyricOverlay> {
       ),
     );
 
-    return Material(
-      type: MaterialType.transparency,
-      clipBehavior: Clip.antiAlias,
-      child: ConstrainedBox(
-        constraints: BoxConstraints(maxWidth: _width),
-        child: Stack(
-          children: [
-            SizedBox(
-              width: _width,
-              child: Marquee(
-                disableAnimation: !_playing,
-                child: Text(
-                  _lyric.isEmpty ? "暂无歌词" : _lyric,
-                  style: textStyle(),
-                  maxLines: 1,
+    return Offstage(
+      offstage: !_visible,
+      child: Material(
+        type: MaterialType.transparency,
+        clipBehavior: Clip.antiAlias,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: _width),
+          child: Stack(
+            children: [
+              SizedBox(
+                width: _width,
+                child: Marquee(
+                  disableAnimation: !_playing,
+                  child: Text(
+                    _lyric.isEmpty ? "暂无歌词" : _lyric,
+                    style: textStyle(),
+                    maxLines: 1,
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:IceyPlayer/helpers/overlay/overlay.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:IceyPlayer/models/media/media.dart';
@@ -30,6 +32,8 @@ class AudioServiceHandler extends BaseAudioHandler
   Duration get position => _player.position;
 
   Stream<Duration> get positionStream => _player.positionStream;
+
+  Timer? overlayVisibleTimer;
 
   final audioSessionHandler = AudioSessionHandler();
 
@@ -200,11 +204,19 @@ class AudioServiceHandler extends BaseAudioHandler
   void _broadcastState(PlaybackEvent event) {
     final playing = _player.playing;
 
-    if (playing) {
-      audioSessionHandler.setActive(true);
-    }
-
     OverlayHelper.shareData({"playing": playing});
+
+    if (playing) {
+      overlayVisibleTimer?.cancel();
+
+      audioSessionHandler.setActive(true);
+
+      OverlayHelper.shareData({"visible": true});
+    } else {
+      overlayVisibleTimer = Timer(const Duration(milliseconds: 3000), () {
+        OverlayHelper.shareData({"visible": false});
+      });
+    }
 
     playbackState.add(
       playbackState.value.copyWith(

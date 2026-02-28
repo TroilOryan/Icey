@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:IceyPlayer/helpers/platform.dart';
 import 'package:IceyPlayer/models/settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
