@@ -1,6 +1,8 @@
 // 跨平台模块：正常导入
 pub mod logger;
 
+pub mod tag_reader;
+
 // Windows 平台：导入完整的实现
 #[cfg(windows)]
 pub mod smtc_flutter;
@@ -8,16 +10,11 @@ pub mod smtc_flutter;
 #[cfg(windows)]
 pub mod utils;
 
-#[cfg(windows)]
-pub mod tag_reader;
-
 // 导出 Windows 平台的所有功能
 #[cfg(windows)]
 pub use smtc_flutter::*;
 #[cfg(windows)]
 pub use utils::*;
-#[cfg(windows)]
-pub use tag_reader::*;
 
 // 非 Windows 平台：所有功能提供空实现
 #[cfg(not(windows))]
@@ -62,36 +59,13 @@ pub mod utils {
     pub fn launch_in_browser(_uri: String) -> bool { false }
 }
 
-#[cfg(not(windows))]
-pub use tag_reader::{ get_lyric_from_path, LyricResult};
-
-#[cfg(not(windows))]
-pub mod tag_reader {
-    use crate::frb_generated::StreamSink;
-
-    pub struct IndexActionState {
-        pub progress: f64,
-        pub message: String,
-    }
-
-    pub struct LyricResult {
-        pub lyrics: String,
-        pub source: String,  // "tag" 表示来自音乐文件标签，"file" 表示来自外部 .lrc 文件
-    }
-
-    pub fn get_picture_from_path(_path: String, _width: u32, _height: u32) -> Option<Vec<u8>> { None }
-    pub fn get_lyric_from_path(_path: String) -> Option<String> { None }
-    pub fn build_index_from_folders_recursively(_folders: Vec<String>, _index_path: String, _sink: StreamSink<IndexActionState>) -> Result<(), std::io::Error> { Ok(()) }
-    pub fn update_index(_index_path: String, _sink: StreamSink<IndexActionState>) -> anyhow::Result<()> { Ok(()) }
-}
-
 // 导出非 Windows 平台的空实现
 #[cfg(not(windows))]
 pub use smtc_flutter::*;
 #[cfg(not(windows))]
 pub use utils::*;
-#[cfg(not(windows))]
-pub use tag_reader::*;
 
 // 导出 logger
 pub use logger::*;
+
+pub use tag_reader::*;

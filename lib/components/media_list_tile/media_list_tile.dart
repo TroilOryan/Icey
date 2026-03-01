@@ -190,10 +190,10 @@ class MediaListTile extends StatelessWidget {
                   offstage: !showLike,
                   child: PlayLikeButton(
                     key: ValueKey(media.id),
-                    id: media.id.toString(),
+                    id: media.id,
                     color: theme.textTheme.bodySmall?.color,
                     size: 23,
-                    onTap: (liked) => onLike?.call(media.id.toString(), liked),
+                    onTap: (liked) => onLike?.call(media.id, liked),
                   ),
                 ),
               ],

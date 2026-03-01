@@ -1,10 +1,8 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:IceyPlayer/helpers/platform.dart';
 import 'package:IceyPlayer/models/lyric/lyric.dart';
 import 'package:IceyPlayer/src/rust/api/tag_reader.dart';
-import 'package:audio_metadata_reader/audio_metadata_reader.dart';
 import 'package:audio_query/audio_query.dart';
 import 'package:audio_query/types/artwork_type.dart';
 import 'package:audio_service/audio_service.dart';
@@ -22,8 +20,6 @@ import 'package:IceyPlayer/services/media_state.dart';
 import 'package:IceyPlayer/services/play_mode.dart';
 import 'package:signals/signals.dart';
 import 'package:rxdart/rxdart.dart' as rx;
-
-part 'media.g.dart';
 
 final mediaManager = MediaManager();
 
@@ -267,7 +263,7 @@ class MediaManager {
   void play([String? id]) {
     if (id != null) {
       final index = _audioService.queue.value.indexWhere(
-        (item) => item.id == id.toString(),
+        (item) => item.id == id,
       );
 
       if (index != -1) {
@@ -324,13 +320,11 @@ class MediaManager {
         lyricManager.setLyricModel("");
 
         lyricManager.setLyricSource(LyricSource.none);
+      } else {
+        lyricManager.setLyricModel(res.lyrics);
 
-        return;
+        lyricManager.setLyricSource(LyricSource.getByValue(res.source));
       }
-
-      lyricManager.setLyricModel(res.lyrics);
-
-      lyricManager.setLyricSource(res.source as LyricSource);
 
       try {
         final coverRes = await AudioQuery().queryArtworkWithColor(
@@ -362,6 +356,7 @@ class MediaManager {
           secondary: -1,
           isDark: false,
         );
+
         print(e);
       }
     });

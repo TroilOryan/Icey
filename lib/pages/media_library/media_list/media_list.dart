@@ -35,7 +35,7 @@ class MediaList extends StatelessWidget {
 
     final item = mediaList[index];
 
-    final isPlaying = mediaItem?.id == item.id.toString();
+    final isPlaying = mediaItem?.id == item.id;
 
     EdgeInsets? margin;
 

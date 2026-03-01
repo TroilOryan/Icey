@@ -1,59 +1,50 @@
-use std::{
-    collections::HashSet,
-    fs::{self},
-    io::{self, Cursor, Write},
-    path::{Path, PathBuf},
-    time::{Duration, UNIX_EPOCH},
-};
-
+use std::{collections::HashSet, fs::{self}, io::{self, Cursor, Write}, path::{Path, PathBuf}, time::{Duration, UNIX_EPOCH},};
 use image::imageops;
 use lofty::prelude::{Accessor, AudioFile, ItemKey, TaggedFileExt};
 
-use windows::{
-    core::Interface,
-    core::HSTRING,
-    Storage::{
-        FileProperties::ThumbnailMode,
-        StorageFile,
-        Streams::{DataReader, IInputStream},
-    },
-};
-
 use crate::frb_generated::StreamSink;
-
 use super::logger::log_to_dart;
 
 const UNKNOWN_COW: std::borrow::Cow<'_, str> = std::borrow::Cow::Borrowed("UNKNOWN");
 const UNKNOWN_STR: &str = "UNKNOWN";
+
 /// 索引的最低版本。低于该版本或没有版本号的索引将被完全重建。现在是 1.1.0
 const LOWEST_VERSION: u64 = 110;
 
 /// K: extension, V: can read tags by using Lofty
 static SUPPORT_FORMAT: phf::Map<&'static str, bool> = phf::phf_map! {
-    "mp3" => true, "mp2" => false, "mp1" => false,
+    "mp3" => true,
+    "mp2" => false,
+    "mp1" => false,
     "ogg" => true,
-    "wav" => true, "wave" => true,
-    "aif" => true, "aiff" => true, "aifc" => true,
-    // 通过 Windows 系统支持
-    "asf" => false, "wma" => false,
-    "aac" => true, "adts" => true,
+    "wav" => true,
+    "wave" => true,
+    "aif" => true,
+    "aiff" => true,
+    "aifc" => true,
+    "asf" => false,
+    "wma" => false,
+    "aac" => true,
+    "adts" => true,
     "m4a" => true,
     "ac3" => false,
-    "amr" => false, "3ga" => false,
+    "amr" => false,
+    "3ga" => false,
     "flac" => true,
     "mpc" => true,
-    // 插件支持
     "mid" => false,
-    "wv" => true, "wvc" => true,
+    "wv" => true,
+    "wvc" => true,
     "opus" => true,
-    "dsf" => false, "dff" => false,
+    "dsf" => false,
+    "dff" => false,
     "ape" => true,
 };
 
+#[derive(Debug)]
 pub struct IndexActionState {
     /// completed / total
     pub progress: f64,
-
     /// describe action state
     pub message: String,
 }
@@ -135,14 +126,10 @@ impl Audio {
         })
     }
 
-    /// 不支持：None
-    /// Lofty 能获取到信息：read_by_lofty
-    /// 不能的话：read_by_win_music_properties
-    /// 再不能的话：title: filename 代替
+    /// 使用 Lofty 获取音乐标签，失败则使用文件名
     fn read_from_path(path: impl AsRef<Path>) -> Option<Self> {
         let path = path.as_ref();
-        let lofty_support: bool =
-            *SUPPORT_FORMAT.get(&path.extension()?.to_ascii_lowercase().to_string_lossy())?;
+        let lofty_support: bool = *SUPPORT_FORMAT.get(&path.extension()?.to_ascii_lowercase().to_string_lossy())?;
 
         let file_metadata = match fs::metadata(path) {
             Ok(val) => val,
@@ -151,12 +138,14 @@ impl Audio {
                 return None;
             }
         };
+
         let modified = file_metadata
             .modified()
             .unwrap_or(UNIX_EPOCH)
             .duration_since(UNIX_EPOCH)
             .unwrap_or(Duration::ZERO)
             .as_secs();
+
         let created = file_metadata
             .created()
             .unwrap_or(UNIX_EPOCH)
@@ -165,31 +154,19 @@ impl Audio {
             .as_secs();
 
         if lofty_support {
-            if let Some(value) = Self::read_by_lofty(path, modified, created) {
-                return Some(value);
-            }
-
-            match Self::read_by_win_music_properties(path, modified, created) {
-                Ok(value) => Some(value),
-                Err(err) => {
-                    log_to_dart(format!("{:?}: {}", path, err));
-                    return Self::new_with_path(path, None);
-                }
-            }
+            // 只用 Lofty，失败就用文件名
+            Self::read_by_lofty(path, modified, created)
+                .or_else(|| Self::new_with_path(path, Some("Lofty".to_string())))
         } else {
-            match Self::read_by_win_music_properties(path, modified, created) {
-                Ok(value) => Some(value),
-                Err(err) => {
-                    log_to_dart(format!("{:?}: {}", path, err));
-                    return Self::new_with_path(path, None);
-                }
-            }
+            // 不支持的格式，用文件名
+            Self::new_with_path(path, None)
         }
     }
 
     /// 使用 lofty 获取音乐标签。只在文件名不正确、没有标签或包含不支持的编码时返回 None
     fn read_by_lofty(path: impl AsRef<Path>, modified: u64, created: u64) -> Option<Self> {
         let path = path.as_ref();
+
         let tagged_file = match lofty::read_from_path(path) {
             Ok(val) => val,
             Err(err) => {
@@ -199,7 +176,6 @@ impl Audio {
         };
 
         let properties = tagged_file.properties();
-
         let quality = Self::calculate_quality(properties.sample_rate(), properties.bit_depth());
 
         if let Some(tag) = tagged_file
@@ -244,63 +220,6 @@ impl Audio {
             by: Some("Lofty".to_string()),
         });
     }
-
-    /// 使用 Windows Api 获取音乐标签。会因为各种原因返回 Err
-    fn read_by_win_music_properties(
-        path: impl AsRef<Path>,
-        modified: u64,
-        created: u64,
-    ) -> Result<Self, windows::core::Error> {
-        let path = path.as_ref();
-        let storage_file = StorageFile::GetFileFromPathAsync(&HSTRING::from(path))?.get()?;
-        let music_properties = storage_file
-            .Properties()?
-            .GetMusicPropertiesAsync()?
-            .get()?;
-
-        let duration: Duration = music_properties.Duration()?.into();
-
-        let mut title = music_properties
-            .Title()
-            .or_else(|_| storage_file.Name())?
-            .to_string();
-        if title.is_empty() {
-            title = storage_file.Name()?.to_string();
-        }
-
-        let mut artist = music_properties
-            .Artist()
-            .unwrap_or(HSTRING::from(UNKNOWN_STR))
-            .to_string();
-        if artist.is_empty() {
-            artist = UNKNOWN_STR.to_string();
-        }
-
-        let mut album = music_properties
-            .Album()
-            .unwrap_or(HSTRING::from(UNKNOWN_STR))
-            .to_string();
-        if album.is_empty() {
-            album = UNKNOWN_STR.to_string();
-        }
-
-        Ok(Audio {
-            title,
-            artist,
-            album,
-            track: Some(music_properties.TrackNumber()?),
-            duration: duration.as_secs(),
-            bitrate: Some(music_properties.Bitrate()? / 1000),
-            sample_rate: None,
-            bit_depth: None,
-            channels: None,
-            quality: UNKNOWN_STR.to_string(),
-            path: path.to_string_lossy().to_string(),
-            modified,
-            created,
-            by: Some("Windows".to_string()),
-        })
-    }
 }
 
 #[derive(Debug)]
@@ -329,9 +248,8 @@ impl AudioFolder {
     }
 
     /// 扫描路径为 path 的文件夹
-    fn read_from_folder(path: impl AsRef<Path>) -> Result<AudioFolder, io::Error> {
+    fn read_from_folder(path: impl AsRef<Path>) -> Result<Self, io::Error> {
         let path = path.as_ref();
-
         let dir = match fs::read_dir(path) {
             Ok(val) => val,
             Err(err) => {
@@ -359,7 +277,6 @@ impl AudioFolder {
                     if audio_item.created > latest {
                         latest = audio_item.created;
                     }
-
                     audios.push(audio_item);
                 }
             }
@@ -387,13 +304,14 @@ impl AudioFolder {
     /// 扫描路径为 path 的文件夹及其所有子文件夹。
     fn read_from_folder_recursively(
         folder: impl AsRef<Path>,
-        result: &mut Vec<Self>,
+        result: &mut Vec<AudioFolder>,
         scaned_count: &mut u64,
         total_count: &mut u64,
         scaned_folders: &mut HashSet<String>,
         sink: &StreamSink<IndexActionState>,
     ) -> Result<(), io::Error> {
         let folder = folder.as_ref();
+
         if scaned_folders.contains(&folder.to_string_lossy().to_string()) {
             return Ok(());
         }
@@ -412,6 +330,7 @@ impl AudioFolder {
         });
 
         scaned_folders.insert(folder.to_string_lossy().to_string());
+
         let mut audios: Vec<Audio> = vec![];
         let mut latest: u64 = 0;
 
@@ -446,7 +365,6 @@ impl AudioFolder {
                 if metadata.created > latest {
                     latest = metadata.created;
                 }
-
                 audios.push(metadata);
             }
         }
@@ -477,55 +395,25 @@ impl AudioFolder {
     }
 }
 
-fn _get_picture_by_windows(path: &String) -> Result<Vec<u8>, windows::core::Error> {
-    let file = StorageFile::GetFileFromPathAsync(&HSTRING::from(path))?.get()?;
-    let thumbnail = file
-        .GetThumbnailAsyncOverloadDefaultSizeDefaultOptions(ThumbnailMode::MusicView)?
-        .get()?;
-
-    let size = thumbnail.Size()? as u32;
-    let stream: IInputStream = thumbnail.cast()?;
-
-    let mut buffer = vec![0u8; size as usize];
-    let data_reader = DataReader::CreateDataReader(&stream)?;
-    data_reader.LoadAsync(size)?.get()?;
-    data_reader.ReadBytes(&mut buffer)?;
-
-    data_reader.Close()?;
-    stream.Close()?;
-
-    Ok(buffer)
-}
-
 fn _get_picture_by_lofty(path: &String) -> Option<Vec<u8>> {
     if let Ok(tagged_file) = lofty::read_from_path(&path) {
         let tag = tagged_file
             .primary_tag()
             .or_else(|| tagged_file.first_tag())?;
-
         return Some(tag.pictures().first()?.data().to_vec());
     }
-
     None
 }
 
 /// for Flutter
-/// 如果无法通过 Lofty 获取则通过 Windows 获取
+/// 使用 Lofty 获取专辑封面并调整大小
 pub fn get_picture_from_path(path: String, width: u32, height: u32) -> Option<Vec<u8>> {
-    let pic_option =
-        _get_picture_by_lofty(&path).or_else(|| match _get_picture_by_windows(&path) {
-            Ok(val) => Some(val),
-            Err(err) => {
-                log_to_dart(format!("fail to get pic: {}", err));
-                None
-            }
-        });
+    let pic_option = _get_picture_by_lofty(&path);
 
     if let Some(pic) = &pic_option {
         if let Ok(loaded_pic) = image::load_from_memory(pic) {
             // 计算新的宽高，保持原比例
             let pic_ratio = loaded_pic.width() as f32 / loaded_pic.height() as f32;
-
             let (result_width, result_height) = if pic_ratio > 1.0 {
                 (width, (width as f32 / pic_ratio).round() as u32)
             } else {
@@ -550,9 +438,10 @@ pub fn get_picture_from_path(path: String, width: u32, height: u32) -> Option<Ve
 }
 
 /// 歌词结果结构体，包含歌词内容和来源信息
+#[derive(Debug, serde::Serialize)]
 pub struct LyricResult {
     pub lyrics: String,
-    pub source: String,  // "tag" 表示来自音乐文件标签，"file" 表示来自外部 .lrc 文件
+    pub source: String,  // "tag" 表示来自音乐文件标签，"file" 表示来自外部歌词文件
 }
 
 fn _get_lyric_from_lofty(path: &String) -> Option<LyricResult> {
@@ -623,19 +512,18 @@ fn _get_lyric_from_lrc_file(path: &String) -> Option<LyricResult> {
 
 /// for Flutter
 /// 只支持读取 ID3V2, VorbisComment, Mp4Ilst 存储的内嵌歌词
-/// 以及相同目录相同文件名的 .lrc 外挂歌词（utf-8 or utf-16）
+/// 以及相同目录相同文件名的歌词文件（lrc, qrc, ttml, yrc, lys, eslrc）
 /// 返回值：Option<LyricResult>
 /// - lyrics: 歌词内容
-/// - source: "tag" 表示来自音乐文件标签，"file" 表示来自外部 .lrc 文件
+/// - source: "tag" 表示来自音乐文件标签，"file" 表示来自外部歌词文件
 pub fn get_lyric_from_path(path: String) -> Option<LyricResult> {
-    _get_lyric_from_lofty(&path).or_else(|| {
-        _get_lyric_from_lrc_file(&path)
-            .map_err(|err| {
-                log_to_dart(format!("fail to get lrc: {}", err.to_string()));
-                err
-            })
-            .ok()
-    })
+    // 优先尝试从音乐文件标签获取
+    if let Some(lyric) = _get_lyric_from_lofty(&path) {
+        return Some(lyric);
+    }
+
+    // 如果标签中没有，尝试从外部歌词文件获取
+    _get_lyric_from_lrc_file(&path)
 }
 
 /// for Flutter
@@ -665,6 +553,7 @@ pub fn build_index_from_folders_recursively(
     for item in &audio_folders {
         audio_folders_json.push(item.to_json_value());
     }
+
     let json_value = serde_json::json!({
         "version": LOWEST_VERSION,
         "folders": audio_folders_json,
@@ -684,21 +573,27 @@ fn _update_index_below_1_1_0(
 ) -> Result<(), io::Error> {
     let mut audio_folders_json: Vec<serde_json::Value> = vec![];
     let folders = index.as_array().unwrap();
+
     for item in folders {
         let path = item["path"].as_str().unwrap();
+
         let _ = sink.add(IndexActionState {
             progress: audio_folders_json.len() as f64 / folders.len() as f64,
             message: String::from("正在扫描 ") + path,
         });
+
         let folder_path = Path::new(path);
+
         if let Ok(audio_folder) = AudioFolder::read_from_folder(folder_path) {
             audio_folders_json.push(audio_folder.to_json_value());
+
             let _ = sink.add(IndexActionState {
                 progress: audio_folders_json.len() as f64 / folders.len() as f64,
                 message: String::new(),
             });
         }
     }
+
     fs::File::create(index_path)?.write_all(
         serde_json::json!({
             "version": LOWEST_VERSION,
@@ -727,19 +622,21 @@ fn _update_index_below_1_1_0(
 pub fn update_index(index_path: String, sink: StreamSink<IndexActionState>) -> anyhow::Result<()> {
     let mut index_path = PathBuf::from(index_path);
     index_path.push("index.json");
+
     let index = fs::read(&index_path)?;
     let mut index: serde_json::Value = serde_json::from_slice(&index)?;
 
     let version = index["version"].as_u64();
+
     if version.is_none() {
         return Ok(_update_index_below_1_1_0(&index, &index_path, &sink)?);
     }
 
     let folders = index["folders"].as_array_mut().unwrap();
+
     // 删除访问不到的文件夹的记录
     folders.retain(|item| {
         let path = item["path"].as_str().unwrap();
-
         Path::new(path).exists()
     });
 
@@ -779,13 +676,13 @@ pub fn update_index(index_path: String, sink: StreamSink<IndexActionState>) -> a
         let audios = folder_item["audios"].as_array_mut().unwrap();
         audios.retain(|item| {
             let path = item["path"].as_str().unwrap();
-
             Path::new(path).exists()
         });
 
         for audio_item in &mut *audios {
             let old_audio_modified = audio_item["modified"].as_u64().unwrap();
             let audio_path = audio_item["path"].as_str().unwrap();
+
             let new_audio_modified = match fs::metadata(&audio_path) {
                 Ok(value) => match value.modified() {
                     Ok(value) => value
@@ -796,6 +693,7 @@ pub fn update_index(index_path: String, sink: StreamSink<IndexActionState>) -> a
                 },
                 Err(_) => continue,
             };
+
             // 跳过没有被修改的文件
             if new_audio_modified <= old_audio_modified {
                 continue;
@@ -813,15 +711,18 @@ pub fn update_index(index_path: String, sink: StreamSink<IndexActionState>) -> a
             Ok(value) => value,
             Err(_) => continue,
         };
+
         for entry in dir {
             let entry = match entry {
                 Ok(value) => value,
                 Err(_) => continue,
             };
+
             let file_type = match entry.file_type() {
                 Ok(value) => value,
                 Err(_) => continue,
             };
+
             if file_type.is_dir() {
                 continue;
             }
@@ -836,20 +737,20 @@ pub fn update_index(index_path: String, sink: StreamSink<IndexActionState>) -> a
                 },
                 Err(_) => continue,
             };
+
             if entry_created > latest {
                 if let Some(new_audio) = Audio::read_from_path(entry.path()) {
                     if entry_created > new_latest {
                         new_latest = entry_created;
                     }
-
                     audios.push(new_audio.to_json_value());
                 }
             }
         }
 
         folder_item["latest"] = serde_json::json!(new_latest);
-
         updated += 1;
+
         let _ = sink.add(IndexActionState {
             progress: updated as f64 / total as f64,
             message: String::new(),

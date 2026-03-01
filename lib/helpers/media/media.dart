@@ -79,7 +79,7 @@ class MediaHelper {
           await _mediaBox.deleteAt(index);
 
           final queueIndex = mediaManager.queue.value.indexWhere(
-            (e) => e.id == media.id.toString(),
+            (e) => e.id == media.id,
           );
 
           if (queueIndex != -1) {
@@ -168,9 +168,9 @@ class MediaHelper {
     }
 
     if (liked) {
-      _likedBox.delete(int.parse(id));
+      _likedBox.delete(id);
     } else {
-      _likedBox.put(int.parse(id), true);
+      _likedBox.put(id, true);
     }
 
     eventBus.fire(LikeMediaChange(id, !liked));

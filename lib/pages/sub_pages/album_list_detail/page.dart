@@ -202,7 +202,7 @@ class AlbumListDetailPage extends StatelessWidget {
                       itemBuilder: (context, index) {
                         final media = albumList()[index];
 
-                        final isPlaying = mediaItem?.id == media.id.toString();
+                        final isPlaying = mediaItem?.id == media.id;
 
                         return MediaListTile(
                           media,

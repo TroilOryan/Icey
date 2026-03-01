@@ -4,16 +4,16 @@ import 'package:flutter/material.dart';
 import '../../theme/theme.dart';
 
 enum LyricSource {
-  file(value: 1, name: "文件"),
-  tag(value: 2, name: "标签"),
-  none(value: 3, name: "无");
+  file(value: 'file', name: "文件"),
+  tag(value: 'tag', name: "标签"),
+  none(value: 'none', name: "无");
 
-  final int value;
+  final String value;
   final String name;
 
   const LyricSource({required this.value, required this.name});
 
-  static LyricSource getByValue(int value) {
+  static LyricSource getByValue(String value) {
     return values.firstWhere((element) => element.value == value);
   }
 }

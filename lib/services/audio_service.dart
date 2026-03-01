@@ -119,7 +119,7 @@ class AudioServiceHandler extends BaseAudioHandler
         if (gap <= 50) {
           final _mediaCountBox = Boxes.mediaCountBox;
 
-          final id = int.parse(mediaItem.value!.id);
+          final id = mediaItem.value!.id;
 
           final currentCount = _mediaCountBox.get(id, defaultValue: 0);
 

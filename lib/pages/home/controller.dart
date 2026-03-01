@@ -114,7 +114,7 @@ class HomeController {
 
   void handleLocate() {
     final index = mediaManager.mediaList.value.indexWhere(
-      (item) => item.id.toString() == mediaManager.mediaItem.value?.id,
+      (item) => item.id == mediaManager.mediaItem.value?.id,
     );
 
     if (index != -1) {
@@ -141,7 +141,7 @@ class HomeController {
 
   void handleMediaTap(MediaEntity media) {
     if (mediaManager.queue.value.indexWhere(
-          (e) => e.id == media.id.toString(),
+          (e) => e.id == media.id,
         ) ==
         -1) {
       mediaManager.updateQueue([MediaEntity.toMediaItem(media)]).then((_) {

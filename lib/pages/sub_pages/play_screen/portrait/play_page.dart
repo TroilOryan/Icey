@@ -31,7 +31,7 @@ class PlayPage extends StatelessWidget {
       return liked;
     }
 
-    _likedBox.put(int.parse(id), !liked);
+    _likedBox.put(id, !liked);
 
     return !liked;
   }

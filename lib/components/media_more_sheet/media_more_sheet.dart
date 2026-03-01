@@ -72,7 +72,7 @@ class MediaMoreSheet {
           _likedBox.put(media.id, true);
         }
 
-        eventBus.fire(LikeMediaChange(media.id.toString(), !liked));
+        eventBus.fire(LikeMediaChange(media.id, !liked));
 
         context.pop();
       },
@@ -229,7 +229,7 @@ class MediaMoreSheet {
         activity: "MainActivity",
         // extras: {
         //   "song_filePath": media.data,
-        //   "song_id": media.id.toString(),
+        //   "song_id": media.id,
         //   "song_filepath": media.data,
         //   'song': jsonEncode({
         //     "song_id": media.id,

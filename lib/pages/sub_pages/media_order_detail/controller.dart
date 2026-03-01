@@ -47,7 +47,7 @@ class MediaOrderDetailController {
     MediaItem? mediaItem,
     double paddingBottom,
   ) {
-    final isPlaying = mediaItem?.id == media.id.toString();
+    final isPlaying = mediaItem?.id == media.id;
 
     return MediaListTile(
       media,
@@ -59,7 +59,7 @@ class MediaOrderDetailController {
   }
 
   void handleUnlike(String id) {
-    MediaHelper.likeMedia(id.toString(), false);
+    MediaHelper.likeMedia(id, false);
 
     final mediaList = List<MediaEntity>.from(state.mediaList.value);
 
@@ -68,7 +68,7 @@ class MediaOrderDetailController {
     state.mediaList.value = mediaList;
 
     final index = mediaManager.queue.value.indexWhere(
-      (e) => e.id == id.toString(),
+      (e) => e.id == id,
     );
 
     if (index != -1) {

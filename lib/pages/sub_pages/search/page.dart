@@ -80,7 +80,7 @@ class _SearchPageState extends State<SearchPage> {
                 itemBuilder: (context, index) {
                   final media = mediaList[index];
 
-                  final isPlaying = mediaItem?.id == media.id.toString();
+                  final isPlaying = mediaItem?.id == media.id;
 
                   return MediaListTile(
                     media,
