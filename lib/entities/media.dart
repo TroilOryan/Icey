@@ -155,7 +155,8 @@ class MediaEntity {
       sampleRate: audio.sampleRate,
       bitDepth: audio.bitDepth,
       quality: audio.quality,
-      artUri: '${audio.uri}/albumart',
+      artUri: "",
+      // artUri: '${audio.uri}/albumart',
     );
   }
 

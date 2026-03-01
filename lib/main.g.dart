@@ -101,10 +101,6 @@ Future<void> initServices() async {
 
   mediaManager.init(medias: medias, audioService: audioService);
 
-  if (!PlatformHelper.isDesktop) {
-    FlutterNativeSplash.remove();
-  }
-
   Request();
 
   ErrorWidget.builder = (FlutterErrorDetails flutterErrorDetails) {

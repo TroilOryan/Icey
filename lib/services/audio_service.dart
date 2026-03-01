@@ -1,10 +1,12 @@
 import 'dart:async';
 
+import 'package:IceyPlayer/entities/media.dart';
 import 'package:IceyPlayer/helpers/overlay/overlay.dart';
+import 'package:IceyPlayer/helpers/platform.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:IceyPlayer/models/media/media.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_overlay_window/flutter_overlay_window.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:IceyPlayer/constants/box_key.dart';
 import 'package:IceyPlayer/constants/cache_key.dart';
@@ -46,8 +48,21 @@ class AudioServiceHandler extends BaseAudioHandler
   }
 
   Future<void> loadPlaylist(List<MediaItem> mediaItems) async {
+    setPlayMode(
+      PlayMode.getByValue(
+        _settingsBox.get(
+          CacheKey.Settings.playMode,
+          defaultValue: PlayMode.listLoop.value,
+        ),
+      ),
+    );
+
     if (mediaItems.isEmpty) {
       await _player.setAudioSource(_playlist, preload: true);
+
+      if (!PlatformHelper.isDesktop) {
+        FlutterNativeSplash.remove();
+      }
 
       return;
     }
@@ -75,17 +90,11 @@ class AudioServiceHandler extends BaseAudioHandler
         initialPosition: Duration(milliseconds: position),
         preload: true,
       );
-    });
 
-    mediaManager.togglePlayerMode(
-      mode: PlayMode.getByValue(
-        _settingsBox.get(
-          CacheKey.Settings.playMode,
-          defaultValue: PlayMode.listLoop.value,
-        ),
-      ),
-      noToast: true,
-    );
+      if (!PlatformHelper.isDesktop) {
+        FlutterNativeSplash.remove();
+      }
+    });
   }
 
   void _listenForSequenceStateChanges() {

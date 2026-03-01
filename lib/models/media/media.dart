@@ -228,9 +228,6 @@ class MediaManager {
   }
 
   Future<void> loadPlaylist(List<MediaItem> value) async {
-    if (PlatformHelper.isDesktop) {
-      return;
-    }
     await _audioService.loadPlaylist(value);
   }
 
