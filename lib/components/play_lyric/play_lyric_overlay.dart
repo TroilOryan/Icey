@@ -1,6 +1,7 @@
 import 'package:IceyPlayer/components/marquee/marquee.dart';
 import 'package:IceyPlayer/constants/settings.dart';
 import 'package:IceyPlayer/helpers/overlay/overlay.dart';
+import 'package:IceyPlayer/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:signals/signals_flutter.dart';
@@ -89,8 +90,9 @@ class _PlayLyricOverlayState extends State<PlayLyricOverlay> {
       ),
     );
 
-    return Offstage(
-      offstage: !_visible,
+    return AnimatedOpacity(
+      opacity: _visible ? 1 : 0,
+      duration: AppTheme.defaultDuration,
       child: Material(
         type: MaterialType.transparency,
         clipBehavior: Clip.antiAlias,
