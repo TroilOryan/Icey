@@ -19,7 +19,17 @@ class AdaptiveBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     return OrientationLayoutBuilder(
       portrait: mobile,
-      landscape: landscape ?? tablet ?? desktop ?? mobile,
+      landscape: (context) => ResponsiveBuilder(
+        builder: (context, size) {
+          if (size.isTablet && tablet != null) {
+            return Builder(builder: tablet!);
+          } else if (size.isDesktop && desktop != null) {
+            return Builder(builder: desktop!);
+          }
+
+          return Builder(builder: landscape ?? tablet ?? desktop ?? mobile);
+        },
+      ),
     );
   }
 }

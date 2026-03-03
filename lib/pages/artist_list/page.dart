@@ -97,9 +97,13 @@ class _ArtistListPageState extends State<ArtistListPage>
                                   ),
                                 )
                               : MediaCover(
-                                  id: artist.id,
+                                  id: PlatformHelper.isDesktop
+                                      ? artist.mediaIDs.first
+                                      : artist.id,
                                   size: 156,
-                                  type: ArtworkType.ARTIST,
+                                  type: PlatformHelper.isDesktop
+                                      ? ArtworkType.AUDIO
+                                      : ArtworkType.ARTIST,
                                   borderRadius: BorderRadius.all(
                                     AppTheme.borderRadiusSm,
                                   ),

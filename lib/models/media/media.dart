@@ -1,10 +1,8 @@
 import 'dart:typed_data';
 
-import 'package:IceyPlayer/helpers/platform.dart';
+import 'package:IceyPlayer/helpers/media/media.dart';
 import 'package:IceyPlayer/models/lyric/lyric.dart';
 import 'package:IceyPlayer/src/rust/api/tag_reader.dart';
-import 'package:audio_query/audio_query.dart';
-import 'package:audio_query/types/artwork_type.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -324,11 +322,7 @@ class MediaManager {
       }
 
       try {
-        final coverRes = await AudioQuery().queryArtworkWithColor(
-          id,
-          ArtworkType.AUDIO,
-          size: 1024,
-        );
+        final coverRes = await MediaHelper.queryCover(id);
 
         _currentCover.value = coverRes?["cover"] ?? Uint8List(0);
 

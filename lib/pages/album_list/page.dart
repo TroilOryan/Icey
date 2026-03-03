@@ -97,9 +97,13 @@ class _AlbumListPageState extends State<AlbumListPage>
                                   ),
                                 )
                               : MediaCover(
-                                  id: album.id,
+                                  id: PlatformHelper.isDesktop
+                                      ? album.mediaIDs.first
+                                      : album.id,
                                   size: 156,
-                                  type: ArtworkType.ALBUM,
+                                  type: PlatformHelper.isDesktop
+                                      ? ArtworkType.AUDIO
+                                      : ArtworkType.ALBUM,
                                   borderRadius: BorderRadius.all(
                                     AppTheme.borderRadiusSm,
                                   ),
@@ -128,12 +132,12 @@ class _AlbumListPageState extends State<AlbumListPage>
                 },
               ),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
+                crossAxisCount: 3,
                 mainAxisSpacing: 12,
                 crossAxisSpacing: 12,
                 childAspectRatio: 0.7,
+                mainAxisExtent: 256,
               ),
-              // gridDelegate: _mySliverGridDelegateWithMaxCrossAxisExtent(),
             ),
           ),
         ],

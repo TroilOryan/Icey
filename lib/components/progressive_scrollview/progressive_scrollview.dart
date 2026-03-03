@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:IceyPlayer/helpers/platform.dart';
 import 'package:IceyPlayer/models/settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -47,7 +48,7 @@ class ProgressiveScrollview extends StatelessWidget {
         edges: [
           EdgeBlur(
             type: EdgeType.topEdge,
-            size: 100,
+            size: PlatformHelper.isDesktop ? 75 : 100,
             sigma: 12,
             tintColor: listBg.isEmpty
                 ? theme.floatingActionButtonTheme.backgroundColor
@@ -153,11 +154,14 @@ class ProgressiveScrollview extends StatelessWidget {
     final paddingTop = MediaQuery.of(context).viewPadding.top;
     final double appbarHeight = max(75, kToolbarHeight + paddingTop);
 
-    return Stack(
-      children: [
-        _buildBody(context, theme, appbarHeight),
-        _buildAppBar(context, theme, paddingTop, appbarHeight),
-      ],
+    return Padding(
+      padding: EdgeInsetsGeometry.only(top: PlatformHelper.isDesktop ? 32 : 0),
+      child: Stack(
+        children: [
+          _buildBody(context, theme, appbarHeight),
+          _buildAppBar(context, theme, paddingTop, appbarHeight),
+        ],
+      ),
     );
   }
 }

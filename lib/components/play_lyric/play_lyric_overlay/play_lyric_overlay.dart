@@ -1,0 +1,73 @@
+part of 'controller.dart';
+
+// 悬浮歌词
+class PlayLyricOverlay extends StatefulWidget {
+  const PlayLyricOverlay({super.key});
+
+  @override
+  State<PlayLyricOverlay> createState() => _PlayLyricOverlayState();
+}
+
+class _PlayLyricOverlayState extends State<PlayLyricOverlay> {
+  final controller = PlayLyricOverlayController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    controller.onInit();
+  }
+
+  @override
+  void dispose() {
+    controller.onDispose();
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final lyric = controller.state.lyric.watch(context),
+        color = controller.state.color.watch(context),
+        fontSize = controller.state.fontSize.watch(context),
+        width = controller.state.width.watch(context),
+        playing = controller.state.playing.watch(context),
+        visible = controller.state.visible.watch(context);
+
+    final textStyle = computed(
+      () => TextStyle(
+        color: color,
+        fontSize: fontSize,
+        fontWeight: FontWeight.bold,
+      ),
+    );
+
+    return AnimatedOpacity(
+      opacity: visible ? 1 : 0,
+      duration: AppTheme.defaultDuration,
+      child: Material(
+        type: MaterialType.transparency,
+        clipBehavior: Clip.antiAlias,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: width),
+          child: Stack(
+            children: [
+              SizedBox(
+                width: width,
+                child: Marquee(
+                  disableAnimation: !playing,
+                  child: Text(
+                    lyric.isEmpty ? "暂无歌词" : lyric,
+                    style: textStyle(),
+                    maxLines: 1,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

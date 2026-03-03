@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:IceyPlayer/helpers/platform.dart';
 import 'package:audio_query/entities.dart';
 import 'package:audio_service/audio_service.dart';
@@ -7,6 +9,8 @@ import 'package:uuid/uuid.dart';
 const _typeId = 1;
 
 const _uuid = Uuid();
+
+var random = Random();
 
 @HiveType(typeId: _typeId, adapterName: "MediaEntityAdapter")
 class MediaEntity {
@@ -155,8 +159,7 @@ class MediaEntity {
       sampleRate: audio.sampleRate,
       bitDepth: audio.bitDepth,
       quality: audio.quality,
-      artUri: "",
-      // artUri: '${audio.uri}/albumart',
+      artUri: PlatformHelper.isDesktop ? null : '${audio.uri}/albumart',
     );
   }
 
@@ -166,7 +169,8 @@ class MediaEntity {
     title: media.title,
     artist: media.artist,
     duration: Duration(milliseconds: media.duration ?? 0),
-    artUri: media.artUri != null ? Uri.parse(media.artUri!) : null,
+    artUri: null,
+    // artUri: media.artUri != null ? Uri.parse(media.artUri!) : null,
     extras: {
       "uuid": _uuid.v4(),
       "quality": media.quality,

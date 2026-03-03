@@ -81,6 +81,7 @@ class MediaListTile extends StatelessWidget {
         child: InkWell(
           onTap: onTap,
           onLongPress: onLongPress,
+          onSecondaryTap: onLongPress,
           child: Container(
             padding: EdgeInsets.fromLTRB(12, 12, showLike ? 10 : 8, 12),
             child: Row(

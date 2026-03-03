@@ -1,7 +1,7 @@
 import 'package:IceyPlayer/components/next_button/next_button.dart';
 import 'package:IceyPlayer/components/play_button/play_button.dart';
 import 'package:IceyPlayer/components/play_list_button/play_list_button.dart';
-import 'package:IceyPlayer/components/play_lyric/play_lyric_small.dart';
+import 'package:IceyPlayer/components/play_lyric/play_lyric_mini/controller.dart';
 import 'package:IceyPlayer/components/play_lyric_button/play_lyric_button.dart';
 import 'package:IceyPlayer/components/play_mode_button/play_mode_button.dart';
 import 'package:IceyPlayer/components/play_progress_bar/play_progress_bar.dart';
@@ -69,7 +69,7 @@ class PlayPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 24),
-                      PlayLyricSmall(
+                      PlayLyricMini(
                         color: appThemeExtension.primary,
                         onTap: () => onOpenLyric(context),
                       ),

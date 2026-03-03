@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:ui';
 
-import 'package:IceyPlayer/components/play_lyric/play_lyric_overlay.dart';
 import 'package:IceyPlayer/helpers/common.dart';
 import 'package:IceyPlayer/helpers/logs/json_file_handler.dart';
 import 'package:IceyPlayer/helpers/overlay/overlay.dart';
@@ -30,6 +29,7 @@ import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:signals/signals_flutter.dart';
 import 'package:window_manager/window_manager.dart';
 import 'build_config.dart';
+import 'components/play_lyric/play_lyric_overlay/controller.dart';
 import 'constants/box_key.dart';
 import 'constants/cache_key.dart';
 import 'entities/media.dart';

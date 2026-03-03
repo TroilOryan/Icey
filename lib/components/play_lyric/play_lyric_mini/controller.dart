@@ -3,30 +3,23 @@ import 'package:IceyPlayer/models/lyric/lyric.dart';
 import 'package:IceyPlayer/models/media/media.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lyric/core/lyric_model.dart';
+import 'package:keframe/keframe.dart';
 
 import 'package:signals/signals_flutter.dart';
 import 'package:super_sliver_list/super_sliver_list.dart';
 
-import '../../theme/theme.dart';
+import '../../../theme/theme.dart';
 
-class PlayLyricSmall extends StatefulWidget {
-  final Color? color;
-  final VoidCallback? onTap;
+part 'play_lyric_mini.dart';
 
-  const PlayLyricSmall({super.key, this.color, this.onTap});
-
-  @override
-  State<PlayLyricSmall> createState() => _PlayLyricSmallState();
-}
-
-class _PlayLyricSmallState extends State<PlayLyricSmall> {
+class PlayLyricMiniController {
   late final EffectCleanup _listener;
 
   final ListController listviewController = ListController();
 
   final ScrollController scrollController = ScrollController();
 
-  Widget _buildLyricItem(
+  Widget buildLyricItem(
     List<LyricLine> lyricList,
     int index,
     int currentIndex,
@@ -91,73 +84,9 @@ class _PlayLyricSmallState extends State<PlayLyricSmall> {
     });
   }
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    onInit();
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-
+  void onDispose() {
     scrollController.dispose();
     listviewController.dispose();
     _listener();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    final appTheme = AppThemeExtension.of(context);
-
-    final textStyle = TextStyle(
-      fontSize: theme.textTheme.titleMedium?.fontSize,
-      fontWeight: FontWeight.bold,
-      height: 1.5,
-      color: widget.color,
-    );
-
-    return GestureDetector(
-      onTap: widget.onTap,
-      child: Builder(
-        builder: (context) {
-          final parsedLyric = lyricManager.parsedLyric.watch(context),
-              currentIndex = lyricManager.currentIndex.watch(context);
-
-          final lineHeight = textStyle.fontSize! * textStyle.height! + 2;
-
-          final containerHeight = lineHeight * 2.15;
-
-          return PlayLyricShaderMask(
-            colorStops: const [0.0, 0.05, 0.95, 1],
-            height: containerHeight,
-            child: MediaQuery.removePadding(
-              removeTop: true,
-              context: context,
-              child: parsedLyric.isEmpty
-                  ? Text("暂无歌词", style: textStyle)
-                  : SuperListView.builder(
-                      key: ValueKey(parsedLyric),
-                      listController: listviewController,
-                      controller: scrollController,
-                      itemCount: parsedLyric.length,
-                      itemBuilder: (context, index) => _buildLyricItem(
-                        parsedLyric,
-                        index,
-                        currentIndex,
-                        textStyle,
-                        appTheme,
-                      ),
-                    ),
-            ),
-          );
-        },
-      ),
-    );
   }
 }

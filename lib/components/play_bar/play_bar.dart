@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:IceyPlayer/components/adaptive_builder/adaptive_builder.dart';
 import 'package:IceyPlayer/constants/glass_settings.dart';
 import 'package:IceyPlayer/helpers/platform.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
@@ -39,11 +40,12 @@ class PlayBar extends StatelessWidget {
       16,
     );
 
+    final deviceWidth = MediaQuery.of(context).size.width;
+
     final delta = playBarController.state.delta.watch(context),
         isNext = playBarController.state.isNext.watch(context);
 
     final playBar = Container(
-      height: playBarHeight,
       padding: EdgeInsets.fromLTRB(10, 8, 6, 8),
       child: Stack(
         children: [
@@ -192,20 +194,18 @@ class PlayBar extends StatelessWidget {
           curve: Curves.easeInOutSine,
           offset: Offset(0, hidePlayBar ? 1 : 0),
           duration: AppTheme.defaultDurationLong,
-          child: OrientationLayoutBuilder(
-            portrait: (context) => GlassPanel(
+          child: AdaptiveBuilder(
+            mobile: (context) => GlassPanel(
+              height: playBarHeight,
               shape: LiquidRoundedRectangle(borderRadius: 66),
               padding: EdgeInsets.zero,
               settings: RecommendedGlassSettings.bottomBar.copyWith(blur: 5),
-              margin: EdgeInsets.fromLTRB(
-                16,
-                0,
-                16,
-                PlatformHelper.isDesktop ? 16 : paddingBottom + 64 + 12,
-              ),
+              margin: EdgeInsets.fromLTRB(16, 0, 16, paddingBottom + 64 + 12),
               child: playBar,
             ),
             landscape: (context) => GlassPanel(
+              width: deviceWidth * 0.6,
+              height: playBarHeight,
               shape: LiquidRoundedRectangle(borderRadius: 66),
               padding: EdgeInsets.zero,
               settings: RecommendedGlassSettings.bottomBar,

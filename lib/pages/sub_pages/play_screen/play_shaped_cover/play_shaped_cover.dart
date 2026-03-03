@@ -24,6 +24,8 @@ class PlayShapedCover extends StatelessWidget {
         ? mediaQuery.size.height - 48
         : mediaQuery.size.width - 48;
 
+    final double paddingLeft = max(mediaQuery.padding.left, 32);
+
     final diskShadowColor = theme.colorScheme.secondaryContainer;
 
     final rotationAnimation = mediaManager.rotationAnimation.watch(context);
@@ -136,7 +138,7 @@ class PlayShapedCover extends StatelessWidget {
 
         if (isLandscape) {
           return Padding(
-            padding: EdgeInsets.only(left: mediaQuery.padding.left),
+            padding: EdgeInsets.only(left: paddingLeft),
             child: child,
           );
         }

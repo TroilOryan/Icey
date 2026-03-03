@@ -2,6 +2,8 @@ import "dart:async";
 import "dart:io";
 
 import "package:IceyPlayer/event_bus/event_bus.dart";
+import "package:IceyPlayer/helpers/platform.dart";
+import "package:IceyPlayer/src/rust/api/tag_reader.dart";
 import "package:audio_query/audio_query.dart";
 import "package:IceyPlayer/constants/box_key.dart";
 import "package:IceyPlayer/constants/cache_key.dart";
@@ -9,6 +11,7 @@ import "package:IceyPlayer/entities/media.dart";
 import "package:IceyPlayer/helpers/media_scanner/media_sort.dart";
 import "package:IceyPlayer/helpers/toast/toast.dart";
 import "package:IceyPlayer/models/media/media.dart";
+import "package:audio_query/types/artwork_type.dart";
 import "package:hive_ce/hive.dart";
 import "package:flutter/material.dart";
 import "package:pinyin/pinyin.dart";
@@ -176,5 +179,21 @@ class MediaHelper {
     eventBus.fire(LikeMediaChange(id, !liked));
 
     return !liked;
+  }
+
+  static Future<Map<String, dynamic>?>? queryCover(String id) async {
+    if (PlatformHelper.isDesktop) {
+      final res = await getPictureFromPath(path: id, width: 1024, height: 1024);
+
+      return {"cover": res};
+    } else {
+      final coverRes = await AudioQuery().queryArtworkWithColor(
+        id,
+        ArtworkType.AUDIO,
+        size: 1024,
+      );
+
+      return coverRes;
+    }
   }
 }

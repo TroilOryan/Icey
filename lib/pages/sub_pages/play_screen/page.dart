@@ -58,18 +58,25 @@ class _PlayScreenPageState extends State<PlayScreenPage>
             : Stack(
                 children: [
                   PlayScreenBackground(),
-                  OrientationBuilder(
-                    builder: (context, orientation) {
-                      if (orientation == Orientation.landscape) {
-                        return Landscape();
-                      }
+                  AdaptiveBuilder(
+                    mobile: (context) => Portrait(
+                      offset: offset,
+                      lyricOpened: lyricOpened,
+                      onOpenLyric: playScreenController.handleOpenLyric,
+                    ),
+                    landscape: (context) => OrientationBuilder(
+                      builder: (context, orientation) {
+                        if (orientation == Orientation.landscape) {
+                          return Landscape();
+                        }
 
-                      return Portrait(
-                        offset: offset,
-                        lyricOpened: lyricOpened,
-                        onOpenLyric: playScreenController.handleOpenLyric,
-                      );
-                    },
+                        return Portrait(
+                          offset: offset,
+                          lyricOpened: lyricOpened,
+                          onOpenLyric: playScreenController.handleOpenLyric,
+                        );
+                      },
+                    ),
                   ),
                 ],
               ),

@@ -10,11 +10,11 @@ class AudioEntity {
 
   String? get artist => _info["artist"];
 
-  String get artistID => (_info["artist_id"] ?? 0).toString();
+  String get artistID => (_info["artist_id"] ?? _info["artist"]).toString();
 
   String? get album => _info["album"];
 
-  String get albumID => (_info["album_id"] ?? 0).toString();
+  String get albumID => (_info["album_id"] ?? _info["album"]).toString();
 
   int? get track => _info["track"];
 
