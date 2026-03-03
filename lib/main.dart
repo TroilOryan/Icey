@@ -27,6 +27,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:go_transitions/go_transitions.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:signals/signals_flutter.dart';
+import 'package:tray_manager/tray_manager.dart';
 import 'package:window_manager/window_manager.dart';
 import 'build_config.dart';
 import 'components/play_lyric/play_lyric_overlay/controller.dart';
@@ -79,7 +80,7 @@ class App extends StatefulWidget {
   State<App> createState() => _AppState();
 }
 
-class _AppState extends State<App> with WidgetsBindingObserver {
+class _AppState extends State<App> with WidgetsBindingObserver, TrayListener {
   Future onInit() async {
     WidgetsBinding.instance.addObserver(this);
 
@@ -139,15 +140,46 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   }
 
   @override
+  void onTrayIconMouseDown() {
+    // do something, for example pop up the menu
+  }
+
+  @override
+  void onTrayIconRightMouseDown() {
+    // do something
+    trayManager.popUpContextMenu();
+  }
+
+  @override
+  void onTrayIconRightMouseUp() {
+    // do something
+  }
+
+  @override
+  void onTrayMenuItemClick(MenuItem menuItem) {
+    if (menuItem.key == 'show') {
+      // do something
+      windowManager.show();
+    } else if (menuItem.key == 'exit') {
+      // do something
+      windowManager.close();
+    }
+  }
+
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    trayManager.addListener(this);
 
     onInit();
   }
 
   @override
   void dispose() {
+    trayManager.removeListener(this);
+
     onDispose();
 
     // TODO: implement dispose
