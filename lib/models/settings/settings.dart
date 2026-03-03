@@ -328,31 +328,6 @@ class SettingsManager {
     _settingsBox.put(CacheKey.Settings.fakeEnhanced, value);
   }
 
-  Future<void> showLyricOverlay() async {
-    if (await OverlayHelper.isActive()) {
-      return;
-    }
-
-    await OverlayHelper.showOverlay(
-      enableDrag: false,
-      overlayTitle: "Icey Player",
-      overlayContent: 'Overlay Lyric',
-      flag: OverlayFlag.clickThrough,
-      visibility: NotificationVisibility.visibilityPublic,
-      positionGravity: PositionGravity.auto,
-      height: WindowSize.matchParent,
-      width: WindowSize.matchParent,
-      startPosition: const OverlayPosition(0, 0),
-    );
-
-    await OverlayHelper.moveOverlay(
-      OverlayPosition(
-        _settingsBox.get(CacheKey.Settings.overlayLyricX, defaultValue: 0.0),
-        _settingsBox.get(CacheKey.Settings.overlayLyricY, defaultValue: 0.0),
-      ),
-    );
-  }
-
   Future<void> setLyricOverlay(bool value) async {
     _lyricOverlay.value = value;
 
@@ -362,7 +337,7 @@ class SettingsManager {
       final res = await OverlayHelper.isPermissionGranted();
 
       if (res == true) {
-        await showLyricOverlay();
+        await OverlayHelper.showLyricOverlay();
       } else {
         showToast("请给予Icey Player悬浮窗权限");
 

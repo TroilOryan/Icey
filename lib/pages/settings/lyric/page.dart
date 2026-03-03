@@ -3,15 +3,22 @@ import 'package:IceyPlayer/components/list_card/list_card.dart';
 import 'package:IceyPlayer/components/list_item/list_item.dart';
 import 'package:IceyPlayer/components/page_wrapper/page_wrapper.dart';
 import 'package:IceyPlayer/constants/settings.dart';
+import 'package:IceyPlayer/helpers/overlay/overlay.dart';
 import 'package:IceyPlayer/models/lyric/lyric.dart';
+import 'package:IceyPlayer/models/media/media.dart';
 import 'package:IceyPlayer/models/settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:signals_flutter/signals_flutter.dart';
 
-class LyricPage extends StatelessWidget {
+class LyricPage extends StatefulWidget {
   const LyricPage({super.key});
 
+  @override
+  State<LyricPage> createState() => _LyricPageState();
+}
+
+class _LyricPageState extends State<LyricPage> {
   void handleSetLyricOverlayColor(BuildContext context) {
     final theme = Theme.of(context);
 
@@ -43,6 +50,38 @@ class LyricPage extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  Future<void> onInit() async {
+    if (settingsManager.lyricOverlay.value && !mediaManager.isPlaying) {
+      if (!await OverlayHelper.isActive()) {
+        OverlayHelper.showLyricOverlay();
+      }
+
+      OverlayHelper.shareData({"visible": true});
+    }
+  }
+
+  void onDispose() {
+    if (settingsManager.lyricOverlay.value && !mediaManager.isPlaying) {
+      OverlayHelper.shareData({"visible": false});
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    onInit();
+  }
+
+  @override
+  void dispose() {
+    onDispose();
+
+    // TODO: implement dispose
+    super.dispose();
   }
 
   @override

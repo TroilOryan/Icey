@@ -1,6 +1,10 @@
 import 'dart:io';
 
+import 'package:IceyPlayer/constants/box_key.dart';
+import 'package:IceyPlayer/constants/cache_key.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
+
+final _settingsBox = Boxes.settingsBox;
 
 class OverlayHelper {
   static Future<bool> isPermissionGranted() async {
@@ -27,7 +31,32 @@ class OverlayHelper {
     return await FlutterOverlayWindow.isActive();
   }
 
-  static Future<void> showOverlay({
+  static Future<void> showLyricOverlay() async {
+    if (await OverlayHelper.isActive()) {
+      return;
+    }
+
+    await OverlayHelper._showOverlay(
+      enableDrag: false,
+      overlayTitle: "Icey Player",
+      overlayContent: 'Overlay Lyric',
+      flag: OverlayFlag.clickThrough,
+      visibility: NotificationVisibility.visibilityPublic,
+      positionGravity: PositionGravity.auto,
+      height: WindowSize.matchParent,
+      width: WindowSize.matchParent,
+      startPosition: const OverlayPosition(0, 0),
+    );
+
+    await OverlayHelper.moveOverlay(
+      OverlayPosition(
+        _settingsBox.get(CacheKey.Settings.overlayLyricX, defaultValue: 0.0),
+        _settingsBox.get(CacheKey.Settings.overlayLyricY, defaultValue: 0.0),
+      ),
+    );
+  }
+
+  static Future<void> _showOverlay({
     int height = WindowSize.fullCover,
     int width = WindowSize.matchParent,
     OverlayAlignment alignment = OverlayAlignment.center,
