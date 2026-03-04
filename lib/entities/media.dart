@@ -169,8 +169,7 @@ class MediaEntity {
     title: media.title,
     artist: media.artist,
     duration: Duration(milliseconds: media.duration ?? 0),
-    artUri: null,
-    // artUri: media.artUri != null ? Uri.parse(media.artUri!) : null,
+    artUri: media.artUri != null ? Uri.parse(media.artUri!) : null,
     extras: {
       "uuid": _uuid.v4(),
       "quality": media.quality,
