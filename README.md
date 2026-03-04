@@ -44,6 +44,7 @@
 <img src="assets/screenshots/歌词页.jpg" width="24%" alt="home" />
 <img src="assets/screenshots/歌词页-卡拉OK.jpg" width="24%" alt="home" />
 <img src="assets/screenshots/歌词页-演唱会模式.jpg" width="100%" alt="home" />
+<img src="assets/screenshots/桌面.jpg" width="100%" alt="home" />
 </div>
 
 <br/>
