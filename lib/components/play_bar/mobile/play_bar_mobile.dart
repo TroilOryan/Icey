@@ -93,7 +93,7 @@ class PlayBarMobile extends StatelessWidget {
                               ),
                             ),
                           ),
-                          PlayInfo(mediaItem: mediaItem),
+                          PlayInfo(),
                           Positioned(
                             left: constraints.maxWidth - 8 - 35.2,
                             child: VisibilityDetector(

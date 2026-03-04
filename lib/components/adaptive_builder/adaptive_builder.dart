@@ -25,6 +25,8 @@ class AdaptiveBuilder extends StatelessWidget {
             return Builder(builder: tablet!);
           } else if (size.isDesktop && desktop != null) {
             return Builder(builder: desktop!);
+          } else if (size.isLarge && landscape != null) {
+            return Builder(builder: landscape!);
           }
 
           return Builder(builder: landscape ?? tablet ?? desktop ?? mobile);

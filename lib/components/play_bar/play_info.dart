@@ -1,3 +1,5 @@
+import 'package:IceyPlayer/components/adaptive_builder/adaptive_builder.dart';
+import 'package:IceyPlayer/helpers/platform.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:IceyPlayer/components/marquee/marquee.dart';
 import 'package:IceyPlayer/models/media/media.dart';
@@ -7,39 +9,49 @@ import 'play_bar_lyric.dart';
 
 /// 音乐信息
 class PlayInfo extends StatelessWidget {
-  final MediaItem? mediaItem;
-
-  const PlayInfo({super.key, required this.mediaItem});
+  const PlayInfo({super.key});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Flexible(
-      child: StreamBuilder(
-        stream: mediaManager.mediaItem,
-        builder: (context, snapshot) {
-          final mediaItem = snapshot.data;
+    final info = StreamBuilder(
+      stream: mediaManager.mediaItem,
+      builder: (context, snapshot) {
+        final mediaItem = snapshot.data;
 
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Marquee(
-                child: Text(
-                  mediaItem?.title ?? "暂无歌曲",
-                  style: theme.textTheme.titleSmall,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                  softWrap: true,
-                ),
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Marquee(
+              child: Text(
+                mediaItem?.title ?? "暂无歌曲",
+                style: theme.textTheme.titleSmall,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                softWrap: true,
               ),
+            ),
 
-              PlayBarLyric(),
-            ],
-          );
-        },
+            PlayBarLyric(),
+          ],
+        );
+      },
+    );
+
+    return AdaptiveBuilder(
+      mobile: (context) => Row(
+        children: [
+          Flexible(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 56),
+              child: info,
+            ),
+          ),
+        ],
       ),
+      tablet: (context) => Flexible(child: info),
     );
   }
 }

@@ -73,7 +73,7 @@
 ## 支持音频格式
 
 | File Format | Metadata Format(s)           |
-|-------------|------------------------------|
+|-------------|------------------------------|[play_bar_mobile.dart](lib/components/play_bar/mobile/play_bar_mobile.dart)
 | AAC (ADTS)  | `ID3v2`, `ID3v1`             |
 | Ape         | `APE`, `ID3v2`\*, `ID3v1`    |
 | AIFF        | `ID3v2`, `Text Chunks`       |

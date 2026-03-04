@@ -49,39 +49,61 @@ class PlayBarDesktop extends StatelessWidget {
                   duration: AppTheme.defaultDurationMid,
                 ),
               ),
-              StreamBuilder(
-                stream: mediaManager.queue,
-                builder: (context, snapshot) {
-                  final queue = snapshot.data ?? [];
-
-                  return StreamBuilder(
-                    stream: mediaManager.mediaItem,
-                    builder: (context, snapshot) {
-                      final mediaItem = snapshot.data;
-
-                      return PlayInfo(mediaItem: mediaItem);
-                    },
-                  );
-                },
-              ),
+              PlayInfo(),
             ],
           ),
 
-          Align(
-            alignment: Alignment.center,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                PlayModeButton(size: 18, color: theme.colorScheme.onSurface),
-                PrevButton(size: 18, color: theme.colorScheme.onSurface),
-                PlayButton(
-                  size: 21,
-                  ghost: true,
-                  color: theme.colorScheme.onSurface,
-                ),
-                NextButton(size: 18, color: theme.colorScheme.onSurface),
-                PlayListButton(size: 18, color: theme.colorScheme.onSurface),
-              ],
+          AdaptiveBuilder(
+            mobile: (context) => Align(
+              alignment: Alignment.center,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  PlayModeButton(size: 18, color: theme.colorScheme.onSurface),
+                  PrevButton(size: 18, color: theme.colorScheme.onSurface),
+                  PlayButton(
+                    size: 21,
+                    ghost: true,
+                    color: theme.colorScheme.onSurface,
+                  ),
+                  NextButton(size: 18, color: theme.colorScheme.onSurface),
+                  PlayListButton(size: 18, color: theme.colorScheme.onSurface),
+                ],
+              ),
+            ),
+            tablet: (context) => Align(
+              alignment: Alignment.center,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  PlayModeButton(size: 18, color: theme.colorScheme.onSurface),
+                  PrevButton(size: 18, color: theme.colorScheme.onSurface),
+                  PlayButton(
+                    size: 21,
+                    ghost: true,
+                    color: theme.colorScheme.onSurface,
+                  ),
+                  NextButton(size: 18, color: theme.colorScheme.onSurface),
+                  PlayListButton(size: 18, color: theme.colorScheme.onSurface),
+                ],
+              ),
+            ),
+            desktop: (context) => Align(
+              alignment: Alignment.center,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  PlayModeButton(size: 18, color: theme.colorScheme.onSurface),
+                  PrevButton(size: 18, color: theme.colorScheme.onSurface),
+                  PlayButton(
+                    size: 21,
+                    ghost: true,
+                    color: theme.colorScheme.onSurface,
+                  ),
+                  NextButton(size: 18, color: theme.colorScheme.onSurface),
+                  PlayListButton(size: 18, color: theme.colorScheme.onSurface),
+                ],
+              ),
             ),
           ),
         ],

@@ -4,7 +4,6 @@
 // ignore_for_file: unused_import, unused_element, unnecessary_import, duplicate_ignore, invalid_use_of_internal_member, annotate_overrides, non_constant_identifier_names, curly_braces_in_flow_control_structures, prefer_const_literals_to_create_immutables, unused_field
 
 import 'api/logger.dart';
-import 'api/smtc_flutter.dart';
 import 'api/tag_reader.dart';
 import 'api/utils.dart';
 import 'dart:async';
@@ -67,7 +66,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => -819868246;
+  int get rustContentHash => 318459630;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -78,34 +77,6 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
 }
 
 abstract class RustLibApi extends BaseApi {
-  Future<void> crateApiSmtcFlutterSmtcFlutterClose({required SmtcFlutter that});
-
-  SmtcFlutter crateApiSmtcFlutterSmtcFlutterNew();
-
-  Stream<SMTCControlEvent>
-  crateApiSmtcFlutterSmtcFlutterSubscribeToControlEvents({
-    required SmtcFlutter that,
-  });
-
-  Future<void> crateApiSmtcFlutterSmtcFlutterUpdateDisplay({
-    required SmtcFlutter that,
-    required String title,
-    required String artist,
-    required String album,
-    required int duration,
-    required String path,
-  });
-
-  Future<void> crateApiSmtcFlutterSmtcFlutterUpdateState({
-    required SmtcFlutter that,
-    required SMTCState state,
-  });
-
-  Future<void> crateApiSmtcFlutterSmtcFlutterUpdateTimeProperties({
-    required SmtcFlutter that,
-    required int progress,
-  });
-
   Stream<IndexActionState> crateApiTagReaderBuildIndexFromFoldersRecursively({
     required List<String> folders,
     required String indexPath,
@@ -132,14 +103,6 @@ abstract class RustLibApi extends BaseApi {
   Stream<IndexActionState> crateApiTagReaderUpdateIndex({
     required String indexPath,
   });
-
-  RustArcIncrementStrongCountFnType
-  get rust_arc_increment_strong_count_SmtcFlutter;
-
-  RustArcDecrementStrongCountFnType
-  get rust_arc_decrement_strong_count_SmtcFlutter;
-
-  CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_SmtcFlutterPtr;
 }
 
 class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
@@ -149,229 +112,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     required super.generalizedFrbRustBinding,
     required super.portManager,
   });
-
-  @override
-  Future<void> crateApiSmtcFlutterSmtcFlutterClose({
-    required SmtcFlutter that,
-  }) {
-    return handler.executeNormal(
-      NormalTask(
-        callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSMTCFlutter(
-            that,
-            serializer,
-          );
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 1,
-            port: port_,
-          );
-        },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_unit,
-          decodeErrorData: null,
-        ),
-        constMeta: kCrateApiSmtcFlutterSmtcFlutterCloseConstMeta,
-        argValues: [that],
-        apiImpl: this,
-      ),
-    );
-  }
-
-  TaskConstMeta get kCrateApiSmtcFlutterSmtcFlutterCloseConstMeta =>
-      const TaskConstMeta(debugName: "SmtcFlutter_close", argNames: ["that"]);
-
-  @override
-  SmtcFlutter crateApiSmtcFlutterSmtcFlutterNew() {
-    return handler.executeSync(
-      SyncTask(
-        callFfi: () {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 2)!;
-        },
-        codec: SseCodec(
-          decodeSuccessData:
-              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSMTCFlutter,
-          decodeErrorData: null,
-        ),
-        constMeta: kCrateApiSmtcFlutterSmtcFlutterNewConstMeta,
-        argValues: [],
-        apiImpl: this,
-      ),
-    );
-  }
-
-  TaskConstMeta get kCrateApiSmtcFlutterSmtcFlutterNewConstMeta =>
-      const TaskConstMeta(debugName: "SmtcFlutter_new", argNames: []);
-
-  @override
-  Stream<SMTCControlEvent>
-  crateApiSmtcFlutterSmtcFlutterSubscribeToControlEvents({
-    required SmtcFlutter that,
-  }) {
-    final sink = RustStreamSink<SMTCControlEvent>();
-    unawaited(
-      handler.executeNormal(
-        NormalTask(
-          callFfi: (port_) {
-            final serializer = SseSerializer(generalizedFrbRustBinding);
-            sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSMTCFlutter(
-              that,
-              serializer,
-            );
-            sse_encode_StreamSink_smtc_control_event_Sse(sink, serializer);
-            pdeCallFfi(
-              generalizedFrbRustBinding,
-              serializer,
-              funcId: 3,
-              port: port_,
-            );
-          },
-          codec: SseCodec(
-            decodeSuccessData: sse_decode_unit,
-            decodeErrorData: null,
-          ),
-          constMeta:
-              kCrateApiSmtcFlutterSmtcFlutterSubscribeToControlEventsConstMeta,
-          argValues: [that, sink],
-          apiImpl: this,
-        ),
-      ),
-    );
-    return sink.stream;
-  }
-
-  TaskConstMeta
-  get kCrateApiSmtcFlutterSmtcFlutterSubscribeToControlEventsConstMeta =>
-      const TaskConstMeta(
-        debugName: "SmtcFlutter_subscribe_to_control_events",
-        argNames: ["that", "sink"],
-      );
-
-  @override
-  Future<void> crateApiSmtcFlutterSmtcFlutterUpdateDisplay({
-    required SmtcFlutter that,
-    required String title,
-    required String artist,
-    required String album,
-    required int duration,
-    required String path,
-  }) {
-    return handler.executeNormal(
-      NormalTask(
-        callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSMTCFlutter(
-            that,
-            serializer,
-          );
-          sse_encode_String(title, serializer);
-          sse_encode_String(artist, serializer);
-          sse_encode_String(album, serializer);
-          sse_encode_u_32(duration, serializer);
-          sse_encode_String(path, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 4,
-            port: port_,
-          );
-        },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_unit,
-          decodeErrorData: null,
-        ),
-        constMeta: kCrateApiSmtcFlutterSmtcFlutterUpdateDisplayConstMeta,
-        argValues: [that, title, artist, album, duration, path],
-        apiImpl: this,
-      ),
-    );
-  }
-
-  TaskConstMeta get kCrateApiSmtcFlutterSmtcFlutterUpdateDisplayConstMeta =>
-      const TaskConstMeta(
-        debugName: "SmtcFlutter_update_display",
-        argNames: ["that", "title", "artist", "album", "duration", "path"],
-      );
-
-  @override
-  Future<void> crateApiSmtcFlutterSmtcFlutterUpdateState({
-    required SmtcFlutter that,
-    required SMTCState state,
-  }) {
-    return handler.executeNormal(
-      NormalTask(
-        callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSMTCFlutter(
-            that,
-            serializer,
-          );
-          sse_encode_smtc_state(state, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 5,
-            port: port_,
-          );
-        },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_unit,
-          decodeErrorData: null,
-        ),
-        constMeta: kCrateApiSmtcFlutterSmtcFlutterUpdateStateConstMeta,
-        argValues: [that, state],
-        apiImpl: this,
-      ),
-    );
-  }
-
-  TaskConstMeta get kCrateApiSmtcFlutterSmtcFlutterUpdateStateConstMeta =>
-      const TaskConstMeta(
-        debugName: "SmtcFlutter_update_state",
-        argNames: ["that", "state"],
-      );
-
-  @override
-  Future<void> crateApiSmtcFlutterSmtcFlutterUpdateTimeProperties({
-    required SmtcFlutter that,
-    required int progress,
-  }) {
-    return handler.executeNormal(
-      NormalTask(
-        callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSMTCFlutter(
-            that,
-            serializer,
-          );
-          sse_encode_u_32(progress, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 6,
-            port: port_,
-          );
-        },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_unit,
-          decodeErrorData: null,
-        ),
-        constMeta: kCrateApiSmtcFlutterSmtcFlutterUpdateTimePropertiesConstMeta,
-        argValues: [that, progress],
-        apiImpl: this,
-      ),
-    );
-  }
-
-  TaskConstMeta
-  get kCrateApiSmtcFlutterSmtcFlutterUpdateTimePropertiesConstMeta =>
-      const TaskConstMeta(
-        debugName: "SmtcFlutter_update_time_properties",
-        argNames: ["that", "progress"],
-      );
 
   @override
   Stream<IndexActionState> crateApiTagReaderBuildIndexFromFoldersRecursively({
@@ -390,7 +130,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             pdeCallFfi(
               generalizedFrbRustBinding,
               serializer,
-              funcId: 7,
+              funcId: 1,
               port: port_,
             );
           },
@@ -427,7 +167,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 8,
+            funcId: 2,
             port: port_,
           );
         },
@@ -461,7 +201,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 9,
+            funcId: 3,
             port: port_,
           );
         },
@@ -494,7 +234,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             pdeCallFfi(
               generalizedFrbRustBinding,
               serializer,
-              funcId: 10,
+              funcId: 4,
               port: port_,
             );
           },
@@ -524,7 +264,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 11,
+            funcId: 5,
             port: port_,
           );
         },
@@ -551,7 +291,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 12,
+            funcId: 6,
             port: port_,
           );
         },
@@ -579,7 +319,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 13,
+            funcId: 7,
             port: port_,
           );
         },
@@ -612,7 +352,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             pdeCallFfi(
               generalizedFrbRustBinding,
               serializer,
-              funcId: 14,
+              funcId: 8,
               port: port_,
             );
           },
@@ -635,45 +375,10 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         argNames: ["indexPath", "sink"],
       );
 
-  RustArcIncrementStrongCountFnType
-  get rust_arc_increment_strong_count_SmtcFlutter => wire
-      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSMTCFlutter;
-
-  RustArcDecrementStrongCountFnType
-  get rust_arc_decrement_strong_count_SmtcFlutter => wire
-      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSMTCFlutter;
-
   @protected
   AnyhowException dco_decode_AnyhowException(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return AnyhowException(raw as String);
-  }
-
-  @protected
-  SmtcFlutter
-  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSMTCFlutter(
-    dynamic raw,
-  ) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return SmtcFlutterImpl.frbInternalDcoDecode(raw as List<dynamic>);
-  }
-
-  @protected
-  SmtcFlutter
-  dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSMTCFlutter(
-    dynamic raw,
-  ) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return SmtcFlutterImpl.frbInternalDcoDecode(raw as List<dynamic>);
-  }
-
-  @protected
-  SmtcFlutter
-  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSMTCFlutter(
-    dynamic raw,
-  ) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return SmtcFlutterImpl.frbInternalDcoDecode(raw as List<dynamic>);
   }
 
   @protected
@@ -684,14 +389,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   RustStreamSink<IndexActionState> dco_decode_StreamSink_index_action_state_Sse(
-    dynamic raw,
-  ) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    throw UnimplementedError();
-  }
-
-  @protected
-  RustStreamSink<SMTCControlEvent> dco_decode_StreamSink_smtc_control_event_Sse(
     dynamic raw,
   ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
@@ -720,12 +417,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   double dco_decode_f_64(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw as double;
-  }
-
-  @protected
-  int dco_decode_i_32(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return raw as int;
   }
 
   @protected
@@ -783,18 +474,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  SMTCControlEvent dco_decode_smtc_control_event(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return SMTCControlEvent.values[raw as int];
-  }
-
-  @protected
-  SMTCState dco_decode_smtc_state(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return SMTCState.values[raw as int];
-  }
-
-  @protected
   int dco_decode_u_32(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw as int;
@@ -813,52 +492,10 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  BigInt dco_decode_usize(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return dcoDecodeU64(raw);
-  }
-
-  @protected
   AnyhowException sse_decode_AnyhowException(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var inner = sse_decode_String(deserializer);
     return AnyhowException(inner);
-  }
-
-  @protected
-  SmtcFlutter
-  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSMTCFlutter(
-    SseDeserializer deserializer,
-  ) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    return SmtcFlutterImpl.frbInternalSseDecode(
-      sse_decode_usize(deserializer),
-      sse_decode_i_32(deserializer),
-    );
-  }
-
-  @protected
-  SmtcFlutter
-  sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSMTCFlutter(
-    SseDeserializer deserializer,
-  ) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    return SmtcFlutterImpl.frbInternalSseDecode(
-      sse_decode_usize(deserializer),
-      sse_decode_i_32(deserializer),
-    );
-  }
-
-  @protected
-  SmtcFlutter
-  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSMTCFlutter(
-    SseDeserializer deserializer,
-  ) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    return SmtcFlutterImpl.frbInternalSseDecode(
-      sse_decode_usize(deserializer),
-      sse_decode_i_32(deserializer),
-    );
   }
 
   @protected
@@ -871,14 +508,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   RustStreamSink<IndexActionState> sse_decode_StreamSink_index_action_state_Sse(
-    SseDeserializer deserializer,
-  ) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    throw UnimplementedError('Unreachable ()');
-  }
-
-  @protected
-  RustStreamSink<SMTCControlEvent> sse_decode_StreamSink_smtc_control_event_Sse(
     SseDeserializer deserializer,
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -910,12 +539,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   double sse_decode_f_64(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return deserializer.buffer.getFloat64();
-  }
-
-  @protected
-  int sse_decode_i_32(SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    return deserializer.buffer.getInt32();
   }
 
   @protected
@@ -989,20 +612,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  SMTCControlEvent sse_decode_smtc_control_event(SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    var inner = sse_decode_i_32(deserializer);
-    return SMTCControlEvent.values[inner];
-  }
-
-  @protected
-  SMTCState sse_decode_smtc_state(SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    var inner = sse_decode_i_32(deserializer);
-    return SMTCState.values[inner];
-  }
-
-  @protected
   int sse_decode_u_32(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return deserializer.buffer.getUint32();
@@ -1020,9 +629,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  BigInt sse_decode_usize(SseDeserializer deserializer) {
+  int sse_decode_i_32(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    return deserializer.buffer.getBigUint64();
+    return deserializer.buffer.getInt32();
   }
 
   @protected
@@ -1032,45 +641,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.message, serializer);
-  }
-
-  @protected
-  void
-  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSMTCFlutter(
-    SmtcFlutter self,
-    SseSerializer serializer,
-  ) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_usize(
-      (self as SmtcFlutterImpl).frbInternalSseEncode(move: true),
-      serializer,
-    );
-  }
-
-  @protected
-  void
-  sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSMTCFlutter(
-    SmtcFlutter self,
-    SseSerializer serializer,
-  ) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_usize(
-      (self as SmtcFlutterImpl).frbInternalSseEncode(move: false),
-      serializer,
-    );
-  }
-
-  @protected
-  void
-  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSMTCFlutter(
-    SmtcFlutter self,
-    SseSerializer serializer,
-  ) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_usize(
-      (self as SmtcFlutterImpl).frbInternalSseEncode(move: null),
-      serializer,
-    );
   }
 
   @protected
@@ -1108,23 +678,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  void sse_encode_StreamSink_smtc_control_event_Sse(
-    RustStreamSink<SMTCControlEvent> self,
-    SseSerializer serializer,
-  ) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_String(
-      self.setupAndSerialize(
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_smtc_control_event,
-          decodeErrorData: sse_decode_AnyhowException,
-        ),
-      ),
-      serializer,
-    );
-  }
-
-  @protected
   void sse_encode_String(String self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_list_prim_u_8_strict(utf8.encoder.convert(self), serializer);
@@ -1149,12 +702,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   void sse_encode_f_64(double self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     serializer.buffer.putFloat64(self);
-  }
-
-  @protected
-  void sse_encode_i_32(int self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    serializer.buffer.putInt32(self);
   }
 
   @protected
@@ -1230,21 +777,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  void sse_encode_smtc_control_event(
-    SMTCControlEvent self,
-    SseSerializer serializer,
-  ) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_i_32(self.index, serializer);
-  }
-
-  @protected
-  void sse_encode_smtc_state(SMTCState self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_i_32(self.index, serializer);
-  }
-
-  @protected
   void sse_encode_u_32(int self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     serializer.buffer.putUint32(self);
@@ -1262,64 +794,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  void sse_encode_usize(BigInt self, SseSerializer serializer) {
+  void sse_encode_i_32(int self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    serializer.buffer.putBigUint64(self);
+    serializer.buffer.putInt32(self);
   }
-}
-
-@sealed
-class SmtcFlutterImpl extends RustOpaque implements SmtcFlutter {
-  // Not to be used by end users
-  SmtcFlutterImpl.frbInternalDcoDecode(List<dynamic> wire)
-    : super.frbInternalDcoDecode(wire, _kStaticData);
-
-  // Not to be used by end users
-  SmtcFlutterImpl.frbInternalSseDecode(BigInt ptr, int externalSizeOnNative)
-    : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
-
-  static final _kStaticData = RustArcStaticData(
-    rustArcIncrementStrongCount:
-        RustLib.instance.api.rust_arc_increment_strong_count_SmtcFlutter,
-    rustArcDecrementStrongCount:
-        RustLib.instance.api.rust_arc_decrement_strong_count_SmtcFlutter,
-    rustArcDecrementStrongCountPtr:
-        RustLib.instance.api.rust_arc_decrement_strong_count_SmtcFlutterPtr,
-  );
-
-  /// Apis for Flutter
-  Future<void> close() =>
-      RustLib.instance.api.crateApiSmtcFlutterSmtcFlutterClose(that: this);
-
-  /// Apis for Flutter
-  Stream<SMTCControlEvent> subscribeToControlEvents() => RustLib.instance.api
-      .crateApiSmtcFlutterSmtcFlutterSubscribeToControlEvents(that: this);
-
-  /// Apis for Flutter
-  Future<void> updateDisplay({
-    required String title,
-    required String artist,
-    required String album,
-    required int duration,
-    required String path,
-  }) => RustLib.instance.api.crateApiSmtcFlutterSmtcFlutterUpdateDisplay(
-    that: this,
-    title: title,
-    artist: artist,
-    album: album,
-    duration: duration,
-    path: path,
-  );
-
-  /// Apis for Flutter
-  Future<void> updateState({required SMTCState state}) => RustLib.instance.api
-      .crateApiSmtcFlutterSmtcFlutterUpdateState(that: this, state: state);
-
-  /// progress, duration: ms
-  /// Apis for Flutter
-  Future<void> updateTimeProperties({required int progress}) =>
-      RustLib.instance.api.crateApiSmtcFlutterSmtcFlutterUpdateTimeProperties(
-        that: this,
-        progress: progress,
-      );
 }
