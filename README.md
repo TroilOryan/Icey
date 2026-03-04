@@ -6,7 +6,7 @@
     <h1>Icey Player</h1>
 <div align="center">
     <!-- release version -->
-    <a href="https://github.com/SeakMengs/Windowpet/releases/latest" target="_blank">
+    <a href="https://github.com/TroilOryan/Icey/releases/latest" target="_blank">
         <img src="https://img.shields.io/github/v/release/TroilOryan/Icey" alt="release-version">
     </a>
     <!-- total download -->
