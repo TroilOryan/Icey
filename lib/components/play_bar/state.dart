@@ -1,4 +1,4 @@
-part of 'play_bar.dart';
+part of 'controller.dart';
 
 class PlayBarState {
   final delta = signal(0.0);

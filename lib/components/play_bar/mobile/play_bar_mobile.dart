@@ -1,35 +1,16 @@
-import 'dart:math';
-
-import 'package:IceyPlayer/components/adaptive_builder/adaptive_builder.dart';
-import 'package:IceyPlayer/constants/glass_settings.dart';
-import 'package:IceyPlayer/helpers/platform.dart';
-import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
-import 'package:responsive_builder/responsive_builder.dart';
-import 'package:signals/signals_flutter.dart';
-
-import 'package:flutter/services.dart';
-import 'package:IceyPlayer/components/play_cover/play_cover.dart';
-import 'package:IceyPlayer/components/play_progress_button/play_progress_button.dart';
-import 'package:IceyPlayer/models/media/media.dart';
-import 'package:flutter/material.dart';
-import 'package:keframe/keframe.dart';
-import 'package:visibility_detector/visibility_detector.dart';
-import '../../theme/theme.dart';
-import './play_info.dart';
-
-part 'controller.dart';
-
-part 'state.dart';
+part of '../controller.dart';
 
 final playBarController = PlayBarController();
 
-final double playBarHeight = 64;
-
-class PlayBar extends StatelessWidget {
+class PlayBarMobile extends StatelessWidget {
   final bool hidePlayBar;
   final VoidCallback onTap;
 
-  const PlayBar({super.key, required this.hidePlayBar, required this.onTap});
+  const PlayBarMobile({
+    super.key,
+    required this.hidePlayBar,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -39,8 +20,6 @@ class PlayBar extends StatelessWidget {
       MediaQuery.of(context).viewPadding.bottom,
       16,
     );
-
-    final deviceWidth = MediaQuery.of(context).size.width;
 
     final delta = playBarController.state.delta.watch(context),
         isNext = playBarController.state.isNext.watch(context);
@@ -194,24 +173,13 @@ class PlayBar extends StatelessWidget {
           curve: Curves.easeInOutSine,
           offset: Offset(0, hidePlayBar ? 1 : 0),
           duration: AppTheme.defaultDurationLong,
-          child: AdaptiveBuilder(
-            mobile: (context) => GlassPanel(
-              height: playBarHeight,
-              shape: LiquidRoundedRectangle(borderRadius: 66),
-              padding: EdgeInsets.zero,
-              settings: RecommendedGlassSettings.bottomBar.copyWith(blur: 5),
-              margin: EdgeInsets.fromLTRB(16, 0, 16, paddingBottom + 64 + 12),
-              child: playBar,
-            ),
-            landscape: (context) => GlassPanel(
-              width: deviceWidth * 0.6,
-              height: playBarHeight,
-              shape: LiquidRoundedRectangle(borderRadius: 66),
-              padding: EdgeInsets.zero,
-              settings: RecommendedGlassSettings.bottomBar,
-              margin: EdgeInsets.fromLTRB(16, 0, 16, paddingBottom),
-              child: playBar,
-            ),
+          child: GlassPanel(
+            height: playBarController.playBarHeight,
+            shape: LiquidRoundedRectangle(borderRadius: 66),
+            padding: EdgeInsets.zero,
+            settings: RecommendedGlassSettings.bottomBar.copyWith(blur: 5),
+            margin: EdgeInsets.fromLTRB(16, 0, 16, paddingBottom + 64 + 12),
+            child: playBar,
           ),
         ),
       ),

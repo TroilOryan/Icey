@@ -50,6 +50,7 @@ class PageWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ProgressiveScrollview(
+      centerTitle: true,
       title: title,
       builder: (appbarHeight) => CustomScrollView(
         slivers: [_buildBody(context: context, appbarHeight: appbarHeight)],

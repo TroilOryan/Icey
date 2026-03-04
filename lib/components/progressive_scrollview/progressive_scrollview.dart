@@ -155,7 +155,7 @@ class ProgressiveScrollview extends StatelessWidget {
     final double appbarHeight = max(75, kToolbarHeight + paddingTop);
 
     return Padding(
-      padding: EdgeInsetsGeometry.only(top: PlatformHelper.isDesktop ? 32 : 0),
+      padding: EdgeInsetsGeometry.only(top: PlatformHelper.isDesktop ? 48 : 0),
       child: Stack(
         children: [
           _buildBody(context, theme, appbarHeight),

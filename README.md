@@ -53,7 +53,7 @@
 - [x] Android
 - [ ] iOS
 - [x] Pad
-- [x] Windows(开始适配中)
+- [x] Windows(已支持，适配中)
 - [ ] Linux
 
 ## feat
@@ -68,6 +68,23 @@
 - [x] 自定义界面
 - [x] 演唱会模式
 - [x] 悬浮状态栏歌词
+
+## 支持音频格式
+
+| File Format | Metadata Format(s)           |
+|-------------|------------------------------|
+| AAC (ADTS)  | `ID3v2`, `ID3v1`             |
+| Ape         | `APE`, `ID3v2`\*, `ID3v1`    |
+| AIFF        | `ID3v2`, `Text Chunks`       |
+| FLAC        | `Vorbis Comments`, `ID3v2`\* |
+| MP3         | `ID3v2`, `ID3v1`, `APE`      |
+| MP4         | `iTunes-style ilst`          |
+| MPC         | `APE`, `ID3v2`\*, `ID3v1`\*  |
+| Opus        | `Vorbis Comments`            |
+| Ogg Vorbis  | `Vorbis Comments`            |
+| Speex       | `Vorbis Comments`            |
+| WAV         | `ID3v2`, `RIFF INFO`         |
+| WavPack     | `APE`, `ID3v1`               |
 
 ## 支持歌词格式
 

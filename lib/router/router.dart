@@ -1,3 +1,4 @@
+import 'package:IceyPlayer/helpers/platform.dart';
 import 'package:IceyPlayer/pages/album_list/controller.dart';
 import 'package:IceyPlayer/pages/artist_list/controller.dart';
 import 'package:IceyPlayer/pages/home/controller.dart';
@@ -24,6 +25,72 @@ import 'package:go_router/go_router.dart';
 import 'package:go_transitions/go_transitions.dart';
 
 import '../pages/sub_pages/album_list_detail/controller.dart';
+
+final List<GoRoute> subPages = [
+  GoRoute(
+    path: '/play_screen',
+    pageBuilder: GoTransitions.slide.toTop.build(
+      builder: (_, _) => const PlayScreenPage(),
+    ),
+  ),
+  GoRoute(
+    path: '/album_list_detail/:id',
+    builder: (_, _) => const AlbumListDetailPage(),
+  ),
+  GoRoute(
+    path: '/artist_list_detail/:id',
+    builder: (_, _) => const ArtistListDetailPage(),
+  ),
+  GoRoute(
+    path: '/media_order_detail/:id',
+    builder: (_, _) => const MediaOrderDetailPage(),
+  ),
+  GoRoute(path: '/search', builder: (_, _) => const SearchPage()),
+  GoRoute(path: '/player_style', builder: (_, _) => const PlayerStylePage()),
+  GoRoute(
+    path: '/settings',
+    builder: (_, _) => const SettingsPage(),
+    routes: [
+      GoRoute(
+        path: '/pro',
+        builder: (_, _) => const ProPage(),
+        routes: [GoRoute(path: '/pay', builder: (_, __) => const PayPage())],
+      ),
+      GoRoute(path: '/media_store', builder: (_, _) => const MediaStorePage()),
+      GoRoute(
+        path: '/interface',
+        builder: (_, _) => const InterfacePage(),
+        routes: [
+          GoRoute(
+            path: '/high_material',
+            builder: (_, _) => const HighMaterialPage(),
+          ),
+        ],
+      ),
+      GoRoute(path: '/lyric', builder: (_, _) => const LyricPage()),
+      GoRoute(
+        path: '/audio_output',
+        builder: (_, _) => const AudioOutputPage(),
+      ),
+      GoRoute(
+        path: '/about',
+        builder: (_, _) => const AboutPage(),
+        routes: [
+          GoRoute(
+            path: '/logs',
+            builder: (_, _) => const LogsPage(),
+            routes: [
+              GoRoute(
+                path: '/detail',
+                builder: (_, _) => const LogsDetailPage(),
+              ),
+            ],
+          ),
+        ],
+      ),
+    ],
+  ),
+];
 
 final GoRouter router = GoRouter(
   initialLocation: "/",
@@ -69,73 +136,9 @@ final GoRouter router = GoRouter(
             GoRoute(path: '/settings', builder: (_, _) => const SettingsPage()),
           ],
         ),
+        if (PlatformHelper.isDesktop) StatefulShellBranch(routes: subPages),
       ],
     ),
-    GoRoute(
-      path: '/play_screen',
-      pageBuilder: GoTransitions.slide.toTop.build(
-        builder: (_, _) => const PlayScreenPage(),
-      ),
-    ),
-    GoRoute(
-      path: '/album_list_detail/:id',
-      builder: (_, _) => const AlbumListDetailPage(),
-    ),
-    GoRoute(
-      path: '/artist_list_detail/:id',
-      builder: (_, _) => const ArtistListDetailPage(),
-    ),
-    GoRoute(
-      path: '/media_order_detail/:id',
-      builder: (_, _) => const MediaOrderDetailPage(),
-    ),
-    GoRoute(path: '/search', builder: (_, _) => const SearchPage()),
-    GoRoute(path: '/player_style', builder: (_, _) => const PlayerStylePage()),
-    GoRoute(
-      path: '/settings',
-      builder: (_, _) => const SettingsPage(),
-      routes: [
-        GoRoute(
-          path: '/pro',
-          builder: (_, _) => const ProPage(),
-          routes: [GoRoute(path: '/pay', builder: (_, __) => const PayPage())],
-        ),
-        GoRoute(
-          path: '/media_store',
-          builder: (_, _) => const MediaStorePage(),
-        ),
-        GoRoute(
-          path: '/interface',
-          builder: (_, _) => const InterfacePage(),
-          routes: [
-            GoRoute(
-              path: '/high_material',
-              builder: (_, _) => const HighMaterialPage(),
-            ),
-          ],
-        ),
-        GoRoute(path: '/lyric', builder: (_, _) => const LyricPage()),
-        GoRoute(
-          path: '/audio_output',
-          builder: (_, _) => const AudioOutputPage(),
-        ),
-        GoRoute(
-          path: '/about',
-          builder: (_, _) => const AboutPage(),
-          routes: [
-            GoRoute(
-              path: '/logs',
-              builder: (_, _) => const LogsPage(),
-              routes: [
-                GoRoute(
-                  path: '/detail',
-                  builder: (_, _) => const LogsDetailPage(),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ],
-    ),
+    if (!PlatformHelper.isDesktop) ...subPages,
   ],
 );

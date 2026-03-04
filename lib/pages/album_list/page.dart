@@ -131,13 +131,20 @@ class _AlbumListPageState extends State<AlbumListPage>
                   );
                 },
               ),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                mainAxisSpacing: 12,
-                crossAxisSpacing: 12,
-                childAspectRatio: 0.7,
-                mainAxisExtent: 256,
-              ),
+              gridDelegate: PlatformHelper.isDesktop
+                  ? SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 6,
+                      mainAxisSpacing: 12,
+                      crossAxisSpacing: 12,
+                      childAspectRatio: 0.7,
+                      mainAxisExtent: 256,
+                    )
+                  : SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 12,
+                      crossAxisSpacing: 12,
+                      childAspectRatio: 0.7,
+                    ),
             ),
           ),
         ],

@@ -67,7 +67,7 @@ class _HomePageState extends State<HomePage>
           widget.navigationShell,
 
           if (mediaList.isNotEmpty)
-            PlayBar(
+            PlayBarMobile(
               hidePlayBar: hidePlayBar,
               onTap: () => homeController.handleOpenPanel(context),
             ),
@@ -149,11 +149,12 @@ class _HomePageState extends State<HomePage>
                 ],
               ),
               if (mediaList.isNotEmpty)
-                PlayBar(
+                PlayBarDesktop(
                   hidePlayBar: hidePlayBar,
                   onTap: () => homeController.handleOpenPanel(context),
                 ),
-              if (PlatformHelper.isDesktop) TitleBarAction(),
+              if (PlatformHelper.isDesktop)
+                TitleBarAction(sideBarOpened: sideBarOpened),
             ],
           ),
         ),

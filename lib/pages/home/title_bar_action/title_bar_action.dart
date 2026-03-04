@@ -1,11 +1,15 @@
+import 'package:IceyPlayer/models/media/media.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_sficon/flutter_sficon.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:signals/signals_flutter.dart';
 import 'package:window_manager/window_manager.dart';
 
 class TitleBarAction extends StatefulWidget {
-  const TitleBarAction({super.key});
+  final bool sideBarOpened;
+
+  const TitleBarAction({super.key, required this.sideBarOpened});
 
   @override
   State<TitleBarAction> createState() => _TitleBarActionState();
@@ -76,6 +80,10 @@ class _TitleBarActionState extends State<TitleBarAction> with WindowListener {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    final mediaList = mediaManager.mediaList.watch(context);
+
     return Positioned(
       right: 16,
       top: 0,
@@ -84,8 +92,34 @@ class _TitleBarActionState extends State<TitleBarAction> with WindowListener {
       child: Row(
         children: [
           Flexible(
-            child: DragToMoveArea(
-              child: SizedBox(width: double.infinity, height: 60),
+            child: Stack(
+              alignment: Alignment.centerLeft,
+              children: [
+                DragToMoveArea(
+                  child: SizedBox(width: double.infinity, height: 60),
+                ),
+                LayoutBuilder(
+                  builder: (context, constraints) => Container(
+                    width: constraints.maxWidth * 0.4,
+                    height: 40,
+                    margin: EdgeInsets.only(
+                      left: widget.sideBarOpened ? 340 : 100,
+                    ),
+                    child: TextField(
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(SFIcons.sf_magnifyingglass, size: 16),
+                        hint: Text(
+                          "在${mediaList.length}个媒体中搜索",
+                          style: theme.textTheme.titleSmall?.copyWith(
+                            fontWeight: FontWeight.normal,
+                            color: theme.textTheme.bodyMedium?.color,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
           IconButton(

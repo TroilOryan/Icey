@@ -158,11 +158,12 @@ class AppTheme {
       ),
       pageTransitionsTheme: const PageTransitionsTheme(
         builders: <TargetPlatform, PageTransitionsBuilder>{
-          // Set the predictive back transitions for Android.
           TargetPlatform.iOS: GoTransitions.cupertino,
+          TargetPlatform.android: GoTransitions.cupertino,
+          TargetPlatform.windows: GoTransitions.cupertino,
+          TargetPlatform.linux: GoTransitions.cupertino,
           TargetPlatform.macOS: GoTransitions.cupertino,
           // TargetPlatform.android: PredictiveBackPageTransitionsBuilder(),
-          TargetPlatform.android: GoTransitions.cupertino,
         },
       ),
       bottomSheetTheme: BottomSheetThemeData(

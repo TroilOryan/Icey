@@ -131,13 +131,20 @@ class _ArtistListPageState extends State<ArtistListPage>
                   );
                 },
               ),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 12,
-                crossAxisSpacing: 12,
-                childAspectRatio: 0.7,
-              ),
-              // gridDelegate: _mySliverGridDelegateWithMaxCrossAxisExtent(),
+              gridDelegate: PlatformHelper.isDesktop
+                  ? SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 6,
+                      mainAxisSpacing: 12,
+                      crossAxisSpacing: 12,
+                      childAspectRatio: 0.7,
+                      mainAxisExtent: 256,
+                    )
+                  : SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 12,
+                      crossAxisSpacing: 12,
+                      childAspectRatio: 0.7,
+                    ),
             ),
           ),
         ],

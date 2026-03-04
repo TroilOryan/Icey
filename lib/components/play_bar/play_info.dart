@@ -9,47 +9,37 @@ import 'play_bar_lyric.dart';
 class PlayInfo extends StatelessWidget {
   final MediaItem? mediaItem;
 
-  const PlayInfo({
-    super.key,
-    required this.mediaItem,
-  });
+  const PlayInfo({super.key, required this.mediaItem});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Row(
-      children: [
-        StreamBuilder(
-          stream: mediaManager.mediaItem,
-          builder: (context, snapshot) {
-            final mediaItem = snapshot.data;
+    return Flexible(
+      child: StreamBuilder(
+        stream: mediaManager.mediaItem,
+        builder: (context, snapshot) {
+          final mediaItem = snapshot.data;
 
-            return Flexible(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 56),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Marquee(
-                      child: Text(
-                        mediaItem?.title ?? "暂无歌曲",
-                        style: theme.textTheme.titleSmall,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        softWrap: true,
-                      ),
-                    ),
-
-                    PlayBarLyric(),
-                  ],
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Marquee(
+                child: Text(
+                  mediaItem?.title ?? "暂无歌曲",
+                  style: theme.textTheme.titleSmall,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  softWrap: true,
                 ),
               ),
-            );
-          },
-        ),
-      ],
+
+              PlayBarLyric(),
+            ],
+          );
+        },
+      ),
     );
   }
 }

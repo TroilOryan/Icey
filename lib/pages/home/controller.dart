@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:IceyPlayer/components/adaptive_builder/adaptive_builder.dart';
+import 'package:IceyPlayer/components/play_bar/controller.dart';
 import 'package:IceyPlayer/helpers/platform.dart';
 import 'package:IceyPlayer/models/lyric/lyric.dart';
 import 'package:IceyPlayer/pages/home/bottom_bar/bottom_bar.dart';
@@ -18,7 +19,6 @@ import 'package:IceyPlayer/components/bottom_sheet/bottom_sheet.dart';
 import 'package:IceyPlayer/components/button/button.dart';
 import 'package:IceyPlayer/components/media_list_tile/media_list_tile.dart';
 import 'package:IceyPlayer/components/media_more_sheet/media_more_sheet.dart';
-import 'package:IceyPlayer/components/play_bar/play_bar.dart';
 import 'package:IceyPlayer/components/sheet_item/sheet_item.dart';
 import 'package:IceyPlayer/constants/box_key.dart';
 import 'package:IceyPlayer/entities/media.dart';

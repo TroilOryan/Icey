@@ -84,22 +84,22 @@ class MediaCover extends StatelessWidget {
         artworkBorder: borderRadius,
         frameBuilder:
             (
-              BuildContext context,
-              Widget child,
-              int? frame,
-              bool wasSynchronouslyLoaded,
+            BuildContext context,
+            Widget child,
+            int? frame,
+            bool wasSynchronouslyLoaded,
             ) {
-              if (!wasSynchronouslyLoaded) {
-                return child;
-              }
+          if (!wasSynchronouslyLoaded) {
+            return child;
+          }
 
-              return AnimatedOpacity(
-                opacity: frame == null ? 0.5 : 1,
-                duration: const Duration(milliseconds: 200),
-                curve: Curves.linear,
-                child: child,
-              );
-            },
+          return AnimatedOpacity(
+            opacity: frame == null ? 0.5 : 1,
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.linear,
+            child: child,
+          );
+        },
         nullArtworkWidget: Container(
           width: width ?? size,
           height: height ?? size,
