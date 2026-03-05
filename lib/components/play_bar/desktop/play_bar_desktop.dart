@@ -118,7 +118,7 @@ class PlayBarDesktop extends StatelessWidget {
           offset: Offset(0, hidePlayBar ? 1 : 0),
           duration: AppTheme.defaultDurationLong,
           child: GlassPanel(
-            width: deviceWidth * 0.6,
+            width: deviceWidth * 0.62,
             height: playBarController.playBarHeight,
             shape: LiquidRoundedRectangle(borderRadius: 66),
             padding: EdgeInsets.zero,

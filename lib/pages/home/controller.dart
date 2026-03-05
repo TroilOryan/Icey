@@ -199,6 +199,7 @@ class HomeController {
                 childAspectRatio: 2.5,
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
+                mainAxisExtent: 50,
                 children: MediaSort.values.map((item) {
                   final active = sortType.value == item.value;
 
