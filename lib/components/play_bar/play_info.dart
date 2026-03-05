@@ -15,6 +15,8 @@ class PlayInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
+    final deviceWidth = MediaQuery.of(context).size.width;
+
     final info = StreamBuilder(
       stream: mediaManager.mediaItem,
       builder: (context, snapshot) {
@@ -51,7 +53,10 @@ class PlayInfo extends StatelessWidget {
           ),
         ],
       ),
-      tablet: (context) => Flexible(child: info),
+      tablet: (context) => Container(
+        width: deviceWidth * 0.2,
+        child: info,
+      ),
     );
   }
 }

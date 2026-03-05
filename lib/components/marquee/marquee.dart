@@ -167,24 +167,27 @@ class _MarqueeState extends State<Marquee> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return FadingEdgeScrollView.fromSingleChildScrollView(
-      gradientFractionOnStart: widget.disableAnimation ? 0 : 0.1,
-      gradientFractionOnEnd: widget.disableAnimation ? 0 : 0.1,
-      child: SingleChildScrollView(
-        physics: const NeverScrollableScrollPhysics(),
-        controller: scrollController,
-        scrollDirection: widget.scrollDirection,
-        child: SlideTransition(
-          position: offset,
-          child: ValueListenableBuilder<bool>(
-            valueListenable: shouldScroll,
-            builder: (context, shouldScroll, _) {
-              if (widget.scrollDirection == Axis.vertical) {
-                return buildVerticalWidget(shouldScroll);
-              } else {
-                return buildHorizontalWidget(shouldScroll);
-              }
-            },
+    return ScrollConfiguration(
+      behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+      child: FadingEdgeScrollView.fromSingleChildScrollView(
+        gradientFractionOnStart: widget.disableAnimation ? 0 : 0.1,
+        gradientFractionOnEnd: widget.disableAnimation ? 0 : 0.1,
+        child: SingleChildScrollView(
+          physics: const NeverScrollableScrollPhysics(),
+          controller: scrollController,
+          scrollDirection: widget.scrollDirection,
+          child: SlideTransition(
+            position: offset,
+            child: ValueListenableBuilder<bool>(
+              valueListenable: shouldScroll,
+              builder: (context, shouldScroll, _) {
+                if (widget.scrollDirection == Axis.vertical) {
+                  return buildVerticalWidget(shouldScroll);
+                } else {
+                  return buildHorizontalWidget(shouldScroll);
+                }
+              },
+            ),
           ),
         ),
       ),

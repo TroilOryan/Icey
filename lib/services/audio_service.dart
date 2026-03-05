@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:IceyPlayer/entities/media.dart';
+import 'package:IceyPlayer/helpers/common.dart';
 import 'package:IceyPlayer/helpers/overlay/overlay.dart';
 import 'package:IceyPlayer/helpers/platform.dart';
+import 'package:IceyPlayer/src/rust/api/tag_reader.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:IceyPlayer/models/media/media.dart';
 import 'package:flutter/services.dart';
@@ -48,6 +51,30 @@ class AudioServiceHandler extends BaseAudioHandler
   }
 
   Future<void> loadPlaylist(List<MediaItem> mediaItems) async {
+    if (PlatformHelper.isDesktop) {
+      final List<MediaItem> arr = [];
+
+      final dir = Directory('${CommonHelper.tmpDir.path}/IceyCover');
+
+      if (!dir.existsSync()) {
+        dir.createSync();
+      }
+
+      for (MediaItem mediaItem in mediaItems) {
+        String tmpPath = "${dir.path}/${mediaItem.title}.jpg";
+
+        final tmpFile = File(tmpPath);
+
+        if (tmpFile.existsSync()) {
+          arr.add(mediaItem.copyWith(artUri: tmpFile.uri));
+        } else {
+          arr.add(mediaItem);
+        }
+      }
+
+      mediaItems = arr;
+    }
+
     setPlayMode(
       PlayMode.getByValue(
         _settingsBox.get(
@@ -86,7 +113,9 @@ class AudioServiceHandler extends BaseAudioHandler
 
       if (PlatformHelper.isDesktop) {
         _player.setAudioSources(
-          mediaItems.map((e) => AudioSource.file(e.extras!["path"])).toList(),
+          mediaItems
+              .map((e) => AudioSource.file(e.extras!["path"], tag: e))
+              .toList(),
           initialIndex: initialIndex,
           initialPosition: Duration(milliseconds: position),
           preload: true,

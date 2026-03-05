@@ -8,6 +8,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:path_provider/path_provider.dart';
 
 class CommonHelper {
+  static late final Directory tmpDir;
+
   static Text buildDuration(
     Duration duration, [
     Color? color,

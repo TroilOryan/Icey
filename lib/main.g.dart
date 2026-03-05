@@ -85,6 +85,8 @@ Future<void> initDesktop() async {
 Future<void> initServices() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
 
+  CommonHelper.tmpDir = await getApplicationDocumentsDirectory();
+
   if (!PlatformHelper.isDesktop) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 

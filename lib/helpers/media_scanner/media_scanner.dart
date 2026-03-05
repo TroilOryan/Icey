@@ -104,6 +104,29 @@ class MediaScanner {
           mediaList.map((e) => e.data).toList(),
         );
 
+        final dir = Directory('${CommonHelper.tmpDir.path}/IceyCover');
+
+        if (!dir.existsSync()) {
+          dir.createSync();
+        }
+
+        for (MediaEntity media in mediaList) {
+          final cover = await getPictureFromPath(
+            path: media.id,
+            width: 256,
+            height: 256,
+          );
+
+          String tmpPath = "${dir.path}/${media.title}.jpg";
+
+          final tmpFile = File(tmpPath);
+
+          if (cover != null && !tmpFile.existsSync()) {
+            final tmpFile = File(tmpPath);
+            await tmpFile.writeAsBytes(cover);
+          }
+        }
+
         eventBus.fire(ScanMediaStatus(false, silent));
 
         _settingsBox.put(CacheKey.Settings.scanDir, scanDir);

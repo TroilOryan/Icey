@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:IceyPlayer/helpers/media/media.dart';
+import 'package:IceyPlayer/helpers/platform.dart';
 import 'package:IceyPlayer/models/lyric/lyric.dart';
 import 'package:IceyPlayer/src/rust/api/tag_reader.dart';
 import 'package:audio_service/audio_service.dart';
@@ -18,6 +19,7 @@ import 'package:IceyPlayer/services/media_state.dart';
 import 'package:IceyPlayer/services/play_mode.dart';
 import 'package:signals/signals.dart';
 import 'package:rxdart/rxdart.dart' as rx;
+import 'package:window_manager/window_manager.dart';
 
 final mediaManager = MediaManager();
 
@@ -300,6 +302,10 @@ class MediaManager {
   Future<void> setCurrentMediaItem(MediaItem value) async {
     if (value.id == _currentMediaItem.value?.id) {
       return;
+    }
+
+    if (PlatformHelper.isDesktop) {
+      windowManager.setTitle(value.title);
     }
 
     batch(() async {
