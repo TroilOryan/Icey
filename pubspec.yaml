@@ -118,12 +118,18 @@ dependencies:
   chinese_font_library: ^1.2.0
 
   ## 桌面端
+  desktop_multi_window: ^0.3.0
   file_picker: ^10.3.10
   flutter_rust_bridge: 2.11.1
   rust_lib_icey:
     path: rust_builder
   tray_manager: ^0.5.2
-  window_manager: ^0.5.1
+#  window_manager: ^0.5.1
+  window_manager:
+    git:
+      url: https://github.com/boyan01/window_manager.git
+      path: packages/window_manager
+      ref: 6fae92d21b4c80ce1b8f71c1190d7970cf722bd4
 
 dependency_overrides:
   rxdart: ^0.28.0

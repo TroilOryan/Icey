@@ -111,7 +111,7 @@ class MediaScanner {
         }
 
         for (MediaEntity media in mediaList) {
-          final cover = await getPictureFromPath(
+          final cover = await getArtworkFromPath(
             path: media.id,
             width: 256,
             height: 256,

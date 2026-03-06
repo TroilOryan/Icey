@@ -37,7 +37,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.11.1";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 318459630;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 751960259;
 
 // Section: executor
 
@@ -90,6 +90,78 @@ fn wire__crate__api__tag_reader__build_index_from_folders_recursively_impl(
         },
     )
 }
+fn wire__crate__api__tag_reader__get_artwork_color_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::SseCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "get_artwork_color",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_path = <String>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| {
+                transform_result_sse::<_, ()>((move || {
+                    let output_ok =
+                        Result::<_, ()>::Ok(crate::api::tag_reader::get_artwork_color(api_path))?;
+                    Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
+fn wire__crate__api__tag_reader__get_artwork_from_path_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::SseCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "get_artwork_from_path",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_path = <String>::sse_decode(&mut deserializer);
+            let api_width = <u32>::sse_decode(&mut deserializer);
+            let api_height = <u32>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| {
+                transform_result_sse::<_, ()>((move || {
+                    let output_ok =
+                        Result::<_, ()>::Ok(crate::api::tag_reader::get_artwork_from_path(
+                            api_path, api_width, api_height,
+                        ))?;
+                    Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
 fn wire__crate__api__tag_reader__get_lyric_from_path_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
@@ -118,44 +190,6 @@ fn wire__crate__api__tag_reader__get_lyric_from_path_impl(
                 transform_result_sse::<_, ()>((move || {
                     let output_ok =
                         Result::<_, ()>::Ok(crate::api::tag_reader::get_lyric_from_path(api_path))?;
-                    Ok(output_ok)
-                })())
-            }
-        },
-    )
-}
-fn wire__crate__api__tag_reader__get_picture_from_path_impl(
-    port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
-) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::SseCodec, _, _>(
-        flutter_rust_bridge::for_generated::TaskInfo {
-            debug_name: "get_picture_from_path",
-            port: Some(port_),
-            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
-        },
-        move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_path = <String>::sse_decode(&mut deserializer);
-            let api_width = <u32>::sse_decode(&mut deserializer);
-            let api_height = <u32>::sse_decode(&mut deserializer);
-            deserializer.end();
-            move |context| {
-                transform_result_sse::<_, ()>((move || {
-                    let output_ok =
-                        Result::<_, ()>::Ok(crate::api::tag_reader::get_picture_from_path(
-                            api_path, api_width, api_height,
-                        ))?;
                     Ok(output_ok)
                 })())
             }
@@ -380,6 +414,22 @@ impl SseDecode for String {
     }
 }
 
+impl SseDecode for crate::api::tag_reader::ArtworkColorResult {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_cover = <Vec<u8>>::sse_decode(deserializer);
+        let mut var_primary = <u32>::sse_decode(deserializer);
+        let mut var_secondary = <u32>::sse_decode(deserializer);
+        let mut var_isDark = <bool>::sse_decode(deserializer);
+        return crate::api::tag_reader::ArtworkColorResult {
+            cover: var_cover,
+            primary: var_primary,
+            secondary: var_secondary,
+            is_dark: var_isDark,
+        };
+    }
+}
+
 impl SseDecode for bool {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -453,6 +503,19 @@ impl SseDecode for Option<String> {
     }
 }
 
+impl SseDecode for Option<crate::api::tag_reader::ArtworkColorResult> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<crate::api::tag_reader::ArtworkColorResult>::sse_decode(
+                deserializer,
+            ));
+        } else {
+            return None;
+        }
+    }
+}
+
 impl SseDecode for Option<crate::api::tag_reader::LyricResult> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -518,23 +581,26 @@ fn pde_ffi_dispatcher_primary_impl(
             rust_vec_len,
             data_len,
         ),
-        2 => wire__crate__api__tag_reader__get_lyric_from_path_impl(
+        2 => {
+            wire__crate__api__tag_reader__get_artwork_color_impl(port, ptr, rust_vec_len, data_len)
+        }
+        3 => wire__crate__api__tag_reader__get_artwork_from_path_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        3 => wire__crate__api__tag_reader__get_picture_from_path_impl(
+        4 => wire__crate__api__tag_reader__get_lyric_from_path_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        4 => wire__crate__api__logger__init_rust_logger_impl(port, ptr, rust_vec_len, data_len),
-        5 => wire__crate__api__utils__launch_in_browser_impl(port, ptr, rust_vec_len, data_len),
-        6 => wire__crate__api__utils__pick_single_folder_impl(port, ptr, rust_vec_len, data_len),
-        7 => wire__crate__api__utils__show_in_explorer_impl(port, ptr, rust_vec_len, data_len),
-        8 => wire__crate__api__tag_reader__update_index_impl(port, ptr, rust_vec_len, data_len),
+        5 => wire__crate__api__logger__init_rust_logger_impl(port, ptr, rust_vec_len, data_len),
+        6 => wire__crate__api__utils__launch_in_browser_impl(port, ptr, rust_vec_len, data_len),
+        7 => wire__crate__api__utils__pick_single_folder_impl(port, ptr, rust_vec_len, data_len),
+        8 => wire__crate__api__utils__show_in_explorer_impl(port, ptr, rust_vec_len, data_len),
+        9 => wire__crate__api__tag_reader__update_index_impl(port, ptr, rust_vec_len, data_len),
         _ => unreachable!(),
     }
 }
@@ -553,6 +619,29 @@ fn pde_ffi_dispatcher_sync_impl(
 
 // Section: rust2dart
 
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::tag_reader::ArtworkColorResult {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.cover.into_into_dart().into_dart(),
+            self.primary.into_into_dart().into_dart(),
+            self.secondary.into_into_dart().into_dart(),
+            self.is_dark.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::tag_reader::ArtworkColorResult
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::tag_reader::ArtworkColorResult>
+    for crate::api::tag_reader::ArtworkColorResult
+{
+    fn into_into_dart(self) -> crate::api::tag_reader::ArtworkColorResult {
+        self
+    }
+}
 // Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for crate::api::tag_reader::IndexActionState {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
@@ -629,6 +718,16 @@ impl SseEncode for String {
     }
 }
 
+impl SseEncode for crate::api::tag_reader::ArtworkColorResult {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <Vec<u8>>::sse_encode(self.cover, serializer);
+        <u32>::sse_encode(self.primary, serializer);
+        <u32>::sse_encode(self.secondary, serializer);
+        <bool>::sse_encode(self.is_dark, serializer);
+    }
+}
+
 impl SseEncode for bool {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -685,6 +784,16 @@ impl SseEncode for Option<String> {
         <bool>::sse_encode(self.is_some(), serializer);
         if let Some(value) = self {
             <String>::sse_encode(value, serializer);
+        }
+    }
+}
+
+impl SseEncode for Option<crate::api::tag_reader::ArtworkColorResult> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <crate::api::tag_reader::ArtworkColorResult>::sse_encode(value, serializer);
         }
     }
 }

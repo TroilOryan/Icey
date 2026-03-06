@@ -66,7 +66,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => 318459630;
+  int get rustContentHash => 751960259;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -82,14 +82,18 @@ abstract class RustLibApi extends BaseApi {
     required String indexPath,
   });
 
-  Future<LyricResult?> crateApiTagReaderGetLyricFromPath({
+  Future<ArtworkColorResult?> crateApiTagReaderGetArtworkColor({
     required String path,
   });
 
-  Future<Uint8List?> crateApiTagReaderGetPictureFromPath({
+  Future<Uint8List?> crateApiTagReaderGetArtworkFromPath({
     required String path,
     required int width,
     required int height,
+  });
+
+  Future<LyricResult?> crateApiTagReaderGetLyricFromPath({
+    required String path,
   });
 
   Stream<String> crateApiLoggerInitRustLogger();
@@ -156,7 +160,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<LyricResult?> crateApiTagReaderGetLyricFromPath({
+  Future<ArtworkColorResult?> crateApiTagReaderGetArtworkColor({
     required String path,
   }) {
     return handler.executeNormal(
@@ -172,21 +176,21 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           );
         },
         codec: SseCodec(
-          decodeSuccessData: sse_decode_opt_box_autoadd_lyric_result,
+          decodeSuccessData: sse_decode_opt_box_autoadd_artwork_color_result,
           decodeErrorData: null,
         ),
-        constMeta: kCrateApiTagReaderGetLyricFromPathConstMeta,
+        constMeta: kCrateApiTagReaderGetArtworkColorConstMeta,
         argValues: [path],
         apiImpl: this,
       ),
     );
   }
 
-  TaskConstMeta get kCrateApiTagReaderGetLyricFromPathConstMeta =>
-      const TaskConstMeta(debugName: "get_lyric_from_path", argNames: ["path"]);
+  TaskConstMeta get kCrateApiTagReaderGetArtworkColorConstMeta =>
+      const TaskConstMeta(debugName: "get_artwork_color", argNames: ["path"]);
 
   @override
-  Future<Uint8List?> crateApiTagReaderGetPictureFromPath({
+  Future<Uint8List?> crateApiTagReaderGetArtworkFromPath({
     required String path,
     required int width,
     required int height,
@@ -209,18 +213,48 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           decodeSuccessData: sse_decode_opt_list_prim_u_8_strict,
           decodeErrorData: null,
         ),
-        constMeta: kCrateApiTagReaderGetPictureFromPathConstMeta,
+        constMeta: kCrateApiTagReaderGetArtworkFromPathConstMeta,
         argValues: [path, width, height],
         apiImpl: this,
       ),
     );
   }
 
-  TaskConstMeta get kCrateApiTagReaderGetPictureFromPathConstMeta =>
+  TaskConstMeta get kCrateApiTagReaderGetArtworkFromPathConstMeta =>
       const TaskConstMeta(
-        debugName: "get_picture_from_path",
+        debugName: "get_artwork_from_path",
         argNames: ["path", "width", "height"],
       );
+
+  @override
+  Future<LyricResult?> crateApiTagReaderGetLyricFromPath({
+    required String path,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(path, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 4,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_opt_box_autoadd_lyric_result,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiTagReaderGetLyricFromPathConstMeta,
+        argValues: [path],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiTagReaderGetLyricFromPathConstMeta =>
+      const TaskConstMeta(debugName: "get_lyric_from_path", argNames: ["path"]);
 
   @override
   Stream<String> crateApiLoggerInitRustLogger() {
@@ -234,7 +268,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             pdeCallFfi(
               generalizedFrbRustBinding,
               serializer,
-              funcId: 4,
+              funcId: 5,
               port: port_,
             );
           },
@@ -264,7 +298,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 5,
+            funcId: 6,
             port: port_,
           );
         },
@@ -291,7 +325,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 6,
+            funcId: 7,
             port: port_,
           );
         },
@@ -319,7 +353,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 7,
+            funcId: 8,
             port: port_,
           );
         },
@@ -352,7 +386,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             pdeCallFfi(
               generalizedFrbRustBinding,
               serializer,
-              funcId: 8,
+              funcId: 9,
               port: port_,
             );
           },
@@ -402,9 +436,29 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  ArtworkColorResult dco_decode_artwork_color_result(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 4)
+      throw Exception('unexpected arr length: expect 4 but see ${arr.length}');
+    return ArtworkColorResult(
+      cover: dco_decode_list_prim_u_8_strict(arr[0]),
+      primary: dco_decode_u_32(arr[1]),
+      secondary: dco_decode_u_32(arr[2]),
+      isDark: dco_decode_bool(arr[3]),
+    );
+  }
+
+  @protected
   bool dco_decode_bool(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw as bool;
+  }
+
+  @protected
+  ArtworkColorResult dco_decode_box_autoadd_artwork_color_result(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_artwork_color_result(raw);
   }
 
   @protected
@@ -459,6 +513,16 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   String? dco_decode_opt_String(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw == null ? null : dco_decode_String(raw);
+  }
+
+  @protected
+  ArtworkColorResult? dco_decode_opt_box_autoadd_artwork_color_result(
+    dynamic raw,
+  ) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null
+        ? null
+        : dco_decode_box_autoadd_artwork_color_result(raw);
   }
 
   @protected
@@ -522,9 +586,34 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  ArtworkColorResult sse_decode_artwork_color_result(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_cover = sse_decode_list_prim_u_8_strict(deserializer);
+    var var_primary = sse_decode_u_32(deserializer);
+    var var_secondary = sse_decode_u_32(deserializer);
+    var var_isDark = sse_decode_bool(deserializer);
+    return ArtworkColorResult(
+      cover: var_cover,
+      primary: var_primary,
+      secondary: var_secondary,
+      isDark: var_isDark,
+    );
+  }
+
+  @protected
   bool sse_decode_bool(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return deserializer.buffer.getUint8() != 0;
+  }
+
+  @protected
+  ArtworkColorResult sse_decode_box_autoadd_artwork_color_result(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_artwork_color_result(deserializer));
   }
 
   @protected
@@ -582,6 +671,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
     if (sse_decode_bool(deserializer)) {
       return (sse_decode_String(deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  ArtworkColorResult? sse_decode_opt_box_autoadd_artwork_color_result(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_artwork_color_result(deserializer));
     } else {
       return null;
     }
@@ -684,9 +786,30 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_artwork_color_result(
+    ArtworkColorResult self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_list_prim_u_8_strict(self.cover, serializer);
+    sse_encode_u_32(self.primary, serializer);
+    sse_encode_u_32(self.secondary, serializer);
+    sse_encode_bool(self.isDark, serializer);
+  }
+
+  @protected
   void sse_encode_bool(bool self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     serializer.buffer.putUint8(self ? 1 : 0);
+  }
+
+  @protected
+  void sse_encode_box_autoadd_artwork_color_result(
+    ArtworkColorResult self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_artwork_color_result(self, serializer);
   }
 
   @protected
@@ -747,6 +870,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_bool(self != null, serializer);
     if (self != null) {
       sse_encode_String(self, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_opt_box_autoadd_artwork_color_result(
+    ArtworkColorResult? self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_artwork_color_result(self, serializer);
     }
   }
 

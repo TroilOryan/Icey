@@ -2,8 +2,11 @@ import 'package:IceyPlayer/components/play_lyric_source/play_lyric_source.dart';
 import 'package:IceyPlayer/constants/box_key.dart';
 import 'package:IceyPlayer/constants/cache_key.dart';
 import 'package:IceyPlayer/constants/settings.dart';
+import 'package:IceyPlayer/extensions/window_controller_extension.dart';
 import 'package:IceyPlayer/helpers/common.dart';
 import 'package:IceyPlayer/helpers/overlay/overlay.dart';
+import 'package:IceyPlayer/helpers/platform.dart';
+import 'package:IceyPlayer/main.dart';
 import 'package:IceyPlayer/models/media/media.dart';
 import 'package:IceyPlayer/models/settings/settings.dart';
 import 'package:flutter_lyric/core/lyric_model.dart';
@@ -162,9 +165,15 @@ class LyricManager {
   void setCurrentIndex(int value) {
     _currentIndex.value = value;
 
-    OverlayHelper.shareData({
-      "lyric": value == -1 ? "" : _parsedLyric.value[value].text,
-    });
+    if (PlatformHelper.isDesktop) {
+      desktopLyricWindowController.updateLyric(
+        value == -1 ? "" : _parsedLyric.value[value].text,
+      );
+    } else {
+      OverlayHelper.shareData({
+        "lyric": value == -1 ? "" : _parsedLyric.value[value].text,
+      });
+    }
   }
 
   void setOverlayLyricSize(double value) {
@@ -204,8 +213,6 @@ class LyricManager {
 
     _settingsBox.put(CacheKey.Settings.overlayLyricY, value);
 
-    OverlayHelper.moveOverlay(
-      OverlayPosition(_overlayLyricX.value, value),
-    );
+    OverlayHelper.moveOverlay(OverlayPosition(_overlayLyricX.value, value));
   }
 }

@@ -47,29 +47,6 @@ class AudioQuery {
     return status;
   }
 
-  Future<Map<String, dynamic>>? queryArtworkWithColor(
-    String id,
-    ArtworkType type, {
-    ArtworkFormat? format,
-    int? size,
-    int? quality,
-  }) async {
-    final res = await AudioQueryPlatform.instance.queryArtworkWithColor(
-      id,
-      type,
-      format: format,
-      size: size,
-      quality: quality,
-    );
-
-    return {
-      "cover": res["data"],
-      "primaryColor": res["color"]["primaryColor"],
-      "secondaryColor": res["color"]["secondaryColor"],
-      "isDark": res["color"]["isDark"],
-    };
-  }
-
   Future<Uint8List?> queryArtwork(
     String id,
     ArtworkType type, {

@@ -9,16 +9,9 @@ import 'package:signals/signals_flutter.dart';
 
 /// 圆形、方形、不规则
 class PlayShapedCover extends StatelessWidget {
-  final double? offset;
-  final bool isLandscape;
-  final double? size;
+  final double size;
 
-  const PlayShapedCover({
-    super.key,
-    this.offset,
-    this.size,
-    this.isLandscape = false,
-  });
+  const PlayShapedCover({super.key, required this.size});
 
   @override
   Widget build(BuildContext context) {
@@ -26,29 +19,13 @@ class PlayShapedCover extends StatelessWidget {
 
     final mediaQuery = MediaQuery.of(context);
 
-    final coverSize =
-        size ??
-        (isLandscape
-            ? mediaQuery.size.height - 48
-            : mediaQuery.size.width - 48);
+    final coverSize = size;
 
     final double paddingLeft = max(mediaQuery.padding.left, 32);
 
     final diskShadowColor = theme.colorScheme.secondaryContainer;
 
     final rotationAnimation = mediaManager.rotationAnimation.watch(context);
-
-    final scale = max(1 - (offset ?? 0) / mediaQuery.size.width, 0.25);
-
-    final alignmentX = (2 * 16 / coverSize) - 1;
-
-    // final alignmentY = (2 * (72.h - 24.w - 8) / size) - 1;
-
-    final alignmentY = -0.5;
-
-    // final alignmentY = 2 * mediaQuery.size.width * 0.25 / 2 + 64.h;
-
-    final immersive = settingsManager.immersive.watch(context);
 
     return Builder(
       builder: (context) {
@@ -144,34 +121,7 @@ class PlayShapedCover extends StatelessWidget {
           },
         );
 
-        if (isLandscape) {
-          return Padding(
-            padding: EdgeInsets.only(left: paddingLeft),
-            child: child,
-          );
-        }
-
-        return AnimatedSlide(
-          curve: Curves.easeInOutSine,
-          offset: Offset(0, immersive ? 0.2 : 0),
-          duration: AppTheme.defaultDurationMid,
-          child: AnimatedScale(
-            curve: Curves.easeInOutSine,
-            duration: AppTheme.defaultDurationMid,
-            alignment: Alignment(alignmentX, alignmentY),
-            scale: scale,
-            child: AnimatedContainer(
-              alignment: Alignment.center,
-              width: mediaQuery.size.width,
-              height: coverSize,
-              duration: AppTheme.defaultDuration,
-              margin: EdgeInsets.only(
-                top: mediaQuery.size.width * 0.25 / 2 + 32,
-              ),
-              child: child,
-            ),
-          ),
-        );
+        return child;
       },
     );
   }

@@ -181,19 +181,23 @@ class MediaHelper {
     return !liked;
   }
 
-  static Future<Map<String, dynamic>?>? queryCover(String id) async {
-    if (PlatformHelper.isDesktop) {
-      final res = await getPictureFromPath(path: id, width: 1024, height: 1024);
+  static Future<ArtworkColorResult?> queryCover(String id) async {
+    final res = await getArtworkColor(path: id);
 
-      return {"cover": res};
-    } else {
-      final coverRes = await AudioQuery().queryArtworkWithColor(
-        id,
-        ArtworkType.AUDIO,
-        size: 1024,
-      );
+    return res;
 
-      return coverRes;
-    }
+    // if (PlatformHelper.isDesktop) {
+    //   final res = await getArtworkFromPath(path: id, width: 1024, height: 1024);
+    //
+    //   return {"cover": res};
+    // } else {
+    //   final coverRes = await AudioQuery().queryArtworkWithColor(
+    //     id,
+    //     ArtworkType.AUDIO,
+    //     size: 1024,
+    //   );
+    //
+    //   return coverRes;
+    // }
   }
 }

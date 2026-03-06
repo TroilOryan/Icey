@@ -37,7 +37,13 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   String dco_decode_String(dynamic raw);
 
   @protected
+  ArtworkColorResult dco_decode_artwork_color_result(dynamic raw);
+
+  @protected
   bool dco_decode_bool(dynamic raw);
+
+  @protected
+  ArtworkColorResult dco_decode_box_autoadd_artwork_color_result(dynamic raw);
 
   @protected
   LyricResult dco_decode_box_autoadd_lyric_result(dynamic raw);
@@ -59,6 +65,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   String? dco_decode_opt_String(dynamic raw);
+
+  @protected
+  ArtworkColorResult? dco_decode_opt_box_autoadd_artwork_color_result(
+    dynamic raw,
+  );
 
   @protected
   LyricResult? dco_decode_opt_box_autoadd_lyric_result(dynamic raw);
@@ -92,7 +103,17 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   String sse_decode_String(SseDeserializer deserializer);
 
   @protected
+  ArtworkColorResult sse_decode_artwork_color_result(
+    SseDeserializer deserializer,
+  );
+
+  @protected
   bool sse_decode_bool(SseDeserializer deserializer);
+
+  @protected
+  ArtworkColorResult sse_decode_box_autoadd_artwork_color_result(
+    SseDeserializer deserializer,
+  );
 
   @protected
   LyricResult sse_decode_box_autoadd_lyric_result(SseDeserializer deserializer);
@@ -114,6 +135,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   String? sse_decode_opt_String(SseDeserializer deserializer);
+
+  @protected
+  ArtworkColorResult? sse_decode_opt_box_autoadd_artwork_color_result(
+    SseDeserializer deserializer,
+  );
 
   @protected
   LyricResult? sse_decode_opt_box_autoadd_lyric_result(
@@ -157,7 +183,19 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_String(String self, SseSerializer serializer);
 
   @protected
+  void sse_encode_artwork_color_result(
+    ArtworkColorResult self,
+    SseSerializer serializer,
+  );
+
+  @protected
   void sse_encode_bool(bool self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_box_autoadd_artwork_color_result(
+    ArtworkColorResult self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_box_autoadd_lyric_result(
@@ -188,6 +226,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_opt_String(String? self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_opt_box_autoadd_artwork_color_result(
+    ArtworkColorResult? self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_opt_box_autoadd_lyric_result(

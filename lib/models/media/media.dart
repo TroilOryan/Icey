@@ -328,15 +328,15 @@ class MediaManager {
       }
 
       try {
-        final coverRes = await MediaHelper.queryCover(id);
+        final coverRes = await MediaHelper.queryCover(value.extras?["path"]);
 
-        _currentCover.value = coverRes?["cover"] ?? Uint8List(0);
+        _currentCover.value = coverRes?.cover ?? Uint8List(0);
 
-        if (coverRes != null && coverRes["primaryColor"] != null) {
+        if (coverRes != null) {
           _coverColor.value = CoverColor(
-            primary: coverRes["primaryColor"],
-            secondary: coverRes["secondaryColor"],
-            isDark: coverRes["isDark"],
+            primary: coverRes.primary,
+            secondary: coverRes.secondary,
+            isDark: coverRes.isDark,
           );
         } else {
           _coverColor.value = const CoverColor(
@@ -353,8 +353,6 @@ class MediaManager {
           secondary: -1,
           isDark: false,
         );
-
-        print(e);
       }
     });
   }

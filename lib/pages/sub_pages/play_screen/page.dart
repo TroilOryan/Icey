@@ -77,6 +77,7 @@ class _PlayScreenPageState extends State<PlayScreenPage>
                         );
                       },
                     ),
+                    tablet: (context) => Tablet(),
                   ),
                 ],
               ),

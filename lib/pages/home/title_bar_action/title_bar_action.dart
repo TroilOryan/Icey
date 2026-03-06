@@ -1,4 +1,5 @@
 import 'package:IceyPlayer/models/media/media.dart';
+import 'package:IceyPlayer/theme/theme.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sficon/flutter_sficon.dart';
@@ -7,9 +8,10 @@ import 'package:signals/signals_flutter.dart';
 import 'package:window_manager/window_manager.dart';
 
 class TitleBarAction extends StatefulWidget {
-  final bool sideBarOpened;
+  final bool? sideBarOpened;
+  final bool? immersive;
 
-  const TitleBarAction({super.key, required this.sideBarOpened});
+  const TitleBarAction({super.key, this.sideBarOpened, this.immersive = false});
 
   @override
   State<TitleBarAction> createState() => _TitleBarActionState();
@@ -82,7 +84,15 @@ class _TitleBarActionState extends State<TitleBarAction> with WindowListener {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
+    final appThemeExtension = AppThemeExtension.of(context);
+
     final mediaList = mediaManager.mediaList.watch(context);
+
+    final iconColor = computed(
+      () => widget.immersive == true
+          ? appThemeExtension.secondary
+          : theme.iconTheme.color,
+    );
 
     return Positioned(
       right: 16,
@@ -98,21 +108,27 @@ class _TitleBarActionState extends State<TitleBarAction> with WindowListener {
                 DragToMoveArea(
                   child: SizedBox(width: double.infinity, height: 60),
                 ),
-                LayoutBuilder(
-                  builder: (context, constraints) => Container(
-                    width: constraints.maxWidth * 0.4,
-                    height: 40,
-                    margin: EdgeInsets.only(
-                      left: widget.sideBarOpened ? 340 : 100,
-                    ),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(SFIcons.sf_magnifyingglass, size: 16),
-                        hint: Text(
-                          "在${mediaList.length}个媒体中搜索",
-                          style: theme.textTheme.titleSmall?.copyWith(
-                            fontWeight: FontWeight.normal,
-                            color: theme.textTheme.bodyMedium?.color,
+                Offstage(
+                  offstage: widget.sideBarOpened == null,
+                  child: LayoutBuilder(
+                    builder: (context, constraints) => Container(
+                      width: constraints.maxWidth * 0.4,
+                      height: 40,
+                      margin: EdgeInsets.only(
+                        left: widget.sideBarOpened == true ? 340 : 100,
+                      ),
+                      child: TextField(
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(
+                            SFIcons.sf_magnifyingglass,
+                            size: 16,
+                          ),
+                          hint: Text(
+                            "在${mediaList.length}个媒体中搜索",
+                            style: theme.textTheme.titleSmall?.copyWith(
+                              fontWeight: FontWeight.normal,
+                              color: theme.textTheme.bodyMedium?.color,
+                            ),
                           ),
                         ),
                       ),
@@ -125,7 +141,7 @@ class _TitleBarActionState extends State<TitleBarAction> with WindowListener {
           IconButton(
             tooltip: "最小化",
             onPressed: handleMinimize,
-            icon: const Icon(Symbols.remove),
+            icon: Icon(Symbols.remove, color: iconColor()),
           ),
           FutureBuilder(
             future: windowManager.isMaximized(),
@@ -138,6 +154,7 @@ class _TitleBarActionState extends State<TitleBarAction> with WindowListener {
                   isMaximized
                       ? FluentIcons.window_multiple_16_filled
                       : FluentIcons.maximize_16_filled,
+                  color: iconColor(),
                 ),
               );
             },
@@ -146,7 +163,7 @@ class _TitleBarActionState extends State<TitleBarAction> with WindowListener {
             tooltip: "退出",
             color: Colors.red,
             onPressed: handleClose,
-            icon: Icon(Icons.close, color: Theme.of(context).iconTheme.color),
+            icon: Icon(Icons.close, color: iconColor()),
           ),
         ],
       ),

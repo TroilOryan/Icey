@@ -6,21 +6,30 @@
 import '../frb_generated.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
-// These functions are ignored because they are not marked as `pub`: `_get_lyric_from_lofty`, `_get_lyric_from_lrc_file`, `_get_picture_by_lofty`, `_update_index_below_1_1_0`, `calculate_quality`, `new_with_path`, `read_by_lofty`, `read_from_folder_recursively`, `read_from_folder`, `read_from_path`, `to_json_value`, `to_json_value`
+// These functions are ignored because they are not marked as `pub`: `_get_artwork_by_lofty`, `_get_lyric_from_lofty`, `_get_lyric_from_lrc_file`, `_update_index_below_1_1_0`, `calculate_brightness`, `calculate_quality`, `new_with_path`, `read_by_lofty`, `read_from_folder_recursively`, `read_from_folder`, `read_from_path`, `rgb_to_argb32`, `to_json_value`, `to_json_value`
 // These types are ignored because they are neither used by any `pub` functions nor (for structs and enums) marked `#[frb(unignore)]`: `AudioFolder`, `Audio`
-// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `fmt`, `fmt`, `fmt`, `fmt`
+// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `fmt`, `fmt`, `fmt`, `fmt`, `fmt`
 
 /// for Flutter
 /// 使用 Lofty 获取专辑封面并调整大小
-Future<Uint8List?> getPictureFromPath({
+Future<Uint8List?> getArtworkFromPath({
   required String path,
   required int width,
   required int height,
-}) => RustLib.instance.api.crateApiTagReaderGetPictureFromPath(
+}) => RustLib.instance.api.crateApiTagReaderGetArtworkFromPath(
   path: path,
   width: width,
   height: height,
 );
+
+/// for Flutter
+/// 从音频文件中提取封面图片，并返回占比最大的颜色和第二大的颜色
+///
+/// 返回值：Option<String>
+/// 格式: " dominant_color | secondary_color "  例如: "#FF5733|#C70039"
+/// 如果无法提取封面，返回 None
+Future<ArtworkColorResult?> getArtworkColor({required String path}) =>
+    RustLib.instance.api.crateApiTagReaderGetArtworkColor(path: path);
 
 /// for Flutter
 /// 只支持读取 ID3V2, VorbisComment, Mp4Ilst 存储的内嵌歌词
@@ -56,6 +65,34 @@ Stream<IndexActionState> buildIndexFromFoldersRecursively({
 /// 3. 遍历该文件夹，添加新增（读取到的 created > 记录的 latest）的音乐文件
 Stream<IndexActionState> updateIndex({required String indexPath}) =>
     RustLib.instance.api.crateApiTagReaderUpdateIndex(indexPath: indexPath);
+
+class ArtworkColorResult {
+  final Uint8List cover;
+  final int primary;
+  final int secondary;
+  final bool isDark;
+
+  const ArtworkColorResult({
+    required this.cover,
+    required this.primary,
+    required this.secondary,
+    required this.isDark,
+  });
+
+  @override
+  int get hashCode =>
+      cover.hashCode ^ primary.hashCode ^ secondary.hashCode ^ isDark.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ArtworkColorResult &&
+          runtimeType == other.runtimeType &&
+          cover == other.cover &&
+          primary == other.primary &&
+          secondary == other.secondary &&
+          isDark == other.isDark;
+}
 
 class IndexActionState {
   /// completed / total

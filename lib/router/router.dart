@@ -26,25 +26,16 @@ import 'package:go_transitions/go_transitions.dart';
 
 import '../pages/sub_pages/album_list_detail/controller.dart';
 
-final List<GoRoute> subPages = [
+final indPages = [
   GoRoute(
     path: '/play_screen',
     pageBuilder: GoTransitions.slide.toTop.build(
       builder: (_, _) => const PlayScreenPage(),
     ),
   ),
-  GoRoute(
-    path: '/album_list_detail/:id',
-    builder: (_, _) => const AlbumListDetailPage(),
-  ),
-  GoRoute(
-    path: '/artist_list_detail/:id',
-    builder: (_, _) => const ArtistListDetailPage(),
-  ),
-  GoRoute(
-    path: '/media_order_detail/:id',
-    builder: (_, _) => const MediaOrderDetailPage(),
-  ),
+];
+
+final List<GoRoute> subPages = [
   GoRoute(path: '/search', builder: (_, _) => const SearchPage()),
   GoRoute(path: '/player_style', builder: (_, _) => const PlayerStylePage()),
   GoRoute(
@@ -89,6 +80,18 @@ final List<GoRoute> subPages = [
         ],
       ),
     ],
+  ),
+  GoRoute(
+    path: '/album_list_detail/:id',
+    builder: (_, _) => const AlbumListDetailPage(),
+  ),
+  GoRoute(
+    path: '/artist_list_detail/:id',
+    builder: (_, _) => const ArtistListDetailPage(),
+  ),
+  GoRoute(
+    path: '/media_order_detail/:id',
+    builder: (_, _) => const MediaOrderDetailPage(),
   ),
 ];
 
@@ -140,5 +143,6 @@ final GoRouter router = GoRouter(
       ],
     ),
     if (!PlatformHelper.isDesktop) ...subPages,
+    ...indPages,
   ],
 );

@@ -42,7 +42,7 @@ class MediaCover extends StatelessWidget {
     if (showDefault != true && id != null) {
       if (PlatformHelper.isDesktop) {
         return ScrollAwareFutureBuilder(
-          future: () => getPictureFromPath(
+          future: () => getArtworkFromPath(
             path: id!,
             width: (width ?? size).toInt(),
             height: (height ?? size).toInt(),

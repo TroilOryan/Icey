@@ -4,6 +4,8 @@ late final EffectCleanup _brightnessThemeListener;
 
 final _settingsBox = Hive.box(BoxKey.settings);
 
+late final WindowController desktopLyricWindowController;
+
 Future<void> initHive() async {
   final dir = await CommonHelper().getAppDataDir();
 
@@ -47,8 +49,27 @@ void setDisplayMode() {
   }
 }
 
-Future<void> initDesktop() async {
-  await windowManager.ensureInitialized();
+Future<void> initDesktopLyric(WindowController windowController) async {
+  await windowController.desktopLyricWindowInit();
+
+  WindowOptions windowOptions = WindowOptions(
+    title: "Desktop Lyric",
+    size: Platform.isLinux ? Size(850, 200) : Size(800, 150),
+    center: true,
+    backgroundColor: Colors.transparent,
+    titleBarStyle: TitleBarStyle.hidden,
+    // prevent hiding the Dock on macOS
+    skipTaskbar: Platform.isMacOS ? false : true,
+    alwaysOnTop: true,
+  );
+
+  await windowManager.waitUntilReadyToShow(windowOptions, () async {
+    await windowManager.setAsFrameless();
+  });
+}
+
+Future<void> initDesktop(WindowController windowController) async {
+  await windowController.mainWindowInit();
 
   WindowOptions windowOptions = WindowOptions(
     size: const Size(1600, 900),
@@ -59,9 +80,19 @@ Future<void> initDesktop() async {
   );
 
   await windowManager.waitUntilReadyToShow(windowOptions, () async {
+    await windowManager.setPreventClose(true);
     await windowManager.show();
     await windowManager.focus();
+    await windowManager.setMinimumSize(
+      Platform.isLinux
+          ? Size(1102, 752)
+          : Platform.isWindows
+          ? Size(1050 + 16, 700 + 9)
+          : Size(1050, 700),
+    );
   });
+
+  windowManager.addListener(AppWindowListener());
 
   trayManager.setIcon(
     Platform.isWindows
@@ -69,7 +100,7 @@ Future<void> initDesktop() async {
         : 'assets/images/app_icon.png',
   );
 
-  trayManager.setToolTip("在线客服聊天系统(客服侧)");
+  trayManager.setToolTip("Icey Player");
 
   Menu menu = Menu(
     items: [
@@ -87,16 +118,26 @@ Future<void> initServices() async {
 
   CommonHelper.tmpDir = await getApplicationDocumentsDirectory();
 
-  if (!PlatformHelper.isDesktop) {
+  if (PlatformHelper.isMobile) {
+    GestureBinding.instance.resamplingEnabled = true;
+
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
     FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   }
 
-  GestureBinding.instance.resamplingEnabled = true;
-
   if (PlatformHelper.isDesktop) {
-    await initDesktop();
+    await windowManager.ensureInitialized();
+
+    final windowController = await WindowController.fromCurrentEngine();
+
+    if (windowController.arguments == 'desktop_lyric') {
+      initDesktopLyric(windowController);
+
+      return;
+    }
+
+    await initDesktop(windowController);
   }
 
   await RustLib.init();
@@ -125,12 +166,13 @@ Future<void> initServices() async {
 
   ErrorWidget.builder = (FlutterErrorDetails flutterErrorDetails) {
     debugPrint(flutterErrorDetails.toString());
+
     return Material(
       child: Center(
         child: Text(
           "发生未预见的错误\n请通知开发者"
           "${flutterErrorDetails.exceptionAsString()}",
-          textAlign: TextAlign.center,
+          textAlign: .center,
         ),
       ),
     );

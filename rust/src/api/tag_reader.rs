@@ -1,7 +1,6 @@
 use std::{collections::HashSet, fs::{self}, io::{self, Cursor, Write}, path::{Path, PathBuf}, time::{Duration, UNIX_EPOCH},};
 use image::imageops;
 use lofty::prelude::{Accessor, AudioFile, ItemKey, TaggedFileExt};
-
 use crate::frb_generated::StreamSink;
 use super::logger::log_to_dart;
 
@@ -97,7 +96,6 @@ impl Audio {
     fn calculate_quality(sample_rate: Option<u32>, bit_depth: Option<u8>) -> String {
         let valid_sample_rate = sample_rate.unwrap_or(0);
         let valid_bit_depth = bit_depth.unwrap_or(0);
-
         if valid_sample_rate >= 44100 && valid_bit_depth >= 24 {
             "HR".to_string()
         } else if valid_sample_rate >= 44100 && valid_sample_rate <= 48000 && valid_bit_depth >= 16 && valid_bit_depth <= 23 {
@@ -130,7 +128,6 @@ impl Audio {
     fn read_from_path(path: impl AsRef<Path>) -> Option<Self> {
         let path = path.as_ref();
         let lofty_support: bool = *SUPPORT_FORMAT.get(&path.extension()?.to_ascii_lowercase().to_string_lossy())?;
-
         let file_metadata = match fs::metadata(path) {
             Ok(val) => val,
             Err(err) => {
@@ -138,14 +135,12 @@ impl Audio {
                 return None;
             }
         };
-
         let modified = file_metadata
             .modified()
             .unwrap_or(UNIX_EPOCH)
             .duration_since(UNIX_EPOCH)
             .unwrap_or(Duration::ZERO)
             .as_secs();
-
         let created = file_metadata
             .created()
             .unwrap_or(UNIX_EPOCH)
@@ -166,7 +161,6 @@ impl Audio {
     /// 使用 lofty 获取音乐标签。只在文件名不正确、没有标签或包含不支持的编码时返回 None
     fn read_by_lofty(path: impl AsRef<Path>, modified: u64, created: u64) -> Option<Self> {
         let path = path.as_ref();
-
         let tagged_file = match lofty::read_from_path(path) {
             Ok(val) => val,
             Err(err) => {
@@ -174,7 +168,6 @@ impl Audio {
                 return None;
             }
         };
-
         let properties = tagged_file.properties();
         let quality = Self::calculate_quality(properties.sample_rate(), properties.bit_depth());
 
@@ -202,7 +195,6 @@ impl Audio {
                 by: Some("Lofty".to_string()),
             });
         }
-
         return Some(Audio {
             title: path.file_name()?.to_string_lossy().to_string(),
             artist: UNKNOWN_COW.to_string(),
@@ -238,7 +230,6 @@ impl AudioFolder {
         for audio in &self.audios {
             audios_json.push(audio.to_json_value());
         }
-
         serde_json::json!({
             "path": self.path,
             "modified": self.modified,
@@ -266,12 +257,10 @@ impl AudioFolder {
                 Ok(value) => value,
                 Err(_) => continue,
             };
-
             let file_type = match entry.file_type() {
                 Ok(value) => value,
                 Err(_) => continue,
             };
-
             if file_type.is_file() {
                 if let Some(audio_item) = Audio::read_from_path(entry.path()) {
                     if audio_item.created > latest {
@@ -294,7 +283,6 @@ impl AudioFolder {
                 audios,
             });
         }
-
         Err(io::Error::new(
             io::ErrorKind::NotFound,
             path.to_string_lossy() + " has no music.",
@@ -311,7 +299,6 @@ impl AudioFolder {
         sink: &StreamSink<IndexActionState>,
     ) -> Result<(), io::Error> {
         let folder = folder.as_ref();
-
         if scaned_folders.contains(&folder.to_string_lossy().to_string()) {
             return Ok(());
         }
@@ -342,7 +329,6 @@ impl AudioFolder {
                     continue;
                 }
             };
-
             let file_type = match entry.file_type() {
                 Ok(value) => value,
                 Err(err) => {
@@ -350,7 +336,6 @@ impl AudioFolder {
                     continue;
                 }
             };
-
             if file_type.is_dir() {
                 *total_count += 1;
                 let _ = Self::read_from_folder_recursively(
@@ -395,7 +380,7 @@ impl AudioFolder {
     }
 }
 
-fn _get_picture_by_lofty(path: &String) -> Option<Vec<u8>> {
+fn _get_artwork_by_lofty(path: &String) -> Option<Vec<u8>> {
     if let Ok(tagged_file) = lofty::read_from_path(&path) {
         let tag = tagged_file
             .primary_tag()
@@ -407,9 +392,8 @@ fn _get_picture_by_lofty(path: &String) -> Option<Vec<u8>> {
 
 /// for Flutter
 /// 使用 Lofty 获取专辑封面并调整大小
-pub fn get_picture_from_path(path: String, width: u32, height: u32) -> Option<Vec<u8>> {
-    let pic_option = _get_picture_by_lofty(&path);
-
+pub fn get_artwork_from_path(path: String, width: u32, height: u32) -> Option<Vec<u8>> {
+    let pic_option = _get_artwork_by_lofty(&path);
     if let Some(pic) = &pic_option {
         if let Ok(loaded_pic) = image::load_from_memory(pic) {
             // 计算新的宽高，保持原比例
@@ -419,29 +403,127 @@ pub fn get_picture_from_path(path: String, width: u32, height: u32) -> Option<Ve
             } else {
                 ((height as f32 * pic_ratio).round() as u32, height)
             };
-
             let resized_img = imageops::resize(
                 &loaded_pic,
                 result_width,
                 result_height,
                 imageops::FilterType::Triangle,
             );
-
             let mut output = Cursor::new(Vec::new());
             if let Ok(_) = resized_img.write_to(&mut output, image::ImageFormat::Png) {
                 return Some(output.into_inner());
             }
         }
     }
-
     pic_option
+}
+
+#[derive(Debug, serde::Serialize)]
+pub struct ArtworkColorResult {
+    pub cover: Vec<u8>,
+    pub primary: u32,
+    pub secondary: u32,
+    pub is_dark: bool,
+}
+
+/// 计算 RGB 颜色的亮度，用于判断深浅色
+/// 亮度 = (R * 299 + G * 587 + B * 114) / 1000
+fn calculate_brightness(r: u8, g: u8, b: u8) -> f32 {
+    (r as f32 * 299.0 + g as f32 * 587.0 + b as f32 * 114.0) / 1000.0
+}
+
+/// 将 RGB 转换为 ARGB32 格式
+/// 格式: (A << 24) | (R << 16) | (G << 8) | B
+fn rgb_to_argb32(r: u8, g: u8, b: u8) -> u32 {
+    0xFF000000 | ((r as u32) << 16) | ((g as u32) << 8) | (b as u32)
+}
+
+/// for Flutter
+/// 从音频文件中提取封面图片，并返回占比最大的颜色和第二大的颜色
+///
+/// 返回值：Option<String>
+/// 格式: " dominant_color | secondary_color "  例如: "#FF5733|#C70039"
+/// 如果无法提取封面，返回 None
+pub fn get_artwork_color(path: String) -> Option<ArtworkColorResult> {
+     let pic_data = _get_artwork_by_lofty(&path)?;
+         let img = image::load_from_memory(&pic_data).ok()?;
+         let img_rgba = img.to_rgba8();
+
+         // 将图片缩小以提高性能（提取颜色时不需要高分辨率）
+         let small_img = if img_rgba.width() > 100 || img_rgba.height() > 100 {
+             let ratio = (100.0 / img_rgba.width() as f32).min(100.0 / img_rgba.height() as f32);
+             let new_width = (img_rgba.width() as f32 * ratio) as u32;
+             let new_height = (img_rgba.height() as f32 * ratio) as u32;
+             imageops::resize(&img_rgba, new_width, new_height, imageops::FilterType::Nearest)
+         } else {
+             img_rgba
+         };
+
+         // 统计颜色频率
+         use std::collections::HashMap;
+         let mut color_counts: HashMap<(u8, u8, u8), u32> = HashMap::new();
+
+         for pixel in small_img.pixels() {
+             // 使用 Rgba8
+             let rgb = (
+                 pixel[0], // R
+                 pixel[1], // G
+                 pixel[2], // B
+             );
+             *color_counts.entry(rgb).or_insert(0) += 1;
+         }
+
+         if color_counts.is_empty() {
+             return None;
+         }
+
+         // 排序找出出现次数最多的颜色
+         let mut sorted_colors: Vec<_> = color_counts.into_iter().collect();
+         sorted_colors.sort_by(|a, b| b.1.cmp(&a.1));
+
+         // 提取前两个主要颜色
+         let dominant = sorted_colors.get(0);
+         let secondary = sorted_colors.get(1);
+
+         match (dominant, secondary) {
+             (Some(d), Some(s)) => {
+                 // 将 RGB 转换为 ARGB32 格式
+                 let primary_color = rgb_to_argb32(d.0.0, d.0.1, d.0.2);
+                 let secondary_color = rgb_to_argb32(s.0.0, s.0.1, s.0.2);
+
+                 // 判断主色亮度，决定是否为深色封面
+                 let brightness = calculate_brightness(d.0.0, d.0.1, d.0.2);
+                 let is_dark = brightness < 128.0;
+
+                 Some(ArtworkColorResult {
+                     cover: pic_data,
+                     primary: primary_color,
+                     secondary: secondary_color,
+                     is_dark,
+                 })
+             }
+             (Some(d), None) => {
+                 // 只有一个颜色，重复两次
+                 let color = rgb_to_argb32(d.0.0, d.0.1, d.0.2);
+                 let brightness = calculate_brightness(d.0.0, d.0.1, d.0.2);
+                 let is_dark = brightness < 128.0;
+
+                 Some(ArtworkColorResult {
+                     cover: pic_data,
+                     primary: color,
+                     secondary: color,
+                     is_dark,
+                 })
+             }
+             _ => None,
+         }
 }
 
 /// 歌词结果结构体，包含歌词内容和来源信息
 #[derive(Debug, serde::Serialize)]
 pub struct LyricResult {
     pub lyrics: String,
-    pub source: String,  // "tag" 表示来自音乐文件标签，"file" 表示来自外部歌词文件
+    pub source: String, // "tag" 表示来自音乐文件标签，"file" 表示来自外部歌词文件
 }
 
 fn _get_lyric_from_lofty(path: &String) -> Option<LyricResult> {
@@ -462,7 +544,6 @@ fn _get_lyric_from_lofty(path: &String) -> Option<LyricResult> {
 fn _get_lyric_from_lrc_file(path: &String) -> Option<LyricResult> {
     // 支持多种歌词文件格式
     let supported_extensions = ["lrc", "qrc", "ttml", "yrc", "lys", "eslrc"];
-
     for ext in &supported_extensions {
         let mut lyric_file_path = PathBuf::from(path);
         lyric_file_path.set_extension(ext);
@@ -505,7 +586,6 @@ fn _get_lyric_from_lrc_file(path: &String) -> Option<LyricResult> {
             }
         }
     }
-
     // 如果所有格式都不存在，返回 None
     None
 }
@@ -521,7 +601,6 @@ pub fn get_lyric_from_path(path: String) -> Option<LyricResult> {
     if let Some(lyric) = _get_lyric_from_lofty(&path) {
         return Some(lyric);
     }
-
     // 如果标签中没有，尝试从外部歌词文件获取
     _get_lyric_from_lrc_file(&path)
 }
@@ -562,7 +641,6 @@ pub fn build_index_from_folders_recursively(
     let mut index_path = PathBuf::from(index_path);
     index_path.push("index.json");
     fs::File::create(index_path)?.write_all(json_value.to_string().as_bytes())?;
-
     Ok(())
 }
 
@@ -576,17 +654,14 @@ fn _update_index_below_1_1_0(
 
     for item in folders {
         let path = item["path"].as_str().unwrap();
-
         let _ = sink.add(IndexActionState {
             progress: audio_folders_json.len() as f64 / folders.len() as f64,
             message: String::from("正在扫描 ") + path,
         });
 
         let folder_path = Path::new(path);
-
         if let Ok(audio_folder) = AudioFolder::read_from_folder(folder_path) {
             audio_folders_json.push(audio_folder.to_json_value());
-
             let _ = sink.add(IndexActionState {
                 progress: audio_folders_json.len() as f64 / folders.len() as f64,
                 message: String::new(),
@@ -602,7 +677,6 @@ fn _update_index_below_1_1_0(
         .to_string()
         .as_bytes(),
     )?;
-
     Ok(())
 }
 
@@ -619,13 +693,14 @@ fn _update_index_below_1_1_0(
 /// 1. 遍历该文件夹索引，判断文件是否存在，不存在则删除记录
 /// 2. 遍历该文件夹索引，如果文件被修改（再次读取到的 modified > 记录的 modified），重新读取标签；没有则跳过它
 /// 3. 遍历该文件夹，添加新增（读取到的 created > 记录的 latest）的音乐文件
-pub fn update_index(index_path: String, sink: StreamSink<IndexActionState>) -> anyhow::Result<()> {
+pub fn update_index(
+    index_path: String,
+    sink: StreamSink<IndexActionState>,
+) -> anyhow::Result<()> {
     let mut index_path = PathBuf::from(index_path);
     index_path.push("index.json");
-
     let index = fs::read(&index_path)?;
     let mut index: serde_json::Value = serde_json::from_slice(&index)?;
-
     let version = index["version"].as_u64();
 
     if version.is_none() {
@@ -717,12 +792,10 @@ pub fn update_index(index_path: String, sink: StreamSink<IndexActionState>) -> a
                 Ok(value) => value,
                 Err(_) => continue,
             };
-
             let file_type = match entry.file_type() {
                 Ok(value) => value,
                 Err(_) => continue,
             };
-
             if file_type.is_dir() {
                 continue;
             }
@@ -749,8 +822,8 @@ pub fn update_index(index_path: String, sink: StreamSink<IndexActionState>) -> a
         }
 
         folder_item["latest"] = serde_json::json!(new_latest);
-        updated += 1;
 
+        updated += 1;
         let _ = sink.add(IndexActionState {
             progress: updated as f64 / total as f64,
             message: String::new(),

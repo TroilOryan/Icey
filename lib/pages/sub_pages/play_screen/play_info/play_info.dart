@@ -33,6 +33,7 @@ class PlayInfo extends StatelessWidget {
 
         return AnimatedSwitcher(
           duration: AppTheme.defaultDurationMid,
+          key: ValueKey(mediaItem?.id),
           child: SizedBox(
             width: lyricOpened == true
                 ? mediaQuery.size.width * 0.8 - 64 - 16

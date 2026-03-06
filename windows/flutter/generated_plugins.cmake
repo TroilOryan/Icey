@@ -4,6 +4,7 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   audio_service_win
+  desktop_multi_window
   file_selector_windows
   just_audio_windows
   permission_handler_windows

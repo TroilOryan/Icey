@@ -20,7 +20,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.io.FileInputStream
-import com.audio.audio_query.utils.QueryArtworkColor
 
 /**
  * 优化后的 QueryArtwork（保持原调用逻辑）
@@ -79,53 +78,6 @@ class QueryArtwork : ViewModel() {
                 result.success(resultArtList)
             } catch (e: Exception) {
                 Log.e(TAG, "queryArtwork failed: ${e.message}", e)
-                result.error("QUERY_ERROR", e.message, null)
-            }
-        }
-    }
-
-    fun queryArtworkWithColor() {
-        val call = PluginProvider.call()
-        val result = PluginProvider.result()
-        val context = PluginProvider.context()
-
-        this.resolver = context.contentResolver
-        id = call.argument("id")!!
-        size = call.argument("size")!!
-        quality = call.argument("quality")!!
-        if (quality > 100) quality = 50
-
-        format = checkArtworkFormat(call.argument("format")!!)
-        uri = checkArtworkType(call.argument("type")!!)
-        type = call.argument("type")!!
-
-        Log.d(TAG, "Query config: ")
-        Log.d(TAG, "\tid: $id")
-        Log.d(TAG, "\tquality: $quality")
-        Log.d(TAG, "\tformat: $format")
-        Log.d(TAG, "\turi: $uri")
-        Log.d(TAG, "\ttype: $type")
-
-        // Query everything in background for a better performance.
-        viewModelScope.launch {
-            try {
-                var resultArtList = loadArt()
-
-                // Sometimes android will extract a 'wrong' or 'empty' artwork. Just set as null.
-                if (resultArtList != null && resultArtList.isEmpty()) {
-                    Log.i(TAG, "Artwork for '$id' is empty. Returning null")
-                    resultArtList = null
-                }
-
-                val color = if (resultArtList != null) {
-                    QueryArtworkColor().queryArtworkColorSync(resultArtList, id.toString())
-                } else {
-                    null
-                }
-
-                result.success(mapOf("data" to resultArtList, "color" to color))
-            } catch (e: Exception) {
-                Log.e(TAG, "queryArtworkWithColor failed: ${e.message}", e)
                 result.error("QUERY_ERROR", e.message, null)
             }
         }

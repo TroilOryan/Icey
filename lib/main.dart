@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:IceyPlayer/app_window_listener.dart';
+import 'package:IceyPlayer/extensions/window_controller_extension.dart';
 import 'package:IceyPlayer/helpers/common.dart';
 import 'package:IceyPlayer/helpers/logs/json_file_handler.dart';
 import 'package:IceyPlayer/helpers/overlay/overlay.dart';
@@ -15,6 +17,7 @@ import 'package:IceyPlayer/router/router.dart';
 import 'package:IceyPlayer/services/audio_service.dart';
 import 'package:IceyPlayer/theme/theme.dart';
 import 'package:common_utils/common_utils.dart';
+import 'package:desktop_multi_window/desktop_multi_window.dart';
 import 'package:flex_seed_scheme/flex_seed_scheme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -31,6 +34,7 @@ import 'package:signals/signals_flutter.dart';
 import 'package:tray_manager/tray_manager.dart';
 import 'package:window_manager/window_manager.dart';
 import 'build_config.dart';
+import 'components/play_lyric/desktop_lyric/desktop_lyric.dart';
 import 'components/play_lyric/play_lyric_overlay/controller.dart';
 import 'constants/box_key.dart';
 import 'constants/cache_key.dart';
@@ -50,6 +54,7 @@ final appState = AppState();
 @pragma("vm:entry-point")
 void overlayMain() {
   WidgetsFlutterBinding.ensureInitialized();
+
   runApp(
     const MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -63,6 +68,16 @@ Future<void> main() async {
 
   final config = await initCatcher();
 
+  final windowController = await WindowController.fromCurrentEngine();
+
+  late final Widget child;
+
+  if (windowController.arguments == 'desktop_lyric') {
+    child = const DesktopLyric();
+  } else {
+    child = const App();
+  }
+
   Catcher2(
     debugConfig: config["debugConfig"],
     releaseConfig: config["releaseConfig"],
@@ -70,8 +85,14 @@ Future<void> main() async {
     //   enabled: !kReleaseMode,
     //   builder: (context) => const App(),
     // ),
-    rootWidget: const App(),
+    rootWidget: child,
   );
+
+  // if (PlatformHelper.isDesktop) {
+  //   desktopLyricWindowController = await WindowController.create(
+  //     WindowConfiguration(hiddenAtLaunch: true, arguments: 'desktop_lyric'),
+  //   );
+  // }
 }
 
 class App extends StatefulWidget {

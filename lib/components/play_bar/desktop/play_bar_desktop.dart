@@ -113,6 +113,7 @@ class PlayBarDesktop extends StatelessWidget {
     return FrameSeparateWidget(
       child: GestureDetector(
         onTap: onTap,
+        behavior: HitTestBehavior.opaque,
         child: AnimatedSlide(
           curve: Curves.easeInOutSine,
           offset: Offset(0, hidePlayBar ? 1 : 0),

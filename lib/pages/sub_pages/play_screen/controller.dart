@@ -11,6 +11,7 @@ import 'package:signals_flutter/signals_flutter.dart';
 import 'landscape/landscape.dart';
 import 'play_screen_background/play_screen_background.dart';
 import 'portrait/portrait.dart';
+import 'tablet/tablet.dart';
 
 part 'state.dart';
 
