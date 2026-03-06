@@ -9,7 +9,7 @@ extension WindowControllerExtension on WindowController {
       switch (call.method) {
         case "close":
           return await windowManager.close();
-        case "lyric":
+        case "update_lyric":
           final raw = call.arguments as Map;
           final map = Map<String, dynamic>.from(raw);
 
