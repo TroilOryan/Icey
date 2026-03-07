@@ -32,28 +32,26 @@ class OverlayHelper {
   }
 
   static Future<void> showLyricOverlay() async {
-    if (await OverlayHelper.isActive()) {
-      return;
+    if (!await OverlayHelper.isActive()) {
+      await OverlayHelper._showOverlay(
+        enableDrag: false,
+        overlayTitle: "Icey Player",
+        overlayContent: 'Overlay Lyric',
+        flag: OverlayFlag.clickThrough,
+        visibility: NotificationVisibility.visibilityPublic,
+        positionGravity: PositionGravity.auto,
+        height: WindowSize.matchParent,
+        width: WindowSize.matchParent,
+        startPosition: const OverlayPosition(0, 0),
+      );
+
+      await OverlayHelper.moveOverlay(
+        OverlayPosition(
+          _settingsBox.get(CacheKey.Settings.overlayLyricX, defaultValue: 0.0),
+          _settingsBox.get(CacheKey.Settings.overlayLyricY, defaultValue: 0.0),
+        ),
+      );
     }
-
-    await OverlayHelper._showOverlay(
-      enableDrag: false,
-      overlayTitle: "Icey Player",
-      overlayContent: 'Overlay Lyric',
-      flag: OverlayFlag.clickThrough,
-      visibility: NotificationVisibility.visibilityPublic,
-      positionGravity: PositionGravity.auto,
-      height: WindowSize.matchParent,
-      width: WindowSize.matchParent,
-      startPosition: const OverlayPosition(0, 0),
-    );
-
-    await OverlayHelper.moveOverlay(
-      OverlayPosition(
-        _settingsBox.get(CacheKey.Settings.overlayLyricX, defaultValue: 0.0),
-        _settingsBox.get(CacheKey.Settings.overlayLyricY, defaultValue: 0.0),
-      ),
-    );
   }
 
   static Future<void> _showOverlay({
@@ -68,54 +66,44 @@ class OverlayHelper {
     PositionGravity positionGravity = PositionGravity.none,
     OverlayPosition? startPosition,
   }) async {
-    if (!Platform.isAndroid) {
-      return;
+    if (Platform.isAndroid) {
+      await FlutterOverlayWindow.showOverlay(
+        height: height,
+        width: width,
+        alignment: alignment,
+        visibility: visibility,
+        flag: flag,
+        overlayTitle: overlayTitle,
+        overlayContent: overlayContent,
+        enableDrag: enableDrag,
+        positionGravity: positionGravity,
+        startPosition: startPosition,
+      );
     }
-
-    await FlutterOverlayWindow.showOverlay(
-      height: height,
-      width: width,
-      alignment: alignment,
-      visibility: visibility,
-      flag: flag,
-      overlayTitle: overlayTitle,
-      overlayContent: overlayContent,
-      enableDrag: enableDrag,
-      positionGravity: positionGravity,
-      startPosition: startPosition,
-    );
   }
 
   static Future<void> closeOverlay() async {
-    if (!Platform.isAndroid) {
-      return;
+    if (Platform.isAndroid) {
+      await FlutterOverlayWindow.closeOverlay();
     }
-
-    await FlutterOverlayWindow.closeOverlay();
   }
 
   static Future<void> moveOverlay(OverlayPosition position) async {
-    if (!Platform.isAndroid) {
-      return;
+    if (Platform.isAndroid) {
+      await FlutterOverlayWindow.moveOverlay(position);
     }
-
-    await FlutterOverlayWindow.moveOverlay(position);
   }
 
   static Future<void> shareData(dynamic data) async {
-    if (!Platform.isAndroid) {
-      return;
+    if (Platform.isAndroid) {
+      await FlutterOverlayWindow.shareData(data);
     }
-
-    await FlutterOverlayWindow.shareData(data);
   }
 
   static void disposeOverlayListener() {
-    if (!Platform.isAndroid) {
-      return;
+    if (Platform.isAndroid) {
+      FlutterOverlayWindow.disposeOverlayListener();
     }
-
-    FlutterOverlayWindow.disposeOverlayListener();
   }
 
   static Stream<dynamic>? overlayListener = Platform.isAndroid

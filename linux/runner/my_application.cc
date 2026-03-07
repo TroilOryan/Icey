@@ -75,10 +75,6 @@ static void my_application_activate(GApplication* application) {
 
   fl_register_plugins(FL_PLUGIN_REGISTRY(view));
 
-  desktop_multi_window_plugin_set_window_created_callback([](FlPluginRegistry* registry){
-      fl_register_plugins(registry);
-  });
-
   gtk_widget_grab_focus(GTK_WIDGET(view));
 }
 

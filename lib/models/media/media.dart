@@ -52,6 +52,7 @@ class MediaManager {
   late final Computed<List<ArtistEntity>> _artistList;
   final Signal<MediaItem?> _currentMediaItem;
   final Signal<Animation<double>?> _rotationAnimation;
+  final Signal<bool> _isPlaying;
   late final AudioServiceHandler _audioService;
   final Signal<CoverColor> _coverColor;
   final Signal<Uint8List> _currentCover;
@@ -73,7 +74,7 @@ class MediaManager {
 
   Signal<Animation<double>?> get rotationAnimation => _rotationAnimation;
 
-  bool get isPlaying => _audioService.isPlaying;
+  Signal<bool> get isPlaying => _isPlaying;
 
   Signal<CoverColor> get coverColor => _coverColor;
 
@@ -102,6 +103,7 @@ class MediaManager {
       _mediaList = signal([]),
       _currentMediaItem = signal(null),
       _rotationAnimation = signal(null),
+      _isPlaying = signal(false),
       _coverColor = signal(
         const CoverColor(primary: -1, secondary: -1, isDark: false),
       ),
@@ -253,6 +255,10 @@ class MediaManager {
     _audioService.removeQueueItem(media);
   }
 
+  void setIsPlaying(bool value) {
+    _isPlaying.value = value;
+  }
+
   void pause() {
     _audioService.pause();
   }
@@ -268,7 +274,8 @@ class MediaManager {
       }
     }
 
-    if (_audioService.isPlaying && id == _audioService.mediaItem.value?.id) {
+    if (mediaManager.isPlaying.value &&
+        id == _audioService.mediaItem.value?.id) {
       _audioService.pause();
     } else {
       _audioService.play();

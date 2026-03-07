@@ -2,17 +2,17 @@ flutter_launcher_icons:
   android: true
   ios: true
   remove_alpha_ios: true
-  image_path: assets/images/logo.png
-  image_path_android: assets/images/logo.png
-  image_path_ios: assets/images/logo.png
+  image_path: assets/images/mobile_icon.png
+  image_path_android: assets/images/mobile_icon.png
+  image_path_ios: assets/images/mobile_icon.png
   adaptive_icon_background: "#ffffff"
-  adaptive_icon_foreground: assets/images/logo.png
+  adaptive_icon_foreground: assets/images/mobile_icon.png
   adaptive_icon_foreground_inset: 12
-  adaptive_icon_monochrome: assets/images/logo.png
+  adaptive_icon_monochrome: assets/images/mobile_icon.png
   windows:
     generate: true
-    image_path: assets/images/logo.png
-    icon_size: 48
+    image_path: assets/images/desktop_icon.png
+    icon_size: 256
   macos:
     generate: true
-    image_path: assets/images/logo.png
+    image_path: assets/images/desktop_icon.png

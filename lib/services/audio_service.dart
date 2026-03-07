@@ -1,11 +1,9 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:IceyPlayer/entities/media.dart';
 import 'package:IceyPlayer/helpers/common.dart';
 import 'package:IceyPlayer/helpers/overlay/overlay.dart';
 import 'package:IceyPlayer/helpers/platform.dart';
-import 'package:IceyPlayer/src/rust/api/tag_reader.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:IceyPlayer/models/media/media.dart';
 import 'package:flutter/services.dart';
@@ -31,8 +29,6 @@ class AudioServiceHandler extends BaseAudioHandler
   );
 
   final List<int> _preferredCompactNotificationButtons = [0, 1, 2];
-
-  bool get isPlaying => _player.playing;
 
   Duration get position => _player.position;
 
@@ -253,16 +249,8 @@ class AudioServiceHandler extends BaseAudioHandler
 
     OverlayHelper.shareData({"playing": playing});
 
-    if (playing) {
-      overlayVisibleTimer?.cancel();
-
-      audioSessionHandler.setActive(true);
-
-      OverlayHelper.shareData({"visible": true});
-    } else {
-      overlayVisibleTimer = Timer(const Duration(milliseconds: 3000), () {
-        OverlayHelper.shareData({"visible": false});
-      });
+    if (PlatformHelper.isMobile) {
+      mediaManager.setIsPlaying(playing);
     }
 
     playbackState.add(
@@ -323,6 +311,18 @@ class AudioServiceHandler extends BaseAudioHandler
         queueIndex: event.currentIndex,
       ),
     );
+
+    if (playing) {
+      overlayVisibleTimer?.cancel();
+
+      audioSessionHandler.setActive(true);
+
+      OverlayHelper.shareData({"visible": true});
+    } else {
+      overlayVisibleTimer = Timer(const Duration(milliseconds: 3000), () {
+        OverlayHelper.shareData({"visible": false});
+      });
+    }
   }
 
   @override
@@ -405,11 +405,15 @@ class AudioServiceHandler extends BaseAudioHandler
   @override
   Future<void> play() async {
     _player.play();
+
+    mediaManager.setIsPlaying(true);
   }
 
   @override
   Future<void> pause() async {
     _player.pause();
+
+    mediaManager.setIsPlaying(false);
   }
 
   @override
@@ -431,13 +435,18 @@ class AudioServiceHandler extends BaseAudioHandler
     if (_player.loopMode == LoopMode.one && mediaItem.value != null) {
       final index = queue.value.indexOf(mediaItem.value!);
 
-      skipToQueueItem(index == queue.value.length - 1 ? 0 : index + 1);
-      _player.play();
+      await skipToQueueItem(index == queue.value.length - 1 ? 0 : index + 1);
+
+      play();
+
       return;
     }
 
-    _player.seekToNext();
-    _player.play();
+    await _player.seekToNext();
+
+    if (!mediaManager.isPlaying.value) {
+      play();
+    }
   }
 
   @override
@@ -445,13 +454,16 @@ class AudioServiceHandler extends BaseAudioHandler
     if (_player.loopMode == LoopMode.one && mediaItem.value != null) {
       final index = queue.value.indexOf(mediaItem.value!);
 
-      skipToQueueItem(index == 0 ? queue.value.length - 1 : index - 1);
-      _player.play();
+      await skipToQueueItem(index == 0 ? queue.value.length - 1 : index - 1);
+
+      play();
+
       return;
     }
 
-    _player.seekToPrevious();
-    _player.play();
+    await _player.seekToPrevious();
+
+    play();
   }
 
   @override
@@ -469,6 +481,7 @@ class AudioServiceHandler extends BaseAudioHandler
         bufferedPosition: _player.bufferedPosition,
       ),
     );
+
     await _player.setShuffleModeEnabled(enabled);
   }
 
@@ -481,6 +494,7 @@ class AudioServiceHandler extends BaseAudioHandler
         bufferedPosition: _player.bufferedPosition,
       ),
     );
+
     await _player.setLoopMode(LoopMode.values[repeatMode.index]);
   }
 

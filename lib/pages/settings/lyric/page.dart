@@ -53,7 +53,7 @@ class _LyricPageState extends State<LyricPage> {
   }
 
   Future<void> onInit() async {
-    if (settingsManager.lyricOverlay.value && !mediaManager.isPlaying) {
+    if (settingsManager.lyricOverlay.value && !mediaManager.isPlaying.value) {
       if (!await OverlayHelper.isActive()) {
         OverlayHelper.showLyricOverlay();
       }
@@ -63,7 +63,7 @@ class _LyricPageState extends State<LyricPage> {
   }
 
   void onDispose() {
-    if (settingsManager.lyricOverlay.value && !mediaManager.isPlaying) {
+    if (settingsManager.lyricOverlay.value && !mediaManager.isPlaying.value) {
       OverlayHelper.shareData({"visible": false});
     }
   }

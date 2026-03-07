@@ -4,8 +4,6 @@ late final EffectCleanup _brightnessThemeListener;
 
 final _settingsBox = Hive.box(BoxKey.settings);
 
-late final WindowController desktopLyricWindowController;
-
 Future<void> initHive() async {
   final dir = await CommonHelper().getAppDataDir();
 
@@ -49,28 +47,7 @@ void setDisplayMode() {
   }
 }
 
-Future<void> initDesktopLyric(WindowController windowController) async {
-  await windowController.desktopLyricWindowInit();
-
-  WindowOptions windowOptions = WindowOptions(
-    title: "Desktop Lyric",
-    size: Platform.isLinux ? Size(850, 200) : Size(800, 150),
-    center: true,
-    backgroundColor: Colors.transparent,
-    titleBarStyle: TitleBarStyle.hidden,
-    // prevent hiding the Dock on macOS
-    skipTaskbar: Platform.isMacOS ? false : true,
-    alwaysOnTop: true,
-  );
-
-  await windowManager.waitUntilReadyToShow(windowOptions, () async {
-    await windowManager.setAsFrameless();
-  });
-}
-
-Future<void> initDesktop(WindowController windowController) async {
-  await windowController.mainWindowInit();
-
+Future<void> initDesktop() async {
   WindowOptions windowOptions = WindowOptions(
     size: const Size(1600, 900),
     center: true,
@@ -80,7 +57,6 @@ Future<void> initDesktop(WindowController windowController) async {
   );
 
   await windowManager.waitUntilReadyToShow(windowOptions, () async {
-    await windowManager.setPreventClose(true);
     await windowManager.show();
     await windowManager.focus();
     await windowManager.setMinimumSize(
@@ -96,8 +72,8 @@ Future<void> initDesktop(WindowController windowController) async {
 
   trayManager.setIcon(
     Platform.isWindows
-        ? 'assets/images/app_icon.ico'
-        : 'assets/images/app_icon.png',
+        ? 'assets/images/desktop_icon.ico'
+        : 'assets/images/desktop_icon.png',
   );
 
   trayManager.setToolTip("Icey Player");
@@ -129,15 +105,7 @@ Future<void> initServices() async {
   if (PlatformHelper.isDesktop) {
     await windowManager.ensureInitialized();
 
-    final windowController = await WindowController.fromCurrentEngine();
-
-    if (windowController.arguments == 'desktop_lyric') {
-      initDesktopLyric(windowController);
-
-      return;
-    }
-
-    await initDesktop(windowController);
+    await initDesktop();
   }
 
   await RustLib.init();

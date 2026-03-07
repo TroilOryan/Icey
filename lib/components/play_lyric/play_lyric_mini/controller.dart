@@ -71,10 +71,8 @@ class PlayLyricMiniController {
         );
       });
 
-      mediaManager.playbackState.map((state) => state.playing).listen((
-        playing,
-      ) {
-        if (playing == true) {
+      effect(() {
+        if (mediaManager.isPlaying.value) {
           _scrollToCurrentLyric(
             lyricManager.currentIndex.value,
             lyricManager.parsedLyric.value.length,

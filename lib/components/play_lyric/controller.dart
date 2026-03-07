@@ -28,9 +28,7 @@ class PlayLyricController {
             (e) => e.words != null && e.words!.isNotEmpty,
           );
 
-          lyricController
-            ..loadLyric(lyricManager.rawLyric.value)
-            ..loadLyricModel(lyricManager.lyricModel.value!);
+          lyricController.loadLyricModel(lyricManager.lyricModel.value!);
         }
       });
 

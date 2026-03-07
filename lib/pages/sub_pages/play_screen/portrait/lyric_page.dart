@@ -27,7 +27,7 @@ class _LyricPageState extends State<LyricPage> {
   void handleVisibilityChanged(VisibilityInfo info) {
     final fraction = info.visibleFraction * 100;
 
-    if (fraction == 100 && mediaManager.isPlaying) {
+    if (fraction == 100 && mediaManager.isPlaying.value) {
       controllerVisibleTimer?.cancel();
 
       controllerVisibleTimer = Timer(const Duration(milliseconds: 1000), () {
@@ -55,8 +55,8 @@ class _LyricPageState extends State<LyricPage> {
   }
 
   void onInit() {
-    mediaManager.playbackState.map((state) => state.playing).listen((playing) {
-      if (playing == true) {
+    effect(() {
+      if (mediaManager.isPlaying.value == true) {
         controllerVisibleTimer?.cancel();
 
         controllerVisibleTimer = Timer(const Duration(milliseconds: 3000), () {

@@ -44,23 +44,28 @@ class ProgressiveScrollview extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: backgroundColor,
-      body: SoftEdgeBlur(
-        edges: [
-          EdgeBlur(
-            type: EdgeType.topEdge,
-            size: PlatformHelper.isDesktop ? 75 : 100,
-            sigma: 12,
-            tintColor: listBg.isEmpty
-                ? theme.floatingActionButtonTheme.backgroundColor
-                : null,
-            controlPoints: [
-              ControlPoint(position: 0.5, type: ControlPointType.visible),
-              ControlPoint(position: 1, type: ControlPointType.transparent),
-            ],
-          ),
-        ],
-        child: Builder(builder: (context) => builder(appbarHeight)),
-      ),
+      body: PlatformHelper.isDesktop
+          ? Builder(builder: (context) => builder(appbarHeight))
+          : SoftEdgeBlur(
+              edges: [
+                EdgeBlur(
+                  type: EdgeType.topEdge,
+                  size: PlatformHelper.isDesktop ? 75 : 100,
+                  sigma: 12,
+                  tintColor: listBg.isEmpty
+                      ? theme.floatingActionButtonTheme.backgroundColor
+                      : null,
+                  controlPoints: [
+                    ControlPoint(position: 0.5, type: ControlPointType.visible),
+                    ControlPoint(
+                      position: 1,
+                      type: ControlPointType.transparent,
+                    ),
+                  ],
+                ),
+              ],
+              child: Builder(builder: (context) => builder(appbarHeight)),
+            ),
     );
   }
 
@@ -152,16 +157,25 @@ class ProgressiveScrollview extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final paddingTop = MediaQuery.of(context).viewPadding.top;
-    final double appbarHeight = max(75, kToolbarHeight + paddingTop);
+    final double appbarHeight = PlatformHelper.isDesktop
+        ? 0
+        : max(75, kToolbarHeight + paddingTop);
 
     return Padding(
       padding: EdgeInsetsGeometry.only(top: PlatformHelper.isDesktop ? 48 : 0),
-      child: Stack(
-        children: [
-          _buildBody(context, theme, appbarHeight),
-          _buildAppBar(context, theme, paddingTop, appbarHeight),
-        ],
-      ),
+      child: PlatformHelper.isDesktop
+          ? Column(
+              children: [
+                _buildAppBar(context, theme, paddingTop, 75),
+                Flexible(child: _buildBody(context, theme, appbarHeight)),
+              ],
+            )
+          : Stack(
+              children: [
+                _buildBody(context, theme, appbarHeight),
+                _buildAppBar(context, theme, paddingTop, appbarHeight),
+              ],
+            ),
     );
   }
 }

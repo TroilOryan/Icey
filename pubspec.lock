@@ -263,14 +263,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.2.4"
-  desktop_multi_window:
-    dependency: "direct main"
-    description:
-      name: desktop_multi_window
-      sha256: "60ba38725b8887b60e44d15afdcf0c3813568b5da2ccaf1e7f6fd09a380a6e24"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.0"
   device_frame_plus:
     dependency: transitive
     description:
@@ -569,10 +561,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_rust_bridge
-      sha256: "37ef40bc6f863652e865f0b2563ea07f0d3c58d8efad803cc01933a4b2ee067e"
+      sha256: "5a5c7a5deeef2cc2ffe6076a33b0429f4a20ceac22a397297aed2b1eb067e611"
       url: "https://pub.dev"
     source: hosted
-    version: "2.11.1"
+    version: "2.9.0"
   flutter_sficon:
     dependency: "direct main"
     description:
@@ -1436,6 +1428,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.12"
+  smooth_corner:
+    dependency: "direct main"
+    description:
+      name: smooth_corner
+      sha256: "112d7331f82ead81ec870c5d1eb0624f2e7e367eccd166c2fffe4c11d4f87c4f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.1"
   soft_edge_blur:
     dependency: "direct main"
     description:
@@ -1726,11 +1726,10 @@ packages:
   window_manager:
     dependency: "direct main"
     description:
-      path: "packages/window_manager"
-      ref: "6fae92d21b4c80ce1b8f71c1190d7970cf722bd4"
-      resolved-ref: "6fae92d21b4c80ce1b8f71c1190d7970cf722bd4"
-      url: "https://github.com/boyan01/window_manager.git"
-    source: git
+      name: window_manager
+      sha256: "7eb6d6c4164ec08e1bf978d6e733f3cebe792e2a23fb07cbca25c2872bfdbdcd"
+      url: "https://pub.dev"
+    source: hosted
     version: "0.5.1"
   xdg_directories:
     dependency: transitive

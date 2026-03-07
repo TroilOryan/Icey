@@ -2,7 +2,6 @@ import 'package:IceyPlayer/components/next_button/next_button.dart';
 import 'package:IceyPlayer/components/play_button/play_button.dart';
 import 'package:IceyPlayer/components/play_list_button/play_list_button.dart';
 import 'package:IceyPlayer/components/play_lyric/play_lyric.dart';
-import 'package:IceyPlayer/components/play_lyric_button/play_lyric_button.dart';
 import 'package:IceyPlayer/components/play_mode_button/play_mode_button.dart';
 import 'package:IceyPlayer/components/play_progress_bar/play_progress_bar.dart';
 import 'package:IceyPlayer/components/prev_button/prev_button.dart';
@@ -10,11 +9,9 @@ import 'package:IceyPlayer/models/media/media.dart';
 import 'package:IceyPlayer/pages/home/title_bar_action/title_bar_action.dart';
 import 'package:IceyPlayer/pages/sub_pages/play_screen/play_info/play_info.dart';
 import 'package:IceyPlayer/theme/theme.dart';
-import 'package:desktop_multi_window/desktop_multi_window.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../main.dart';
 import './play_shaped_cover.dart';
 
 class Tablet extends StatelessWidget {
@@ -103,21 +100,6 @@ class Tablet extends StatelessWidget {
                       PlayListButton(
                         size: 24,
                         color: appThemeExtension.secondary,
-                      ),
-                      PlayLyricButton(
-                        size: 24,
-                        color: appThemeExtension.secondary,
-                        onTap: () async {
-                          desktopLyricWindowController =
-                              await WindowController.create(
-                                WindowConfiguration(
-                                  hiddenAtLaunch: true,
-                                  arguments: 'desktop_lyric',
-                                ),
-                              );
-
-                          desktopLyricWindowController.show();
-                        },
                       ),
                     ],
                   ),

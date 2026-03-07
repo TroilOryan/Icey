@@ -30,7 +30,7 @@ class SideBar extends StatelessWidget {
     final theme = Theme.of(context);
 
     final logo = Image.asset(
-      "assets/images/logo.png",
+      "assets/images/desktop_icon.png",
       gaplessPlayback: true,
       height: 44,
       width: 44,
