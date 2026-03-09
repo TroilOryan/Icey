@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:IceyPlayer/components/adaptive_builder/adaptive_builder.dart';
+import 'package:IceyPlayer/components/play_lyric/lyric/lyric_screen.dart';
 import 'package:IceyPlayer/models/media/media.dart';
 import 'package:IceyPlayer/models/settings/settings.dart';
 import 'package:IceyPlayer/pages/sub_pages/play_screen/concert/concert.dart';

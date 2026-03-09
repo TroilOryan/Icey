@@ -1,9 +1,8 @@
 import 'package:IceyPlayer/components/play_lyric/play_lyric_style.dart';
 import 'package:IceyPlayer/models/lyric/lyric.dart';
-import 'package:IceyPlayer/models/settings/settings.dart';
 import 'package:IceyPlayer/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_lyric/flutter_lyric.dart';
+import 'package:flutter_lyric/flutter_lyric.dart' hide LyricVi;
 import 'package:signals/signals_flutter.dart';
 
 class LyricWidget extends StatelessWidget {

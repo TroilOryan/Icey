@@ -6,7 +6,7 @@ version: 1.0.43+44
 
 environment:
   sdk: ">=3.10.0"
-  flutter: 3.41.0 # update `.fvmrc` config
+  flutter: 3.41.4 # update `.fvmrc` config
 
 dependencies:
   flutter:
