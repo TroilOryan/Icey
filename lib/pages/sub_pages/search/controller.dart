@@ -33,19 +33,15 @@ class SearchController {
       return;
     }
 
-    final valueUpper = value.toUpperCase(), valueLower = value.toLowerCase();
+    final valueLower = value.toLowerCase();
 
     state.mediaList.value = List.unmodifiable(
       localMediaList.where((media) {
-        final artist = PinyinHelper.getPinyinE(media.artist!);
-        final title = PinyinHelper.getPinyinE(media.title);
+        final artist = PinyinHelper.getPinyinE(media.artist!).toLowerCase();
+        final title = PinyinHelper.getPinyinE(media.title).toLowerCase();
 
-        return artist.contains(valueUpper) ||
-            title.contains(valueUpper) ||
-            artist.contains(valueLower) ||
+        return artist.contains(valueLower) ||
             title.contains(valueLower) ||
-            media.artist!.contains(valueUpper) ||
-            media.title.contains(valueUpper) ||
             media.artist!.contains(valueLower) ||
             media.title.contains(valueLower);
       }).toList(),

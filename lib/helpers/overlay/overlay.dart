@@ -42,11 +42,7 @@ class OverlayHelper {
         positionGravity: PositionGravity.auto,
         height: WindowSize.matchParent,
         width: WindowSize.matchParent,
-        startPosition: const OverlayPosition(0, 0),
-      );
-
-      await OverlayHelper.moveOverlay(
-        OverlayPosition(
+        startPosition: OverlayPosition(
           _settingsBox.get(CacheKey.Settings.overlayLyricX, defaultValue: 0.0),
           _settingsBox.get(CacheKey.Settings.overlayLyricY, defaultValue: 0.0),
         ),
