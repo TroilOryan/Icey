@@ -164,8 +164,31 @@ class LyricManager {
   void setCurrentIndex(int value) {
     _currentIndex.value = value;
 
+    late final int duration;
+
+    if (value >= 0) {
+      final lyric = _parsedLyric.value[value];
+
+      if (lyric.end != null) {
+        duration = lyric.end!.inMilliseconds - lyric.start.inMilliseconds;
+      } else {
+        if (value != _parsedLyric.value.length - 1) {
+          duration =
+              _parsedLyric.value[value + 1].start.inMilliseconds -
+              lyric.start.inMilliseconds;
+        } else {
+          duration = lyric.start.inMilliseconds + 1000;
+        }
+      }
+    } else {
+      duration = 1000;
+    }
+
     OverlayHelper.shareData({
-      "lyric": value == -1 ? "" : _parsedLyric.value[value].text,
+      "lyric": {
+        "text": value == -1 ? "" : _parsedLyric.value[value].text,
+        "duration": duration,
+      },
     });
   }
 

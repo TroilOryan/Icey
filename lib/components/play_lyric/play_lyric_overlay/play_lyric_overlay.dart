@@ -29,6 +29,7 @@ class _PlayLyricOverlayState extends State<PlayLyricOverlay> {
   @override
   Widget build(BuildContext context) {
     final lyric = controller.state.lyric.watch(context),
+        duration = controller.state.duration.watch(context),
         color = controller.state.color.watch(context),
         fontSize = controller.state.fontSize.watch(context),
         width = controller.state.width.watch(context),
@@ -56,6 +57,9 @@ class _PlayLyricOverlayState extends State<PlayLyricOverlay> {
               SizedBox(
                 width: width,
                 child: Marquee(
+                  gap: 50,
+                  delay: const Duration(milliseconds: 1000),
+                  duration: Duration(milliseconds: duration + 2000),
                   disableAnimation: !playing,
                   child: Text(
                     lyric.isEmpty ? "暂无歌词" : lyric,

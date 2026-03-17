@@ -15,7 +15,8 @@ class PlayLyricOverlayController {
   void onInit() {
     OverlayHelper.overlayListener?.listen((event) {
       if (event?["lyric"] != null) {
-        state.lyric.value = event["lyric"];
+        state.lyric.value = event["lyric"]["text"];
+        state.duration.value = event["lyric"]["duration"];
       }
 
       if (event?["fontSize"] != null) {

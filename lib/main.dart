@@ -88,7 +88,7 @@ class _AppState extends State<App> with WidgetsBindingObserver, TrayListener {
     WidgetsBinding.instance.addObserver(this);
 
     GoTransition.defaultCurve = Curves.easeInOutSine;
-    GoTransition.defaultDuration = const Duration(milliseconds: 600);
+    GoTransition.defaultDuration = const Duration(milliseconds: 300);
 
     setDisplayMode();
 
