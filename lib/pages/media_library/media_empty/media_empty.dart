@@ -1,6 +1,4 @@
 import 'package:IceyPlayer/constants/strings.dart';
-import 'package:IceyPlayer/src/rust/api/utils.dart';
-import 'package:animated_gradient_background/animated_gradient_background.dart';
 import 'package:IceyPlayer/components/button/button.dart';
 import 'package:flutter/material.dart';
 import 'package:IceyPlayer/components/media_default_cover/media_default_cover.dart';
@@ -66,10 +64,8 @@ class MediaEmpty extends StatelessWidget {
     final paddingTop = MediaQuery.of(context).padding.top,
         paddingBottom = MediaQuery.of(context).padding.bottom;
 
-    return AnimatedGradientBackground(
-      duration: const Duration(seconds: 6),
-      colors: [theme.scaffoldBackgroundColor, theme.cardTheme.color!],
-      child: Stack(
+    return Scaffold(
+      body: Stack(
         children: [
           _buildCover(size: size, paddingTop: paddingTop),
           _buildBody(theme: theme, paddingBottom: paddingBottom),
