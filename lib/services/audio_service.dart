@@ -35,6 +35,8 @@ class AudioServiceHandler extends BaseAudioHandler
   Stream<Duration> get positionStream => _player.positionStream;
 
   Timer? overlayVisibleTimer;
+  Timer? positionUpdateTimer;
+  int lastPosition = 0;
 
   final audioSessionHandler = AudioSessionHandler();
 
@@ -52,8 +54,8 @@ class AudioServiceHandler extends BaseAudioHandler
 
       final dir = Directory('${CommonHelper.tmpDir.path}/IceyCover');
 
-      if (!dir.existsSync()) {
-        dir.createSync();
+      if (!await dir.exists()) {
+        await dir.create();
       }
 
       for (MediaItem mediaItem in mediaItems) {
@@ -61,7 +63,7 @@ class AudioServiceHandler extends BaseAudioHandler
 
         final tmpFile = File(tmpPath);
 
-        if (tmpFile.existsSync()) {
+        if (await tmpFile.exists()) {
           arr.add(mediaItem.copyWith(artUri: tmpFile.uri));
         } else {
           arr.add(mediaItem);
@@ -110,6 +112,7 @@ class AudioServiceHandler extends BaseAudioHandler
       if (PlatformHelper.isDesktop) {
         _player.setAudioSources(
           mediaItems
+              .where((e) => e.extras?["path"] != null)
               .map((e) => AudioSource.file(e.extras!["path"], tag: e))
               .toList(),
           initialIndex: initialIndex,
@@ -146,10 +149,18 @@ class AudioServiceHandler extends BaseAudioHandler
 
       mediaManager.setPosition(position);
 
-      _settingsBox.put(
-        CacheKey.Settings.currentPosition,
-        position.inMilliseconds,
-      );
+      // 每1秒写入一次数据库，减少数据库操作频率
+      if (positionUpdateTimer == null || !positionUpdateTimer!.isActive) {
+        positionUpdateTimer = Timer(const Duration(seconds: 1), () {
+          if (position.inMilliseconds != lastPosition) {
+            _settingsBox.put(
+              CacheKey.Settings.currentPosition,
+              position.inMilliseconds,
+            );
+            lastPosition = position.inMilliseconds;
+          }
+        });
+      }
 
       if (mediaItem.value == null || mediaItem.value?.duration == null) return;
 
@@ -382,10 +393,13 @@ class AudioServiceHandler extends BaseAudioHandler
     queue.add(newQueue);
   }
 
-  UriAudioSource _createAudioSource(MediaItem mediaItem) => AudioSource.uri(
-    Uri.parse(mediaItem.extras!['uri'] as String),
-    tag: mediaItem,
-  );
+  UriAudioSource _createAudioSource(MediaItem mediaItem) {
+    final uri = mediaItem.extras?['uri'] as String?;
+    if (uri == null) {
+      throw ArgumentError('MediaItem must have a non-null uri in extras');
+    }
+    return AudioSource.uri(Uri.parse(uri), tag: mediaItem);
+  }
 
   @override
   Future<void> removeQueueItemAt(int index) async {
@@ -423,7 +437,9 @@ class AudioServiceHandler extends BaseAudioHandler
   @override
   Future<void> skipToQueueItem(int index) async {
     if (index < 0 || index >= queue.value.length) return;
-    if (_player.shuffleModeEnabled) {
+    if (_player.shuffleModeEnabled &&
+        _player.shuffleIndices != null &&
+        index < _player.shuffleIndices!.length) {
       index = _player.shuffleIndices![index];
     }
 
@@ -500,6 +516,10 @@ class AudioServiceHandler extends BaseAudioHandler
 
   @override
   Future<void> stop() async {
+    // 取消计时器
+    overlayVisibleTimer?.cancel();
+    positionUpdateTimer?.cancel();
+
     // await _player.stop();
     // await _player.dispose();
 

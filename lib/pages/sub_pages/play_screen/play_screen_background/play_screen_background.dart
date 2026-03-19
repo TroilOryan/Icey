@@ -1,3 +1,4 @@
+import 'package:IceyPlayer/models/media/media.dart';
 import 'package:IceyPlayer/pages/home/controller.dart';
 import 'package:animated_gradient_background/animated_gradient_background.dart';
 import 'package:blur/blur.dart';
@@ -22,6 +23,8 @@ class PlayScreenBackground extends StatelessWidget {
         final highMaterial = settingsManager.highMaterial.watch(context),
             dynamicLight = settingsManager.dynamicLight.watch(context),
             artCover = settingsManager.artCover.watch(context);
+
+        final primary=mediaManager.coverColor.value.primary;
 
         final blurValue = computed(() => highMaterial ? 48.0 : 24.0);
 

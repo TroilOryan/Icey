@@ -64,6 +64,7 @@ class PlayScreenController {
   }
 
   void onInit() {
+    // 重新订阅媒体项变化
     mediaItemListener = mediaManager.mediaItem.listen((mediaItem) {
       if (currentMediaItem != mediaItem) {
         rotationController?.reverse();
@@ -71,6 +72,7 @@ class PlayScreenController {
       }
     });
 
+    // 重新订阅播放状态变化
     playbackStateListener = mediaManager.playbackState
         .map((state) => state.playing)
         .listen((playing) {
@@ -81,13 +83,21 @@ class PlayScreenController {
             rotationController?.stop();
           }
         });
+
+    // 根据当前播放状态恢复动画
+    if (mediaManager.playbackState.value.playing &&
+        rotationController != null &&
+        !rotationController!.isAnimating) {
+      rotationController?.repeat();
+    }
   }
 
   void onDispose() {
-    rotationController?.stop();
-
+    // 取消流订阅
     mediaItemListener.cancel();
-
     playbackStateListener.cancel();
+
+    // 只停止动画，不 dispose，保持状态
+    rotationController?.stop();
   }
 }

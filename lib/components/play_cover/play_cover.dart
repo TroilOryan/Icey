@@ -10,30 +10,25 @@ class PlayNoCoverPainter extends CustomPainter {
   final Color primary;
   final Color secondary;
 
-  PlayNoCoverPainter({required this.primary, required this.secondary});
+  const PlayNoCoverPainter({required this.primary, required this.secondary});
 
   @override
   void paint(Canvas canvas, Size size) {
     final double radius = size.width / 2;
+    final center = Offset(size.width / 2, size.height / 2);
 
     final Paint paint = Paint()
       ..isAntiAlias = true
       ..style = PaintingStyle.fill
       ..color = primary;
 
-    canvas.drawCircle(Offset(size.width / 2, size.height / 2), radius, paint);
+    canvas.drawCircle(center, radius, paint);
 
     paint.color = secondary;
-
-    canvas.drawCircle(
-      Offset(size.width / 2, size.height / 2),
-      radius / 2,
-      paint,
-    );
+    canvas.drawCircle(center, radius / 2, paint);
 
     paint.color = Colors.white24;
-
-    canvas.drawCircle(Offset(size.width / 2, size.height / 2), 6, paint);
+    canvas.drawCircle(center, 6, paint);
   }
 
   @override
@@ -45,7 +40,7 @@ class PlayCover extends StatelessWidget {
   final double width;
   final double height;
   final bool noCover;
-  final bool? noAnimation;
+  final bool noAnimation;
   final Duration? duration;
   final Widget Function(Widget, Animation<double>) transitionBuilder;
   final ImageRepeat repeat;

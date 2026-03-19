@@ -1,46 +1,32 @@
 import 'dart:io';
 import 'dart:ui';
 
-import 'package:IceyPlayer/app_window_listener.dart';
-import 'package:IceyPlayer/helpers/common.dart';
-import 'package:IceyPlayer/helpers/logs/json_file_handler.dart';
 import 'package:IceyPlayer/helpers/overlay/overlay.dart';
-import 'package:IceyPlayer/src/rust/frb_generated.dart';
-import 'package:audio_service/audio_service.dart';
-import 'package:catcher_2/catcher_2.dart';
-import 'package:chinese_font_library/chinese_font_library.dart';
 import 'package:IceyPlayer/models/media/media.dart';
 import 'package:IceyPlayer/models/settings/settings.dart';
 import 'package:IceyPlayer/pages/home/controller.dart';
 import 'package:IceyPlayer/router/router.dart';
-import 'package:IceyPlayer/services/audio_service.dart';
 import 'package:IceyPlayer/theme/theme.dart';
-import 'package:common_utils/common_utils.dart';
+import 'package:catcher_2/catcher_2.dart';
+import 'package:chinese_font_library/chinese_font_library.dart';
 import 'package:flex_seed_scheme/flex_seed_scheme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:go_transitions/go_transitions.dart';
-import 'package:hive_ce_flutter/hive_flutter.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:signals/signals_flutter.dart';
 import 'package:tray_manager/tray_manager.dart';
 import 'package:window_manager/window_manager.dart';
-import 'build_config.dart';
 import 'components/play_lyric/play_lyric_overlay/controller.dart';
 import 'constants/box_key.dart';
 import 'constants/cache_key.dart';
-import 'entities/media.dart';
-import 'entities/media_order.dart';
-import 'helpers/media/media.dart';
-import 'helpers/platform.dart';
-import 'http/init.dart';
-import 'package:path/path.dart' as path;
+import 'init/services.dart';
+import 'init/catcher.dart';
+import 'package:flutter/painting.dart';
+import 'package:hive_ce_flutter/hive_flutter.dart';
 
 part 'main.g.dart';
 
@@ -84,6 +70,8 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> with WidgetsBindingObserver, TrayListener {
+  late final Computed<ScrollBehavior> scrollBehavior;
+
   Future onInit() async {
     WidgetsBinding.instance.addObserver(this);
 
@@ -171,8 +159,13 @@ class _AppState extends State<App> with WidgetsBindingObserver, TrayListener {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+
+    scrollBehavior = computed(
+      () => settingsManager.isMaterialScrollBehavior.watch(context)
+          ? const MaterialScrollBehavior()
+          : const CupertinoScrollBehavior(),
+    );
 
     trayManager.addListener(this);
 
@@ -183,9 +176,10 @@ class _AppState extends State<App> with WidgetsBindingObserver, TrayListener {
   void dispose() {
     trayManager.removeListener(this);
 
-    onDispose();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await onDispose();
+    });
 
-    // TODO: implement dispose
     super.dispose();
   }
 
@@ -203,12 +197,6 @@ class _AppState extends State<App> with WidgetsBindingObserver, TrayListener {
         isMaterialScrollBehavior = settingsManager.isMaterialScrollBehavior
             .watch(context),
         immersive = settingsManager.immersive.watch(context);
-
-    final scrollBehavior = computed(
-      () => isMaterialScrollBehavior
-          ? const MaterialScrollBehavior()
-          : const CupertinoScrollBehavior(),
-    );
 
     return AnnotatedRegion(
       value: SystemUiOverlayStyle(

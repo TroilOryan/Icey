@@ -39,7 +39,7 @@ class _SearchPageState extends State<SearchPage> {
         children: [
           SliverToBoxAdapter(
             child: Container(
-              margin: EdgeInsets.only(bottom: 16),
+              margin: const EdgeInsets.only(bottom: 16),
               child: TextField(
                 focusNode: controller.focusNode,
                 onChanged: controller.handleChanged,

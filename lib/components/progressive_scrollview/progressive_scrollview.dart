@@ -53,7 +53,8 @@ class ProgressiveScrollview extends StatelessWidget {
                   size: PlatformHelper.isDesktop ? 75 : 100,
                   sigma: 12,
                   tintColor: listBg.isEmpty
-                      ? theme.floatingActionButtonTheme.backgroundColor
+                      ? theme.floatingActionButtonTheme.backgroundColor ??
+                            theme.scaffoldBackgroundColor
                       : null,
                   controlPoints: [
                     ControlPoint(position: 0.5, type: ControlPointType.visible),

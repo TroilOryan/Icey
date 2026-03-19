@@ -13,7 +13,6 @@ class _PlayScreenPageState extends State<PlayScreenPage>
     with SingleTickerProviderStateMixin {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     playScreenController.updateVsync(this);
@@ -36,7 +35,6 @@ class _PlayScreenPageState extends State<PlayScreenPage>
   void dispose() {
     playScreenController.onDispose();
 
-    // TODO: implement dispose
     super.dispose();
   }
 
@@ -57,7 +55,7 @@ class _PlayScreenPageState extends State<PlayScreenPage>
             ? const Concert()
             : Stack(
                 children: [
-                  PlayScreenBackground(),
+                  const PlayScreenBackground(),
                   AdaptiveBuilder(
                     mobile: (context) => Portrait(
                       offset: offset,
@@ -77,7 +75,7 @@ class _PlayScreenPageState extends State<PlayScreenPage>
                         );
                       },
                     ),
-                    tablet: (context) => Tablet(),
+                    tablet: (context) => const Tablet(),
                   ),
                 ],
               ),
