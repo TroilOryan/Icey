@@ -2,7 +2,7 @@ name: IceyPlayer
 description: "A new Flutter project."
 publish_to: 'none'
 
-version: 1.0.47+48
+version: 1.0.48+49
 
 environment:
   sdk: ">=3.10.0"
@@ -23,7 +23,6 @@ dependencies:
   just_audio_windows: ^0.2.2
 
   ## UI
-  animated_gradient_background: ^0.0.1
   animated_toggle_switch: ^0.8.7
   blur: ^4.0.2
   easy_refresh: ^3.4.0

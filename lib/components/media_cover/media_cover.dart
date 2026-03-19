@@ -15,7 +15,7 @@ class MediaCover extends StatelessWidget {
   final double? width;
   final double? height;
   final int? quality;
-  final bool? showDefault;
+  final bool showDefault;
   final bool keepOldArtwork;
   final bool? isDarkMode;
   final ArtworkType type;
@@ -29,7 +29,7 @@ class MediaCover extends StatelessWidget {
     this.width,
     this.height,
     this.quality,
-    this.showDefault,
+    this.showDefault = false,
     this.keepOldArtwork = true,
     this.isDarkMode,
     this.type = ArtworkType.AUDIO,
@@ -37,29 +37,36 @@ class MediaCover extends StatelessWidget {
     this.onQueried,
   });
 
+  Widget _buildDefaultCover() {
+    return Container(
+      width: width ?? size,
+      height: height ?? size,
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(borderRadius: borderRadius),
+      child: MediaDefaultCover(
+        size: Size(width ?? size, height ?? size),
+        isDarkMode: isDarkMode,
+        borderRadius: borderRadius,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (showDefault != true && id != null) {
+    if (!showDefault && id != null) {
       if (PlatformHelper.isDesktop) {
         return ScrollAwareFutureBuilder(
-          future: () => getArtworkFromPath(
-            path: id!,
-            width: (width ?? size).toInt(),
-            height: (height ?? size).toInt(),
-          ),
+          future: () async {
+            if (id == null) return null;
+            return getArtworkFromPath(
+              path: id!,
+              width: (width ?? size).toInt(),
+              height: (height ?? size).toInt(),
+            );
+          },
           builder: (context, snapshot) {
             if (snapshot.data == null) {
-              return Container(
-                width: width ?? size,
-                height: height ?? size,
-                clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(borderRadius: borderRadius),
-                child: MediaDefaultCover(
-                  size: Size(width ?? size, height ?? size),
-                  isDarkMode: isDarkMode,
-                  borderRadius: borderRadius,
-                ),
-              );
+              return _buildDefaultCover();
             }
 
             return Container(
@@ -84,42 +91,27 @@ class MediaCover extends StatelessWidget {
         artworkBorder: borderRadius,
         frameBuilder:
             (
-            BuildContext context,
-            Widget child,
-            int? frame,
-            bool wasSynchronouslyLoaded,
+              BuildContext context,
+              Widget child,
+              int? frame,
+              bool wasSynchronouslyLoaded,
             ) {
-          if (!wasSynchronouslyLoaded) {
-            return child;
-          }
+              if (!wasSynchronouslyLoaded) {
+                return child;
+              }
 
-          return AnimatedOpacity(
-            opacity: frame == null ? 0.5 : 1,
-            duration: const Duration(milliseconds: 200),
-            curve: Curves.linear,
-            child: child,
-          );
-        },
-        nullArtworkWidget: Container(
-          width: width ?? size,
-          height: height ?? size,
-          clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(borderRadius: borderRadius),
-          child: MediaDefaultCover(
-            size: Size(width ?? size, height ?? size),
-            isDarkMode: isDarkMode,
-            borderRadius: borderRadius,
-          ),
-        ),
+              return AnimatedOpacity(
+                opacity: frame == null ? 0.5 : 1,
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.linear,
+                child: child,
+              );
+            },
+        nullArtworkWidget: _buildDefaultCover(),
         onQueried: onQueried,
       );
     }
 
-    return MediaDefaultCover(
-      key: const ValueKey('defaultCover'),
-      size: Size(width ?? size, height ?? size),
-      isDarkMode: isDarkMode,
-      borderRadius: borderRadius,
-    );
+    return _buildDefaultCover();
   }
 }
