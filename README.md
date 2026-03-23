@@ -27,7 +27,7 @@
             alt="visitors">
     </a>
     <!-- license -->
-    <a href="https://github.com/TroilOryan/Icey/blob/main/LICENSE.md" target="_blank">
+    <a href="https://github.com/TroilOryan/Icey/blob/main/LICENSE" target="_blank">
         <img src="https://img.shields.io/github/license/TroilOryan/Icey" alt="license">
     </a>
 </div>
