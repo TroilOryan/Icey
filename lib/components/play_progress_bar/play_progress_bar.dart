@@ -14,6 +14,10 @@ class PlayProgressBarState {
   final Signal<Duration> position = signal(Duration.zero);
 
   final Signal<double> dragPosition = signal(0.0);
+
+  final Signal<bool> isDragging = signal(false);
+
+  final Signal<Duration> dragDuration = signal(Duration.zero);
 }
 
 class PlayProgressBar extends StatefulWidget {
@@ -31,29 +35,25 @@ class PlayProgressBar extends StatefulWidget {
 }
 
 class _PlayProgressBarState extends State<PlayProgressBar> {
-  late final EffectCleanup positionListener;
-
-  final state = PlayProgressBarState();
-
   bool draggable = true;
-
-  bool isDragging = false;
 
   int _lastDragUpdateTime = 0;
 
-  Duration dragDuration = const Duration(milliseconds: 0);
+  final state = PlayProgressBarState();
+
+  late final EffectCleanup positionListener;
 
   void handleHorizontalDragDown(DragDownDetails details) {
     if (!draggable) return;
 
-    isDragging = true;
+    state.isDragging.value = true;
   }
 
   void handleHorizontalDragUpdate(
     DragUpdateDetails details,
     BuildContext context,
   ) {
-    if (!isDragging || !draggable) return;
+    if (!state.isDragging.value || !draggable) return;
 
     // 计算当前时间
     final now = DateTime.now().microsecondsSinceEpoch;
@@ -69,15 +69,17 @@ class _PlayProgressBarState extends State<PlayProgressBar> {
       1.0,
     );
 
-    state.dragPosition.value = newPosition;
-    dragDuration = Duration(
-      milliseconds: (state.dragPosition * state.duration.value.inMilliseconds)
-          .toInt(),
-    );
+    batch(() {
+      state.dragPosition.value = newPosition;
+      state.dragDuration.value = Duration(
+        milliseconds: (state.dragPosition * state.duration.value.inMilliseconds)
+            .toInt(),
+      );
+    });
   }
 
   void handleHorizontalDragEnd(DragEndDetails details) {
-    isDragging = false;
+    state.isDragging.value = false;
 
     widget.onChangeEnd(
       Duration(
@@ -88,7 +90,7 @@ class _PlayProgressBarState extends State<PlayProgressBar> {
   }
 
   void handleTapUp(TapUpDetails details) {
-    isDragging = false;
+    state.isDragging.value = false;
   }
 
   void handleTapDown(TapDownDetails details, BuildContext context) {
@@ -99,11 +101,13 @@ class _PlayProgressBarState extends State<PlayProgressBar> {
       1.0,
     );
 
-    state.dragPosition.value = newPosition;
-    dragDuration = Duration(
-      milliseconds: (state.dragPosition * state.duration.value.inMilliseconds)
-          .toInt(),
-    );
+    batch(() {
+      state.dragPosition.value = newPosition;
+      state.dragDuration.value = Duration(
+        milliseconds: (state.dragPosition * state.duration.value.inMilliseconds)
+            .toInt(),
+      );
+    });
 
     widget.onChangeEnd(
       Duration(
@@ -114,13 +118,15 @@ class _PlayProgressBarState extends State<PlayProgressBar> {
   }
 
   void updatePosition(Duration position, Duration duration) {
-    if (isDragging) return;
+    if (state.isDragging.value) return;
 
     final nowMs = position.inMilliseconds, totalMs = duration.inMilliseconds;
 
-    final double _position = (nowMs / totalMs).isNaN ? 0.0 : (nowMs / totalMs);
+    final double dragPosition = (nowMs / totalMs).isNaN
+        ? 0.0
+        : (nowMs / totalMs);
 
-    state.dragPosition.value = _position.clamp(0.0, 1.0);
+    state.dragPosition.value = dragPosition.clamp(0.0, 1.0);
 
     if (totalMs == 0) {
       draggable = false;
@@ -173,7 +179,9 @@ class _PlayProgressBarState extends State<PlayProgressBar> {
 
     final duration = state.duration.watch(context),
         position = state.position.watch(context),
-        dragPosition = state.dragPosition.watch(context);
+        dragPosition = state.dragPosition.watch(context),
+        isDragging = state.isDragging.watch(context),
+        dragDuration = state.dragDuration.watch(context);
 
     return GestureDetector(
       onHorizontalDragDown: handleHorizontalDragDown,
@@ -207,7 +215,7 @@ class _PlayProgressBarState extends State<PlayProgressBar> {
               child: Offstage(
                 offstage: !isDragging,
                 child: Container(
-                  padding: EdgeInsets.fromLTRB(8, 2, 8, 2),
+                  padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
                   decoration: BoxDecoration(
                     color: progressBarBgColor,
                     borderRadius: BorderRadius.circular(
