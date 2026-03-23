@@ -15,6 +15,8 @@ part 'play_lyric_mini.dart';
 class PlayLyricMiniController {
   late final EffectCleanup _listener;
 
+  late final EffectCleanup _playingListener;
+
   final ListController listviewController = ListController();
 
   final ScrollController scrollController = ScrollController();
@@ -63,6 +65,11 @@ class PlayLyricMiniController {
   }
 
   void onInit() {
+    _scrollToCurrentLyric(
+      lyricManager.currentIndex.value,
+      lyricManager.parsedLyric.value.length,
+    );
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _listener = effect(() {
         _scrollToCurrentLyric(
@@ -71,7 +78,7 @@ class PlayLyricMiniController {
         );
       });
 
-      effect(() {
+      _playingListener = effect(() {
         if (mediaManager.isPlaying.value) {
           _scrollToCurrentLyric(
             lyricManager.currentIndex.value,
@@ -86,5 +93,6 @@ class PlayLyricMiniController {
     scrollController.dispose();
     listviewController.dispose();
     _listener();
+    _playingListener();
   }
 }

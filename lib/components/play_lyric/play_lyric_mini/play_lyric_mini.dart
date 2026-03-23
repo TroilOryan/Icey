@@ -15,10 +15,10 @@ class _PlayLyricMiniState extends State<PlayLyricMini> {
 
   @override
   void initState() {
+    controller.onInit();
+
     // TODO: implement initState
     super.initState();
-
-    controller.onInit();
   }
 
   @override
