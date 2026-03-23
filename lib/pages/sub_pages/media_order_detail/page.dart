@@ -127,7 +127,7 @@ class _MediaOrderDetailPageState extends State<MediaOrderDetailPage> {
                     child: Row(
                       children: [
                         Material(
-                          borderRadius: BorderRadius.all(Radius.circular(6)),
+                          borderRadius: BorderRadius.circular(6),
                           clipBehavior: Clip.antiAlias,
                           type: MaterialType.transparency,
                           child: Ink(

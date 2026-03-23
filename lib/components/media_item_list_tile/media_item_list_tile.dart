@@ -24,7 +24,7 @@ class MediaItemListTile extends StatelessWidget {
 
     return Material(
       type: MaterialType.transparency,
-      borderRadius: BorderRadius.all(AppTheme.borderRadiusSm),
+      borderRadius: BorderRadius.circular(AppTheme.borderRadiusSm),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onTap,

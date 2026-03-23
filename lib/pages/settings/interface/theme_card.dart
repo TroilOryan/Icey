@@ -24,7 +24,7 @@ class ThemeCard extends StatelessWidget {
     return Flexible(
       child: Material(
         clipBehavior: Clip.antiAlias,
-        borderRadius: BorderRadius.all(AppTheme.borderRadiusSm),
+        borderRadius: BorderRadius.circular(AppTheme.borderRadiusSm),
         color: active
             ? theme.colorScheme.secondary.withAlpha(AppTheme.defaultAlphaLight)
             : theme.scaffoldBackgroundColor,

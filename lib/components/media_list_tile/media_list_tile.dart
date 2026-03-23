@@ -63,7 +63,7 @@ class MediaListTile extends StatelessWidget {
     return HighMaterialWrapper(
       disabled: !obscure,
       margin: margin,
-      borderRadius: BorderRadius.all(AppTheme.borderRadiusSm),
+      borderRadius: BorderRadius.circular(AppTheme.borderRadiusSm),
       decoration: (highMaterial) => BoxDecoration(
         color: ghost == true
             ? theme.colorScheme.secondaryContainer
@@ -72,10 +72,10 @@ class MediaListTile extends StatelessWidget {
                     ? AppTheme.defaultAlphaLight
                     : 255,
               ),
-        borderRadius: BorderRadius.all(AppTheme.borderRadiusSm),
+        borderRadius: BorderRadius.circular(AppTheme.borderRadiusSm),
       ),
       builder: (highMaterial) => Material(
-        borderRadius: BorderRadius.all(AppTheme.borderRadiusSm),
+        borderRadius: BorderRadius.circular(AppTheme.borderRadiusSm),
         clipBehavior: Clip.antiAlias,
         type: MaterialType.transparency,
         child: InkWell(
@@ -92,7 +92,7 @@ class MediaListTile extends StatelessWidget {
                   child: MediaCover(
                     id: media.id,
                     size: 56,
-                    borderRadius: BorderRadius.all(AppTheme.borderRadiusXs),
+                    borderRadius: BorderRadius.circular(AppTheme.borderRadiusXs),
                   ),
                 ),
                 const SizedBox(width: 12),

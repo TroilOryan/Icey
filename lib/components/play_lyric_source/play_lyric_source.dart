@@ -38,7 +38,7 @@ class PlayLyricSource extends StatelessWidget {
           ),
         ],
         color: appThemeExtension.secondaryContainer,
-        borderRadius: const BorderRadius.all(Radius.circular(6)),
+        borderRadius: BorderRadius.circular(6),
       ),
       child: Center(
         child: Text(

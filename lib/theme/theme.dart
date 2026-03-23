@@ -1,4 +1,3 @@
-import 'package:IceyPlayer/helpers/dominant_color.dart';
 import 'package:flutter/material.dart';
 import 'package:go_transitions/go_transitions.dart';
 
@@ -17,15 +16,15 @@ class AppTheme {
 
   static const int defaultAlphaLight = 33;
 
-  static Radius borderRadiusXxs = Radius.circular(12);
+  static const double borderRadiusXxs = 12.0;
 
-  static Radius borderRadiusXs = Radius.circular(16);
+  static const double borderRadiusXs = 16.0;
 
-  static Radius borderRadiusSm = Radius.circular(20);
+  static const double borderRadiusSm = 20.0;
 
-  static Radius borderRadiusMd = Radius.circular(24);
+  static const double borderRadiusMd = 24.0;
 
-  static Radius borderRadiusLg = Radius.circular(28);
+  static const double borderRadiusLg = 28.0;
 
   static const Color bgColor = Color(0xfff1f3f5);
 
@@ -171,7 +170,7 @@ class AppTheme {
       ),
       buttonTheme: ButtonThemeData(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(borderRadiusLg),
+          borderRadius: BorderRadius.circular(borderRadiusLg),
         ),
       ),
       cardColor: colorScheme.secondaryContainer,
@@ -189,8 +188,8 @@ class AppTheme {
         style: FilledButton.styleFrom(
           backgroundColor: colorScheme.primary,
           elevation: 0,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(30)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
           ),
           shadowColor: Colors.transparent,
           surfaceTintColor: Colors.transparent,
@@ -207,26 +206,26 @@ class AppTheme {
         hintStyle: bodySmall,
         contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 16),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.all(borderRadiusLg),
+          borderRadius: BorderRadius.circular(borderRadiusLg),
           borderSide: BorderSide(
             color: colorScheme.outline.withAlpha(10),
             width: 1,
           ),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(borderRadiusLg),
+          borderRadius: BorderRadius.circular(borderRadiusLg),
           borderSide: BorderSide(
             color: colorScheme.outline.withAlpha(10),
             width: 1,
           ),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(borderRadiusLg),
+          borderRadius: BorderRadius.circular(borderRadiusLg),
           borderSide: BorderSide(color: primaryColor.withAlpha(50), width: 1),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(borderRadiusLg),
-          borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(borderRadiusLg),
+          borderSide: const BorderSide(width: 1),
         ),
       ),
       listTileTheme: ListTileThemeData(
@@ -253,7 +252,7 @@ class AppTheme {
         color: isDark ? const Color(0xff212121) : Colors.white,
         shadowColor: isDark ? Colors.white12 : Colors.black12,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(AppTheme.borderRadiusMd),
+          borderRadius: BorderRadius.circular(AppTheme.borderRadiusMd),
         ),
         position: PopupMenuPosition.under,
       ),
@@ -264,9 +263,7 @@ class AppTheme {
       scaffoldBackgroundColor: isDark ? Colors.black : const Color(0xfff2f3f5),
       segmentedButtonTheme: SegmentedButtonThemeData(
         style: SegmentedButton.styleFrom(
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(8.0)),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
       ),
       textTheme: textTheme,

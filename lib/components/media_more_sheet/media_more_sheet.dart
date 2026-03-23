@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:IceyPlayer/theme/theme.dart';
 import 'package:common_utils/common_utils.dart';
 import 'package:filesize/filesize.dart';
 import 'package:IceyPlayer/components/bottom_sheet/bottom_sheet.dart';
@@ -113,7 +114,7 @@ class MediaMoreSheet {
                     height: 50,
                     clipBehavior: Clip.antiAlias,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      borderRadius: BorderRadius.circular(AppTheme.borderRadiusXxs),
                     ),
                     child: e.cover != null
                         ? ExtendedImage.memory(
@@ -125,7 +126,7 @@ class MediaMoreSheet {
                         ? MediaCover(
                             id: e.mediaIDs.last,
                             size: 50,
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            borderRadius: BorderRadius.circular(AppTheme.borderRadiusXxs),
                           )
                         : ExtendedImage.asset(
                             'assets/images/no_cover.png',

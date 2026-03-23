@@ -15,7 +15,7 @@ scrollableBottomSheet({
       builder: (context) {
         return Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(AppTheme.borderRadiusLg),
+            borderRadius: BorderRadius.circular(AppTheme.borderRadiusLg),
             color: Theme.of(context).scaffoldBackgroundColor,
           ),
           constraints: BoxConstraints(
@@ -50,7 +50,9 @@ scrollableBottomSheet({
     context: context,
     isScrollControlled: true,
     shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: AppTheme.borderRadiusLg),
+      borderRadius: BorderRadius.vertical(
+        top: Radius.circular(AppTheme.borderRadiusLg),
+      ),
     ),
     builder: (context) {
       return ConstrainedBox(
@@ -92,7 +94,7 @@ bottomSheet({
       builder: (context) {
         return Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(AppTheme.borderRadiusLg),
+            borderRadius: BorderRadius.circular(AppTheme.borderRadiusLg),
             color: Theme.of(context).scaffoldBackgroundColor,
           ),
           constraints: BoxConstraints(
@@ -125,7 +127,7 @@ bottomSheet({
     isCollapsible: false,
     isModal: true,
     isSafeArea: true,
-    bottomSheetBorderRadius: BorderRadius.all(AppTheme.borderRadiusLg),
+    bottomSheetBorderRadius: BorderRadius.circular(AppTheme.borderRadiusLg),
     context: context,
     builder: (context, controller, _) => Padding(
       padding: EdgeInsets.fromLTRB(

@@ -95,14 +95,14 @@ class _PlayListState extends State<PlayList> {
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               decoration: BoxDecoration(
                 color: theme.cardTheme.color,
-                borderRadius: BorderRadius.all(AppTheme.borderRadiusSm),
+                borderRadius: BorderRadius.circular(AppTheme.borderRadiusSm),
               ),
               child: Row(
                 children: [
                   PlayCover(
                     width: 55,
                     height: 55,
-                    borderRadius: BorderRadius.all(AppTheme.borderRadiusSm),
+                    borderRadius: BorderRadius.circular(AppTheme.borderRadiusSm),
                   ),
                   const SizedBox(width: 8),
                   Flexible(

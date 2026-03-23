@@ -24,7 +24,7 @@ class AzListCursor extends StatelessWidget {
       );
 
       resultWidget = ClipRRect(
-        borderRadius: const BorderRadius.all(Radius.circular(100)),
+        borderRadius: BorderRadius.circular(100),
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
           child: Container(

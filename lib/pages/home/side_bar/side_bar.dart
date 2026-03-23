@@ -77,7 +77,7 @@ class SideBar extends StatelessWidget {
 
             return Material(
               clipBehavior: Clip.antiAlias,
-              borderRadius: BorderRadius.all(AppTheme.borderRadiusXxs),
+              borderRadius: BorderRadius.circular(AppTheme.borderRadiusXxs),
               color: selected ? theme.colorScheme.primary : null,
               child: Ink(
                 child: InkWell(

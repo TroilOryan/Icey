@@ -146,7 +146,7 @@ class MediaOrderDetailController {
                   child: Material(
                     clipBehavior: Clip.antiAlias,
                     color: theme.scaffoldBackgroundColor,
-                    borderRadius: BorderRadius.all(AppTheme.borderRadiusSm),
+                    borderRadius: BorderRadius.circular(AppTheme.borderRadiusSm),
                     child: Ink(
                       child: InkWell(
                         onLongPress: () => customizeCoverData.value = null,

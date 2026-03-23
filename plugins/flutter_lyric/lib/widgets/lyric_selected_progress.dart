@@ -41,7 +41,7 @@ class LyricSelectionProgress extends StatelessWidget {
                   Positioned(
                     right: 20,
                     child: ClipRRect(
-                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      borderRadius: BorderRadius.circular(10),
                       child: BackdropFilter(
                         filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
                         child: Container(

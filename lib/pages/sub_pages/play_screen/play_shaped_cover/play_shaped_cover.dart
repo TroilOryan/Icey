@@ -124,7 +124,7 @@ class PlayShapedCover extends StatelessWidget {
                       blurRadius: 33,
                     ),
                   ],
-                  borderRadius: BorderRadius.all(AppTheme.borderRadiusLg),
+                  borderRadius: BorderRadius.circular(AppTheme.borderRadiusLg),
                 ),
                 child: PlayCover(
                   duration: AppTheme.defaultDurationLong,

@@ -87,7 +87,7 @@ class _AlbumListPageState extends State<AlbumListPage>
                                   height: 156,
                                   clipBehavior: Clip.antiAlias,
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(
+                                    borderRadius: BorderRadius.circular(
                                       AppTheme.borderRadiusSm,
                                     ),
                                   ),
@@ -104,7 +104,7 @@ class _AlbumListPageState extends State<AlbumListPage>
                                   type: PlatformHelper.isDesktop
                                       ? ArtworkType.AUDIO
                                       : ArtworkType.ALBUM,
-                                  borderRadius: BorderRadius.all(
+                                  borderRadius: BorderRadius.circular(
                                     AppTheme.borderRadiusSm,
                                   ),
                                   onQueried: (v) => albumListController

@@ -101,7 +101,7 @@ class ListItem extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       clipBehavior: Clip.antiAlias,
-      borderRadius: BorderRadius.all(AppTheme.borderRadiusMd),
+      borderRadius: BorderRadius.circular(AppTheme.borderRadiusMd),
       child: InkWell(
         onTap: () => handleTap(_disabled),
         child: Container(

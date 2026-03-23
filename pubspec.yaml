@@ -32,11 +32,10 @@ dependencies:
   flutter_sficon: ^1.2.1
   fluentui_system_icons: ^1.1.273
   keframe: ^3.0.0
-  liquid_glass_widgets: ^0.4.0-dev.4
+  liquid_glass_widgets: ^0.4.0-dev.7
   material_symbols_icons: ^4.2892.0
   scrollview_observer: ^1.26.2
   sliver_tools: ^0.2.12
-  smooth_corner: ^1.1.1
   soft_edge_blur: ^0.1.3
   super_sliver_list:
     path: plugins/super_sliver_list

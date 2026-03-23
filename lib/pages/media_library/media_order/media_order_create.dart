@@ -90,7 +90,7 @@ class _MediaOrderCreateState extends State<MediaOrderCreate> {
                   child: Material(
                     clipBehavior: Clip.antiAlias,
                     color: theme.scaffoldBackgroundColor,
-                    borderRadius: BorderRadius.all(AppTheme.borderRadiusSm),
+                    borderRadius: BorderRadius.circular(AppTheme.borderRadiusSm),
                     child: Ink(
                       child: InkWell(
                         onTap: () async {
@@ -169,7 +169,7 @@ class _MediaOrderCreateState extends State<MediaOrderCreate> {
     final theme = Theme.of(context);
 
     return HighMaterialWrapper(
-      borderRadius: BorderRadius.all(AppTheme.borderRadiusSm),
+      borderRadius: BorderRadius.circular(AppTheme.borderRadiusSm),
       builder: (highMaterial) => Material(
         color: highMaterial
             ? theme.cardTheme.color!.withAlpha(AppTheme.defaultAlphaLight)

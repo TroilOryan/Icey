@@ -74,7 +74,7 @@ class AlbumListDetailPage extends StatelessWidget {
                         height: 156,
                         clipBehavior: Clip.antiAlias,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(
+                          borderRadius: BorderRadius.circular(
                             AppTheme.borderRadiusSm,
                           ),
                         ),
@@ -84,7 +84,7 @@ class AlbumListDetailPage extends StatelessWidget {
                                 id: id,
                                 type: ArtworkType.ALBUM,
                                 size: 156,
-                                borderRadius: BorderRadius.all(
+                                borderRadius: BorderRadius.circular(
                                   AppTheme.borderRadiusSm,
                                 ),
                               ),
@@ -136,7 +136,7 @@ class AlbumListDetailPage extends StatelessWidget {
                     child: Row(
                       children: [
                         Material(
-                          borderRadius: BorderRadius.all(Radius.circular(6)),
+                          borderRadius: BorderRadius.circular(6),
                           clipBehavior: Clip.antiAlias,
                           type: MaterialType.transparency,
                           child: Ink(

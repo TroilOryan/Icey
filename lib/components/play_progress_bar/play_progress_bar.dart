@@ -210,7 +210,9 @@ class _PlayProgressBarState extends State<PlayProgressBar> {
                   padding: EdgeInsets.fromLTRB(8, 2, 8, 2),
                   decoration: BoxDecoration(
                     color: progressBarBgColor,
-                    borderRadius: const BorderRadius.all(Radius.circular(16)),
+                    borderRadius: BorderRadius.circular(
+                      AppTheme.borderRadiusXs,
+                    ),
                   ),
                   child: CommonHelper.buildDuration(
                     dragDuration,

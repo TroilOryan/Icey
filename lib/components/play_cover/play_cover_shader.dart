@@ -44,7 +44,7 @@ class PlayCoverShader extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         borderRadius: scale < 1
-            ? BorderRadius.all(AppTheme.borderRadiusLg)
+            ? BorderRadius.circular(AppTheme.borderRadiusLg)
             : null,
       ),
       child: child,
@@ -88,7 +88,7 @@ class PlayCoverShader extends StatelessWidget {
                 duration: AppTheme.defaultDurationMid,
                 clipBehavior: Clip.antiAlias,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(AppTheme.borderRadiusLg),
+                  borderRadius: BorderRadius.circular(AppTheme.borderRadiusLg),
                 ),
                 child: child,
               ),

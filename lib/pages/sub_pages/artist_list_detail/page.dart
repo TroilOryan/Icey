@@ -73,7 +73,7 @@ class ArtistListDetailPage extends StatelessWidget {
                         height: 156,
                         clipBehavior: Clip.antiAlias,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(
+                          borderRadius: BorderRadius.circular(
                             AppTheme.borderRadiusSm,
                           ),
                         ),
@@ -83,7 +83,7 @@ class ArtistListDetailPage extends StatelessWidget {
                                 id: id,
                                 type: ArtworkType.ARTIST,
                                 size: 156,
-                                borderRadius: BorderRadius.all(
+                                borderRadius: BorderRadius.circular(
                                   AppTheme.borderRadiusSm,
                                 ),
                               ),
@@ -135,7 +135,7 @@ class ArtistListDetailPage extends StatelessWidget {
                     child: Row(
                       children: [
                         Material(
-                          borderRadius: BorderRadius.all(Radius.circular(6)),
+                          borderRadius: BorderRadius.circular(6),
                           clipBehavior: Clip.antiAlias,
                           type: MaterialType.transparency,
                           child: Ink(

@@ -46,7 +46,7 @@ class PlayImmersiveCover extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         borderRadius: scale < 1
-            ? BorderRadius.all(AppTheme.borderRadiusLg)
+            ? BorderRadius.circular(AppTheme.borderRadiusLg)
             : null,
       ),
       child: PlayCover(
@@ -100,7 +100,7 @@ class PlayImmersiveCover extends StatelessWidget {
                 duration: AppTheme.defaultDurationMid,
                 clipBehavior: Clip.antiAlias,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(AppTheme.borderRadiusLg),
+                  borderRadius: BorderRadius.circular(AppTheme.borderRadiusLg),
                 ),
                 child: PlayCover(
                   duration: AppTheme.defaultDurationLong,

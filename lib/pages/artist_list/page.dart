@@ -87,7 +87,7 @@ class _ArtistListPageState extends State<ArtistListPage>
                                   height: 156,
                                   clipBehavior: Clip.antiAlias,
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(
+                                    borderRadius: BorderRadius.circular(
                                       AppTheme.borderRadiusSm,
                                     ),
                                   ),
@@ -104,7 +104,7 @@ class _ArtistListPageState extends State<ArtistListPage>
                                   type: PlatformHelper.isDesktop
                                       ? ArtworkType.AUDIO
                                       : ArtworkType.ARTIST,
-                                  borderRadius: BorderRadius.all(
+                                  borderRadius: BorderRadius.circular(
                                     AppTheme.borderRadiusSm,
                                   ),
                                   onQueried: (v) => artistListController

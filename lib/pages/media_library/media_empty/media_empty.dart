@@ -17,7 +17,7 @@ class MediaEmpty extends StatelessWidget {
         child: MediaDefaultCover(
           size: Size(size, size),
           isDarkMode: true,
-          borderRadius: BorderRadius.all(Radius.circular(300)),
+          borderRadius: BorderRadius.circular(300),
         ),
       );
 

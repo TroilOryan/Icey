@@ -36,7 +36,7 @@ class SheetItem extends StatelessWidget {
       color: active
           ? theme.colorScheme.primaryContainer
           : theme.cardTheme.color,
-      borderRadius: BorderRadius.all(AppTheme.borderRadiusSm),
+      borderRadius: BorderRadius.circular(AppTheme.borderRadiusSm),
       child: Ink(
         child: InkWell(
           onTap: () => handleTap(context),
