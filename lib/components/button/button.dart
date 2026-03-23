@@ -19,7 +19,8 @@ class Button extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+
+    final colorScheme = theme.colorScheme;
 
     final button = FilledButton(
       style: FilledButton.styleFrom(

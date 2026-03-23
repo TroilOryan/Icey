@@ -14,4 +14,12 @@ class PlayLyricOverlayState {
   final playing = signal(false);
 
   final visible = signal(true);
+
+  late final textStyle = computed(
+    () => TextStyle(
+      color: color.value,
+      fontSize: fontSize.value,
+      fontWeight: FontWeight.bold,
+    ),
+  );
 }

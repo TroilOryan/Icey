@@ -30,19 +30,9 @@ class _PlayLyricOverlayState extends State<PlayLyricOverlay> {
   Widget build(BuildContext context) {
     final lyric = controller.state.lyric.watch(context),
         duration = controller.state.duration.watch(context),
-        color = controller.state.color.watch(context),
-        fontSize = controller.state.fontSize.watch(context),
         width = controller.state.width.watch(context),
         playing = controller.state.playing.watch(context),
         visible = controller.state.visible.watch(context);
-
-    final textStyle = computed(
-      () => TextStyle(
-        color: color,
-        fontSize: fontSize,
-        fontWeight: FontWeight.bold,
-      ),
-    );
 
     return AnimatedOpacity(
       opacity: visible ? 1 : 0,
@@ -63,7 +53,7 @@ class _PlayLyricOverlayState extends State<PlayLyricOverlay> {
                   disableAnimation: !playing,
                   child: Text(
                     lyric.isEmpty ? "暂无歌词" : lyric,
-                    style: textStyle(),
+                    style: controller.state.textStyle(),
                     maxLines: 1,
                   ),
                 ),

@@ -4,7 +4,7 @@ import 'package:IceyPlayer/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
-scrollableBottomSheet({
+Future<dynamic> scrollableBottomSheet({
   required BuildContext context,
   required List<Widget> Function(BuildContext) builder,
   isDismissible = true,
@@ -80,7 +80,7 @@ scrollableBottomSheet({
   );
 }
 
-bottomSheet({
+Future<dynamic> bottomSheet({
   required BuildContext context,
   required Widget Function(BuildContext, ScrollController?) builder,
   isDismissible = true,
