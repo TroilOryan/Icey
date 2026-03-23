@@ -31,7 +31,7 @@ class PlayLyricMiniController {
     final isPlaying = currentIndex == index;
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 2),
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 2),
       child: Text(
         index < 0 ? "" : lyricList[index].text,
         style: isPlaying

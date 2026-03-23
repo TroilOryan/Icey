@@ -95,9 +95,11 @@ class _ListCardState extends State<ListCard> {
               ? HighMaterialWrapper(
                   padding:
                       widget.padding ??
-                      EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   decoration: (highMaterial) => BoxDecoration(
-                    borderRadius: BorderRadius.circular(AppTheme.borderRadiusMd),
+                    borderRadius: BorderRadius.circular(
+                      AppTheme.borderRadiusMd,
+                    ),
                     color: theme.cardTheme.color!.withAlpha(
                       highMaterial
                           ? AppTheme.defaultAlphaLight
@@ -119,7 +121,9 @@ class _ListCardState extends State<ListCard> {
                   clipBehavior: Clip.antiAlias,
                   decoration: BoxDecoration(
                     color: Theme.of(context).cardTheme.color,
-                    borderRadius: BorderRadius.circular(AppTheme.borderRadiusMd),
+                    borderRadius: BorderRadius.circular(
+                      AppTheme.borderRadiusMd,
+                    ),
                   ),
                   child: Column(
                     spacing: widget.spacing ?? 12,

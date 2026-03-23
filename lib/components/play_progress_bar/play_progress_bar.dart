@@ -244,7 +244,7 @@ class _PlayProgressBarState extends State<PlayProgressBar> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.all(Radius.circular(4)),
                           child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 6),
+                            padding: const EdgeInsets.symmetric(horizontal: 6),
                             decoration: BoxDecoration(
                               color: progressBarBgColor,
                             ),

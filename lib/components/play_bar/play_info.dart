@@ -47,16 +47,13 @@ class PlayInfo extends StatelessWidget {
         children: [
           Flexible(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 56),
+              padding: const EdgeInsets.symmetric(horizontal: 56),
               child: info,
             ),
           ),
         ],
       ),
-      tablet: (context) => Container(
-        width: deviceWidth * 0.2,
-        child: info,
-      ),
+      tablet: (context) => Container(width: deviceWidth * 0.2, child: info),
     );
   }
 }

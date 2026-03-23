@@ -69,8 +69,6 @@ class _PlayScreenBackgroundState extends State<PlayScreenBackground>
             dynamicLight = settingsManager.dynamicLight.watch(context),
             artCover = settingsManager.artCover.watch(context);
 
-        final primary = mediaManager.coverColor.value.primary;
-
         final blurValue = computed(() => highMaterial ? 48.0 : 24.0);
 
         final colorOpacity = computed(() => artCover ? 0.01 : 0.5);
@@ -119,7 +117,6 @@ class _PlayScreenBackgroundState extends State<PlayScreenBackground>
                 ],
               ],
             ),
-            // child: Transform.flip(flipY: true, child: cover),
           ),
         );
       },

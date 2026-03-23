@@ -143,7 +143,9 @@ class _MediaOrderTileState extends State<MediaOrderTile> {
                       fit: BoxFit.cover,
                       clipBehavior: Clip.antiAlias,
                       shape: BoxShape.rectangle,
-                      borderRadius:  BorderRadius.circular(AppTheme.borderRadiusSm),
+                      borderRadius: BorderRadius.circular(
+                        AppTheme.borderRadiusSm,
+                      ),
                     )
                   : ExtendedImage.asset(
                       'assets/images/no_cover.png',
@@ -152,7 +154,9 @@ class _MediaOrderTileState extends State<MediaOrderTile> {
                       gaplessPlayback: true,
                       clipBehavior: Clip.antiAlias,
                       shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.circular(AppTheme.borderRadiusSm),
+                      borderRadius: BorderRadius.circular(
+                        AppTheme.borderRadiusSm,
+                      ),
                     ),
             ),
             Positioned(
@@ -167,7 +171,7 @@ class _MediaOrderTileState extends State<MediaOrderTile> {
                         : AppTheme.defaultAlpha,
                   ),
                 ),
-                padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                 borderRadius: BorderRadius.circular(8),
                 builder: (_) => Text(
                   widget.mediaOrder.name,

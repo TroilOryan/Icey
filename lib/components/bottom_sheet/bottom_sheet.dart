@@ -29,7 +29,7 @@ scrollableBottomSheet({
                   MediaQuery.of(context).padding.bottom,
             ),
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               child: Column(
                 spacing: 16,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,7 +66,7 @@ scrollableBottomSheet({
                 MediaQuery.of(context).padding.bottom,
           ),
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
             child: Column(
               spacing: 16,
               crossAxisAlignment: CrossAxisAlignment.start,

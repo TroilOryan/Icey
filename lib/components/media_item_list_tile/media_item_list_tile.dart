@@ -31,7 +31,7 @@ class MediaItemListTile extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(color: theme.cardTheme.color),
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
             child: Row(
               children: [
                 Flexible(
