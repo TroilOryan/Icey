@@ -32,12 +32,6 @@ class _ListCardState extends State<ListCard> {
   final collapsed = signal(true);
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     List<Widget> leading = [];
 
@@ -48,7 +42,7 @@ class _ListCardState extends State<ListCard> {
     if (widget.title != null) {
       leading.add(
         Container(
-          margin: EdgeInsets.only(left: 8),
+          margin: .only(left: 8),
           child: Text(widget.title!, style: theme.textTheme.bodyMedium),
         ),
       );
@@ -86,53 +80,55 @@ class _ListCardState extends State<ListCard> {
 
     return Column(
       spacing: 8,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: .start,
       children: [
         Row(children: leading),
 
         if (!_collapsed || !widget.collapsible)
           widget.highMaterial
-              ? HighMaterialWrapper(
-                  padding:
-                      widget.padding ??
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  decoration: (highMaterial) => BoxDecoration(
-                    borderRadius: BorderRadius.circular(
-                      AppTheme.borderRadiusMd,
-                    ),
-                    color: theme.cardTheme.color!.withAlpha(
-                      highMaterial
-                          ? AppTheme.defaultAlphaLight
-                          : AppTheme.defaultAlpha,
-                    ),
-                  ),
-                  builder: (_) => Column(
-                    spacing: widget.spacing ?? 12,
-                    children: widget.children.isNotEmpty
-                        ? widget.children
-                        : [Text("暂无内容", style: theme.textTheme.bodyMedium)],
-                  ),
-                )
-              : Container(
-                  width: double.infinity,
-                  padding:
-                      widget.padding ??
-                      EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  clipBehavior: Clip.antiAlias,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).cardTheme.color,
-                    borderRadius: BorderRadius.circular(
-                      AppTheme.borderRadiusMd,
-                    ),
-                  ),
-                  child: Column(
-                    spacing: widget.spacing ?? 12,
-                    children: widget.children.isNotEmpty
-                        ? widget.children
-                        : [Text("暂无内容", style: theme.textTheme.bodyMedium)],
-                  ),
-                ),
+              ? _buildHighMaterial(context)
+              : _buildNormal(context),
       ],
+    );
+  }
+
+  Widget _buildHighMaterial(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return HighMaterialWrapper(
+      padding: widget.padding ?? const .symmetric(horizontal: 16, vertical: 12),
+      decoration: (highMaterial) => BoxDecoration(
+        borderRadius: .circular(AppTheme.borderRadiusMd),
+        color: theme.cardTheme.color!.withAlpha(
+          highMaterial ? AppTheme.defaultAlphaLight : AppTheme.defaultAlpha,
+        ),
+      ),
+      builder: (_) => Column(
+        spacing: widget.spacing ?? 12,
+        children: widget.children.isNotEmpty
+            ? widget.children
+            : [Text("暂无内容", style: theme.textTheme.bodyMedium)],
+      ),
+    );
+  }
+
+  Widget _buildNormal(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Container(
+      width: double.infinity,
+      padding: widget.padding ?? .symmetric(horizontal: 16, vertical: 12),
+      clipBehavior: .antiAlias,
+      decoration: BoxDecoration(
+        color: theme.cardTheme.color,
+        borderRadius: .circular(AppTheme.borderRadiusMd),
+      ),
+      child: Column(
+        spacing: widget.spacing ?? 12,
+        children: widget.children.isNotEmpty
+            ? widget.children
+            : [Text("暂无内容", style: theme.textTheme.bodyMedium)],
+      ),
     );
   }
 }

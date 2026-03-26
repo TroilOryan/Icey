@@ -38,41 +38,32 @@ class HighMaterialWrapper extends StatelessWidget {
     return Builder(
       builder: (context) {
         if (obscure) {
-          return GlassPanel(
-            settings: RecommendedGlassSettings.bottomBar,
-            padding: padding ?? EdgeInsets.zero,
-            margin: margin,
-            child: builder(true),
-          );
-
-          return Container(
-            padding: padding,
-            margin: margin,
-            clipBehavior: clipBehavior != null
-                ? clipBehavior!(true)
-                : Clip.antiAlias,
-            decoration: decoration != null
-                ? decoration!(true)
-                : BoxDecoration(borderRadius: borderRadius),
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
-              child: builder(true),
-            ),
-          );
+          return _buildHighMaterial();
         }
 
-        return Container(
-          margin: margin,
-          padding: padding,
-          clipBehavior: clipBehavior != null
-              ? clipBehavior!(false)
-              : Clip.antiAlias,
-          decoration: decoration != null
-              ? decoration!(false)
-              : BoxDecoration(borderRadius: borderRadius),
-          child: builder(false),
-        );
+        return _buildNormalMaterial();
       },
+    );
+  }
+
+  Widget _buildHighMaterial() {
+    return GlassPanel(
+      settings: RecommendedGlassSettings.bottomBar,
+      padding: padding ?? .zero,
+      margin: margin,
+      child: builder(true),
+    );
+  }
+
+  Widget _buildNormalMaterial() {
+    return Container(
+      padding: padding,
+      margin: margin,
+      clipBehavior: clipBehavior != null ? clipBehavior!(false) : .antiAlias,
+      decoration: decoration != null
+          ? decoration!(false)
+          : BoxDecoration(borderRadius: borderRadius),
+      child: builder(false),
     );
   }
 }

@@ -75,7 +75,7 @@ class ListItem extends StatelessWidget {
       // children.add(MultiSwitch());
       children.add(
         PopupMenuButton<String>(
-          clipBehavior: Clip.antiAlias,
+          clipBehavior: .antiAlias,
           splashRadius: 0,
           child: Text(value, style: theme.textTheme.bodyLarge),
           itemBuilder: (context) => values!
@@ -100,15 +100,15 @@ class ListItem extends StatelessWidget {
 
     return Material(
       color: Colors.transparent,
-      clipBehavior: Clip.antiAlias,
-      borderRadius: BorderRadius.circular(AppTheme.borderRadiusMd),
+      clipBehavior: .antiAlias,
+      borderRadius: .circular(AppTheme.borderRadiusMd),
       child: InkWell(
         onTap: () => handleTap(_disabled),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          padding: const .symmetric(horizontal: 16, vertical: 12),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: .spaceBetween,
+            crossAxisAlignment: .center,
             children: [
               Flexible(
                 child: Row(
@@ -117,7 +117,7 @@ class ListItem extends StatelessWidget {
                     ...titleChildren,
                     Flexible(
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: .start,
                         children: [
                           Row(
                             spacing: isPro == true ? 16 : 0,

@@ -41,7 +41,7 @@ class MediaCover extends StatelessWidget {
     return Container(
       width: width ?? size,
       height: height ?? size,
-      clipBehavior: Clip.antiAlias,
+      clipBehavior: .antiAlias,
       decoration: BoxDecoration(borderRadius: borderRadius),
       child: MediaDefaultCover(
         size: Size(width ?? size, height ?? size),
@@ -70,7 +70,7 @@ class MediaCover extends StatelessWidget {
             }
 
             return Container(
-              clipBehavior: Clip.antiAlias,
+              clipBehavior: .antiAlias,
               width: width ?? size,
               height: height ?? size,
               decoration: BoxDecoration(borderRadius: borderRadius),

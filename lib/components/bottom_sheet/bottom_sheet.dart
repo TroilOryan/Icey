@@ -11,11 +11,11 @@ Future<dynamic> scrollableBottomSheet({
 }) {
   if (PlatformHelper.isDesktop) {
     return SmartDialog.show(
-      animationType: SmartAnimationType.fade,
+      animationType: .fade,
       builder: (context) {
         return Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(AppTheme.borderRadiusLg),
+            borderRadius: .circular(AppTheme.borderRadiusLg),
             color: Theme.of(context).scaffoldBackgroundColor,
           ),
           constraints: BoxConstraints(
@@ -23,17 +23,17 @@ Future<dynamic> scrollableBottomSheet({
             maxHeight: MediaQuery.of(context).size.height * 0.8,
           ),
           child: SingleChildScrollView(
-            padding: EdgeInsets.only(
+            padding: .only(
               bottom:
                   MediaQuery.of(context).viewInsets.bottom +
                   MediaQuery.of(context).padding.bottom,
             ),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              padding: const .symmetric(horizontal: 24, vertical: 16),
               child: Column(
                 spacing: 16,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: .start,
+                mainAxisSize: .min,
                 children: builder(context),
               ),
             ),
@@ -50,9 +50,7 @@ Future<dynamic> scrollableBottomSheet({
     context: context,
     isScrollControlled: true,
     shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(
-        top: Radius.circular(AppTheme.borderRadiusLg),
-      ),
+      borderRadius: .vertical(top: .circular(AppTheme.borderRadiusLg)),
     ),
     builder: (context) {
       return ConstrainedBox(
@@ -60,17 +58,17 @@ Future<dynamic> scrollableBottomSheet({
           maxHeight: MediaQuery.of(context).size.height * 0.8,
         ),
         child: SingleChildScrollView(
-          padding: EdgeInsets.only(
+          padding: .only(
             bottom:
                 MediaQuery.of(context).viewInsets.bottom +
                 MediaQuery.of(context).padding.bottom,
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            padding: const .symmetric(horizontal: 24, vertical: 16),
             child: Column(
               spacing: 16,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: .start,
+              mainAxisSize: .min,
               children: builder(context),
             ),
           ),
@@ -90,11 +88,11 @@ Future<dynamic> bottomSheet({
 }) {
   if (PlatformHelper.isDesktop) {
     return SmartDialog.show(
-      animationType: SmartAnimationType.fade,
+      animationType: .fade,
       builder: (context) {
         return Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(AppTheme.borderRadiusLg),
+            borderRadius: .circular(AppTheme.borderRadiusLg),
             color: Theme.of(context).scaffoldBackgroundColor,
           ),
           constraints: BoxConstraints(
@@ -102,7 +100,7 @@ Future<dynamic> bottomSheet({
             maxHeight: MediaQuery.of(context).size.height * 0.8,
           ),
           child: Padding(
-            padding: EdgeInsets.fromLTRB(
+            padding: .fromLTRB(
               24,
               16,
               24,

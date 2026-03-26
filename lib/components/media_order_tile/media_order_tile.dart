@@ -152,11 +152,9 @@ class _MediaOrderTileState extends State<MediaOrderTile> {
                       fit: BoxFit.cover,
                       width: 88,
                       gaplessPlayback: true,
-                      clipBehavior: Clip.antiAlias,
-                      shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.circular(
-                        AppTheme.borderRadiusSm,
-                      ),
+                      clipBehavior: .antiAlias,
+                      shape: .rectangle,
+                      borderRadius: .circular(AppTheme.borderRadiusSm),
                     ),
             ),
             Positioned(
@@ -164,15 +162,15 @@ class _MediaOrderTileState extends State<MediaOrderTile> {
               bottom: 8,
               child: HighMaterialWrapper(
                 decoration: (highMaterial) => BoxDecoration(
-                  borderRadius: BorderRadius.circular(6),
+                  borderRadius: .circular(6),
                   color: theme.cardTheme.color!.withAlpha(
                     highMaterial
                         ? AppTheme.defaultAlphaLight
                         : AppTheme.defaultAlpha,
                   ),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                borderRadius: BorderRadius.circular(8),
+                padding: const .symmetric(horizontal: 6, vertical: 2),
+                borderRadius: .circular(8),
                 builder: (_) => Text(
                   widget.mediaOrder.name,
                   style: theme.textTheme.bodyLarge!.copyWith(),

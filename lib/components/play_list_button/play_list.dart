@@ -92,7 +92,7 @@ class _PlayListState extends State<PlayList> {
           spacing: 16,
           children: [
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              padding: const .symmetric(horizontal: 12, vertical: 8),
               decoration: BoxDecoration(
                 color: theme.cardTheme.color,
                 borderRadius: BorderRadius.circular(AppTheme.borderRadiusSm),
@@ -102,13 +102,13 @@ class _PlayListState extends State<PlayList> {
                   PlayCover(
                     width: 55,
                     height: 55,
-                    borderRadius: BorderRadius.circular(AppTheme.borderRadiusSm),
+                    borderRadius: .circular(AppTheme.borderRadiusSm),
                   ),
                   const SizedBox(width: 8),
                   Flexible(
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: .start,
+                      mainAxisAlignment: .center,
                       children: [
                         StreamBuilder(
                           stream: mediaManager.mediaItem,
@@ -116,7 +116,7 @@ class _PlayListState extends State<PlayList> {
                             final mediaItem = snapshot.data;
 
                             return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: .start,
                               children: [
                                 Text(
                                   mediaItem?.title ?? "暂无歌曲",
@@ -148,7 +148,7 @@ class _PlayListState extends State<PlayList> {
                   controller: scrollController,
                   itemCount: queue?.length ?? 0,
                   itemBuilder: (context, index) => Container(
-                    margin: EdgeInsets.only(
+                    margin: .only(
                       bottom: queue != null
                           ? index == queue.length - 1
                                 ? 16

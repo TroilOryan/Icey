@@ -23,20 +23,20 @@ class PlayInfo extends StatelessWidget {
         final mediaItem = snapshot.data;
 
         return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: .start,
+          mainAxisAlignment: .center,
           children: [
             Marquee(
               child: Text(
                 mediaItem?.title ?? "暂无歌曲",
                 style: theme.textTheme.titleSmall,
-                overflow: TextOverflow.ellipsis,
+                overflow: .ellipsis,
                 maxLines: 1,
                 softWrap: true,
               ),
             ),
 
-            PlayBarLyric(),
+            const PlayBarLyric(),
           ],
         );
       },
@@ -47,13 +47,13 @@ class PlayInfo extends StatelessWidget {
         children: [
           Flexible(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 56),
+              padding: const .symmetric(horizontal: 56),
               child: info,
             ),
           ),
         ],
       ),
-      tablet: (context) => Container(width: deviceWidth * 0.2, child: info),
+      tablet: (context) => SizedBox(width: deviceWidth * 0.2, child: info),
     );
   }
 }

@@ -2,7 +2,7 @@ name: IceyPlayer
 description: "A new Flutter project."
 publish_to: 'none'
 
-version: 1.0.49+50
+version: 1.0.50+51
 
 environment:
   sdk: ">=3.10.0"

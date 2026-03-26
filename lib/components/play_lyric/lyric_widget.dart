@@ -50,7 +50,7 @@ class LyricWidget extends StatelessWidget {
           theme.colorScheme.primaryContainer,
         ],
       ),
-      selectLineResumeMode: SelectionAutoResumeMode.selecting,
+      selectLineResumeMode: .selecting,
       activeHighlightColor: isHighlight
           ? theme.colorScheme.inversePrimary
           : null,

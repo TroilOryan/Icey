@@ -27,16 +27,14 @@ class PageWrapper extends StatelessWidget {
     if (body is MultiSliver) {
       return SliverPadding(
         padding:
-            padding ??
-            EdgeInsets.fromLTRB(16, 12 + appbarHeight, 16, paddingBottom + 12),
+            padding ?? .fromLTRB(16, 12 + appbarHeight, 16, paddingBottom + 12),
         sliver: body,
       );
     }
 
     return SliverPadding(
       padding:
-          padding ??
-          EdgeInsets.fromLTRB(16, 12 + appbarHeight, 16, paddingBottom + 12),
+          padding ?? .fromLTRB(16, 12 + appbarHeight, 16, paddingBottom + 12),
       sliver: SliverToBoxAdapter(child: body),
     );
   }

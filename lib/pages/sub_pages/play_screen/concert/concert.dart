@@ -5,12 +5,14 @@ import 'package:IceyPlayer/components/next_button/next_button.dart';
 import 'package:IceyPlayer/components/play_button/play_button.dart';
 import 'package:IceyPlayer/components/play_progress_button/play_progress_button.dart';
 import 'package:IceyPlayer/components/prev_button/prev_button.dart';
+import 'package:IceyPlayer/helpers/overlay/overlay.dart';
 import 'package:IceyPlayer/models/lyric/lyric.dart';
 import 'package:IceyPlayer/models/media/media.dart';
 import 'package:IceyPlayer/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_lyric/flutter_lyric.dart';
+import 'package:go_router/go_router.dart';
 import 'package:signals_flutter/signals_flutter.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -62,6 +64,8 @@ class _ConcertState extends State<Concert> {
     // TODO: implement initState
     super.initState();
 
+    OverlayHelper.shareData({"visible": false});
+
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
 
     SystemChrome.setPreferredOrientations([
@@ -86,6 +90,8 @@ class _ConcertState extends State<Concert> {
 
   @override
   void dispose() {
+    OverlayHelper.shareData({"visible": true});
+
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
     SystemChrome.setPreferredOrientations([]);
@@ -155,6 +161,23 @@ class _ConcertState extends State<Concert> {
                   child: Center(child: Text('暂无歌词', style: extTextStyle)),
                 ),
               Positioned(
+                top: 6,
+                right: 6,
+                child: AnimatedSlide(
+                  offset: Offset(0, _hideController ? -0.5 : 0),
+                  duration: AppTheme.defaultDuration,
+                  child: Offstage(
+                    offstage: _hideController,
+                    child: IconButton(
+                      tooltip: "退出",
+                      color: Colors.red,
+                      onPressed: context.pop,
+                      icon: Icon(Icons.close, color: Colors.white),
+                    ),
+                  ),
+                ),
+              ),
+              Positioned(
                 right: 6,
                 bottom: 6,
                 child: VisibilityDetector(
@@ -166,19 +189,38 @@ class _ConcertState extends State<Concert> {
                     duration: AppTheme.defaultDuration,
                     child: Offstage(
                       offstage: _hideController,
-                      child: Row(
-                        mainAxisAlignment: .center,
+                      child: Column(
+                        crossAxisAlignment: .center,
                         children: [
-                          PrevButton(
-                            ghost: true,
-                            size: 20,
-                            color: Colors.white54,
+                          StreamBuilder(
+                            stream: mediaManager.mediaItem,
+                            builder: (context, snapshot) {
+                              final title = snapshot.data?.title ?? "暂无歌曲";
+                              final artist = snapshot.data?.artist ?? "暂无歌手";
+
+                              return Text(
+                                "$title-$artist",
+                                style: theme.textTheme.titleSmall!.copyWith(
+                                  color: Colors.white,
+                                ),
+                              );
+                            },
                           ),
-                          PlayProgressButton(size: 22, color: Colors.white),
-                          NextButton(
-                            ghost: true,
-                            size: 20,
-                            color: Colors.white54,
+                          Row(
+                            mainAxisAlignment: .center,
+                            children: [
+                              PrevButton(
+                                ghost: true,
+                                size: 20,
+                                color: Colors.white54,
+                              ),
+                              PlayProgressButton(size: 22, color: Colors.white),
+                              NextButton(
+                                ghost: true,
+                                size: 20,
+                                color: Colors.white54,
+                              ),
+                            ],
                           ),
                         ],
                       ),

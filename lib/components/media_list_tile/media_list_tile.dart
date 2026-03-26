@@ -63,7 +63,7 @@ class MediaListTile extends StatelessWidget {
     return HighMaterialWrapper(
       disabled: !obscure,
       margin: margin,
-      borderRadius: BorderRadius.circular(AppTheme.borderRadiusSm),
+      borderRadius: .circular(AppTheme.borderRadiusSm),
       decoration: (highMaterial) => BoxDecoration(
         color: ghost == true
             ? theme.colorScheme.secondaryContainer
@@ -72,35 +72,35 @@ class MediaListTile extends StatelessWidget {
                     ? AppTheme.defaultAlphaLight
                     : 255,
               ),
-        borderRadius: BorderRadius.circular(AppTheme.borderRadiusSm),
+        borderRadius: .circular(AppTheme.borderRadiusSm),
       ),
       builder: (highMaterial) => Material(
-        borderRadius: BorderRadius.circular(AppTheme.borderRadiusSm),
-        clipBehavior: Clip.antiAlias,
-        type: MaterialType.transparency,
+        borderRadius: .circular(AppTheme.borderRadiusSm),
+        clipBehavior: .antiAlias,
+        type: .transparency,
         child: InkWell(
           onTap: onTap,
           onLongPress: onLongPress,
           onSecondaryTap: onLongPress,
           child: Container(
-            padding: EdgeInsets.fromLTRB(12, 12, showLike ? 10 : 8, 12),
+            padding: .fromLTRB(12, 12, showLike ? 10 : 8, 12),
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: .center,
               children: [
                 Offstage(
                   offstage: !showCover,
                   child: MediaCover(
                     id: media.id,
                     size: 56,
-                    borderRadius: BorderRadius.circular(AppTheme.borderRadiusXs),
+                    borderRadius: .circular(AppTheme.borderRadiusXs),
                   ),
                 ),
                 const SizedBox(width: 12),
                 Flexible(
                   child: Column(
                     spacing: 3,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: .start,
+                    mainAxisAlignment: .center,
                     children: [
                       Row(
                         children: [
@@ -108,7 +108,7 @@ class MediaListTile extends StatelessWidget {
                             child: Text(
                               maxLines: 2,
                               softWrap: true,
-                              overflow: TextOverflow.ellipsis,
+                              overflow: .ellipsis,
                               media.title,
                               style: theme.listTileTheme.titleTextStyle
                                   ?.copyWith(
@@ -124,7 +124,7 @@ class MediaListTile extends StatelessWidget {
                       ),
 
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: .spaceBetween,
                         children: [
                           Flexible(
                             child: Row(
@@ -133,7 +133,7 @@ class MediaListTile extends StatelessWidget {
                                 Flexible(
                                   child: Text(
                                     "${media.artist ?? "未知歌手"}-${media.album ?? "未知专辑"}",
-                                    overflow: TextOverflow.ellipsis,
+                                    overflow: .ellipsis,
                                     maxLines: 1,
                                     style:
                                         theme.listTileTheme.subtitleTextStyle,
@@ -145,7 +145,7 @@ class MediaListTile extends StatelessWidget {
                           Offstage(
                             offstage: !showDuration,
                             child: Container(
-                              margin: EdgeInsets.only(left: 6),
+                              margin: .only(left: 6),
                               child: Row(
                                 children: [
                                   CommonHelper.buildDuration(
@@ -175,7 +175,7 @@ class MediaListTile extends StatelessWidget {
                               ),
                             )
                           : const SizedBox(),
-                      SizedBox(width: 6),
+                      const SizedBox(width: 6),
                       InkWell(
                         onTap: onLongPress,
                         child: Icon(

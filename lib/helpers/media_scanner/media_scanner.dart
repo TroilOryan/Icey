@@ -80,23 +80,13 @@ class MediaScanner {
 
         late List<MediaEntity> mediaList;
 
-        if (filterShort == true) {
-          mediaList = audios
-              .map((audio) => MediaEntity.fromMediaStore(audio, isSecond: true))
-              .where(
-                (audio) =>
-                    (audio.duration ?? 0) > 5 &&
-                    filterDir.every((dir) => !audio.data.contains(dir)),
-              )
-              .toList();
-        } else {
-          mediaList = audios
-              .map((audio) => MediaEntity.fromMediaStore(audio, isSecond: true))
-              .where(
-                (audio) => filterDir.every((dir) => !audio.data.contains(dir)),
-              )
-              .toList();
-        }
+        mediaList = _filterAudios(
+          audios,
+          filterShort,
+          filterDir,
+          5000, // 统一使用毫秒
+          isSecond: true,
+        );
 
         await _mediaBox.addAll(mediaList);
 
@@ -177,23 +167,12 @@ class MediaScanner {
 
         late List<MediaEntity> mediaList;
 
-        if (filterShort == true) {
-          mediaList = audios
-              .map((MediaEntity.fromMediaStore))
-              .where(
-                (audio) =>
-                    (audio.duration ?? 0) > 5000 &&
-                    filterDir.every((dir) => !audio.data.contains(dir)),
-              )
-              .toList();
-        } else {
-          mediaList = audios
-              .map((MediaEntity.fromMediaStore))
-              .where(
-                (audio) => filterDir.every((dir) => !audio.data.contains(dir)),
-              )
-              .toList();
-        }
+        mediaList = _filterAudios(
+          audios,
+          filterShort,
+          filterDir,
+          5000, // 统一使用毫秒
+        );
 
         await _mediaBox.addAll(mediaList);
 
@@ -204,6 +183,33 @@ class MediaScanner {
         _settingsBox.put(CacheKey.Settings.scanDir, scanDir);
       },
     );
+  }
+
+  /// 过滤音频列表
+  static List<MediaEntity> _filterAudios(
+    List<AudioEntity> audios,
+    bool filterShort,
+    List<String> filterDir,
+    int minDurationMs, {
+    bool isSecond = false,
+  }) {
+    if (filterShort == true) {
+      return audios
+          .map((audio) => MediaEntity.fromMediaStore(audio, isSecond: isSecond))
+          .where(
+            (audio) =>
+                (audio.duration ?? 0) > minDurationMs &&
+                filterDir.every((dir) => !audio.data.contains(dir)),
+          )
+          .toList();
+    } else {
+      return audios
+          .map((audio) => MediaEntity.fromMediaStore(audio, isSecond: isSecond))
+          .where(
+            (audio) => filterDir.every((dir) => !audio.data.contains(dir)),
+          )
+          .toList();
+    }
   }
 
   /// 扫描音频文件

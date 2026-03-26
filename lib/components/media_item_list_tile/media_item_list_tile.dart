@@ -23,21 +23,21 @@ class MediaItemListTile extends StatelessWidget {
     final themeExtension = AppThemeExtension.of(context);
 
     return Material(
-      type: MaterialType.transparency,
-      borderRadius: BorderRadius.circular(AppTheme.borderRadiusSm),
-      clipBehavior: Clip.antiAlias,
+      type: .transparency,
+      borderRadius: .circular(AppTheme.borderRadiusSm),
+      clipBehavior: .antiAlias,
       child: InkWell(
         onTap: onTap,
         child: Container(
           decoration: BoxDecoration(color: theme.cardTheme.color),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+            padding: const .symmetric(horizontal: 12, vertical: 12),
             child: Row(
               children: [
                 Flexible(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: .start,
+                    mainAxisAlignment: .center,
                     children: [
                       Row(
                         children: [
@@ -45,7 +45,7 @@ class MediaItemListTile extends StatelessWidget {
                             child: Text(
                               maxLines: 1,
                               softWrap: true,
-                              overflow: TextOverflow.ellipsis,
+                              overflow: .ellipsis,
                               media.title,
                               style: theme.listTileTheme.titleTextStyle
                                   ?.copyWith(
@@ -60,7 +60,7 @@ class MediaItemListTile extends StatelessWidget {
                       ),
                       Text(
                         "${media.artist ?? "未知歌手"}-${media.album ?? "未知专辑"}",
-                        overflow: TextOverflow.ellipsis,
+                        overflow: .ellipsis,
                         maxLines: 1,
                         softWrap: true,
                         style: theme.listTileTheme.subtitleTextStyle

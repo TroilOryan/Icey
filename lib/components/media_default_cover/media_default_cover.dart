@@ -16,7 +16,7 @@ class MediaDefaultCover extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      clipBehavior: Clip.antiAlias,
+      clipBehavior: .antiAlias,
       decoration: BoxDecoration(borderRadius: borderRadius),
       child: ExtendedImage.asset(
         isDarkMode == true
@@ -25,7 +25,7 @@ class MediaDefaultCover extends StatelessWidget {
         gaplessPlayback: true,
         width: size?.width,
         height: size?.height,
-        fit: BoxFit.cover,
+        fit: .cover,
       ),
     );
   }

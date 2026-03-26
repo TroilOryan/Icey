@@ -12,9 +12,17 @@ class LabelValue extends StatelessWidget {
 
     return Column(
       children: [
-        Text(value, style: theme.textTheme.titleSmall),
-        Text(label, style: theme.textTheme.bodyMedium),
+        _buildValue(theme.textTheme.titleSmall),
+        _buildLabel(theme.textTheme.bodyMedium),
       ],
     );
+  }
+
+  Widget _buildValue(TextStyle? style) {
+    return Text(value, style: style);
+  }
+
+  Widget _buildLabel(TextStyle? style) {
+    return Text(label, style: style);
   }
 }

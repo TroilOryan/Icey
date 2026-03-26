@@ -42,7 +42,7 @@ class PlayBarLyric extends StatelessWidget {
               leadingDistribution: TextLeadingDistribution.even,
               decoration: TextDecoration.none,
             ),
-            overflow: TextOverflow.ellipsis,
+            overflow: .ellipsis,
             maxLines: 1,
             softWrap: true,
           ),

@@ -78,7 +78,7 @@ class PlayCover extends StatelessWidget {
             width: width,
             height: height,
             key: ValueKey(currentMediaItem?.id),
-            clipBehavior: Clip.antiAlias,
+            clipBehavior: .antiAlias,
             decoration: BoxDecoration(borderRadius: borderRadius),
             child: currentCover.isNotEmpty
                 ? ExtendedImage.memory(

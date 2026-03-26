@@ -41,11 +41,9 @@ class PlayCoverShader extends StatelessWidget {
 
     Widget cover = AnimatedContainer(
       duration: AppTheme.defaultDuration,
-      clipBehavior: Clip.antiAlias,
+      clipBehavior: .antiAlias,
       decoration: BoxDecoration(
-        borderRadius: scale < 1
-            ? BorderRadius.circular(AppTheme.borderRadiusLg)
-            : null,
+        borderRadius: scale < 1 ? .circular(AppTheme.borderRadiusLg) : null,
       ),
       child: child,
     );
@@ -86,9 +84,9 @@ class PlayCoverShader extends StatelessWidget {
               duration: AppTheme.defaultDurationMid,
               child: AnimatedContainer(
                 duration: AppTheme.defaultDurationMid,
-                clipBehavior: Clip.antiAlias,
+                clipBehavior: .antiAlias,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(AppTheme.borderRadiusLg),
+                  borderRadius: .circular(AppTheme.borderRadiusLg),
                 ),
                 child: child,
               ),

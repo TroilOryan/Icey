@@ -20,24 +20,8 @@ class IceySwitch extends StatelessWidget {
     required this.onChanged,
   });
 
-  void handleChanged([bool? newValue]) {
-    if (newValue != null && onChanged != null) {
-      onChanged!(newValue);
-    } else if (newValue == null && onChanged != null && value != null) {
-      onChanged!(!value!);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    final closedColor = theme.scaffoldBackgroundColor;
-
-    final openedColor = theme.colorScheme.primary;
-
-    final innerIndicatorSize = height - 4 * borderWidth;
-
     return CustomAnimatedToggleSwitch(
       active: !disabled,
       current: value,
@@ -52,38 +36,64 @@ class IceySwitch extends StatelessWidget {
       height: height,
       padding: EdgeInsets.all(borderWidth),
       indicatorSize: Size.square(height - 2 * borderWidth),
-      foregroundIndicatorBuilder: (context, global) {
-        final color = Color.lerp(closedColor, openedColor, global.position)!;
+      foregroundIndicatorBuilder: (context, global) =>
+          _foregroundIndicatorBuilder(context, global),
+      wrapperBuilder: (context, global, child) =>
+          _wrapperBuilder(context, global, child),
+    );
+  }
 
-        return Container(
-          alignment: Alignment.center,
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            shape: BoxShape.circle,
-          ),
-          child: Container(
-            width:
-                innerIndicatorSize * 0.4 +
-                global.position * innerIndicatorSize * 0.6,
-            height: innerIndicatorSize,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20.0),
-              color: color,
-            ),
-          ),
-        );
-      },
-      wrapperBuilder: (context, global, child) {
-        final color = Color.lerp(closedColor, openedColor, global.position)!;
+  void handleChanged([bool? newValue]) {
+    if (newValue != null && onChanged != null) {
+      onChanged!(newValue);
+    } else if (newValue == null && onChanged != null && value != null) {
+      onChanged!(!value!);
+    }
+  }
 
-        return DecoratedBox(
-          decoration: BoxDecoration(
-            color: color,
-            borderRadius: BorderRadius.circular(50.0),
-          ),
-          child: child,
-        );
-      },
+  Widget _foregroundIndicatorBuilder(
+    BuildContext context,
+    DetailedGlobalToggleProperties<bool?> global,
+  ) {
+    final innerIndicatorSize = height - 4 * borderWidth;
+
+    final theme = Theme.of(context);
+
+    final closedColor = theme.scaffoldBackgroundColor;
+
+    final openedColor = theme.colorScheme.primary;
+
+    final color = Color.lerp(closedColor, openedColor, global.position)!;
+
+    return Container(
+      alignment: .center,
+      decoration: const BoxDecoration(color: Colors.white, shape: .circle),
+      child: Container(
+        width:
+            innerIndicatorSize * 0.4 +
+            global.position * innerIndicatorSize * 0.6,
+        height: innerIndicatorSize,
+        decoration: BoxDecoration(borderRadius: .circular(20.0), color: color),
+      ),
+    );
+  }
+
+  Widget _wrapperBuilder(
+    BuildContext context,
+    GlobalToggleProperties<bool?> global,
+    Widget child,
+  ) {
+    final theme = Theme.of(context);
+
+    final closedColor = theme.scaffoldBackgroundColor;
+
+    final openedColor = theme.colorScheme.primary;
+
+    final color = Color.lerp(closedColor, openedColor, global.position)!;
+
+    return DecoratedBox(
+      decoration: BoxDecoration(color: color, borderRadius: .circular(50.0)),
+      child: child,
     );
   }
 }
