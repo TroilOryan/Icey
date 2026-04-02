@@ -86,12 +86,12 @@ class MediaHelper {
           );
 
           if (queueIndex != -1) {
-            mediaManager.removeQueue(queueIndex, noToast: true).then((_) async {
-              if (mediaManager.mediaItem.value != null &&
-                  media.id == mediaManager.mediaItem.value!.id) {
-                mediaManager.skipToNext();
-              }
+            if (mediaManager.mediaItem.value != null &&
+                media.id == mediaManager.mediaItem.value!.id) {
+              mediaManager.skipToNext();
+            }
 
+            mediaManager.removeQueue(queueIndex, noToast: true).then((_) async {
               final medias = MediaHelper.queryLocalMedia();
 
               mediaManager.setLocalMediaList(medias, true);
