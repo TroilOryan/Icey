@@ -300,6 +300,24 @@ class LrcParser extends LyricParse {
     // 找到中文翻译的起始位置（只识别真正的中文字符）
     int chineseStartIndex = -1;
 
+    // 检查是否包含括号
+    final RegExp bracketRegex = RegExp(r'[\(\)\[\]\{\}（）\［\］\｛\｝]');
+    final bool hasBrackets = bracketRegex.hasMatch(mainText);
+
+    // 如果包含括号，检查是否是整个文本都在括号内
+    if (hasBrackets) {
+      // 检查是否以括号开始并以括号结束
+      final bool startsWithBracket = RegExp(
+        r'^[\(\[\{（\［\｛]',
+      ).hasMatch(mainText);
+      final bool endsWithBracket = RegExp(r'[\)\]\}）\］\｝]$').hasMatch(mainText);
+
+      if (startsWithBracket && endsWithBracket) {
+        // 整个文本都在括号内，不分割为翻译
+        return LyricLine(start: start, text: mainText);
+      }
+    }
+
     for (int i = 0; i < mainText.length; i++) {
       // 跳过空格
       if (mainText[i] == ' ') {
@@ -316,8 +334,8 @@ class LrcParser extends LyricParse {
           // 只统计真正的中文字符
           if (innerCharCode >= 0x4E00 && innerCharCode <= 0x9FFF) {
             chineseLength++;
-          } else if (mainText[j] == ' ') {
-            // 允许中文中间有空格
+          } else if (mainText[j] == ' ' || bracketRegex.hasMatch(mainText[j])) {
+            // 允许中文中间有空格和括号
             continue;
           } else {
             break; // 遇到非中文字符就停止
@@ -340,6 +358,13 @@ class LrcParser extends LyricParse {
       final String chineseTranslation = mainText
           .substring(chineseStartIndex)
           .trim();
+
+      // 检查原歌词是否只有括号
+      if (originalLyric.isEmpty ||
+          RegExp(r'^[\(\)\[\]\{\}（）\［\］\｛\｝]+$').hasMatch(originalLyric)) {
+        // 如果原歌词只有括号，不分割为翻译
+        return LyricLine(start: start, text: mainText);
+      }
 
       return LyricLine(
         start: start,
