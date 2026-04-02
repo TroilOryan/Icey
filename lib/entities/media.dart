@@ -137,7 +137,7 @@ class MediaEntity {
     );
   }
 
-  static MediaEntity fromMediaStore(AudioEntity audio, {bool? isSecond}) {
+  static MediaEntity fromMediaStore(AudioEntity audio) {
     return MediaEntity(
       id: audio.id,
       favorite: false,
@@ -148,9 +148,7 @@ class MediaEntity {
       albumID: audio.albumID,
       track: audio.track,
       year: audio.year,
-      duration: isSecond == true
-          ? (audio.duration ?? 0) * 1000
-          : audio.duration,
+      duration: audio.duration,
       data: audio.data,
       uri: audio.uri,
       dateAdded: audio.dateAdded,

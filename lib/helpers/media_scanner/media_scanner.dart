@@ -12,6 +12,7 @@ import "package:IceyPlayer/event_bus/event_bus.dart";
 import "package:IceyPlayer/helpers/common.dart";
 import "package:IceyPlayer/helpers/toast/toast.dart";
 import "package:IceyPlayer/permission/audio.dart";
+import "package:executor/executor.dart";
 import "package:file_picker/file_picker.dart";
 
 final audioQuery = AudioQuery();
@@ -20,108 +21,119 @@ final _mediaBox = Boxes.mediaBox, _settingsBox = Boxes.settingsBox;
 
 class MediaScanner {
   static Future<void> _scanMediasDesktop([bool? silent]) async {
-    String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
+    try {
+      String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
 
-    if (selectedDirectory == null) {
-      return;
-    }
+      if (selectedDirectory == null) {
+        return;
+      }
 
-    await _mediaBox.clear();
+      await _mediaBox.clear();
 
-    eventBus.fire(ScanMediaStatus(true, silent));
+      eventBus.fire(ScanMediaStatus(true, silent));
 
-    final applicationSupportDirectory = await CommonHelper().getAppDataDir();
+      final applicationSupportDirectory = await CommonHelper().getAppDataDir();
 
-    final stream = buildIndexFromFoldersRecursively(
-      folders: [selectedDirectory],
-      indexPath: applicationSupportDirectory.path,
-    );
+      final stream = buildIndexFromFoldersRecursively(
+        folders: [selectedDirectory],
+        indexPath: applicationSupportDirectory.path,
+      );
 
-    List<AudioEntity> audios = [];
+      List<AudioEntity> audios = [];
 
-    stream.listen(
-      (res) {},
-      onDone: () async {
-        final List<String> filterDir = _settingsBox.get(
-          CacheKey.Settings.filterDir,
-          defaultValue: <String>[],
-        );
-
-        final filterShort = _settingsBox.get(
-          CacheKey.Settings.filterShort,
-          defaultValue: true,
-        );
-
-        final supportPath = applicationSupportDirectory.path;
-
-        final indexPath = "$supportPath\\index.json";
-
-        final indexStr = File(indexPath).readAsStringSync();
-
-        final Map indexJson = json.decode(indexStr);
-        final List foldersJson = indexJson["folders"];
-        // final List<AudioFolder> folders = [];
-
-        for (Map folderMap in foldersJson) {
-          final List audiosJson = folderMap["audios"];
-          for (Map audioMap in audiosJson) {
-            audios.add(AudioEntity(audioMap));
-            eventBus.fire(ScanMediaAdd(audios));
-          }
-
-          // folders.add(AudioFolder.fromMap(folderMap, audios));
-        }
-
-        if (audios.isEmpty) {
-          showToast("本地没有音乐或者系统拒绝访问 QAQ");
-
-          return;
-        }
-
-        late List<MediaEntity> mediaList;
-
-        mediaList = _filterAudios(
-          audios,
-          filterShort,
-          filterDir,
-          5000, // 统一使用毫秒
-          isSecond: true,
-        );
-
-        await _mediaBox.addAll(mediaList);
-
-        final scanDir = CommonHelper.getParentFolders(
-          mediaList.map((e) => e.data).toList(),
-        );
-
-        final dir = Directory('${CommonHelper.tmpDir.path}/IceyCover');
-
-        if (!dir.existsSync()) {
-          dir.createSync();
-        }
-
-        for (MediaEntity media in mediaList) {
-          final cover = await getArtworkFromPath(
-            path: media.id,
-            width: 256,
-            height: 256,
+      stream.listen(
+        (res) {},
+        onDone: () async {
+          final List<String> filterDir = _settingsBox.get(
+            CacheKey.Settings.filterDir,
+            defaultValue: <String>[],
           );
 
-          String tmpPath = "${dir.path}/${media.title}.jpg";
+          final filterShort = _settingsBox.get(
+            CacheKey.Settings.filterShort,
+            defaultValue: true,
+          );
 
-          final tmpFile = File(tmpPath);
+          final supportPath = applicationSupportDirectory.path;
 
-          if (cover != null && !tmpFile.existsSync()) {
-            final tmpFile = File(tmpPath);
-            await tmpFile.writeAsBytes(cover);
+          final indexPath = "$supportPath\\index.json";
+
+          final indexStr = File(indexPath).readAsStringSync();
+
+          final Map indexJson = json.decode(indexStr);
+          final List foldersJson = indexJson["folders"];
+          // final List<AudioFolder> folders = [];
+
+          for (Map folderMap in foldersJson) {
+            final List audiosJson = folderMap["audios"];
+            for (Map audioMap in audiosJson) {
+              audios.add(AudioEntity(audioMap));
+              eventBus.fire(ScanMediaAdd(audios));
+            }
+
+            // folders.add(AudioFolder.fromMap(folderMap, audios));
           }
-        }
 
-        eventBus.fire(ScanMediaStatus(false, silent));
+          if (audios.isEmpty) {
+            showToast("本地没有音乐或者系统拒绝访问 QAQ");
 
-        _settingsBox.put(CacheKey.Settings.scanDir, scanDir);
-      },
-    );
+            return;
+          }
+
+          late List<MediaEntity> mediaList;
+
+          mediaList = _filterAudios(
+            audios,
+            filterShort,
+            filterDir,
+            5000, // 统一使用毫秒
+          );
+
+          await _mediaBox.addAll(mediaList);
+
+          final scanDir = CommonHelper.getParentFolders(
+            mediaList.map((e) => e.data).toList(),
+          );
+
+          final dir = Directory('${CommonHelper.tmpDir.path}/IceyCover');
+
+          if (!dir.existsSync()) {
+            dir.createSync();
+          }
+
+          final executor = Executor(concurrency: 300);
+
+          for (MediaEntity media in mediaList) {
+            executor.scheduleTask(() async {
+              final cover = await getArtworkFromPath(
+                path: media.id,
+                width: 256,
+                height: 256,
+              );
+
+              String tmpPath = "${dir.path}/${media.title}.jpg";
+
+              final tmpFile = File(tmpPath);
+
+              if (cover != null && !tmpFile.existsSync()) {
+                final tmpFile = File(tmpPath);
+                await tmpFile.writeAsBytes(cover);
+              }
+            });
+          }
+
+          await executor.join(withWaiting: true);
+
+          await executor.close();
+
+          eventBus.fire(ScanMediaStatus(false, silent));
+
+          _settingsBox.put(CacheKey.Settings.scanDir, scanDir);
+        },
+      );
+    } catch (e) {
+      print(e);
+    }
 
     return;
   }
@@ -190,12 +202,11 @@ class MediaScanner {
     List<AudioEntity> audios,
     bool filterShort,
     List<String> filterDir,
-    int minDurationMs, {
-    bool isSecond = false,
-  }) {
+    int minDurationMs,
+  ) {
     if (filterShort == true) {
       return audios
-          .map((audio) => MediaEntity.fromMediaStore(audio, isSecond: isSecond))
+          .map((audio) => MediaEntity.fromMediaStore(audio))
           .where(
             (audio) =>
                 (audio.duration ?? 0) > minDurationMs &&
@@ -204,10 +215,8 @@ class MediaScanner {
           .toList();
     } else {
       return audios
-          .map((audio) => MediaEntity.fromMediaStore(audio, isSecond: isSecond))
-          .where(
-            (audio) => filterDir.every((dir) => !audio.data.contains(dir)),
-          )
+          .map((audio) => MediaEntity.fromMediaStore(audio))
+          .where((audio) => filterDir.every((dir) => !audio.data.contains(dir)))
           .toList();
     }
   }

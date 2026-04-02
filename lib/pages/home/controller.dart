@@ -29,6 +29,7 @@ import 'package:IceyPlayer/helpers/toast/toast.dart';
 import 'package:IceyPlayer/helpers/update/update.dart';
 import 'package:IceyPlayer/models/media/media.dart';
 import 'package:IceyPlayer/models/settings/settings.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:go_router/go_router.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 import 'package:scrollview_observer/scrollview_observer.dart';
@@ -140,10 +141,7 @@ class HomeController {
   }
 
   void handleMediaTap(MediaEntity media) {
-    if (mediaManager.queue.value.indexWhere(
-          (e) => e.id == media.id,
-        ) ==
-        -1) {
+    if (mediaManager.queue.value.indexWhere((e) => e.id == media.id) == -1) {
       mediaManager.updateQueue([MediaEntity.toMediaItem(media)]).then((_) {
         mediaManager.play(media.id);
 
@@ -314,7 +312,11 @@ class HomeController {
                   block: true,
                   disabled: !scanEnded,
                   onPressed: () async {
-                    Navigator.of(context).pop();
+                    if (PlatformHelper.isDesktop) {
+                      SmartDialog.dismiss();
+                    } else {
+                      context.pop();
+                    }
 
                     final mediaList = MediaHelper.queryLocalMedia();
 

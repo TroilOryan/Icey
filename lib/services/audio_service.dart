@@ -83,10 +83,12 @@ class AudioServiceHandler extends BaseAudioHandler
     );
 
     if (mediaItems.isEmpty) {
-      await _player.setAudioSource(_playlist, preload: true);
-
       if (!PlatformHelper.isDesktop) {
+        await _player.setAudioSource(_playlist, preload: true);
+
         FlutterNativeSplash.remove();
+      } else {
+        _player.setAudioSources([], preload: true);
       }
 
       return;

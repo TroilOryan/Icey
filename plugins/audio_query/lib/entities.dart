@@ -10,11 +10,11 @@ class AudioEntity {
 
   String? get artist => _info["artist"];
 
-  String get artistID => (_info["artist_id"] ?? _info["artist"]).toString();
+  String get artistID => _info["artist_id"].toString();
 
   String? get album => _info["album"];
 
-  String get albumID => (_info["album_id"] ?? _info["album"]).toString();
+  String get albumID => _info["album_id"].toString();
 
   int? get track => _info["track"];
 
@@ -28,16 +28,16 @@ class AudioEntity {
   String get uri => _info["_uri"] ?? _info["path"];
 
   // s
-  int? get dateAdded => _info["date_added"] ?? _info["created"];
+  int? get dateAdded => _info["date_added"];
 
   // s
-  int? get dateModified => _info["date_modified"] ?? _info["modified"];
+  int? get dateModified => _info["date_modified"];
 
   int? get bitRate => _info["bitRate"];
 
-  int? get sampleRate => _info["sampleRate"] ?? _info["sample_rate"];
+  int? get sampleRate => _info["sampleRate"];
 
-  int? get bitDepth => _info["bitDepth"] ?? _info["bit_depth"];
+  int? get bitDepth => _info["bitDepth"];
 
   String get quality => _info["quality"];
 

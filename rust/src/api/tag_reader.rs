@@ -52,9 +52,11 @@ pub struct IndexActionState {
 struct Audio {
     title: String,
     artist: String,
+    artist_id: String,
     album: String,
+    album_id: String,
     track: Option<u32>,
-    /// in secs
+    /// in ms
     duration: u64,
     /// kbps
     bitrate: Option<u32>,
@@ -78,7 +80,9 @@ impl Audio {
         Some(Audio {
             title: path.file_name()?.to_string_lossy().to_string(),
             artist: UNKNOWN_STR.to_string(),
+            artist_id: UNKNOWN_STR.to_string(),
             album: UNKNOWN_STR.to_string(),
+            album_id: UNKNOWN_STR.to_string(),
             track: None,
             duration: 0,
             bitrate: None,
@@ -109,17 +113,19 @@ impl Audio {
         serde_json::json!({
             "title": self.title,
             "artist": self.artist,
+            "artist_id": self.artist_id,
             "album": self.album,
+            "album_id": self.album_id,
             "track": self.track,
             "duration": self.duration,
-            "bitrate": self.bitrate,
-            "sample_rate": self.sample_rate,
-            "bit_depth": self.bit_depth,
+            "bitRate": self.bitrate,
+            "sampleRate": self.sample_rate,
+            "bitDepth": self.bit_depth,
             "channels": self.channels,
             "quality": self.quality,
             "path": self.path,
-            "modified": self.modified,
-            "created": self.created,
+            "date_modified": self.modified,
+            "date_added": self.created,
             "by": self.by
         })
     }
@@ -175,15 +181,20 @@ impl Audio {
             .primary_tag()
             .or_else(|| tagged_file.first_tag())
         {
+            let artist = tag.artist().unwrap_or(UNKNOWN_COW).to_string();
+            let album = tag.album().unwrap_or(UNKNOWN_COW).to_string();
+            
             return Some(Audio {
                 title: tag
                     .title()
                     .unwrap_or(path.file_name()?.to_string_lossy())
                     .to_string(),
-                artist: tag.artist().unwrap_or(UNKNOWN_COW).to_string(),
-                album: tag.album().unwrap_or(UNKNOWN_COW).to_string(),
+                artist: artist.clone(),
+                artist_id: artist,
+                album: album.clone(),
+                album_id: album,
                 track: tag.track(),
-                duration: properties.duration().as_secs(),
+                duration: properties.duration().as_millis() as u64,
                 bitrate: properties.audio_bitrate(),
                 sample_rate: properties.sample_rate(),
                 bit_depth: properties.bit_depth(),
@@ -198,9 +209,11 @@ impl Audio {
         return Some(Audio {
             title: path.file_name()?.to_string_lossy().to_string(),
             artist: UNKNOWN_COW.to_string(),
+            artist_id: UNKNOWN_COW.to_string(),
             album: UNKNOWN_COW.to_string(),
+            album_id: UNKNOWN_COW.to_string(),
             track: None,
-            duration: properties.duration().as_secs(),
+            duration: properties.duration().as_millis() as u64,
             bitrate: properties.audio_bitrate(),
             sample_rate: properties.sample_rate(),
             bit_depth: properties.bit_depth(),
