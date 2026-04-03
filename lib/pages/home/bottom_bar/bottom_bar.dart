@@ -32,7 +32,7 @@ class BottomBar extends StatelessWidget {
       selectedIconColor: theme.colorScheme.primary,
       unselectedIconColor: theme.iconTheme.color!,
       extraButton: GlassBottomBarExtraButton(
-        icon: FluentIcons.search_12_regular,
+        icon: Icon(FluentIcons.search_12_regular),
         onTap: onSearch,
         label: "",
       ),
@@ -40,8 +40,8 @@ class BottomBar extends StatelessWidget {
           .map(
             (e) => GlassBottomBarTab(
               label: e.label,
-              icon: e.icon,
-              selectedIcon: e.selectedIcon,
+              icon: Icon(e.icon),
+              activeIcon: Icon(e.selectedIcon),
             ),
           )
           .toList(),

@@ -195,8 +195,27 @@ class QueryAudios {
         // 手动管理 MediaMetadataRetriever 生命周期
         val retriever = MediaMetadataRetriever()
         try {
-            // 设置数据源
-            retriever.setDataSource(audioItem.dataPath)
+            // 设置数据源 - Android 10+ 使用 ContentResolver 以适配 Scoped Storage
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                val uri = ContentUris.withAppendedId(
+                    MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                    audioItem.id
+                )
+                val context = PluginProvider.context()
+                val fd = context.contentResolver.openFileDescriptor(uri, "r")
+                if (fd == null) {
+                    Log.w("QueryAudios", "无法打开文件描述符: ${audioItem.title} (ID: ${audioItem.id})")
+                    return
+                }
+                retriever.setDataSource(fd.fileDescriptor)
+                fd.close()
+            } else {
+                if (audioItem.dataPath.isEmpty()) {
+                    Log.w("QueryAudios", "跳过空路径文件: ${audioItem.title}")
+                    return
+                }
+                retriever.setDataSource(audioItem.dataPath)
+            }
 
             val audioData = mutableMapOf<String, Any?>().apply {
                 // 基本信息（来自预加载的AudioItem）

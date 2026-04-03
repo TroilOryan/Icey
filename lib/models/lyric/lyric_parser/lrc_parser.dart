@@ -280,6 +280,19 @@ class LrcParser extends LyricParse {
       );
     }
 
+    // 检查是否包含尖括号时间戳格式（如 <00:00.000>）
+    if (mainText.contains('<') && mainText.contains('>')) {
+      final List<LyricWord> words = _extractWordsWithAngleBrackets(mainText);
+      if (words.isNotEmpty) {
+        return LyricLine(
+          start: start,
+          text: mainText,
+          translation: null,
+          words: words,
+        );
+      }
+    }
+
     // 如果有多个时间戳，认为是逐字歌词
     if (durations.length > 1) {
       final List<LyricWord> words = _extractWords(mainText, durations);
@@ -432,6 +445,61 @@ class LrcParser extends LyricParse {
         start: lastWord.start,
         end: lastWord.end,
       );
+    }
+
+    return words;
+  }
+
+  // 提取尖括号格式的逐字高亮信息（如 <00:00.000>我<00:00.171>的）
+  static List<LyricWord> _extractWordsWithAngleBrackets(String text) {
+    final List<LyricWord> words = [];
+
+    // 匹配尖括号时间戳，格式如 <00:00.000>
+    final RegExp timeRegex = RegExp(r'<(\d{1,}):(\d{2})(?:\.(\d{1,}))?>');
+    final matches = timeRegex.allMatches(text);
+
+    if (matches.isEmpty) {
+      return words;
+    }
+
+    // 提取所有时间戳
+    final List<Duration> durations = [];
+    for (RegExpMatch match in matches) {
+      final minutes = match.group(1);
+      final seconds = match.group(2);
+      String milliseconds = match.group(3) ?? '0';
+      if (milliseconds.length > 3) {
+        milliseconds = milliseconds.substring(0, 3);
+      }
+      final Duration duration = Duration(
+        minutes: int.parse(minutes!),
+        seconds: int.parse(seconds!),
+        milliseconds: int.parse(milliseconds.padRight(3, '0')),
+      );
+      durations.add(duration);
+    }
+
+    // 提取时间戳之间的文本
+    int lastEnd = 0;
+    for (int i = 0; i < matches.length; i++) {
+      final match = matches.elementAt(i);
+      final startTime = durations[i];
+      Duration? endTime;
+
+      if (i < matches.length - 1) {
+        endTime = durations[i + 1];
+      }
+
+      // 提取当前时间戳到下一个时间戳之间的文本
+      final start = match.end;
+      final end = i < matches.length - 1
+          ? matches.elementAt(i + 1).start
+          : text.length;
+      final wordText = text.substring(start, end).trim();
+
+      if (wordText.isNotEmpty) {
+        words.add(LyricWord(text: wordText, start: startTime, end: endTime));
+      }
     }
 
     return words;
