@@ -90,11 +90,30 @@ class LrcParser extends LyricParse {
         // 重复时间戳，当前行作为翻译
         final existingLyricLine = timeToLyricLine[timeMs]!;
 
-        // 创建新的 LyricLine，添加翻译
+        // 解析翻译行的逐字信息（如果包含尖括号时间戳）
+        List<LyricWord>? translationWords;
+        String translationText = text;
+
+        // 提取方括号时间戳后的文本内容
+        final textAfterBrackets = text
+            .replaceAll(RegExp(r'\[\d{1,}:\d{2}(?:\.\d{1,})?\]'), '')
+            .trim();
+
+        // 检查是否包含尖括号时间戳格式
+        if (textAfterBrackets.contains('<') &&
+            textAfterBrackets.contains('>')) {
+          final result = _extractWordsWithAngleBrackets(textAfterBrackets);
+          translationWords = result['words'];
+          translationText = result['text'];
+        }
+
+        // 创建新的 LyricLine，添加翻译，保留原有的 words 信息
         final newLyricLine = LyricLine(
           start: existingLyricLine.start,
           text: existingLyricLine.text,
-          translation: text, // 直接使用整行文本，不拆分
+          translation: translationText,
+          words: existingLyricLine.words, // 保留原有的逐字信息
+          translationWords: translationWords, // 添加翻译的逐字信息
         );
 
         // 更新映射和列表
@@ -267,26 +286,15 @@ class LrcParser extends LyricParse {
       return null;
     }
 
-    // 关键修改：只有单时间戳且包含这些符号时才跳过，多时间戳（逐字歌词）不跳过
-    if (durations.length == 1 &&
-        (mainText.contains('/') ||
-            mainText.contains(':') ||
-            mainText.contains('：'))) {
-      return LyricLine(
-        start: start,
-        text: mainText,
-        translation: null,
-        words: null,
-      );
-    }
-
     // 检查是否包含尖括号时间戳格式（如 <00:00.000>）
     if (mainText.contains('<') && mainText.contains('>')) {
-      final List<LyricWord> words = _extractWordsWithAngleBrackets(mainText);
+      final result = _extractWordsWithAngleBrackets(mainText);
+      final List<LyricWord> words = result['words'];
+      final String pureText = result['text'];
       if (words.isNotEmpty) {
         return LyricLine(
           start: start,
-          text: mainText,
+          text: pureText,
           translation: null,
           words: words,
         );
@@ -301,6 +309,19 @@ class LrcParser extends LyricParse {
         text: mainText,
         translation: null,
         words: words,
+      );
+    }
+
+    // 关键修改：只有单时间戳且包含这些符号时才跳过，多时间戳（逐字歌词）不跳过
+    if (durations.length == 1 &&
+        (mainText.contains('/') ||
+            mainText.contains(':') ||
+            mainText.contains('：'))) {
+      return LyricLine(
+        start: start,
+        text: mainText,
+        translation: null,
+        words: null,
       );
     }
 
@@ -451,15 +472,16 @@ class LrcParser extends LyricParse {
   }
 
   // 提取尖括号格式的逐字高亮信息（如 <00:00.000>我<00:00.171>的）
-  static List<LyricWord> _extractWordsWithAngleBrackets(String text) {
+  // 返回值是一个 Map，包含纯文本（不包含尖括号时间戳）和逐字信息
+  static Map<String, dynamic> _extractWordsWithAngleBrackets(String text) {
     final List<LyricWord> words = [];
 
     // 匹配尖括号时间戳，格式如 <00:00.000>
     final RegExp timeRegex = RegExp(r'<(\d{1,}):(\d{2})(?:\.(\d{1,}))?>');
-    final matches = timeRegex.allMatches(text);
+    final matches = timeRegex.allMatches(text).toList();
 
     if (matches.isEmpty) {
-      return words;
+      return {'text': text, 'words': words};
     }
 
     // 提取所有时间戳
@@ -479,10 +501,10 @@ class LrcParser extends LyricParse {
       durations.add(duration);
     }
 
-    // 提取时间戳之间的文本
-    int lastEnd = 0;
+    // 提取时间戳之间的文本，同时构建纯文本
+    final StringBuffer pureText = StringBuffer();
     for (int i = 0; i < matches.length; i++) {
-      final match = matches.elementAt(i);
+      final match = matches[i];
       final startTime = durations[i];
       Duration? endTime;
 
@@ -492,16 +514,18 @@ class LrcParser extends LyricParse {
 
       // 提取当前时间戳到下一个时间戳之间的文本
       final start = match.end;
-      final end = i < matches.length - 1
-          ? matches.elementAt(i + 1).start
-          : text.length;
+      final end = i < matches.length - 1 ? matches[i + 1].start : text.length;
       final wordText = text.substring(start, end).trim();
 
       if (wordText.isNotEmpty) {
         words.add(LyricWord(text: wordText, start: startTime, end: endTime));
+        if (pureText.isNotEmpty) {
+          pureText.write(' ');
+        }
+        pureText.write(wordText);
       }
     }
 
-    return words;
+    return {'text': pureText.toString(), 'words': words};
   }
 }

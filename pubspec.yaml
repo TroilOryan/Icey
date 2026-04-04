@@ -118,7 +118,7 @@ dependencies:
 
   ## 桌面端
   file_picker: ^10.3.10
-  flutter_rust_bridge: 2.11.1
+  flutter_rust_bridge: 2.9.0
   rust_lib_icey:
     path: rust_builder
   tray_manager: ^0.5.2

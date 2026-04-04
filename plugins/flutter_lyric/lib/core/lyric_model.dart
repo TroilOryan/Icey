@@ -33,6 +33,7 @@ class LyricLine {
   final List<LyricWord>? words; // 可选：逐字高亮信息
   // 可选副歌词字段
   final String? translation; // 翻译
+  final List<LyricWord>? translationWords; // 可选：翻译的逐字高亮信息
 
   LyricLine({
     required this.start,
@@ -40,11 +41,12 @@ class LyricLine {
     required this.text,
     this.translation,
     this.words,
+    this.translationWords,
   });
 
   @override
   String toString() {
-    return 'LyricLine(start: $start, end: $end, text: $text, translation: $translation, words: $words)';
+    return 'LyricLine(start: $start, end: $end, text: $text, translation: $translation, words: $words, translationWords: $translationWords)';
   }
 }
 
