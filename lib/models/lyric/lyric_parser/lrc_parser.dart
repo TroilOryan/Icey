@@ -108,8 +108,15 @@ class LrcParser extends LyricParse {
         }
 
         // 创建新的 LyricLine，添加翻译，保留原有的 words 信息
+        // 使用翻译的最后一个字的结束时间作为整行的结束时间
+        final Duration? end =
+            translationWords != null && translationWords.isNotEmpty
+            ? translationWords.last.end
+            : existingLyricLine.end;
+
         final newLyricLine = LyricLine(
           start: existingLyricLine.start,
+          end: end,
           text: existingLyricLine.text,
           translation: translationText,
           words: existingLyricLine.words, // 保留原有的逐字信息
@@ -292,8 +299,11 @@ class LrcParser extends LyricParse {
       final List<LyricWord> words = result['words'];
       final String pureText = result['text'];
       if (words.isNotEmpty) {
+        // 使用最后一个字的结束时间作为整行的结束时间
+        final Duration? end = words.isNotEmpty ? words.last.end : null;
         return LyricLine(
           start: start,
+          end: end,
           text: pureText,
           translation: null,
           words: words,
@@ -304,8 +314,11 @@ class LrcParser extends LyricParse {
     // 如果有多个时间戳，认为是逐字歌词
     if (durations.length > 1) {
       final List<LyricWord> words = _extractWords(mainText, durations);
+      // 使用最后一个字的结束时间作为整行的结束时间
+      final Duration? end = words.isNotEmpty ? words.last.end : null;
       return LyricLine(
         start: start,
+        end: end,
         text: mainText,
         translation: null,
         words: words,
@@ -503,18 +516,19 @@ class LrcParser extends LyricParse {
 
     // 提取时间戳之间的文本，同时构建纯文本
     final StringBuffer pureText = StringBuffer();
-    for (int i = 0; i < matches.length; i++) {
+    // 注意：最后一个时间戳是最后一个字的结束时间，不是新字的开始时间
+    // 所以只需要处理前 (matches.length - 1) 个时间戳
+    final int wordCount = matches.length - 1;
+
+    for (int i = 0; i < wordCount; i++) {
       final match = matches[i];
       final startTime = durations[i];
-      Duration? endTime;
-
-      if (i < matches.length - 1) {
-        endTime = durations[i + 1];
-      }
+      // 结束时间：下一个时间戳的开始时间
+      final Duration endTime = durations[i + 1];
 
       // 提取当前时间戳到下一个时间戳之间的文本
       final start = match.end;
-      final end = i < matches.length - 1 ? matches[i + 1].start : text.length;
+      final end = matches[i + 1].start;
       final wordText = text.substring(start, end).trim();
 
       if (wordText.isNotEmpty) {

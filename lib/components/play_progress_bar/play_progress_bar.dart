@@ -17,6 +17,8 @@ class PlayProgressBarState {
 
   final Signal<bool> isDragging = signal(false);
 
+  final Signal<bool> draggable = signal(false);
+
   final Signal<Duration> dragDuration = signal(Duration.zero);
 }
 
@@ -35,8 +37,6 @@ class PlayProgressBar extends StatefulWidget {
 }
 
 class _PlayProgressBarState extends State<PlayProgressBar> {
-  bool draggable = true;
-
   int _lastDragUpdateTime = 0;
 
   final state = PlayProgressBarState();
@@ -44,7 +44,7 @@ class _PlayProgressBarState extends State<PlayProgressBar> {
   late final EffectCleanup positionListener;
 
   void handleHorizontalDragDown(DragDownDetails details) {
-    if (!draggable) return;
+    if (!state.draggable.value) return;
 
     state.isDragging.value = true;
   }
@@ -53,7 +53,7 @@ class _PlayProgressBarState extends State<PlayProgressBar> {
     DragUpdateDetails details,
     BuildContext context,
   ) {
-    if (!state.isDragging.value || !draggable) return;
+    if (!state.isDragging.value || !state.draggable.value) return;
 
     // 计算当前时间
     final now = DateTime.now().microsecondsSinceEpoch;
@@ -72,8 +72,9 @@ class _PlayProgressBarState extends State<PlayProgressBar> {
     batch(() {
       state.dragPosition.value = newPosition;
       state.dragDuration.value = Duration(
-        milliseconds: (state.dragPosition * state.duration.value.inMilliseconds)
-            .toInt(),
+        milliseconds:
+            (state.dragPosition.value * state.duration.value.inMilliseconds)
+                .toInt(),
       );
     });
   }
@@ -82,10 +83,7 @@ class _PlayProgressBarState extends State<PlayProgressBar> {
     state.isDragging.value = false;
 
     widget.onChangeEnd(
-      Duration(
-        milliseconds: (state.dragPosition * state.duration.value.inMilliseconds)
-            .toInt(),
-      ),
+      Duration(milliseconds: state.dragDuration.value.inMilliseconds),
     );
   }
 
@@ -94,7 +92,7 @@ class _PlayProgressBarState extends State<PlayProgressBar> {
   }
 
   void handleTapDown(TapDownDetails details, BuildContext context) {
-    if (!draggable) return;
+    if (!state.draggable.value) return;
 
     final newPosition = (details.localPosition.dx / context.size!.width).clamp(
       0.0,
@@ -104,8 +102,9 @@ class _PlayProgressBarState extends State<PlayProgressBar> {
     batch(() {
       state.dragPosition.value = newPosition;
       state.dragDuration.value = Duration(
-        milliseconds: (state.dragPosition * state.duration.value.inMilliseconds)
-            .toInt(),
+        milliseconds:
+            (state.dragPosition.value * state.duration.value.inMilliseconds)
+                .toInt(),
       );
     });
 
@@ -126,13 +125,15 @@ class _PlayProgressBarState extends State<PlayProgressBar> {
         ? 0.0
         : (nowMs / totalMs);
 
-    state.dragPosition.value = dragPosition.clamp(0.0, 1.0);
+    batch(() {
+      state.dragPosition.value = dragPosition.clamp(0.0, 1.0);
 
-    if (totalMs == 0) {
-      draggable = false;
-    } else {
-      draggable = true;
-    }
+      if (totalMs == 0) {
+        state.draggable.value = false;
+      } else {
+        state.draggable.value = true;
+      }
+    });
   }
 
   void onInit() {

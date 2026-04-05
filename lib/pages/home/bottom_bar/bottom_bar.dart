@@ -25,9 +25,9 @@ class BottomBar extends StatelessWidget {
 
     return GlassBottomBar(
       horizontalPadding: 16,
-      quality: GlassQuality.standard,
+      quality: GlassQuality.premium,
       indicatorColor: theme.colorScheme.primary.withAlpha(55),
-      glassSettings: RecommendedGlassSettings.bottomBar,
+      glassSettings: RecommendedGlassSettings.bottomBar.copyWith(blur: 5),
       iconSize: 20,
       selectedIconColor: theme.colorScheme.primary,
       unselectedIconColor: theme.iconTheme.color!,

@@ -65,27 +65,27 @@ class PlayLyricMiniController {
   }
 
   void onInit() {
-    _scrollToCurrentLyric(
-      lyricManager.currentIndex.value,
-      lyricManager.parsedLyric.value.length,
-    );
+    Future.delayed(const Duration(milliseconds: 300)).then((_) {
+      _scrollToCurrentLyric(
+        lyricManager.currentIndex.value,
+        lyricManager.parsedLyric.value.length,
+      );
+    });
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _listener = effect(() {
+    _listener = effect(() {
+      _scrollToCurrentLyric(
+        lyricManager.currentIndex.value,
+        lyricManager.parsedLyric.value.length,
+      );
+    });
+
+    _playingListener = effect(() {
+      if (mediaManager.isPlaying.value) {
         _scrollToCurrentLyric(
           lyricManager.currentIndex.value,
           lyricManager.parsedLyric.value.length,
         );
-      });
-
-      _playingListener = effect(() {
-        if (mediaManager.isPlaying.value) {
-          _scrollToCurrentLyric(
-            lyricManager.currentIndex.value,
-            lyricManager.parsedLyric.value.length,
-          );
-        }
-      });
+      }
     });
   }
 
