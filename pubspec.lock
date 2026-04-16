@@ -387,10 +387,10 @@ packages:
     dependency: "direct main"
     description:
       name: file_picker
-      sha256: "84fd4edc420fd356b4c72b733ba3b54b4b20240b9e495e3852fe015181c9ede6"
+      sha256: f13a03000d942e476bc1ff0a736d2e9de711d2f89a95cd4c1d88f861c3348387
       url: "https://pub.dev"
     source: hosted
-    version: "11.0.1"
+    version: "11.0.2"
   file_selector_linux:
     dependency: transitive
     description:
@@ -845,10 +845,10 @@ packages:
     dependency: "direct main"
     description:
       name: just_audio_windows
-      sha256: b1ba5305d841c0e3883644e20fc11aaa23f28cfdd43ec20236d1e119a402ef29
+      sha256: "7d80dfa02a2189f1c26673a56f4d8584a306d3f22735302be6111e9578a40318"
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.2"
+    version: "0.2.3"
   keframe:
     dependency: "direct main"
     description:
@@ -893,10 +893,10 @@ packages:
     dependency: "direct main"
     description:
       name: liquid_glass_widgets
-      sha256: "8c075a4d985d564dc4cbbb33a749559c54d99c4dbddd2b8f3595b4e4fe38b75f"
+      sha256: "25e0521933657292515f79c27a8e0eabb69f4ce2fdcca3a832db65eec50298c3"
       url: "https://pub.dev"
     source: hosted
-    version: "0.7.2"
+    version: "0.7.12"
   logger:
     dependency: "direct main"
     description:

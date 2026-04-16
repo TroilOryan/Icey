@@ -117,7 +117,7 @@ dependencies:
   chinese_font_library: ^1.2.0
 
   ## 桌面端
-  file_picker: ^11.0.1
+  file_picker: ^11.0.2
   flutter_rust_bridge: 2.9.0
   rust_lib_icey:
     path: rust_builder
