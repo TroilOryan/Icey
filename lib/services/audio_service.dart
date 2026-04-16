@@ -494,13 +494,13 @@ class AudioServiceHandler extends BaseAudioHandler
 
     playbackState.add(
       playbackState.value.copyWith(
-        shuffleMode: AudioServiceShuffleMode.none,
+        shuffleMode: shuffleMode,
         updatePosition: _player.position,
         bufferedPosition: _player.bufferedPosition,
       ),
     );
 
-    await _player.setShuffleModeEnabled(false);
+    await _player.setShuffleModeEnabled(enabled);
   }
 
   @override

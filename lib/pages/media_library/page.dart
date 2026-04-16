@@ -63,7 +63,7 @@ class _MediaLibraryPageState extends State<MediaLibraryPage>
             child: ProgressiveScrollview(
               backgroundColor: Colors.transparent,
               centerTitle: false,
-              title: "媒体库",
+              title: "媒体库(${mediaList.length})",
               action: controller.headerAppBarAction,
               onTap: homeController.handleBackTop,
               builder: (appbarHeight) => CustomScrollView(
