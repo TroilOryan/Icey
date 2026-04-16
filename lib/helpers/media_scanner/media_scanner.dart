@@ -22,7 +22,7 @@ final _mediaBox = Boxes.mediaBox, _settingsBox = Boxes.settingsBox;
 class MediaScanner {
   static Future<void> _scanMediasDesktop([bool? silent]) async {
     try {
-      String? selectedDirectory = await FilePicker.getDirectoryPath();
+      String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
 
       if (selectedDirectory == null) {
         return;
