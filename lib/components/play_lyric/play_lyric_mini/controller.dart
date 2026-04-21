@@ -47,9 +47,6 @@ class PlayLyricMiniController {
         length == 0 ||
         length == null ||
         !listviewController.isAttached) {
-      // listviewController.jumpToItem(
-      //     index: 0, scrollController: scrollController, alignment: 0.5);
-
       return;
     }
 
@@ -57,7 +54,7 @@ class PlayLyricMiniController {
       listviewController.animateToItem(
         index: () => index,
         scrollController: scrollController,
-        alignment: 0,
+        alignment: 0, // 顶部对齐，确保当前歌词在第一行
         duration: (estimatedDistance) => AppTheme.defaultDurationMid,
         curve: (estimatedDistance) => Curves.easeInOut,
       );

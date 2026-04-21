@@ -50,9 +50,10 @@ class _PlayLyricMiniState extends State<PlayLyricMini> {
             final parsedLyric = lyricManager.parsedLyric.watch(context),
                 currentIndex = lyricManager.currentIndex.watch(context);
 
-            final lineHeight = textStyle.fontSize! * textStyle.height! + 2;
+            final lineHeight =
+                textStyle.fontSize! * textStyle.height! + 4; // 包含上下padding各2
 
-            final containerHeight = lineHeight * 2.15;
+            final containerHeight = lineHeight * 2; // 正好容纳两行
 
             return PlayLyricShaderMask(
               colorStops: const [0.0, 0.05, 0.95, 1],

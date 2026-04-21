@@ -58,8 +58,6 @@ class _PlayScreenBackgroundState extends State<PlayScreenBackground>
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     final width = MediaQuery.of(context).size.width,
         height = MediaQuery.of(context).size.height;
 
@@ -69,7 +67,7 @@ class _PlayScreenBackgroundState extends State<PlayScreenBackground>
             dynamicLight = settingsManager.dynamicLight.watch(context),
             artCover = settingsManager.artCover.watch(context);
 
-        final blurValue = computed(() => highMaterial ? 48.0 : 24.0);
+        final blurValue = computed(() => highMaterial ? 84.0 : 24.0);
 
         final colorOpacity = computed(() => artCover ? 0.01 : 0.5);
 

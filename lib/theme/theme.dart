@@ -151,7 +151,6 @@ class AppTheme {
     }
 
     return ThemeData(
-      fontFamily: "Arial",
       appBarTheme: AppBarThemeData(
         titleTextStyle: titleMedium.copyWith(color: colorScheme.onSurface),
       ),

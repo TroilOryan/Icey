@@ -18,6 +18,7 @@ import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:go_transitions/go_transitions.dart';
 import 'package:liquid_glass_widgets/liquid_glass_setup.dart';
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 import 'package:signals/signals_flutter.dart';
 import 'package:tray_manager/tray_manager.dart';
 import 'package:window_manager/window_manager.dart';
@@ -59,7 +60,10 @@ Future<void> main() async {
     //   enabled: !kReleaseMode,
     //   builder: (context) => const App(),
     // ),
-    rootWidget: LiquidGlassWidgets.wrap(const App()),
+    rootWidget: LiquidGlassWidgets.wrap(
+      const App(),
+      respectSystemAccessibility: false,
+    ),
   );
 }
 

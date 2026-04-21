@@ -1,10 +1,10 @@
-
 import 'dart:io';
 import 'package:IceyPlayer/models/media/media.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:window_manager/window_manager.dart';
@@ -19,6 +19,8 @@ import 'desktop.dart';
 
 Future<void> initServices() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+
+  await LiquidGlassWidgets.initialize();
 
   CommonHelper.tmpDir = await getApplicationDocumentsDirectory();
 

@@ -2,7 +2,7 @@ name: IceyPlayer
 description: "A new Flutter project."
 publish_to: 'none'
 
-version: 1.0.53+54
+version: 1.0.54+55
 
 environment:
   sdk: ">=3.10.0"
@@ -18,23 +18,23 @@ dependencies:
   audio_service: ^0.18.18
   audio_service_win:
     path: plugins/audio_service_win
-  audio_session: ^0.2.2
+  audio_session: ^0.2.3
   just_audio: ^0.10.5
   just_audio_windows: ^0.2.3
 
   ## UI
   animated_toggle_switch: ^0.8.7
   blur: ^4.0.2
-  easy_refresh: ^3.4.0
+  easy_refresh: ^3.5.0
   flex_seed_scheme: ^4.0.1
   flutter_lyric:
     path: plugins/flutter_lyric
   flutter_sficon: ^1.3.0
   fluentui_system_icons: ^1.1.273
   keframe: ^3.0.0
-  liquid_glass_widgets: ^0.7.12
-  material_symbols_icons: ^4.2892.0
-  scrollview_observer: ^1.26.2
+  liquid_glass_widgets: ^0.8.0
+  material_symbols_icons: ^4.2928.1
+  scrollview_observer: ^1.26.3
   sliver_tools: ^0.2.12
   soft_edge_blur: ^0.1.3
   super_sliver_list:
@@ -43,11 +43,10 @@ dependencies:
   visibility_detector: ^0.4.0+2
 
   ## 存储
-  hive_ce: ^2.16.0
-  hive_ce_flutter: ^2.3.3
+  hive_ce: ^2.19.3
+  hive_ce_flutter: ^2.3.4
 
   ## 对话框等
-  bottom_sheet: ^4.0.4
   flutter_smart_dialog: ^5.1.0
 
   ## app跳转
