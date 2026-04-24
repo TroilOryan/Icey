@@ -34,23 +34,32 @@ class CommonHelper {
     }
   }
 
-  static int findClosestIndex(List<BigInt?> bigInts, BigInt? target) {
-    if (bigInts.isEmpty || target == null) {
+  static int findClosestIndex(List<int> values, int target) {
+    if (values.isEmpty) {
       return 0;
     }
 
-    if (bigInts[bigInts.length - 1]! <= target) {
-      return bigInts.length - 1;
+    if (target <= values.first) {
+      return 0;
     }
 
-    for (int i = 0; i < bigInts.length - 1; i++) {
-      if ((bigInts[i]! <= target && bigInts[i + 1]! >= target) ||
-          (bigInts[i]! >= target && bigInts[i + 1]! <= target)) {
-        return i;
+    if (target >= values.last) {
+      return values.length - 1;
+    }
+
+    int low = 0;
+    int high = values.length - 1;
+
+    while (low < high) {
+      final mid = (low + high + 1) ~/ 2;
+      if (values[mid] <= target) {
+        low = mid;
+      } else {
+        high = mid - 1;
       }
     }
 
-    return 0;
+    return low;
   }
 
   static Size getTextSize(

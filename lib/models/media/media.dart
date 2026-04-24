@@ -117,59 +117,45 @@ class MediaManager {
     );
 
     _albumList = computed(() {
-      final List<AlbumEntity> albumList = [];
+      final Map<String, List<MediaEntity>> albumGroups = {};
+      final Map<String, String> albumNames = {};
 
-      _mediaList.forEach((media) {
-        final index = albumList.indexWhere(
-          (album) => album.id == media.albumID,
-        );
+      for (final media in _mediaList.value) {
+        final albumId = (media.albumID ?? BigInt.from(-1)).toString();
+        albumGroups.putIfAbsent(albumId, () => []).add(media);
+        albumNames.putIfAbsent(albumId, () => media.album ?? "未知专辑");
+      }
 
-        if (index == -1) {
-          albumList.add(
-            AlbumEntity(
-              id: (media.albumID ?? BigInt.from(-1)).toString(),
-              name: media.album ?? "未知专辑",
-              mediaIDs: [media.id],
-            ),
-          );
-        } else {
-          final album = albumList[index];
-
-          albumList.replaceRange(index, index + 1, [
-            album.copyWith(mediaIDs: album.mediaIDs..add(media.id)),
-          ]);
-        }
-      });
-
-      return List.unmodifiable(albumList);
+      return List.unmodifiable(
+        albumGroups.entries.map(
+          (e) => AlbumEntity(
+            id: e.key,
+            name: albumNames[e.key]!,
+            mediaIDs: e.value.map((m) => m.id).toList(),
+          ),
+        ),
+      );
     });
 
     _artistList = computed(() {
-      final List<ArtistEntity> artistList = [];
+      final Map<String, List<MediaEntity>> artistGroups = {};
+      final Map<String, String> artistNames = {};
 
-      _mediaList.forEach((media) {
-        final index = artistList.indexWhere(
-          (album) => album.id == media.artistID,
-        );
+      for (final media in _mediaList.value) {
+        final artistId = (media.artistID ?? BigInt.from(-1)).toString();
+        artistGroups.putIfAbsent(artistId, () => []).add(media);
+        artistNames.putIfAbsent(artistId, () => media.artist ?? "未知艺术家");
+      }
 
-        if (index == -1) {
-          artistList.add(
-            ArtistEntity(
-              id: (media.artistID ?? BigInt.from(-1)).toString(),
-              name: media.artist ?? "未知艺术家",
-              mediaIDs: [media.id],
-            ),
-          );
-        } else {
-          final artist = artistList[index];
-
-          artistList.replaceRange(index, index + 1, [
-            artist.copyWith(mediaIDs: artist.mediaIDs..add(media.id)),
-          ]);
-        }
-      });
-
-      return List.unmodifiable(artistList);
+      return List.unmodifiable(
+        artistGroups.entries.map(
+          (e) => ArtistEntity(
+            id: e.key,
+            name: artistNames[e.key]!,
+            mediaIDs: e.value.map((m) => m.id).toList(),
+          ),
+        ),
+      );
     });
   }
 

@@ -138,6 +138,18 @@ class SettingsManager {
 
   Signal<bool> get autoUpdate => _autoUpdate;
 
+  static T _loadSetting<T>(String key, T defaultValue) {
+    return _settingsBox.get(key, defaultValue: defaultValue);
+  }
+
+  static T _loadSettingAs<T, R>(String key, R defaultValue, T Function(R) fromBox) {
+    return fromBox(_settingsBox.get(key, defaultValue: defaultValue));
+  }
+
+  static void _saveSetting<T>(String key, T value, [dynamic Function(T)? toBox]) {
+    _settingsBox.put(key, toBox != null ? toBox(value) : value);
+  }
+
   SettingsManager()
     : _sortType = signal(MediaSort.title),
       _brightnessTheme = signal(BrightnessTheme.system),
@@ -157,101 +169,41 @@ class SettingsManager {
       _concert = signal(false),
       _audioFocus = signal(true),
       _autoUpdate = signal(true) {
-    _sortType.value = MediaSort.getByValue(
-      _settingsBox.get(
-        CacheKey.Settings.sortType,
-        defaultValue: MediaSort.title.value,
-      ),
+    _sortType.value = _loadSettingAs(
+      CacheKey.Settings.sortType,
+      MediaSort.title.value,
+      MediaSort.getByValue,
     );
-
-    _brightnessTheme.value = BrightnessTheme.getByValue(
-      _settingsBox.get(
-        CacheKey.Settings.brightnessTheme,
-        defaultValue: BrightnessTheme.system.value,
-      ),
+    _brightnessTheme.value = _loadSettingAs(
+      CacheKey.Settings.brightnessTheme,
+      BrightnessTheme.system.value,
+      BrightnessTheme.getByValue,
     );
-
-    _liquidGlass.value = _settingsBox.get(
-      CacheKey.Settings.liquidGlass,
-      defaultValue: true,
+    _liquidGlass.value = _loadSetting(CacheKey.Settings.liquidGlass, true);
+    _scrollHidePlayBar.value = _loadSetting(CacheKey.Settings.scrollHidePlayBar, true);
+    _isMaterialScrollBehavior.value = _loadSetting(CacheKey.Settings.isMaterialScrollBehavior, false);
+    _coverShape.value = _loadSettingAs(
+      CacheKey.Settings.coverShape,
+      CoverShape.circle.value,
+      CoverShape.getByValue,
     );
-
-    _scrollHidePlayBar.value = _settingsBox.get(
-      CacheKey.Settings.scrollHidePlayBar,
-      defaultValue: true,
-    );
-
-    _isMaterialScrollBehavior.value = _settingsBox.get(
-      CacheKey.Settings.isMaterialScrollBehavior,
-      defaultValue: false,
-    );
-
-    _coverShape.value = CoverShape.getByValue(
-      _settingsBox.get(
-        CacheKey.Settings.coverShape,
-        defaultValue: CoverShape.circle.value,
-      ),
-    );
-
-    _artCover.value = _settingsBox.get(
-      CacheKey.Settings.artCover,
-      defaultValue: true,
-    );
-
-    _wakelock.value = _settingsBox.get(
-      CacheKey.Settings.wakelock,
-      defaultValue: true,
-    );
-
-    _dynamicLight.value = _settingsBox.get(
-      CacheKey.Settings.dynamicLight,
-      defaultValue: false,
-    );
-
-    _listBg.value = _settingsBox.get(
-      CacheKey.Settings.listBg,
-      defaultValue: Uint8List(0),
-    );
-
-    _highMaterial.value = _settingsBox.get(
-      CacheKey.Settings.highMaterial,
-      defaultValue: true,
-    );
-
-    _fakeEnhanced.value = _settingsBox.get(
-      CacheKey.Settings.fakeEnhanced,
-      defaultValue: false,
-    );
-
-    setLyricOverlay(
-      _settingsBox.get(CacheKey.Settings.lyricOverlay, defaultValue: false),
-    );
-
-    _immersive.value = _settingsBox.get(
-      CacheKey.Settings.immersive,
-      defaultValue: false,
-    );
-
-    _concert.value = _settingsBox.get(
-      CacheKey.Settings.concert,
-      defaultValue: false,
-    );
-
-    _audioFocus.value = _settingsBox.get(
-      CacheKey.Settings.audioFocus,
-      defaultValue: true,
-    );
-
-    _autoUpdate.value = _settingsBox.get(
-      CacheKey.Settings.autoUpdate,
-      defaultValue: true,
-    );
+    _artCover.value = _loadSetting(CacheKey.Settings.artCover, true);
+    _wakelock.value = _loadSetting(CacheKey.Settings.wakelock, true);
+    _dynamicLight.value = _loadSetting(CacheKey.Settings.dynamicLight, false);
+    _listBg.value = _loadSetting(CacheKey.Settings.listBg, Uint8List(0));
+    _highMaterial.value = _loadSetting(CacheKey.Settings.highMaterial, true);
+    _fakeEnhanced.value = _loadSetting(CacheKey.Settings.fakeEnhanced, false);
+    setLyricOverlay(_loadSetting(CacheKey.Settings.lyricOverlay, false));
+    _immersive.value = _loadSetting(CacheKey.Settings.immersive, false);
+    _concert.value = _loadSetting(CacheKey.Settings.concert, false);
+    _audioFocus.value = _loadSetting(CacheKey.Settings.audioFocus, true);
+    _autoUpdate.value = _loadSetting(CacheKey.Settings.autoUpdate, true);
   }
 
   void setSortType(MediaSort value) {
     _sortType.value = value;
 
-    _settingsBox.put(CacheKey.Settings.sortType, value.value);
+    _saveSetting(CacheKey.Settings.sortType, value, (v) => v.value);
 
     MediaHelper.queryLocalMedia();
   }
@@ -259,79 +211,79 @@ class SettingsManager {
   void setBrightnessTheme(BrightnessTheme value) {
     _brightnessTheme.value = value;
 
-    _settingsBox.put(CacheKey.Settings.brightnessTheme, value.value);
+    _saveSetting(CacheKey.Settings.brightnessTheme, value, (v) => v.value);
   }
 
   void setLiquidGlass(bool value) {
     _liquidGlass.value = value;
 
-    _settingsBox.put(CacheKey.Settings.liquidGlass, value);
+    _saveSetting(CacheKey.Settings.liquidGlass, value);
   }
 
   void setScrollHidePlayBar(bool value) {
     _scrollHidePlayBar.value = value;
 
-    _settingsBox.put(CacheKey.Settings.scrollHidePlayBar, value);
+    _saveSetting(CacheKey.Settings.scrollHidePlayBar, value);
   }
 
   void setIsMaterialScrollBehavior(bool value) {
     _isMaterialScrollBehavior.value = value;
 
-    _settingsBox.put(CacheKey.Settings.isMaterialScrollBehavior, value);
+    _saveSetting(CacheKey.Settings.isMaterialScrollBehavior, value);
   }
 
   void setCoverShape(CoverShape value) {
     _coverShape.value = value;
 
-    _settingsBox.put(CacheKey.Settings.coverShape, value.value);
+    _saveSetting(CacheKey.Settings.coverShape, value, (v) => v.value);
   }
 
   void setArtCover(bool value) {
     _artCover.value = value;
 
-    _settingsBox.put(CacheKey.Settings.artCover, value);
+    _saveSetting(CacheKey.Settings.artCover, value);
   }
 
   void setWakelock(bool value) {
     _wakelock.value = value;
 
-    _settingsBox.put(CacheKey.Settings.wakelock, value);
+    _saveSetting(CacheKey.Settings.wakelock, value);
   }
 
   void setDynamicLight(bool value) {
     _dynamicLight.value = value;
 
-    _settingsBox.put(CacheKey.Settings.dynamicLight, value);
+    _saveSetting(CacheKey.Settings.dynamicLight, value);
   }
 
   void setListBg(Uint8List value) {
     _listBg.value = value;
 
-    _settingsBox.put(CacheKey.Settings.listBg, value);
+    _saveSetting(CacheKey.Settings.listBg, value);
   }
 
   void setHighMaterial(bool value) {
     _highMaterial.value = value;
 
-    _settingsBox.put(CacheKey.Settings.highMaterial, value);
+    _saveSetting(CacheKey.Settings.highMaterial, value);
   }
 
   void setKaraoke(bool value) {
     _karaoke.value = value;
 
-    _settingsBox.put(CacheKey.Settings.karaoke, value);
+    _saveSetting(CacheKey.Settings.karaoke, value);
   }
 
   void setFakeEnhanced(bool value) {
     _fakeEnhanced.value = value;
 
-    _settingsBox.put(CacheKey.Settings.fakeEnhanced, value);
+    _saveSetting(CacheKey.Settings.fakeEnhanced, value);
   }
 
   Future<void> setLyricOverlay(bool value) async {
     _lyricOverlay.value = value;
 
-    _settingsBox.put(CacheKey.Settings.lyricOverlay, value);
+    _saveSetting(CacheKey.Settings.lyricOverlay, value);
 
     if (value) {
       final res = await OverlayHelper.isPermissionGranted();
@@ -355,24 +307,24 @@ class SettingsManager {
   void setImmersive(bool value) {
     _immersive.value = value;
 
-    _settingsBox.put(CacheKey.Settings.immersive, value);
+    _saveSetting(CacheKey.Settings.immersive, value);
   }
 
   void setConcert(bool value) {
     _concert.value = value;
 
-    _settingsBox.put(CacheKey.Settings.concert, value);
+    _saveSetting(CacheKey.Settings.concert, value);
   }
 
   void setAudioFocus(bool value) {
     _audioFocus.value = value;
 
-    _settingsBox.put(CacheKey.Settings.audioFocus, value);
+    _saveSetting(CacheKey.Settings.audioFocus, value);
   }
 
   void setAutoUpdate(bool value) {
     _autoUpdate.value = value;
 
-    _settingsBox.put(CacheKey.Settings.autoUpdate, value);
+    _saveSetting(CacheKey.Settings.autoUpdate, value);
   }
 }

@@ -120,6 +120,7 @@ class LyricManager {
 
   void dispose() {
     lyricListener();
+    lyricDurationListener();
   }
 
   Future<void> setLyricModel(String value) async {
@@ -145,8 +146,8 @@ class LyricManager {
   void setCurrentIndexByLyric(List<LyricLine> lyric, Duration position) {
     if (lyric.isNotEmpty) {
       final index = CommonHelper.findClosestIndex(
-        parsedLyric.map((e) => BigInt.from(e.start.inMilliseconds)).toList(),
-        BigInt.from(position.inMilliseconds),
+        parsedLyric.map((e) => e.start.inMilliseconds).toList(),
+        position.inMilliseconds,
       );
 
       if (index != -1 && index != currentIndex.value) {
