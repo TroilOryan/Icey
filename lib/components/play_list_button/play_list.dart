@@ -20,61 +20,61 @@ class _PlayListState extends State<PlayList> {
   final listController = ListController();
   final scrollController = ScrollController();
 
-  late final StreamSubscription<MediaItem?> listener;
+  late final StreamSubscription<MediaItem?> _mediaItemSub;
+  late final StreamSubscription<List<MediaItem>> _queueSub;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
-    final index = mediaManager.queue.value.indexWhere(
-      (queue) =>
-          queue.id == mediaManager.mediaItem.value?.id &&
-          queue.extras?['uuid'] ==
-              mediaManager.mediaItem.value?.extras?['uuid'],
-    );
-
-    Future.delayed(const Duration(milliseconds: 500)).then((_) {
-      if (index != -1 &&
-          index >= 0 &&
-          index < mediaManager.queue.value.length - 1 &&
-          listController.isAttached) {
-        listController.jumpToItem(
-          index: index,
-          scrollController: scrollController,
-          alignment: 0,
-        );
-      }
+    // 初始加载时立即滚动到当前歌曲
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollToCurrent();
     });
 
-    WidgetsBinding.instance.addPostFrameCallback((callback) {
-      listener = mediaManager.mediaItem.listen((mediaItem) {
-        final index = mediaManager.queue.value.indexWhere(
-          (queue) =>
-              queue.id == mediaItem?.id &&
-              queue.extras?['uuid'] == mediaItem?.extras?['uuid'],
-        );
+    // 当前歌曲变化时滚动
+    _mediaItemSub = mediaManager.mediaItem.listen((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _scrollToCurrent();
+      });
+    });
 
-        if (index != -1 &&
-            index >= 0 &&
-            index < mediaManager.queue.value.length - 1 &&
-            listController.isAttached) {
-          listController.jumpToItem(
-            index: index,
-            scrollController: scrollController,
-            alignment: 0,
-          );
-        }
+    // 队列变化时（如 shuffle 重排）也滚动到当前歌曲
+    _queueSub = mediaManager.queue.listen((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _scrollToCurrent();
       });
     });
   }
 
+  void _scrollToCurrent() {
+    if (!listController.isAttached) return;
+
+    final currentMedia = mediaManager.mediaItem.value;
+    if (currentMedia == null) return;
+
+    final queue = mediaManager.queue.value;
+    final index = queue.indexWhere(
+      (item) =>
+          item.id == currentMedia.id &&
+          item.extras?['uuid'] == currentMedia.extras?['uuid'],
+    );
+
+    if (index >= 0 && index < queue.length) {
+      listController.jumpToItem(
+        index: index,
+        scrollController: scrollController,
+        alignment: 0,
+      );
+    }
+  }
+
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
 
-    listener.cancel();
+    _mediaItemSub.cancel();
+    _queueSub.cancel();
   }
 
   @override
