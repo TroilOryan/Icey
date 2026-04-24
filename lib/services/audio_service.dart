@@ -16,11 +16,23 @@ import 'package:IceyPlayer/services/play_mode.dart';
 import 'audio_session.dart';
 import 'custom_shuffle_order.dart';
 
-class AudioServiceHandler extends BaseAudioHandler
-    with QueueHandler, SeekHandler {
+class AudioServiceHandler extends BaseAudioHandler with SeekHandler {
   final _player = AudioPlayer();
 
   final _settingsBox = Boxes.settingsBox;
+
+  /// 自管理的播放队列，反映实际播放顺序
+  /// shuffle 开启时为打乱顺序，关闭时为原始顺序
+  final List<MediaItem> _queue = [];
+
+  /// 当前歌曲在 _queue 中的索引
+  int _currentQueueIndex = 0;
+
+  /// 手动跳转标志，防止 currentIndexStream 重复处理
+  bool _isManuallyAdvancing = false;
+
+  /// 手动跳转超时保护
+  Timer? _manualAdvanceTimer;
 
   late final _playlist = ConcatenatingAudioSource(
     children: [],
@@ -46,6 +58,27 @@ class AudioServiceHandler extends BaseAudioHandler
     _listenForDurationChanges();
     _listenForSequenceStateChanges();
     _notifyAudioHandlerAboutPlaybackEvents();
+  }
+
+  /// 同步内部 _queue 到 BaseAudioHandler 的 queue stream
+  void _syncQueueToStream() {
+    queue.add(List.unmodifiable(_queue));
+  }
+
+  /// 将 queue 索引映射为 _playlist 序列索引
+  int _queueIndexToSequenceIndex(int queueIndex) {
+    if (queueIndex < 0 || queueIndex >= _queue.length) return 0;
+    final mediaItemTag = _queue[queueIndex];
+    for (int i = 0; i < _playlist.length; i++) {
+      if ((_playlist[i] as IndexedAudioSource).tag == mediaItemTag) return i;
+    }
+    return 0;
+  }
+
+  /// 重置手动跳转标志
+  void _resetManualAdvance() {
+    _isManuallyAdvancing = false;
+    _manualAdvanceTimer?.cancel();
   }
 
   Future<void> loadPlaylist(List<MediaItem> mediaItems) async {
@@ -130,23 +163,87 @@ class AudioServiceHandler extends BaseAudioHandler
         );
       }
 
+      // 根据初始播放的歌曲找到 queue 中的位置
+      if (currentMediaID != null) {
+        final queueIndex = _queue.indexWhere((e) => e.id == currentMediaID);
+        if (queueIndex != -1) {
+          _currentQueueIndex = queueIndex;
+        }
+      }
+
       if (!PlatformHelper.isDesktop) {
         FlutterNativeSplash.remove();
       }
     });
   }
 
+  /// 监听 sequenceState 变化，重建 _queue
   void _listenForSequenceStateChanges() {
     _player.sequenceStateStream.listen((SequenceState? sequenceState) {
       final sequence = sequenceState?.effectiveSequence;
       if (sequence == null || sequence.isEmpty) return;
-      final items = sequence.map((source) => source.tag as MediaItem);
-      queue.add(items.toList());
+
+      final newShuffleEnabled = sequenceState!.shuffleModeEnabled;
+      final newShuffleIndices = sequenceState.shuffleIndices.toList();
+      final newSequenceLength = sequence.length;
+
+      // 仅在 shuffle 状态或序列长度变化时重建 queue
+      final needRebuild = newShuffleEnabled != _lastShuffleEnabled ||
+          newShuffleIndices.toString() != _lastShuffleIndices.toString() ||
+          newSequenceLength != _lastSequenceLength;
+
+      if (!needRebuild) return;
+
+      _lastShuffleEnabled = newShuffleEnabled;
+      _lastShuffleIndices = newShuffleIndices;
+      _lastSequenceLength = newSequenceLength;
+
+      // 保留已有 item 的 duration 数据
+      final Map<String, MediaItem> existingItems = {};
+      for (final item in _queue) {
+        existingItems[item.id] = item;
+      }
+
+      _queue.clear();
+      for (final source in sequence) {
+        final tag = source.tag as MediaItem;
+        final existing = existingItems[tag.id];
+        _queue.add(existing ?? tag);
+      }
+
+      _syncQueueToStream();
+
+      // 找到当前歌曲在新 queue 中的位置
+      final currentItem = mediaItem.value;
+      if (currentItem != null) {
+        final idx = _queue.indexWhere((item) => item.id == currentItem.id);
+        if (idx != -1) {
+          _currentQueueIndex = idx;
+        }
+      }
     });
   }
 
+  bool _lastShuffleEnabled = false;
+  List<int> _lastShuffleIndices = [];
+  int _lastSequenceLength = 0;
+
   void _listenForPositionChanges() {
     _player.positionStream.listen((position) {
+      // 自动推进：歌曲播完时跳到 queue 中的下一首
+      if (!_isManuallyAdvancing &&
+          position.inMilliseconds > 0 &&
+          mediaItem.value?.duration != null) {
+        final gap =
+            (position.inMilliseconds -
+                    mediaItem.value!.duration!.inMilliseconds)
+                .abs();
+
+        if (gap <= 50) {
+          _autoAdvanceIfNeeded();
+        }
+      }
+
       if (position.inMilliseconds == 0) return;
 
       mediaManager.setPosition(position);
@@ -185,47 +282,77 @@ class AudioServiceHandler extends BaseAudioHandler
     });
   }
 
-  Future<void> _listenForCurrentSongIndexChanges() async {
-    _player.currentIndexStream.listen((index) {
-      final playlist = queue.value;
+  /// 歌曲自然播完时，跳到 queue 中的下一首
+  void _autoAdvanceIfNeeded() {
+    if (_queue.isEmpty) return;
 
-      if (index == null || playlist.isEmpty || index > playlist.length - 1) {
+    // 确认当前播放的确实是 queue 中预期的歌曲
+    final currentIndex = _player.currentIndex;
+    if (currentIndex != null) {
+      final playingTag = (_playlist[currentIndex] as IndexedAudioSource).tag;
+      if (playingTag != _queue[_currentQueueIndex]) return;
+    }
+
+    if (_currentQueueIndex < _queue.length - 1) {
+      _currentQueueIndex++;
+      final seqIndex = _queueIndexToSequenceIndex(_currentQueueIndex);
+      _isManuallyAdvancing = true;
+      _player.seek(Duration.zero, index: seqIndex);
+
+      // 超时保护：5秒后重置标志
+      _manualAdvanceTimer?.cancel();
+      _manualAdvanceTimer = Timer(const Duration(seconds: 5), () {
+        _isManuallyAdvancing = false;
+      });
+    }
+  }
+
+  void _listenForCurrentSongIndexChanges() {
+    _player.currentIndexStream.listen((index) {
+      if (_isManuallyAdvancing) {
+        _resetManualAdvance();
         return;
       }
 
-      if (_player.shuffleModeEnabled) {
-        index = (_player.shuffleIndices).indexOf(index);
+      if (index == null || _queue.isEmpty) return;
+
+      // currentIndex 是 _playlist 的序列索引，需映射到 _queue
+      if (index < _playlist.length) {
+        final tag = (_playlist[index] as IndexedAudioSource).tag;
+        final queueIdx = _queue.indexWhere((item) => item.id == tag.id);
+        if (queueIdx != -1) {
+          _currentQueueIndex = queueIdx;
+        }
       }
 
-      if (index != -1) {
-        final currentMedia = playlist[index];
+      if (_currentQueueIndex >= _queue.length) return;
 
-        mediaManager.setCurrentMediaItem(currentMedia);
+      final currentMedia = _queue[_currentQueueIndex];
 
-        mediaItem.add(currentMedia);
+      mediaManager.setCurrentMediaItem(currentMedia);
 
-        _settingsBox.put(CacheKey.Settings.currentMedia, currentMedia.id);
-      }
+      mediaItem.add(currentMedia);
+
+      _settingsBox.put(CacheKey.Settings.currentMedia, currentMedia.id);
     });
   }
 
   void _listenForDurationChanges() {
     _player.durationStream.listen((duration) {
-      int? index = _player.currentIndex;
-      final newQueue = queue.value;
+      final index = _player.currentIndex;
 
-      if (newQueue.isEmpty || index == null) return;
+      if (_queue.isEmpty || index == null || index >= _playlist.length) return;
 
-      if (_player.shuffleModeEnabled) {
-        index = _player.shuffleIndices.indexOf(index);
-      }
+      // 通过 tag 匹配找到 _queue 中对应的 item
+      final tag = (_playlist[index] as IndexedAudioSource).tag;
+      final queueIdx = _queue.indexWhere((item) => item.id == tag.id);
+      if (queueIdx == -1) return;
 
-      final oldMediaItem = newQueue[index];
-      final newMediaItem = oldMediaItem.copyWith(duration: duration);
+      final newMediaItem = _queue[queueIdx].copyWith(duration: duration);
 
-      newQueue[index] = newMediaItem;
+      _queue[queueIdx] = newMediaItem;
 
-      queue.add(newQueue);
+      _syncQueueToStream();
       mediaItem.add(newMediaItem);
     });
   }
@@ -340,59 +467,66 @@ class AudioServiceHandler extends BaseAudioHandler
 
   @override
   Future<void> addQueueItems(List<MediaItem> mediaItems) async {
-    final audioSource = mediaItems.map(_createAudioSource);
-    await _playlist.addAll(audioSource.toList());
+    final audioSource = mediaItems.map(_createAudioSource).toList();
+    await _playlist.addAll(audioSource);
 
-    final newQueue = queue.value..addAll(mediaItems);
-
-    queue.add(newQueue);
+    _queue.addAll(mediaItems);
+    _syncQueueToStream();
   }
 
   @override
   Future<void> addQueueItem(MediaItem mediaItem) async {
-    // manage Just Audio
     final audioSource = _createAudioSource(mediaItem);
     _playlist.add(audioSource);
 
-    // notify system
-    final newQueue = queue.value..add(mediaItem);
-    queue.add(newQueue);
+    _queue.add(mediaItem);
+    _syncQueueToStream();
   }
 
   @override
   Future<void> updateQueue(List<MediaItem> mediaItems) async {
     _playlist.clear();
-    queue.value.clear();
+    _queue.clear();
 
-    final audioSource = mediaItems.map(_createAudioSource);
+    final audioSource = mediaItems.map(_createAudioSource).toList();
 
-    await _playlist.addAll(audioSource.toList());
+    await _playlist.addAll(audioSource);
 
-    queue.value.addAll(mediaItems);
+    // 如果 shuffle 已启用，按 shuffleIndices 重排 queue
+    if (_player.shuffleModeEnabled && _player.shuffleIndices != null) {
+      final indices = _player.shuffleIndices!;
+      for (int i = 0; i < indices.length && i < mediaItems.length; i++) {
+        _queue.add(mediaItems[indices[i]]);
+      }
+    } else {
+      _queue.addAll(mediaItems);
+    }
 
-    queue.add(mediaItems);
+    _syncQueueToStream();
+
+    _resetManualAdvance();
+    _currentQueueIndex = 0;
   }
 
   @override
   Future<void> insertQueueItem(int index, MediaItem mediaItem) async {
-    final _queue = List<MediaItem>.from(queue.value);
+    // 注意：index 是 queue 中的位置，需要映射到 _playlist
+    final seqIndex = _queueIndexToSequenceIndex(index);
+    _playlist.insert(seqIndex, _createAudioSource(mediaItem));
 
-    _playlist.insert(index, _createAudioSource(mediaItem));
-
-    final newQueue = _queue..insert(index, mediaItem);
-
-    queue.add(newQueue);
+    _queue.insert(index, mediaItem);
+    _syncQueueToStream();
   }
 
   @override
   Future<void> removeQueueItem(MediaItem mediaItem) async {
-    final index = queue.value.indexOf(mediaItem);
-    // manage Just Audio
-    _playlist.removeAt(index);
+    final index = _queue.indexWhere(
+      (item) => item.id == mediaItem.id &&
+          item.extras?['uuid'] == mediaItem.extras?['uuid'],
+    );
+    if (index == -1) return;
 
-    // notify system
-    final newQueue = queue.value..removeAt(index);
-    queue.add(newQueue);
+    await removeQueueItemAt(index);
   }
 
   UriAudioSource _createAudioSource(MediaItem mediaItem) {
@@ -405,12 +539,15 @@ class AudioServiceHandler extends BaseAudioHandler
 
   @override
   Future<void> removeQueueItemAt(int index) async {
-    // manage Just Audio
-    _playlist.removeAt(index);
+    if (index < 0 || index >= _queue.length) return;
 
-    // notify system
-    final newQueue = queue.value..removeAt(index);
-    queue.add(newQueue);
+    // 找到该歌曲在 _playlist 中的位置（queue 顺序和 playlist 顺序可能不同）
+    final seqIndex = _queueIndexToSequenceIndex(index);
+
+    // 从 _playlist 移除，sequenceStateStream 会自动重建 _queue
+    if (seqIndex < _playlist.length) {
+      await _playlist.removeAt(seqIndex);
+    }
   }
 
   @override
@@ -438,59 +575,86 @@ class AudioServiceHandler extends BaseAudioHandler
 
   @override
   Future<void> skipToQueueItem(int index) async {
-    if (index < 0 || index >= queue.value.length) return;
-    if (_player.shuffleModeEnabled &&
-        _player.shuffleIndices != null &&
-        index < _player.shuffleIndices!.length) {
-      index = _player.shuffleIndices![index];
-    }
+    if (index < 0 || index >= _queue.length) return;
 
-    _player.seek(Duration.zero, index: index);
+    _currentQueueIndex = index;
+    final seqIndex = _queueIndexToSequenceIndex(index);
+
+    _isManuallyAdvancing = true;
+    _player.seek(Duration.zero, index: seqIndex);
+
+    _manualAdvanceTimer?.cancel();
+    _manualAdvanceTimer = Timer(const Duration(seconds: 5), () {
+      _isManuallyAdvancing = false;
+    });
   }
 
   @override
   Future<void> skipToNext() async {
-    if (_player.loopMode == LoopMode.one && mediaItem.value != null) {
-      final index = queue.value.indexOf(mediaItem.value!);
-
-      await skipToQueueItem(index == queue.value.length - 1 ? 0 : index + 1);
-
+    // 单曲循环模式下，skipToNext 强制跳到下一首
+    if (_player.loopMode == LoopMode.one) {
+      if (_queue.isEmpty) return;
+      final nextIndex = _currentQueueIndex < _queue.length - 1
+          ? _currentQueueIndex + 1
+          : 0;
+      await skipToQueueItem(nextIndex);
       play();
-
       return;
     }
 
-    await _player.seekToNext();
+    if (_currentQueueIndex < _queue.length - 1) {
+      _currentQueueIndex++;
+      final seqIndex = _queueIndexToSequenceIndex(_currentQueueIndex);
 
-    if (!mediaManager.isPlaying.value) {
-      play();
+      _isManuallyAdvancing = true;
+      _player.seek(Duration.zero, index: seqIndex);
+
+      _manualAdvanceTimer?.cancel();
+      _manualAdvanceTimer = Timer(const Duration(seconds: 5), () {
+        _isManuallyAdvancing = false;
+      });
+
+      if (!mediaManager.isPlaying.value) {
+        play();
+      }
     }
   }
 
   @override
   Future<void> skipToPrevious() async {
-    if (_player.loopMode == LoopMode.one && mediaItem.value != null) {
-      final index = queue.value.indexOf(mediaItem.value!);
-
-      await skipToQueueItem(index == 0 ? queue.value.length - 1 : index - 1);
-
+    // 单曲循环模式下，skipToPrevious 强制跳到上一首
+    if (_player.loopMode == LoopMode.one) {
+      if (_queue.isEmpty) return;
+      final prevIndex = _currentQueueIndex > 0
+          ? _currentQueueIndex - 1
+          : _queue.length - 1;
+      await skipToQueueItem(prevIndex);
       play();
-
       return;
     }
 
-    await _player.seekToPrevious();
+    if (_currentQueueIndex > 0) {
+      _currentQueueIndex--;
+      final seqIndex = _queueIndexToSequenceIndex(_currentQueueIndex);
 
-    play();
+      _isManuallyAdvancing = true;
+      _player.seek(Duration.zero, index: seqIndex);
+
+      _manualAdvanceTimer?.cancel();
+      _manualAdvanceTimer = Timer(const Duration(seconds: 5), () {
+        _isManuallyAdvancing = false;
+      });
+
+      play();
+    }
   }
 
   @override
   Future<void> setShuffleMode(AudioServiceShuffleMode shuffleMode) async {
     final enabled = shuffleMode == AudioServiceShuffleMode.all;
 
-    if (enabled) {
-      await _player.shuffle();
-    }
+    // 不调用 _player.shuffle()，保持 _playlist 原始顺序
+    // queue 的顺序由 sequenceStateStream 根据 effectiveSequence 自动重建
 
     playbackState.add(
       playbackState.value.copyWith(
@@ -513,7 +677,13 @@ class AudioServiceHandler extends BaseAudioHandler
       ),
     );
 
-    await _player.setLoopMode(LoopMode.values[repeatMode.index]);
+    // 所有模式都用 LoopMode.all，自动推进由 _autoAdvanceIfNeeded 管理
+    // 单曲循环例外：使用 LoopMode.one 让 player 自动循环当前歌曲
+    if (repeatMode == AudioServiceRepeatMode.one) {
+      await _player.setLoopMode(LoopMode.one);
+    } else {
+      await _player.setLoopMode(LoopMode.all);
+    }
   }
 
   @override
