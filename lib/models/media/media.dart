@@ -304,8 +304,6 @@ class MediaManager {
     batch(() async {
       final String path = value.extras?["path"];
 
-      final id = value.id;
-
       _currentMediaItem.value = value;
 
       final res = await getLyricFromPath(path: path);
