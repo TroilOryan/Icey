@@ -52,7 +52,7 @@ class _AboutPageState extends State<AboutPage> {
             padding: EdgeInsets.zero,
             children: [ListItem(title: "制作人员", desc: "牧以诚 安酥雨")],
           ),
-          ListCard(
+          const ListCard(
             title: "版本信息",
             padding: EdgeInsets.zero,
             children: [ListItem(title: '版本号', desc: BuildConfig.versionName)],

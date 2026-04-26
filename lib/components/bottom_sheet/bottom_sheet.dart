@@ -49,7 +49,7 @@ Future<dynamic> scrollableBottomSheet({
     isDismissible: isDismissible,
     context: context,
     isScrollControlled: true,
-    shape: RoundedRectangleBorder(
+    shape: const RoundedRectangleBorder(
       borderRadius: .vertical(top: .circular(AppTheme.borderRadiusLg)),
     ),
     builder: (context) {

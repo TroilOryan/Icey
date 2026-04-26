@@ -1,6 +1,4 @@
 import 'package:IceyPlayer/components/adaptive_builder/adaptive_builder.dart';
-import 'package:IceyPlayer/helpers/platform.dart';
-import 'package:audio_service/audio_service.dart';
 import 'package:IceyPlayer/components/marquee/marquee.dart';
 import 'package:IceyPlayer/models/media/media.dart';
 import 'package:flutter/material.dart';

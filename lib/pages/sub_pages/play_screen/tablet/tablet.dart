@@ -25,20 +25,20 @@ class Tablet extends StatelessWidget {
 
     return Stack(
       children: [
-        TitleBarAction(immersive: true),
+        const TitleBarAction(immersive: true),
         SizedBox(
           height: 60,
           child: Padding(
-            padding: EdgeInsetsGeometry.only(left: 16),
+            padding: const EdgeInsetsGeometry.only(left: 16),
             child: Row(
               children: [
                 IconButton(
-                  icon: Icon(Icons.keyboard_arrow_down),
+                  icon: const Icon(Icons.keyboard_arrow_down),
                   color: appThemeExtension.secondary,
                   onPressed: () => context.pop(),
                 ),
                 IconButton(
-                  icon: Icon(Icons.fullscreen),
+                  icon: const Icon(Icons.fullscreen),
                   color: appThemeExtension.secondary,
                   onPressed: () => context.pop(),
                 ),
@@ -47,7 +47,7 @@ class Tablet extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: EdgeInsetsGeometry.fromLTRB(32, 64, 32, 32),
+          padding: const EdgeInsetsGeometry.fromLTRB(32, 64, 32, 32),
           child: Column(
             spacing: 32,
             mainAxisAlignment: .spaceBetween,
@@ -57,7 +57,7 @@ class Tablet extends StatelessWidget {
                   spacing: 64,
                   children: [
                     PlayShapedCover(size: deviceHeight * 0.6),
-                    Flexible(
+                    const Flexible(
                       child: Column(
                         children: [
                           PlayInfo(),

@@ -131,7 +131,7 @@ class ArtistListDetailPage extends StatelessWidget {
 
                 SliverToBoxAdapter(
                   child: Container(
-                    margin: EdgeInsets.only(bottom: 16),
+                    margin: const EdgeInsets.only(bottom: 16),
                     child: Row(
                       children: [
                         Material(
@@ -143,7 +143,7 @@ class ArtistListDetailPage extends StatelessWidget {
                               onTap: () =>
                                   controller.handlePlayAll(artistList()),
                               child: Padding(
-                                padding: EdgeInsets.symmetric(
+                                padding: const EdgeInsets.symmetric(
                                   horizontal: 6,
                                   vertical: 2,
                                 ),

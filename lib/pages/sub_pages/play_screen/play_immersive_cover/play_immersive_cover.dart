@@ -83,7 +83,7 @@ class PlayImmersiveCover extends StatelessWidget {
       scale: scale,
       child: AnimatedContainer(
         duration: AppTheme.defaultDuration,
-        height: _size,
+        height: size,
         margin: EdgeInsets.only(
           top: lyricOpened != null && lyricOpened!
               ? mediaQuery.size.width * 0.25 / 2 + 14

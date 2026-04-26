@@ -1,6 +1,7 @@
 ///
 ///  create by zmtzawqlp on 2019/5/27
 ///
+library;
 import 'package:flutter/material.dart';
 
 import 'painter/bubbles_painter.dart';
@@ -384,12 +385,12 @@ class LikeButtonState extends State<LikeButton> with TickerProviderStateMixin {
                     clipBehavior: Clip.hardEdge,
                     children: <Widget>[
                       Opacity(
-                        child: currentSameWidget,
                         opacity: _opacityAnimation.value,
+                        child: currentSameWidget,
                       ),
                       Opacity(
-                        child: preSameWidget,
                         opacity: 1.0 - _opacityAnimation.value,
+                        child: preSameWidget,
                       ),
                     ],
                   ),
@@ -440,8 +441,8 @@ class LikeButtonState extends State<LikeButton> with TickerProviderStateMixin {
     }
 
     result = ClipRect(
-      child: result,
       clipper: LikeCountClip(),
+      child: result,
     );
 
     return result;

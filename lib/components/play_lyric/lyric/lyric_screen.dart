@@ -34,7 +34,7 @@ class _LyricScreenState extends State<LyricScreen>
   bool _showTranslation = true;
   
   /// 播放速度
-  double _playbackSpeed = 1.0;
+  final double _playbackSpeed = 1.0;
   
   /// 动画控制器
   late AnimationController _playButtonController;
@@ -334,10 +334,10 @@ class _LyricScreenState extends State<LyricScreen>
         const SizedBox(width: 12),
         Expanded(
           child: SliderTheme(
-            data: SliderThemeData(
+            data: const SliderThemeData(
               trackHeight: 2,
-              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6),
-              overlayShape: const RoundSliderOverlayShape(overlayRadius: 10),
+              thumbShape: RoundSliderThumbShape(enabledThumbRadius: 6),
+              overlayShape: RoundSliderOverlayShape(overlayRadius: 10),
               activeTrackColor: Colors.white38,
               inactiveTrackColor: Colors.white12,
               thumbColor: Colors.white,
@@ -397,10 +397,10 @@ class _LyricScreenState extends State<LyricScreen>
     return Column(
       children: [
         SliderTheme(
-          data: SliderThemeData(
+          data: const SliderThemeData(
             trackHeight: 4,
-            thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6),
-            overlayShape: const RoundSliderOverlayShape(overlayRadius: 12),
+            thumbShape: RoundSliderThumbShape(enabledThumbRadius: 6),
+            overlayShape: RoundSliderOverlayShape(overlayRadius: 12),
             activeTrackColor: Colors.white,
             inactiveTrackColor: Colors.white24,
             thumbColor: Colors.white,

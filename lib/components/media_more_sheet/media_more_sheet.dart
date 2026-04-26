@@ -46,7 +46,7 @@ final _likedBox = Boxes.likedBox,
     _mediaCountBox = Boxes.mediaCountBox;
 
 class MediaMoreSheet {
-  static addToNextPlay(MediaEntity media) {
+  static SheetItem addToNextPlay(MediaEntity media) {
     final currentIndex = mediaManager.queue.value.indexWhere(
       (item) =>
           item.id == mediaManager.mediaItem.value?.id &&
@@ -59,7 +59,7 @@ class MediaMoreSheet {
     );
   }
 
-  static likeMedia(BuildContext context, MediaEntity media) {
+  static SheetItem likeMedia(BuildContext context, MediaEntity media) {
     final likedIDs = _likedBox.keys.toList();
 
     return SheetItem(
@@ -80,7 +80,7 @@ class MediaMoreSheet {
     );
   }
 
-  static addToMediaOrder(BuildContext context, MediaEntity media) {
+  static SheetItem addToMediaOrder(BuildContext context, MediaEntity media) {
     return SheetItem(
       label: "添加到歌单",
       onTap: () {
@@ -91,7 +91,7 @@ class MediaMoreSheet {
     );
   }
 
-  static showMediaOrder(BuildContext context, MediaEntity media) {
+  static void showMediaOrder(BuildContext context, MediaEntity media) {
     final theme = Theme.of(context);
 
     final List<MediaOrderEntity> mediaOrder = _mediaOrderBox.values
@@ -169,11 +169,11 @@ class MediaMoreSheet {
     );
   }
 
-  static deleteMedia(MediaEntity media) {
+  static SheetItem deleteMedia(MediaEntity media) {
     return SheetItem(label: "删除", onTap: () => MediaHelper.deleteMedia(media));
   }
 
-  static mediaInfo(BuildContext context, MediaEntity media) {
+  static SheetItem mediaInfo(BuildContext context, MediaEntity media) {
     return SheetItem(
       label: "媒体信息",
       onTap: () {
@@ -184,7 +184,7 @@ class MediaMoreSheet {
     );
   }
 
-  static mediaArtist(BuildContext context, MediaEntity mediaItem) {
+  static SheetItem mediaArtist(BuildContext context, MediaEntity mediaItem) {
     final index = mediaManager.artistList.value.indexWhere(
       (e) => e.id == mediaItem.artistID,
     );
@@ -201,7 +201,7 @@ class MediaMoreSheet {
     );
   }
 
-  static mediaAlbum(BuildContext context, MediaEntity media) {
+  static SheetItem mediaAlbum(BuildContext context, MediaEntity media) {
     final index = mediaManager.albumList.value.indexWhere(
       (e) => e.id == media.albumID,
     );
@@ -219,12 +219,12 @@ class MediaMoreSheet {
   }
 
   // 打开音乐标签
-  static openInMusicTagEditor(MediaEntity media) {
-    var _app = OpenApp();
+  static SheetItem openInMusicTagEditor(MediaEntity media) {
+    var app = OpenApp();
 
     return SheetItem(
       label: '在音乐标签中打开',
-      onTap: () async => await _app.openActivity(
+      onTap: () async => await app.openActivity(
         appId: "com.xjcheng.musictageditor",
         // activity: "SongDetailActivity",
         activity: "MainActivity",
@@ -241,7 +241,7 @@ class MediaMoreSheet {
     );
   }
 
-  static showMediaInfo(BuildContext context, MediaEntity media) {
+  static void showMediaInfo(BuildContext context, MediaEntity media) {
     final theme = Theme.of(context);
 
     final count = _mediaCountBox.get(media.id, defaultValue: 0);

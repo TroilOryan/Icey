@@ -22,7 +22,7 @@ class PlayBarDesktop extends StatelessWidget {
     );
 
     final playBar = Container(
-      padding: .fromLTRB(10, 8, 6, 8),
+      padding: const .fromLTRB(10, 8, 6, 8),
       child: Stack(
         children: [
           Row(
@@ -47,7 +47,7 @@ class PlayBarDesktop extends StatelessWidget {
                   duration: AppTheme.defaultDurationMid,
                 ),
               ),
-              PlayInfo(),
+              const PlayInfo(),
             ],
           ),
 
@@ -119,7 +119,7 @@ class PlayBarDesktop extends StatelessWidget {
           child: GlassPanel(
             width: deviceWidth * 0.62,
             height: playBarController.playBarHeight,
-            shape: LiquidRoundedRectangle(borderRadius: 66),
+            shape: const LiquidRoundedRectangle(borderRadius: 66),
             padding: .zero,
             settings: RecommendedGlassSettings.bottomBar,
             margin: .fromLTRB(16, 0, 16, paddingBottom),

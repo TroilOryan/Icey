@@ -17,7 +17,7 @@ class MediaListCursor extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (offstage || cursorInfo == null) {
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
 
     return Builder(
@@ -28,7 +28,7 @@ class MediaListCursor extends StatelessWidget {
 
         double titleSize = 80;
 
-        top = cursorInfo!.offset.dy + 190 - titleSize * 0.5;
+        top = cursorInfo!.offset.dy - titleSize * 0.5;
 
         resultWidget = AzListCursor(size: titleSize, title: cursorInfo!.title);
 

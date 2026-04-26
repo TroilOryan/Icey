@@ -1,5 +1,4 @@
 import 'package:IceyPlayer/models/lyric/lyric_parser/ttml_parser.dart';
-import 'package:IceyPlayer/src/rust/api/lyric_parser.dart';
 import 'package:flutter_lyric/core/lyric_model.dart';
 import 'package:flutter_lyric/core/lyric_parse.dart' hide LrcParser;
 

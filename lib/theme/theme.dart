@@ -34,32 +34,32 @@ class AppTheme {
 
   static const Color bgColorDarkDisabled = Color(0xff424242);
 
-  static TextStyle titleLarge = TextStyle(
+  static TextStyle titleLarge = const TextStyle(
     fontSize: 24.0,
     fontWeight: FontWeight.bold,
   );
 
-  static TextStyle titleMedium = TextStyle(
+  static TextStyle titleMedium = const TextStyle(
     fontSize: 20.0,
     fontWeight: FontWeight.bold,
   );
 
-  static TextStyle titleSmall = TextStyle(
+  static TextStyle titleSmall = const TextStyle(
     fontSize: 16.0,
     fontWeight: FontWeight.bold,
   );
 
-  static TextStyle bodyLarge = TextStyle(
+  static TextStyle bodyLarge = const TextStyle(
     fontSize: 14.0,
     fontWeight: FontWeight.w500,
   );
 
-  static TextStyle bodyMedium = TextStyle(
+  static TextStyle bodyMedium = const TextStyle(
     fontSize: 12.0,
     fontWeight: FontWeight.w500,
   );
 
-  static TextStyle bodySmall = TextStyle(
+  static TextStyle bodySmall = const TextStyle(
     fontSize: 10.0,
     fontWeight: FontWeight.w500,
   );
@@ -199,11 +199,11 @@ class AppTheme {
       ),
       iconTheme: IconThemeData(size: 16, color: colorScheme.onSurface),
       inputDecorationTheme: InputDecorationTheme(
-        constraints: BoxConstraints(maxHeight: 66),
+        constraints: const BoxConstraints(maxHeight: 66),
         fillColor: (isDark ? const Color(0xff212121) : Colors.white),
         filled: true,
         hintStyle: bodySmall,
-        contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+        contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(borderRadiusLg),
           borderSide: BorderSide(

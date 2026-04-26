@@ -44,29 +44,37 @@ class ProgressiveScrollview extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: backgroundColor,
-      body: PlatformHelper.isDesktop
-          ? Builder(builder: (context) => builder(appbarHeight))
-          : SoftEdgeBlur(
-              edges: [
-                EdgeBlur(
-                  type: EdgeType.topEdge,
-                  size: PlatformHelper.isDesktop ? 75 : 100,
-                  sigma: 12,
-                  tintColor: listBg.isEmpty
-                      ? theme.floatingActionButtonTheme.backgroundColor ??
-                            theme.scaffoldBackgroundColor
-                      : null,
-                  controlPoints: [
-                    ControlPoint(position: 0.5, type: ControlPointType.visible),
-                    ControlPoint(
-                      position: 1,
-                      type: ControlPointType.transparent,
-                    ),
-                  ],
-                ),
-              ],
-              child: Builder(builder: (context) => builder(appbarHeight)),
-            ),
+      // 隔离键盘弹出引起的 MediaQuery viewInsets 变化，避免滚动内容全部重建
+      body: MediaQuery.removeViewInsets(
+        context: context,
+        removeBottom: true,
+        child: PlatformHelper.isDesktop
+            ? Builder(builder: (context) => builder(appbarHeight))
+            : SoftEdgeBlur(
+                edges: [
+                  EdgeBlur(
+                    type: EdgeType.topEdge,
+                    size: PlatformHelper.isDesktop ? 75 : 100,
+                    sigma: 12,
+                    tintColor: listBg.isEmpty
+                        ? theme.floatingActionButtonTheme.backgroundColor ??
+                              theme.scaffoldBackgroundColor
+                        : null,
+                    controlPoints: [
+                      ControlPoint(
+                        position: 0.5,
+                        type: ControlPointType.visible,
+                      ),
+                      ControlPoint(
+                        position: 1,
+                        type: ControlPointType.transparent,
+                      ),
+                    ],
+                  ),
+                ],
+                child: Builder(builder: (context) => builder(appbarHeight)),
+              ),
+      ),
     );
   }
 
@@ -105,7 +113,7 @@ class ProgressiveScrollview extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: Container(
               height: 36,
-              margin: EdgeInsets.fromLTRB(24, 4, 0, 0),
+              margin: const EdgeInsets.fromLTRB(24, 4, 0, 0),
               child: RoundIconButton(
                 ghost: false,
                 icon: const Icon(Icons.arrow_back),

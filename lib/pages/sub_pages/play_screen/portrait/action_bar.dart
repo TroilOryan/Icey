@@ -25,8 +25,8 @@ class ActionBar extends StatelessWidget {
       opacity: opacity(),
       duration: AppTheme.defaultDuration,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 2),
-        margin: EdgeInsets.only(top: 32),
+        padding: const EdgeInsets.symmetric(horizontal: 2),
+        margin: const EdgeInsets.only(top: 32),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -34,7 +34,7 @@ class ActionBar extends StatelessWidget {
               color: appThemeExtension.primary,
               onPressed: context.pop,
               iconSize: 24,
-              icon: Icon(Icons.keyboard_arrow_down),
+              icon: const Icon(Icons.keyboard_arrow_down),
             ),
             PlayMenuButton(size: 24, color: appThemeExtension.primary),
           ],

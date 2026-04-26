@@ -45,7 +45,7 @@ final List<GoRoute> subPages = [
       GoRoute(
         path: '/pro',
         builder: (_, _) => const ProPage(),
-        routes: [GoRoute(path: '/pay', builder: (_, __) => const PayPage())],
+        routes: [GoRoute(path: '/pay', builder: (_, _) => const PayPage())],
       ),
       GoRoute(path: '/media_store', builder: (_, _) => const MediaStorePage()),
       GoRoute(

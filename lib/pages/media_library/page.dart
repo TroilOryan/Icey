@@ -39,7 +39,7 @@ class _MediaLibraryPageState extends State<MediaLibraryPage>
     final showBackTop = homeController.state.showBackTop.watch(context);
 
     if (mediaList.isEmpty) {
-      return MediaEmpty(onScan: MediaScanner.scanMedias);
+      return const MediaEmpty(onScan: MediaScanner.scanMedias);
     }
 
     return Stack(
@@ -75,7 +75,7 @@ class _MediaLibraryPageState extends State<MediaLibraryPage>
                     padding: EdgeInsetsGeometry.only(top: appbarHeight),
                     sliver: MultiSliver(
                       children: [
-                        HeaderLocator.sliver(),
+                        const HeaderLocator.sliver(),
 
                         MediaList(
                           showDuration: showDuration,

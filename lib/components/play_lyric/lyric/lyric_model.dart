@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 /// 单词/逐字信息
 class LyricWord {

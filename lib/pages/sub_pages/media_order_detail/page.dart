@@ -81,7 +81,7 @@ class _MediaOrderDetailPageState extends State<MediaOrderDetailPage> {
               alignment: Alignment.centerLeft,
               child: Container(
                 height: 36,
-                margin: EdgeInsets.fromLTRB(24, 4, 0, 0),
+                margin: const EdgeInsets.fromLTRB(24, 4, 0, 0),
                 child: RoundIconButton(
                   icon: const Icon(Icons.arrow_back),
                   onTap: context.pop,
@@ -118,12 +118,12 @@ class _MediaOrderDetailPageState extends State<MediaOrderDetailPage> {
           ),
 
           SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
             sliver: MultiSliver(
               children: [
                 SliverToBoxAdapter(
                   child: Container(
-                    margin: EdgeInsets.only(bottom: 16),
+                    margin: const EdgeInsets.only(bottom: 16),
                     child: Row(
                       children: [
                         Material(
@@ -134,7 +134,7 @@ class _MediaOrderDetailPageState extends State<MediaOrderDetailPage> {
                             child: InkWell(
                               onTap: controller.handlePlayAll,
                               child: Padding(
-                                padding: EdgeInsets.symmetric(
+                                padding: const EdgeInsets.symmetric(
                                   horizontal: 6,
                                   vertical: 2,
                                 ),

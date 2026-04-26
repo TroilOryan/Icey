@@ -132,7 +132,7 @@ class AlbumListDetailPage extends StatelessWidget {
 
                 SliverToBoxAdapter(
                   child: Container(
-                    margin: EdgeInsets.only(bottom: 16),
+                    margin: const EdgeInsets.only(bottom: 16),
                     child: Row(
                       children: [
                         Material(
@@ -144,7 +144,7 @@ class AlbumListDetailPage extends StatelessWidget {
                               onTap: () =>
                                   controller.handlePlayAll(albumList()),
                               child: Padding(
-                                padding: EdgeInsets.symmetric(
+                                padding: const EdgeInsets.symmetric(
                                   horizontal: 6,
                                   vertical: 2,
                                 ),

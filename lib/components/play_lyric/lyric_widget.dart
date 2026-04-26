@@ -27,20 +27,20 @@ class LyricWidget extends StatelessWidget {
 
     final textStyle = theme.textTheme.titleLarge!.copyWith(
       color: appThemeExtension.secondary,
-      fontSize: isLandscape ? null : 32,
+      fontSize: isLandscape ? 20 : 32,
     );
 
     final activeTextStyle = theme.textTheme.titleLarge!.copyWith(
       color: appThemeExtension.primary,
-      fontSize: isLandscape ? null : 32,
+      fontSize: isLandscape ? 20 : 32,
     );
 
     final extTextStyle = theme.textTheme.titleLarge!.copyWith(
       color: appThemeExtension.secondary,
-      fontSize: isLandscape ? null : 20,
+      fontSize: isLandscape ? 18 : 20,
     );
 
-    final lyricStyle = PlayLyricStyle.default1.copyWith(
+    final baseStyle = PlayLyricStyle.default1.copyWith(
       textStyle: textStyle,
       activeStyle: activeTextStyle,
       translationStyle: extTextStyle,
@@ -55,6 +55,11 @@ class LyricWidget extends StatelessWidget {
           ? theme.colorScheme.inversePrimary
           : null,
     );
+
+    // 横屏时当前歌词居中（activeAnchorPosition: 0.5 = 视口高度的 50%）
+    final lyricStyle = isLandscape
+        ? PlayLyricStyle.landscape(baseStyle)
+        : baseStyle;
 
     if (parsedLyric.isEmpty) {
       return Center(child: Text('暂无歌词', style: extTextStyle));

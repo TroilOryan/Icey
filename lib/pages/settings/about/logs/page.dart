@@ -59,7 +59,7 @@ class _LogsPageState extends State<LogsPage> {
         children: [
           ListCard(
             spacing: 0,
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             children: [
               if (latestLog != null)
                 Row(
@@ -117,13 +117,13 @@ class _LogsPageState extends State<LogsPage> {
             onPressed: () => CommonHelper.launchURL(
               'https://github.com/TroilOryan/Icey/issues',
             ),
-            child: Text("反馈错误"),
+            child: const Text("反馈错误"),
           ),
           Button(
             primary: false,
             block: true,
             onPressed: controller.clearLogs,
-            child: Text("清空日志"),
+            child: const Text("清空日志"),
           ),
         ],
       ),

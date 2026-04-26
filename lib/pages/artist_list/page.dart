@@ -132,14 +132,14 @@ class _ArtistListPageState extends State<ArtistListPage>
                 },
               ),
               gridDelegate: PlatformHelper.isDesktop
-                  ? SliverGridDelegateWithFixedCrossAxisCount(
+                  ? const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 6,
                       mainAxisSpacing: 12,
                       crossAxisSpacing: 12,
                       childAspectRatio: 0.7,
                       mainAxisExtent: 256,
                     )
-                  : SliverGridDelegateWithFixedCrossAxisCount(
+                  : const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       mainAxisSpacing: 12,
                       crossAxisSpacing: 12,

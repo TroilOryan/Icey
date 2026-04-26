@@ -81,7 +81,7 @@ class _AzListIndexBarState extends State<AzListIndexBar> {
     );
   }
 
-  _onGestureHandler(dynamic details) async {
+  Future<void> _onGestureHandler(dynamic details) async {
     if (details is! DragUpdateDetails && details is! DragDownDetails) return;
 
     observeOffset = details.localPosition.dy;
@@ -100,17 +100,17 @@ class _AzListIndexBarState extends State<AzListIndexBar> {
     final firstChildIndex = firstChildModel.index;
     selectedIndex.value = firstChildIndex;
 
-    // Calculate cursor offset.
+    // Calculate cursor offset relative to the Stack parent.
     final firstChildRenderObj = firstChildModel.renderObject;
-
-    final firstChildRenderObjOffset = firstChildRenderObj.localToGlobal(
+    final stackRenderObj = widget.parentKey.currentContext?.findRenderObject();
+    final relativeOffset = firstChildRenderObj.localToGlobal(
       Offset.zero,
-      ancestor: widget.parentKey.currentContext?.findRenderObject(),
+      ancestor: stackRenderObj,
     );
 
     final cursorOffset = Offset(
-      firstChildRenderObjOffset.dx,
-      firstChildRenderObjOffset.dy + firstChildModel.size.width * 0.5,
+      relativeOffset.dx,
+      relativeOffset.dy + firstChildModel.size.height * 0.5,
     );
 
     widget.onSelectionUpdate?.call(firstChildIndex, cursorOffset);

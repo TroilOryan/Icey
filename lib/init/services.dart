@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:IceyPlayer/models/media/media.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';

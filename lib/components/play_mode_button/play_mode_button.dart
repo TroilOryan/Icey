@@ -1,5 +1,4 @@
 import 'package:IceyPlayer/components/round_icon_button/round_icon_button.dart';
-import 'package:IceyPlayer/helpers/toast/toast.dart';
 import 'package:IceyPlayer/models/media/media.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sficon/flutter_sficon.dart';

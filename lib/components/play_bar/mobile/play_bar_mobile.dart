@@ -25,7 +25,7 @@ class PlayBarMobile extends StatelessWidget {
         isNext = playBarController.state.isNext.watch(context);
 
     final playBar = Container(
-      padding: .fromLTRB(10, 8, 6, 8),
+      padding: const .fromLTRB(10, 8, 6, 8),
       child: Stack(
         children: [
           StreamBuilder(
@@ -56,7 +56,7 @@ class PlayBarMobile extends StatelessWidget {
                           Positioned(
                             right: constraints.maxWidth - 8 - 35.2,
                             child: VisibilityDetector(
-                              key: Key("prev"),
+                              key: const Key("prev"),
                               onVisibilityChanged:
                                   playBarController.handleVisibilityChanged,
                               child: Offstage(
@@ -92,11 +92,11 @@ class PlayBarMobile extends StatelessWidget {
                               ),
                             ),
                           ),
-                          PlayInfo(),
+                          const PlayInfo(),
                           Positioned(
                             left: constraints.maxWidth - 8 - 35.2,
                             child: VisibilityDetector(
-                              key: Key("next"),
+                              key: const Key("next"),
                               onVisibilityChanged:
                                   playBarController.handleVisibilityChanged,
                               child: Offstage(
@@ -173,7 +173,7 @@ class PlayBarMobile extends StatelessWidget {
           duration: AppTheme.defaultDurationLong,
           child: GlassPanel(
             height: playBarController.playBarHeight,
-            shape: LiquidRoundedRectangle(borderRadius: 66),
+            shape: const LiquidRoundedRectangle(borderRadius: 66),
             padding: .zero,
             settings: RecommendedGlassSettings.bottomBar.copyWith(blur: 5),
             margin: .fromLTRB(16, 0, 16, paddingBottom + 64 + 12),

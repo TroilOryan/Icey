@@ -135,7 +135,7 @@ class _MediaOrderTileState extends State<MediaOrderTile> {
           children: [
             Hero(
               tag: "mediaOrderDetail_${widget.mediaOrder.id}",
-              child: _cover.isNotEmpty
+              child: cover.isNotEmpty
                   ? ExtendedImage.memory(
                       _cover,
                       gaplessPlayback: true,

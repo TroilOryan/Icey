@@ -94,7 +94,7 @@ class ListItem extends StatelessWidget {
       children.add(trailing);
     }
 
-    if (onTap != null && !_disabled && trailing == null) {
+    if (onTap != null && !disabled && trailing == null) {
       children.add(const Icon(Icons.chevron_right));
     }
 
@@ -103,7 +103,7 @@ class ListItem extends StatelessWidget {
       clipBehavior: .antiAlias,
       borderRadius: .circular(AppTheme.borderRadiusMd),
       child: InkWell(
-        onTap: () => handleTap(_disabled),
+        onTap: () => handleTap(disabled),
         child: Container(
           padding: const .symmetric(horizontal: 16, vertical: 12),
           child: Row(

@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:IceyPlayer/components/high_material_wrapper/high_material_wrapper.dart';
 import 'package:IceyPlayer/constants/glass_settings.dart';
 import 'package:IceyPlayer/helpers/platform.dart';
 import 'package:IceyPlayer/theme/theme.dart';

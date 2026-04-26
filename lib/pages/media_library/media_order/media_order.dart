@@ -59,17 +59,17 @@ class _MediaOrderState extends State<MediaOrder> {
             onPressed: () async {
               _mediaOrderBox.delete(mediaOrder.id);
 
-              final _mediaOrder = List<MediaOrderEntity>.from(
+              final mediaOrder0 = List<MediaOrderEntity>.from(
                 state.mediaOrder.value,
               );
 
-              final index = _mediaOrder.indexWhere(
+              final index = mediaOrder0.indexWhere(
                 (e) => e.id == mediaOrder.id,
               );
 
               if (index != -1) {
-                _mediaOrder.removeAt(index);
-                state.mediaOrder.value = List.unmodifiable(_mediaOrder);
+                mediaOrder0.removeAt(index);
+                state.mediaOrder.value = List.unmodifiable(mediaOrder0);
                 context.pop();
               }
             },
@@ -101,13 +101,13 @@ class _MediaOrderState extends State<MediaOrder> {
   }
 
   void initMediaOrder() {
-    final List<MediaOrderEntity> _mediaOrder = _mediaOrderBox.values
+    final List<MediaOrderEntity> mediaOrder0 = _mediaOrderBox.values
         .toList()
         .cast<MediaOrderEntity>();
 
     final mediaOrder = List.from(state.mediaOrder.value);
 
-    mediaOrder.addAll(_mediaOrder);
+    mediaOrder.addAll(mediaOrder0);
 
     state.mediaOrder.value = List.unmodifiable(mediaOrder);
   }
@@ -200,38 +200,38 @@ class _MediaOrderState extends State<MediaOrder> {
   @override
   Widget build(BuildContext context) {
     if (widget.offstage) {
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
 
     final mediaOrder = state.mediaOrder.watch(context);
 
     return SliverPadding(
-      padding: EdgeInsets.symmetric(horizontal: 24),
+      padding: const EdgeInsets.symmetric(horizontal: 24),
       sliver: SliverToBoxAdapter(
         child: Container(
-          margin: EdgeInsets.only(bottom: 16),
+          margin: const EdgeInsets.only(bottom: 16),
           width: 88,
           height: 88,
           child: MediaQuery.removePadding(
             removeLeft: true,
             context: context,
             child: SuperListView.separated(
-              separatorBuilder: (context, index) => SizedBox(width: 12),
+              separatorBuilder: (context, index) => const SizedBox(width: 12),
               itemCount: mediaOrder.length + 1,
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
                 if (index < mediaOrder.length) {
-                  final _mediaOrder = mediaOrder[index];
+                  final mediaOrder0 = mediaOrder[index];
 
                   return MediaOrderTile(
-                    key: ValueKey(_mediaOrder.id),
-                    mediaOrder: _mediaOrder,
+                    key: ValueKey(mediaOrder0.id),
+                    mediaOrder: mediaOrder0,
                     onLongPress: () =>
-                        handleDeleteMediaOrder(context, _mediaOrder),
+                        handleDeleteMediaOrder(context, mediaOrder0),
                   );
                 }
 
-                return MediaOrderCreate();
+                return const MediaOrderCreate();
               },
             ),
           ),

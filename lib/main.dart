@@ -11,7 +11,6 @@ import 'package:catcher_2/catcher_2.dart';
 import 'package:chinese_font_library/chinese_font_library.dart';
 import 'package:flex_seed_scheme/flex_seed_scheme.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
@@ -27,7 +26,6 @@ import 'constants/box_key.dart';
 import 'constants/cache_key.dart';
 import 'init/services.dart';
 import 'init/catcher.dart';
-import 'package:flutter/painting.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 
 part 'main.g.dart';
@@ -81,7 +79,7 @@ class _AppState extends State<App> with WidgetsBindingObserver, TrayListener {
     WidgetsBinding.instance.addObserver(this);
 
     GoTransition.defaultCurve = Curves.easeInOutSine;
-    GoTransition.defaultDuration = const Duration(milliseconds: 300);
+    GoTransition.defaultDuration = const Duration(milliseconds: 600);
 
     setDisplayMode();
 

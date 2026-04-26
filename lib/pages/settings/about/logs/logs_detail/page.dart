@@ -26,7 +26,7 @@ class LogsDetailPage extends StatelessWidget {
                 ListCard(
                   action: IconButton(
                     onPressed: () => CommonHelper.copyText(error.error),
-                    icon: Icon(Icons.copy),
+                    icon: const Icon(Icons.copy),
                   ),
                   title: "错误详情",
                   children: [
@@ -39,7 +39,7 @@ class LogsDetailPage extends StatelessWidget {
                 ListCard(
                   action: IconButton(
                     onPressed: () => CommonHelper.copyText(error.stackTrace),
-                    icon: Icon(Icons.copy),
+                    icon: const Icon(Icons.copy),
                   ),
                   title: "堆栈跟踪",
                   children: [

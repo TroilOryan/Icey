@@ -18,7 +18,7 @@ class PlayLyricStyle {
     selectedColor: Colors.white,
     selectedTranslationColor: Colors.white,
     scrollCurve: Curves.easeInOutSine,
-    scrollDuration: Duration(milliseconds: 800),
+    scrollDuration: const Duration(milliseconds: 800),
     scrollDurations: {
       100: const Duration(milliseconds: 800), // 小距离
       300: const Duration(milliseconds: 850), // 中等距离
@@ -33,5 +33,35 @@ class PlayLyricStyle {
     switchEnterCurve: Curves.easeInOutSine,
     switchExitCurve: Curves.easeInOutSine,
     selectionAlignment: MainAxisAlignment.center,
+  );
+
+  /// 横屏样式 - 当前歌词居中
+  static LyricStyle landscape(LyricStyle base) => LyricStyle(
+    activeHighlightExtraFadeWidth: base.activeHighlightExtraFadeWidth,
+    textStyle: base.textStyle,
+    activeStyle: base.activeStyle,
+    translationStyle: base.translationStyle,
+    lineTextAlign: base.lineTextAlign,
+    lineGap: base.lineGap,
+    translationLineGap: base.translationLineGap,
+    contentAlignment: base.contentAlignment,
+    contentPadding: base.contentPadding,
+    selectionAnchorPosition: base.selectionAnchorPosition,
+    activeAnchorPosition: 0.5,
+    fadeRange: base.fadeRange,
+    selectedColor: base.selectedColor,
+    selectedTranslationColor: base.selectedTranslationColor,
+    scrollCurve: base.scrollCurve,
+    scrollDuration: base.scrollDuration,
+    scrollDurations: base.scrollDurations,
+    enableSwitchAnimation: base.enableSwitchAnimation,
+    selectionAutoResumeMode: base.selectionAutoResumeMode,
+    selectionAutoResumeDuration: base.selectionAutoResumeDuration,
+    activeAutoResumeDuration: base.activeAutoResumeDuration,
+    activeHighlightColor: base.activeHighlightColor,
+    activeHighlightGradient: base.activeHighlightGradient,
+    switchEnterCurve: base.switchEnterCurve,
+    switchExitCurve: base.switchExitCurve,
+    selectionAlignment: base.selectionAlignment,
   );
 }

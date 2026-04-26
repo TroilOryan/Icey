@@ -5,8 +5,8 @@ import 'package:window_manager/window_manager.dart';
 import 'package:flutter/material.dart';
 
 Future<void> initDesktop() async {
-  WindowOptions windowOptions = WindowOptions(
-    size: const Size(1600, 900),
+  WindowOptions windowOptions = const WindowOptions(
+    size: Size(1600, 900),
     center: true,
     backgroundColor: Colors.transparent,
     skipTaskbar: false,
@@ -18,10 +18,10 @@ Future<void> initDesktop() async {
     await windowManager.focus();
     await windowManager.setMinimumSize(
       Platform.isLinux
-          ? Size(1102, 752)
+          ? const Size(1102, 752)
           : Platform.isWindows
-          ? Size(1050 + 16, 700 + 9)
-          : Size(1050, 700),
+          ? const Size(1050 + 16, 700 + 9)
+          : const Size(1050, 700),
     );
   });
 

@@ -47,10 +47,10 @@ class InterfacePage extends StatelessWidget {
           ListCard(
             spacing: 0,
             title: '用户界面',
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             children: [
               Container(
-                margin: EdgeInsets.only(bottom: 16),
+                margin: const EdgeInsets.only(bottom: 16),
                 child: Row(
                   spacing: 12,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

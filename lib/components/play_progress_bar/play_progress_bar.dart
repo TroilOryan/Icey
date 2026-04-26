@@ -243,7 +243,7 @@ class _PlayProgressBarState extends State<PlayProgressBar> {
                       offstage: widget.quality == null,
                       child: Center(
                         child: ClipRRect(
-                          borderRadius: BorderRadius.all(Radius.circular(4)),
+                          borderRadius: const BorderRadius.all(Radius.circular(4)),
                           child: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 6),
                             decoration: BoxDecoration(

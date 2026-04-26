@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 
 import 'package:IceyPlayer/components/bottom_sheet/bottom_sheet.dart';
 import 'package:IceyPlayer/components/button/button.dart';
@@ -36,24 +35,24 @@ class _MediaOrderCreateState extends State<MediaOrderCreate> {
     final theme = Theme.of(context);
     final customizeCover = signal(false);
     final Signal<Uint8List?> customizeCoverData = signal(null);
-    final _formKey = GlobalKey<FormState>();
-    final _textController = TextEditingController();
+    final formKey = GlobalKey<FormState>();
+    final textController = TextEditingController();
 
     scrollableBottomSheet(
       context: context,
       builder: (context) {
-        final _customizeCover = customizeCover.watch(context),
-            _customizeCoverData = customizeCoverData.watch(context);
+        final customizeCover0 = customizeCover.watch(context),
+            customizeCoverData0 = customizeCoverData.watch(context);
 
         return [
           Text("创建歌单", style: theme.textTheme.titleMedium),
           ListCard(
             children: [
               Form(
-                key: _formKey,
+                key: formKey,
                 child: TextFormField(
                   autofocus: true,
-                  controller: _textController,
+                  controller: textController,
                   decoration: InputDecoration(
                     fillColor: theme.cardTheme.color,
                     hint: Text(
@@ -63,7 +62,7 @@ class _MediaOrderCreateState extends State<MediaOrderCreate> {
                         color: theme.textTheme.bodyMedium?.color,
                       ),
                     ),
-                    errorStyle: TextStyle(color: Colors.red), // 错误提示样式
+                    errorStyle: const TextStyle(color: Colors.red), // 错误提示样式
                   ),
                   // 核心校验逻辑
                   validator: (value) {
@@ -80,12 +79,12 @@ class _MediaOrderCreateState extends State<MediaOrderCreate> {
               ListItem(
                 title: "自定义封面",
                 trailing: IceySwitch(
-                  value: _customizeCover,
+                  value: customizeCover0,
                   onChanged: (v) => customizeCover.value = v,
                 ),
               ),
               Offstage(
-                offstage: !_customizeCover,
+                offstage: !customizeCover0,
                 child: Center(
                   child: Material(
                     clipBehavior: Clip.antiAlias,
@@ -103,12 +102,12 @@ class _MediaOrderCreateState extends State<MediaOrderCreate> {
                         child: SizedBox(
                           width: 88,
                           height: 88,
-                          child: _customizeCoverData != null
+                          child: customizeCoverData0 != null
                               ? ExtendedImage.memory(
-                                  _customizeCoverData,
+                                  customizeCoverData0,
                                   fit: BoxFit.cover,
                                 )
-                              : Center(
+                              : const Center(
                                   child: Column(
                                     spacing: 8,
                                     mainAxisSize: MainAxisSize.min,
@@ -128,12 +127,12 @@ class _MediaOrderCreateState extends State<MediaOrderCreate> {
           ),
           Button(
             block: true,
-            child: Text("创建歌单"),
+            child: const Text("创建歌单"),
             onPressed: () {
-              if (_formKey.currentState!.validate()) {
+              if (formKey.currentState!.validate()) {
                 final id = uuid.v4();
 
-                final name = _textController.text.trim();
+                final name = textController.text.trim();
 
                 _mediaOrderBox.put(
                   id,
@@ -141,7 +140,7 @@ class _MediaOrderCreateState extends State<MediaOrderCreate> {
                     id: id,
                     name: name,
                     mediaIDs: [],
-                    cover: _customizeCoverData,
+                    cover: customizeCoverData0,
                   ),
                 );
 
@@ -149,7 +148,7 @@ class _MediaOrderCreateState extends State<MediaOrderCreate> {
                   MediaOrderChange(
                     id: id,
                     name: name,
-                    cover: _customizeCoverData,
+                    cover: customizeCoverData0,
                   ),
                 );
 
@@ -177,10 +176,10 @@ class _MediaOrderCreateState extends State<MediaOrderCreate> {
         child: Ink(
           child: InkWell(
             onTap: () => handleOpenCreateMediaOrder(context),
-            child: SizedBox(
+            child: const SizedBox(
               width: 88,
               height: 88,
-              child: const Center(child: Icon(SFIcons.sf_plus)),
+              child: Center(child: Icon(SFIcons.sf_plus)),
             ),
           ),
         ),

@@ -7,7 +7,7 @@ class PlayerStylePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PageWrapper(
+    return const PageWrapper(
       title: "播放器样式",
       body: ListCard(children: []),
     );

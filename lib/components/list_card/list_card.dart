@@ -42,7 +42,7 @@ class _ListCardState extends State<ListCard> {
     if (widget.title != null) {
       leading.add(
         Container(
-          margin: .only(left: 8),
+          margin: const .only(left: 8),
           child: Text(widget.title!, style: theme.textTheme.bodyMedium),
         ),
       );
@@ -117,7 +117,7 @@ class _ListCardState extends State<ListCard> {
 
     return Container(
       width: double.infinity,
-      padding: widget.padding ?? .symmetric(horizontal: 16, vertical: 12),
+      padding: widget.padding ?? const .symmetric(horizontal: 16, vertical: 12),
       clipBehavior: .antiAlias,
       decoration: BoxDecoration(
         color: theme.cardTheme.color,

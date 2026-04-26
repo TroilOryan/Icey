@@ -42,45 +42,43 @@ class _PlayLyricMiniState extends State<PlayLyricMini> {
       color: widget.color,
     );
 
-    return FrameSeparateWidget(
-      child: GestureDetector(
-        onTap: widget.onTap,
-        child: Builder(
-          builder: (context) {
-            final parsedLyric = lyricManager.parsedLyric.watch(context),
-                currentIndex = lyricManager.currentIndex.watch(context);
+    return GestureDetector(
+      onTap: widget.onTap,
+      child: Builder(
+        builder: (context) {
+          final parsedLyric = lyricManager.parsedLyric.watch(context),
+              currentIndex = lyricManager.currentIndex.watch(context);
 
-            final lineHeight =
-                textStyle.fontSize! * textStyle.height! + 4; // 包含上下padding各2
+          final lineHeight =
+              textStyle.fontSize! * textStyle.height! + 4; // 包含上下padding各2
 
-            final containerHeight = lineHeight * 2; // 正好容纳两行
+          final containerHeight = lineHeight * 2; // 正好容纳两行
 
-            return PlayLyricShaderMask(
-              colorStops: const [0.0, 0.05, 0.95, 1],
-              height: containerHeight,
-              child: MediaQuery.removePadding(
-                removeTop: true,
-                context: context,
-                child: parsedLyric.isEmpty
-                    ? Text("暂无歌词", style: textStyle)
-                    : SuperListView.builder(
-                        key: ValueKey(parsedLyric),
-                        listController: controller.listviewController,
-                        controller: controller.scrollController,
-                        itemCount: parsedLyric.length,
-                        itemBuilder: (context, index) =>
-                            controller.buildLyricItem(
-                              parsedLyric,
-                              index,
-                              currentIndex,
-                              textStyle,
-                              appTheme,
-                            ),
-                      ),
-              ),
-            );
-          },
-        ),
+          return PlayLyricShaderMask(
+            colorStops: const [0.0, 0.05, 0.95, 1],
+            height: containerHeight,
+            child: MediaQuery.removePadding(
+              removeTop: true,
+              context: context,
+              child: parsedLyric.isEmpty
+                  ? Text("暂无歌词", style: textStyle)
+                  : SuperListView.builder(
+                      key: ValueKey(parsedLyric),
+                      listController: controller.listviewController,
+                      controller: controller.scrollController,
+                      itemCount: parsedLyric.length,
+                      itemBuilder: (context, index) =>
+                          controller.buildLyricItem(
+                            parsedLyric,
+                            index,
+                            currentIndex,
+                            textStyle,
+                            appTheme,
+                          ),
+                    ),
+            ),
+          );
+        },
       ),
     );
   }

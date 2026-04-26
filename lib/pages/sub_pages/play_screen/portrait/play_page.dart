@@ -99,7 +99,7 @@ class PlayPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 32),
+                        padding: const EdgeInsets.symmetric(horizontal: 32),
                         child: Row(
                           spacing: 32,
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -124,7 +124,7 @@ class PlayPage extends StatelessWidget {
                         opacity: immersive ? 0 : 1,
                         duration: AppTheme.defaultDuration,
                         child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 32),
+                          padding: const EdgeInsets.symmetric(horizontal: 32),
                           child: Row(
                             spacing: 16,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -49,11 +49,11 @@ void precacheAssets(BuildContext context) {
     precacheImage(MemoryImage(listBg), context);
   }
 
-  precacheImage(AssetImage("assets/images/no_cover.png"), context);
-  precacheImage(AssetImage("assets/images/hires.png"), context);
-  precacheImage(AssetImage("assets/images/hq.png"), context);
-  precacheImage(AssetImage("assets/images/hr.png"), context);
-  precacheImage(AssetImage("assets/images/sq.png"), context);
-  precacheImage(AssetImage("assets/images/lossless.png"), context);
-  precacheImage(AssetImage("assets/images/no_cover_dark.png"), context);
+  precacheImage(const AssetImage("assets/images/no_cover.png"), context);
+  precacheImage(const AssetImage("assets/images/hires.png"), context);
+  precacheImage(const AssetImage("assets/images/hq.png"), context);
+  precacheImage(const AssetImage("assets/images/hr.png"), context);
+  precacheImage(const AssetImage("assets/images/sq.png"), context);
+  precacheImage(const AssetImage("assets/images/lossless.png"), context);
+  precacheImage(const AssetImage("assets/images/no_cover_dark.png"), context);
 }

@@ -205,9 +205,6 @@ class LrcParser extends LyricParse {
           endTime = duration;
         }
 
-        // 如果没有结束时间，跳过
-        if (endTime == null) continue;
-
         // 将整行文本拆分成逐字高亮
         final List<LyricWord> words = [];
 

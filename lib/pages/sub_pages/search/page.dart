@@ -45,7 +45,7 @@ class _SearchPageState extends State<SearchPage> {
                 onChanged: controller.handleChanged,
                 decoration: InputDecoration(
                   fillColor: theme.cardTheme.color,
-                  prefixIcon: Icon(SFIcons.sf_magnifyingglass, size: 16),
+                  prefixIcon: const Icon(SFIcons.sf_magnifyingglass, size: 16),
                   hint: Text(
                     "搜索媒体或者歌手",
                     style: theme.textTheme.titleSmall?.copyWith(
@@ -62,7 +62,7 @@ class _SearchPageState extends State<SearchPage> {
             child: mediaList.isEmpty
                 ? ExtendedImage.asset("assets/images/empty.png")
                 : Padding(
-                    padding: EdgeInsets.only(bottom: 16),
+                    padding: const EdgeInsets.only(bottom: 16),
                     child: Text(
                       "共${mediaList.length}个",
                       textAlign: TextAlign.center,

@@ -105,7 +105,7 @@ class _TitleBarActionState extends State<TitleBarAction> with WindowListener {
             child: Stack(
               alignment: Alignment.centerLeft,
               children: [
-                DragToMoveArea(
+                const DragToMoveArea(
                   child: SizedBox(width: double.infinity, height: 60),
                 ),
                 Offstage(
@@ -119,7 +119,7 @@ class _TitleBarActionState extends State<TitleBarAction> with WindowListener {
                       ),
                       child: TextField(
                         decoration: InputDecoration(
-                          prefixIcon: Icon(
+                          prefixIcon: const Icon(
                             SFIcons.sf_magnifyingglass,
                             size: 16,
                           ),

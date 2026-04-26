@@ -89,14 +89,14 @@ class PlaySessionButonController {
 
   Future<bool> switchToSpeaker() async {
     if (_androidAudioManager != null) {
-      await _androidAudioManager!.setMode(
+      await _androidAudioManager.setMode(
         AndroidAudioHardwareMode.inCommunication,
       );
-      await _androidAudioManager!.stopBluetoothSco();
-      await _androidAudioManager!.setBluetoothScoOn(false);
-      await _androidAudioManager!.setSpeakerphoneOn(true);
+      await _androidAudioManager.stopBluetoothSco();
+      await _androidAudioManager.setBluetoothScoOn(false);
+      await _androidAudioManager.setSpeakerphoneOn(true);
     } else if (_avAudioSession != null) {
-      await _avAudioSession!.overrideOutputAudioPort(
+      await _avAudioSession.overrideOutputAudioPort(
         AVAudioSessionPortOverride.speaker,
       );
     }
@@ -105,10 +105,10 @@ class PlaySessionButonController {
 
   Future<bool> switchToReceiver() async {
     if (_androidAudioManager != null) {
-      _androidAudioManager!.setMode(AndroidAudioHardwareMode.inCommunication);
-      _androidAudioManager!.stopBluetoothSco();
-      _androidAudioManager!.setBluetoothScoOn(false);
-      _androidAudioManager!.setSpeakerphoneOn(false);
+      _androidAudioManager.setMode(AndroidAudioHardwareMode.inCommunication);
+      _androidAudioManager.stopBluetoothSco();
+      _androidAudioManager.setBluetoothScoOn(false);
+      _androidAudioManager.setSpeakerphoneOn(false);
       return true;
     } else if (_avAudioSession != null) {
       return await _switchToAnyIosPortIn({AVAudioSessionPort.builtInMic});
@@ -118,10 +118,10 @@ class PlaySessionButonController {
 
   Future<bool> switchToHeadphones() async {
     if (_androidAudioManager != null) {
-      _androidAudioManager!.setMode(AndroidAudioHardwareMode.inCommunication);
-      _androidAudioManager!.stopBluetoothSco();
-      _androidAudioManager!.setBluetoothScoOn(false);
-      _androidAudioManager!.setSpeakerphoneOn(false);
+      _androidAudioManager.setMode(AndroidAudioHardwareMode.inCommunication);
+      _androidAudioManager.stopBluetoothSco();
+      _androidAudioManager.setBluetoothScoOn(false);
+      _androidAudioManager.setSpeakerphoneOn(false);
       return true;
     } else if (_avAudioSession != null) {
       return await _switchToAnyIosPortIn({AVAudioSessionPort.headsetMic});
@@ -131,13 +131,13 @@ class PlaySessionButonController {
 
   Future<bool> switchToBluetooth() async {
     if (_androidAudioManager != null) {
-      await _androidAudioManager!.setMode(
+      await _androidAudioManager.setMode(
         AndroidAudioHardwareMode.inCommunication,
       );
 
-      await _androidAudioManager!.setSpeakerphoneOn(false);
-      await _androidAudioManager!.startBluetoothSco();
-      await _androidAudioManager!.setBluetoothScoOn(true);
+      await _androidAudioManager.setSpeakerphoneOn(false);
+      await _androidAudioManager.startBluetoothSco();
+      await _androidAudioManager.setBluetoothScoOn(true);
       return true;
     } else if (_avAudioSession != null) {
       return await _switchToAnyIosPortIn({
@@ -155,9 +155,9 @@ class PlaySessionButonController {
     )) {
       return true;
     }
-    for (var input in await _avAudioSession!.availableInputs) {
+    for (var input in await _avAudioSession.availableInputs) {
       if (ports.contains(input.portType)) {
-        await _avAudioSession!.setPreferredInput(input);
+        await _avAudioSession.setPreferredInput(input);
       }
     }
     return false;

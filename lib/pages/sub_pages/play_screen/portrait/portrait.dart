@@ -65,7 +65,7 @@ class Portrait extends StatelessWidget {
           PlayInfo(lyricOpened: lyricOpened),
           LyricPage(lyricOpened: lyricOpened),
           PlayPage(lyricOpened: lyricOpened, onOpenLyric: onOpenLyric),
-          ActionBar(),
+          const ActionBar(),
         ],
       ),
     );

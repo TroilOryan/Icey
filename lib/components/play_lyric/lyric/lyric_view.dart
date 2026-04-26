@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import './lyric_model.dart';
 import 'lyric_line_widget.dart';

@@ -36,7 +36,6 @@ import 'package:scrollview_observer/scrollview_observer.dart';
 import 'package:signals/signals_flutter.dart';
 import 'package:super_sliver_list/super_sliver_list.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
-import 'package:responsive_builder/responsive_builder.dart';
 import '../../main.dart';
 import 'state.dart';
 
@@ -68,22 +67,22 @@ class HomeController {
   final _settingsBox = Boxes.settingsBox;
 
   final List<MenuData> menu = [
-    MenuData(
+    const MenuData(
       label: '媒体库',
       icon: FluentIcons.music_note_1_20_regular,
       selectedIcon: FluentIcons.music_note_1_20_filled,
     ),
-    MenuData(
+    const MenuData(
       label: '专辑',
       icon: FluentIcons.connected_16_regular,
       selectedIcon: FluentIcons.connected_16_filled,
     ),
-    MenuData(
+    const MenuData(
       label: '艺术家',
       icon: FluentIcons.person_head_hint_16_regular,
       selectedIcon: FluentIcons.person_head_hint_16_filled,
     ),
-    MenuData(
+    const MenuData(
       label: '设置',
       icon: FluentIcons.status_16_regular,
       selectedIcon: FluentIcons.status_16_filled,
@@ -240,7 +239,7 @@ class HomeController {
 
     controller.animateTo(
       0,
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
   }

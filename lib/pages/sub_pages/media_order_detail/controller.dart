@@ -126,8 +126,8 @@ class MediaOrderDetailController {
     scrollableBottomSheet(
       context: context,
       builder: (context) {
-        final _customizeCover = customizeCover.watch(context),
-            _customizeCoverData = customizeCoverData.watch(context);
+        final customizeCover0 = customizeCover.watch(context),
+            customizeCoverData0 = customizeCoverData.watch(context);
 
         return [
           Text("修改歌单封面", style: theme.textTheme.titleMedium),
@@ -136,12 +136,12 @@ class MediaOrderDetailController {
               ListItem(
                 title: "自定义封面",
                 trailing: IceySwitch(
-                  value: _customizeCover,
+                  value: customizeCover0,
                   onChanged: (v) => customizeCover.value = v,
                 ),
               ),
               Offstage(
-                offstage: !_customizeCover,
+                offstage: !customizeCover0,
                 child: Center(
                   child: Material(
                     clipBehavior: Clip.antiAlias,
@@ -160,12 +160,12 @@ class MediaOrderDetailController {
                         child: SizedBox(
                           width: 88,
                           height: 88,
-                          child: _customizeCoverData != null
+                          child: customizeCoverData0 != null
                               ? ExtendedImage.memory(
-                                  _customizeCoverData,
+                                  customizeCoverData0,
                                   fit: BoxFit.cover,
                                 )
-                              : Center(
+                              : const Center(
                                   child: Column(
                                     spacing: 8,
                                     mainAxisSize: MainAxisSize.min,
@@ -183,11 +183,11 @@ class MediaOrderDetailController {
               ),
               Button(
                 block: true,
-                child: Text("确认修改"),
+                child: const Text("确认修改"),
                 onPressed: () async {
-                  if (_customizeCover && _customizeCoverData == null) {
+                  if (customizeCover0 && customizeCoverData0 == null) {
                     showToast("请选择一张图片作为自定义封面");
-                  } else if (!_customizeCover) {
+                  } else if (!customizeCover0) {
                     if (mediaIDs.isNotEmpty) {
                       final coverRes = await AudioQuery().queryArtwork(
                         mediaIDs.last,
@@ -215,12 +215,12 @@ class MediaOrderDetailController {
                       );
                     }
                   } else {
-                    state.tempCover.value = _customizeCoverData;
+                    state.tempCover.value = customizeCoverData0;
 
                     eventBus.fire(
                       MediaOrderCoverChange(
                         id: mediaOrderID,
-                        cover: _customizeCoverData,
+                        cover: customizeCoverData0,
                       ),
                     );
 
@@ -230,7 +230,7 @@ class MediaOrderDetailController {
 
                     _mediaOrderBox.put(
                       mediaOrderID,
-                      mediaOrder.copyWith(cover: _customizeCoverData),
+                      mediaOrder.copyWith(cover: customizeCoverData0),
                     );
                   }
 

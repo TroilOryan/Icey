@@ -1,7 +1,6 @@
 import 'package:IceyPlayer/components/marquee/marquee.dart';
 import 'package:IceyPlayer/components/play_like_button/play_like_button.dart';
 import 'package:IceyPlayer/constants/box_key.dart';
-import 'package:IceyPlayer/event_bus/event_bus.dart';
 import 'package:IceyPlayer/helpers/media/media.dart';
 import 'package:IceyPlayer/models/media/media.dart';
 import 'package:IceyPlayer/models/settings/settings.dart';

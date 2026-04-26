@@ -3,7 +3,9 @@ import 'package:IceyPlayer/components/play_button/play_button.dart';
 import 'package:IceyPlayer/components/play_list_button/play_list_button.dart';
 import 'package:IceyPlayer/components/play_lyric/play_lyric.dart';
 import 'package:IceyPlayer/components/play_menu_button/play_menu_button.dart';
+import 'package:IceyPlayer/components/play_mode_button/play_mode_button.dart';
 import 'package:IceyPlayer/components/play_progress_bar/play_progress_bar.dart';
+import 'package:IceyPlayer/components/play_session_button/play_session_button.dart';
 import 'package:IceyPlayer/components/prev_button/prev_button.dart';
 import 'package:IceyPlayer/models/media/media.dart';
 import 'package:IceyPlayer/models/settings/settings.dart';
@@ -37,8 +39,8 @@ class Landscape extends StatelessWidget {
         child = PlayImmersiveCover(isLandscape: true, size: height);
       } else {
         child = Container(
-          margin: EdgeInsets.only(top: 32),
-          child: PlayShapedCover(isLandscape: true),
+          margin: const EdgeInsets.only(top: 32),
+          child: const PlayShapedCover(isLandscape: true),
         );
       }
 
@@ -59,34 +61,48 @@ class Landscape extends StatelessWidget {
         buildPlayCover(onTap: () {}, deviceHeight: deviceHeight),
         Flexible(
           child: Padding(
-            padding: EdgeInsets.fromLTRB(0, 32, 24, 8),
+            padding: const EdgeInsets.fromLTRB(0, 32, 24, 8),
             child: Column(
               children: [
-                PlayInfo(),
-                const SizedBox(height: 8),
-                Flexible(child: PlayLyric()),
-                const SizedBox(height: 16),
-                StreamBuilder(
-                  stream: mediaManager.mediaItem,
-                  builder: (context, snapshot) {
-                    final mediaItem = snapshot.data;
+                Flexible(
+                  child: Padding(
+                    padding: const EdgeInsetsGeometry.symmetric(horizontal: 12),
+                    child: Column(
+                      children: [
+                        const PlayInfo(),
+                        const SizedBox(height: 12),
+                        const Flexible(child: PlayLyric()),
+                        const SizedBox(height: 12),
+                        StreamBuilder(
+                          stream: mediaManager.mediaItem,
+                          builder: (context, snapshot) {
+                            final mediaItem = snapshot.data;
 
-                    return PlayProgressBar(
-                      quality: mediaItem?.extras?["quality"],
-                      onChangeEnd: mediaManager.seek,
-                    );
-                  },
+                            return PlayProgressBar(
+                              quality: mediaItem?.extras?["quality"],
+                              onChangeEnd: mediaManager.seek,
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    PlayListButton(size: 24, color: appThemeExtension.primary),
-                    PrevButton(size: 24, color: appThemeExtension.primary),
-                    const SizedBox(width: 8),
-                    PlayButton(size: 40, color: appThemeExtension.primary),
-                    const SizedBox(width: 8),
-                    NextButton(size: 24, color: appThemeExtension.primary),
-                    PlayMenuButton(size: 24, color: appThemeExtension.primary),
+                    PlayModeButton(size: 22, color: appThemeExtension.secondary),
+                    PlayListButton(size: 22, color: appThemeExtension.secondary),
+                    PrevButton(size: 22, color: appThemeExtension.primary),
+                    const SizedBox(width: 6),
+                    PlayButton(size: 36, color: appThemeExtension.primary),
+                    const SizedBox(width: 6),
+                    NextButton(size: 22, color: appThemeExtension.primary),
+                    PlaySessionButton(
+                      size: 22,
+                      color: appThemeExtension.secondary,
+                    ),
+                    PlayMenuButton(size: 22, color: appThemeExtension.secondary),
                   ],
                 ),
               ],

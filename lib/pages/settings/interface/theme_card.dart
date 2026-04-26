@@ -33,7 +33,7 @@ class ThemeCard extends StatelessWidget {
             onTap: () => onTap(value),
             child: Container(
               width: double.infinity,
-              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 6),
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 6),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 spacing: 12,

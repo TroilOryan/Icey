@@ -102,7 +102,7 @@ class _PlayListState extends State<PlayList> {
                   PlayCover(
                     width: 55,
                     height: 55,
-                    borderRadius: .circular(AppTheme.borderRadiusSm),
+                    borderRadius: .circular(27.5),
                   ),
                   const SizedBox(width: 8),
                   Flexible(

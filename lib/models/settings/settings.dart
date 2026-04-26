@@ -2,14 +2,12 @@ import 'dart:typed_data';
 
 import 'package:IceyPlayer/helpers/overlay/overlay.dart';
 import 'package:IceyPlayer/helpers/toast/toast.dart';
-import 'package:IceyPlayer/models/lyric/lyric.dart';
 import 'package:flutter/services.dart';
 import 'package:IceyPlayer/constants/box_key.dart';
 import 'package:IceyPlayer/constants/cache_key.dart';
 import 'package:IceyPlayer/helpers/media/media.dart';
 import 'package:IceyPlayer/helpers/media_scanner/media_sort.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:flutter_sficon/flutter_sficon.dart';
 import 'package:signals/signals.dart';
 

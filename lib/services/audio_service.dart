@@ -270,13 +270,13 @@ class AudioServiceHandler extends BaseAudioHandler with SeekHandler {
       // 播完一首才算播放次数
       if (mediaItem.value != null && mediaItem.value!.duration != null) {
         if (gap <= 50) {
-          final _mediaCountBox = Boxes.mediaCountBox;
+          final mediaCountBox = Boxes.mediaCountBox;
 
           final id = mediaItem.value!.id;
 
-          final currentCount = _mediaCountBox.get(id, defaultValue: 0);
+          final currentCount = mediaCountBox.get(id, defaultValue: 0);
 
-          _mediaCountBox.put(id, currentCount + 1);
+          mediaCountBox.put(id, currentCount + 1);
         }
       }
     });
@@ -493,8 +493,8 @@ class AudioServiceHandler extends BaseAudioHandler with SeekHandler {
     await _playlist.addAll(audioSource);
 
     // 如果 shuffle 已启用，按 shuffleIndices 重排 queue
-    if (_player.shuffleModeEnabled && _player.shuffleIndices != null) {
-      final indices = _player.shuffleIndices!;
+    if (_player.shuffleModeEnabled) {
+      final indices = _player.shuffleIndices;
       for (int i = 0; i < indices.length && i < mediaItems.length; i++) {
         _queue.add(mediaItems[indices[i]]);
       }

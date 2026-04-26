@@ -49,6 +49,7 @@ class _PlayScreenPageState extends State<PlayScreenPage>
       canPop: !lyricOpened,
       onPopInvokedWithResult: playScreenController.handlePopInvokedWithResult,
       child: Scaffold(
+        backgroundColor: Colors.black,
         extendBody: true,
         extendBodyBehindAppBar: true,
         body: concert
@@ -65,7 +66,7 @@ class _PlayScreenPageState extends State<PlayScreenPage>
                     landscape: (context) => OrientationBuilder(
                       builder: (context, orientation) {
                         if (orientation == Orientation.landscape) {
-                          return Landscape();
+                          return const Landscape();
                         }
 
                         return Portrait(

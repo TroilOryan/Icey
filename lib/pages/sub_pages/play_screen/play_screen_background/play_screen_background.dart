@@ -1,9 +1,11 @@
+import 'dart:typed_data';
+
+import 'package:IceyPlayer/components/media_default_cover/media_default_cover.dart';
 import 'package:IceyPlayer/models/media/media.dart';
-import 'package:blur/blur.dart';
-import 'package:IceyPlayer/components/play_cover/play_cover.dart';
 import 'package:IceyPlayer/models/settings/settings.dart';
+import 'package:blur/blur.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:keframe/keframe.dart';
 import 'package:signals/signals_flutter.dart';
 
 class PlayScreenBackground extends StatefulWidget {
@@ -24,7 +26,6 @@ class _PlayScreenBackgroundState extends State<PlayScreenBackground>
   void initState() {
     super.initState();
 
-    // 为每个分割部分创建独立的动画控制器
     _controller1 = AnimationController(
       duration: const Duration(seconds: 35),
       vsync: this,
@@ -67,72 +68,103 @@ class _PlayScreenBackgroundState extends State<PlayScreenBackground>
             dynamicLight = settingsManager.dynamicLight.watch(context),
             artCover = settingsManager.artCover.watch(context);
 
-        final blurValue = computed(() => highMaterial ? 84.0 : 24.0);
+        final currentCover = mediaManager.currentCover.watch(context);
 
-        final colorOpacity = computed(() => artCover ? 0.01 : 0.5);
+        final blurValue = highMaterial ? 84.0 : 24.0;
+        final colorOpacity = artCover ? 0.01 : 0.5;
 
-        final cover = PlayCover(
-          height: height,
-          width: width,
-          repeat: ImageRepeat.repeat,
-          fit: BoxFit.fitWidth,
-          filterQuality: FilterQuality.low,
-        );
-
-        return FrameSeparateWidget(
-          child: Blur(
-            blur: blurValue(),
-            colorOpacity: colorOpacity(),
-            overlay: null,
-            child: Stack(
-              children: [
-                RepaintBoundary(child: cover),
-                if (dynamicLight) ...[
-                  _buildAnimatedCover(
-                    cover,
-                    TopLeftClipper(),
-                    _controller1,
-                    0.8,
-                  ),
-                  _buildAnimatedCover(
-                    cover,
-                    TopRightClipper(),
-                    _controller2,
-                    -0.8,
-                  ),
-                  _buildAnimatedCover(
-                    cover,
-                    BottomLeftClipper(),
-                    _controller3,
-                    -1,
-                  ),
-                  _buildAnimatedCover(
-                    cover,
-                    BottomRightClipper(),
-                    _controller4,
-                    1,
-                  ),
-                ],
-              ],
+        return Stack(
+          children: [
+            // 静态模糊背景 - 直接构建，不经过 FrameSeparateWidget / PlayCover
+            RepaintBoundary(
+              child: Blur(
+                blur: blurValue,
+                colorOpacity: colorOpacity,
+                overlay: null,
+                child: _buildCoverImage(currentCover, width, height),
+              ),
             ),
-          ),
+            // 动态光效 - 在模糊层之上，RepaintBoundary 隔离
+            if (dynamicLight)
+              RepaintBoundary(
+                child: Stack(
+                  children: [
+                    _buildAnimatedCover(
+                      TopLeftClipper(),
+                      _controller1,
+                      0.8,
+                      currentCover,
+                      width,
+                      height,
+                    ),
+                    _buildAnimatedCover(
+                      TopRightClipper(),
+                      _controller2,
+                      -0.8,
+                      currentCover,
+                      width,
+                      height,
+                    ),
+                    _buildAnimatedCover(
+                      BottomLeftClipper(),
+                      _controller3,
+                      -1,
+                      currentCover,
+                      width,
+                      height,
+                    ),
+                    _buildAnimatedCover(
+                      BottomRightClipper(),
+                      _controller4,
+                      1,
+                      currentCover,
+                      width,
+                      height,
+                    ),
+                  ],
+                ),
+              ),
+          ],
         );
       },
     );
   }
 
+  Widget _buildCoverImage(Uint8List cover, double width, double height) {
+    return SizedBox(
+      width: width,
+      height: height,
+      child: cover.isNotEmpty
+          ? ExtendedImage.memory(
+              cover,
+              width: width,
+              height: height,
+              fit: BoxFit.fitWidth,
+              gaplessPlayback: true,
+              repeat: ImageRepeat.repeat,
+              filterQuality: FilterQuality.low,
+            )
+          : MediaDefaultCover(size: Size(width, height), isDarkMode: false),
+    );
+  }
+
   Widget _buildAnimatedCover(
-    Widget cover,
     CustomClipper<Rect> clipper,
     AnimationController controller,
     double rotationRange,
+    Uint8List cover,
+    double width,
+    double height,
   ) {
     return RotationTransition(
       turns: Tween<double>(
         begin: -rotationRange,
         end: rotationRange,
       ).animate(controller),
-      child: ClipRect(clipper: clipper, child: cover),
+      child: ClipRect(
+        clipper: clipper,
+        child: _buildCoverImage(cover, width, height),
+      ),
     );
   }
 }

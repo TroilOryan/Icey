@@ -90,13 +90,13 @@ class _LyricPageState extends State<LyricPage> {
 
     final appThemeExtension = AppThemeExtension.of(context);
 
-    final _visible = controllerVisible.watch(context);
+    final visible = controllerVisible.watch(context);
 
     return RepaintBoundary(
       child: IgnorePointer(
         ignoring: !widget.lyricOpened,
         child: VisibilityDetector(
-          key: Key("lyricPage"),
+          key: const Key("lyricPage"),
           onVisibilityChanged: handleVisibilityChanged,
           child: Offstage(
             offstage: !widget.lyricOpened,
@@ -117,9 +117,9 @@ class _LyricPageState extends State<LyricPage> {
                     Align(
                       alignment: Alignment.bottomCenter,
                       child: IgnorePointer(
-                        ignoring: !_visible,
+                        ignoring: !visible,
                         child: AnimatedOpacity(
-                          opacity: _visible ? 1 : 0,
+                          opacity: visible ? 1 : 0,
                           duration: AppTheme.defaultDurationMid,
                           child: Row(
                             spacing: 32,

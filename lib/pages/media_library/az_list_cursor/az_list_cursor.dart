@@ -20,7 +20,7 @@ class AzListCursor extends StatelessWidget {
     Widget buildTitle() {
       Widget resultWidget = Text(
         title,
-        style: TextStyle(color: Colors.white, fontSize: 32),
+        style: const TextStyle(color: Colors.white, fontSize: 32),
       );
 
       resultWidget = ClipRRect(

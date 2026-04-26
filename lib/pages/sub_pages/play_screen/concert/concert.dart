@@ -1,8 +1,6 @@
 import 'dart:async';
 
-import 'package:IceyPlayer/components/marquee/marquee.dart';
 import 'package:IceyPlayer/components/next_button/next_button.dart';
-import 'package:IceyPlayer/components/play_button/play_button.dart';
 import 'package:IceyPlayer/components/play_progress_button/play_progress_button.dart';
 import 'package:IceyPlayer/components/prev_button/prev_button.dart';
 import 'package:IceyPlayer/helpers/overlay/overlay.dart';
@@ -130,7 +128,7 @@ class _ConcertState extends State<Concert> {
     final lyricStyle = LyricStyles.single.copyWith(
       textAlign: .center,
       contentAlignment: .center,
-      contentPadding: EdgeInsets.only(top: 200),
+      contentPadding: const EdgeInsets.only(top: 200),
       textStyle: textStyle,
       activeStyle: activeTextStyle,
       translationStyle: extTextStyle,
@@ -146,7 +144,7 @@ class _ConcertState extends State<Concert> {
       child: Scaffold(
         backgroundColor: Colors.black,
         body: SafeArea(
-          minimum: EdgeInsets.fromLTRB(0, 0, 32, 0),
+          minimum: const EdgeInsets.fromLTRB(0, 0, 32, 0),
           child: Stack(
             children: [
               if (parsedLyric.isNotEmpty)
@@ -172,7 +170,7 @@ class _ConcertState extends State<Concert> {
                       tooltip: "退出",
                       color: Colors.red,
                       onPressed: context.pop,
-                      icon: Icon(Icons.close, color: Colors.white),
+                      icon: const Icon(Icons.close, color: Colors.white),
                     ),
                   ),
                 ),
@@ -206,7 +204,7 @@ class _ConcertState extends State<Concert> {
                               );
                             },
                           ),
-                          Row(
+                          const Row(
                             mainAxisAlignment: .center,
                             children: [
                               PrevButton(

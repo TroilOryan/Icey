@@ -2,7 +2,6 @@ import "dart:async";
 import "dart:io";
 
 import "package:IceyPlayer/event_bus/event_bus.dart";
-import "package:IceyPlayer/helpers/platform.dart";
 import "package:IceyPlayer/src/rust/api/tag_reader.dart";
 import "package:audio_query/audio_query.dart";
 import "package:IceyPlayer/constants/box_key.dart";
@@ -11,9 +10,6 @@ import "package:IceyPlayer/entities/media.dart";
 import "package:IceyPlayer/helpers/media_scanner/media_sort.dart";
 import "package:IceyPlayer/helpers/toast/toast.dart";
 import "package:IceyPlayer/models/media/media.dart";
-import "package:audio_query/types/artwork_type.dart";
-import "package:hive_ce/hive.dart";
-import "package:flutter/material.dart";
 import "package:pinyin/pinyin.dart";
 import "package:uuid/uuid.dart";
 
@@ -38,24 +34,24 @@ class MediaHelper {
     );
 
     try {
-      List<MediaEntity> _medias = medias ?? _mediaBox.values.toList().cast();
+      List<MediaEntity> medias0 = medias ?? _mediaBox.values.toList().cast();
 
-      _medias = sortMedia(_medias, sortType);
+      medias0 = sortMedia(medias0, sortType);
 
       final List<String> filterDir = _settingsBox.get(
         CacheKey.Settings.filterDir,
         defaultValue: <String>[],
       );
 
-      _medias = _medias
+      medias0 = medias0
           .where((media) => filterDir.every((dir) => !media.data.contains(dir)))
           .toList();
 
       if (init != true) {
-        mediaManager.setLocalMediaList(_medias);
+        mediaManager.setLocalMediaList(medias0);
       }
 
-      return _medias;
+      return medias0;
     } catch (error) {
       return [];
     }
@@ -109,47 +105,47 @@ class MediaHelper {
   }
 
   static List<MediaEntity> sortMedia(List<MediaEntity> medias, int sortType) {
-    final _sortType = MediaSort.getByValue(sortType);
+    final sortType0 = MediaSort.getByValue(sortType);
 
     medias.sort((a, b) {
-      if (_sortType == MediaSort.artist) {
+      if (sortType0 == MediaSort.artist) {
         final aArtist = PinyinHelper.getPinyinE(a.artist!);
         final bArtist = PinyinHelper.getPinyinE(b.artist!);
 
         return aArtist.compareTo(bArtist);
-      } else if (_sortType == MediaSort.title) {
+      } else if (sortType0 == MediaSort.title) {
         final aTitle = PinyinHelper.getPinyinE(a.title).toLowerCase();
         final bTitle = PinyinHelper.getPinyinE(b.title).toLowerCase();
 
         return aTitle.compareTo(bTitle);
       }
       /// 添加时间
-      else if (_sortType == MediaSort.addTime) {
+      else if (sortType0 == MediaSort.addTime) {
         return (a.dateAdded ?? 0).compareTo(b.dateAdded ?? 0);
-      } else if (_sortType == MediaSort.addTimeDesc) {
+      } else if (sortType0 == MediaSort.addTimeDesc) {
         return (b.dateAdded ?? 0).compareTo(a.dateAdded ?? 0);
       }
       /// 添加时间 END
       /// 修改时间
-      else if (_sortType == MediaSort.modifyTime) {
+      else if (sortType0 == MediaSort.modifyTime) {
         return (a.dateModified ?? 0).compareTo(b.dateModified ?? 0);
-      } else if (_sortType == MediaSort.modifyTimeDesc) {
+      } else if (sortType0 == MediaSort.modifyTimeDesc) {
         return (b.dateModified ?? 0).compareTo(a.dateModified ?? 0);
       }
       /// 修改时间 END
       /// 时长
-      else if (_sortType == MediaSort.duration) {
+      else if (sortType0 == MediaSort.duration) {
         return (a.duration ?? 0).compareTo(b.duration ?? 0);
-      } else if (_sortType == MediaSort.durationDesc) {
+      } else if (sortType0 == MediaSort.durationDesc) {
         return (b.duration ?? 0).compareTo(a.duration ?? 0);
       }
       /// 播放次数
-      else if (_sortType == MediaSort.count) {
+      else if (sortType0 == MediaSort.count) {
         final int aCount = _mediaCountBox.get(a.id, defaultValue: 0),
             bCount = _mediaCountBox.get(b.id, defaultValue: 0);
 
         return aCount.compareTo(bCount);
-      } else if (_sortType == MediaSort.countDesc) {
+      } else if (sortType0 == MediaSort.countDesc) {
         final int aCount = _mediaCountBox.get(a.id, defaultValue: 0),
             bCount = _mediaCountBox.get(b.id, defaultValue: 0);
 

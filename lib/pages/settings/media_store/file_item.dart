@@ -18,7 +18,7 @@ class FileItem extends StatelessWidget {
 
     return ListTile(
         dense: true,
-        contentPadding: EdgeInsets.only(left: 8),
+        contentPadding: const EdgeInsets.only(left: 8),
         leading: SFIcon(SFIcons.sf_folder_fill,
             color: isFiltered == true
                 ? theme.textTheme.bodyMedium?.color

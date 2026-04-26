@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 import 'package:IceyPlayer/components/bottom_sheet/bottom_sheet.dart';
 import 'package:IceyPlayer/components/play_list_button/play_list.dart';
@@ -20,7 +19,7 @@ class PlayListButton extends StatelessWidget {
     bottomSheet(
       context: context,
       builder: (context, controller) {
-        return PlayList();
+        return const PlayList();
       },
     );
   }

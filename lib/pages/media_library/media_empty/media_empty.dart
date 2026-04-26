@@ -51,7 +51,7 @@ class MediaEmpty extends StatelessWidget {
         spacing: 16,
         children: [
           Text("添加音乐以开始", style: bodyStyle),
-          Button(onPressed: onScan, child: Text("扫描")),
+          Button(onPressed: onScan, child: const Text("扫描")),
         ],
       ),
     );

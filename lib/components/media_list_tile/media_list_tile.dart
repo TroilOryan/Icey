@@ -1,4 +1,3 @@
-import "dart:ui";
 
 import "package:IceyPlayer/components/high_material_wrapper/high_material_wrapper.dart";
 import "package:IceyPlayer/components/play_like_button/play_like_button.dart";
@@ -119,7 +118,7 @@ class MediaListTile extends StatelessWidget {
                                   ),
                             ),
                           ),
-                          SizedBox(width: 10),
+                          const SizedBox(width: 10),
                         ],
                       ),
 
@@ -145,7 +144,7 @@ class MediaListTile extends StatelessWidget {
                           Offstage(
                             offstage: !showDuration,
                             child: Container(
-                              margin: .only(left: 6),
+                              margin: const .only(left: 6),
                               child: Row(
                                 children: [
                                   CommonHelper.buildDuration(
@@ -160,7 +159,7 @@ class MediaListTile extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(width: 12),
+                const SizedBox(width: 12),
                 Offstage(
                   offstage: onLongPress == null,
                   child: Row(
