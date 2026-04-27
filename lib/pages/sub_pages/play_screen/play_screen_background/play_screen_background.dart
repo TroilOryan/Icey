@@ -70,7 +70,7 @@ class _PlayScreenBackgroundState extends State<PlayScreenBackground>
 
         final currentCover = mediaManager.currentCover.watch(context);
 
-        final blurValue = highMaterial ? 84.0 : 24.0;
+        final blurValue = highMaterial ? 46.0 : 24.0;
         final colorOpacity = artCover ? 0.01 : 0.5;
 
         return Stack(
@@ -87,41 +87,45 @@ class _PlayScreenBackgroundState extends State<PlayScreenBackground>
             // 动态光效 - 在模糊层之上，RepaintBoundary 隔离
             if (dynamicLight)
               RepaintBoundary(
-                child: Stack(
-                  children: [
-                    _buildAnimatedCover(
-                      TopLeftClipper(),
-                      _controller1,
-                      0.8,
-                      currentCover,
-                      width,
-                      height,
-                    ),
-                    _buildAnimatedCover(
-                      TopRightClipper(),
-                      _controller2,
-                      -0.8,
-                      currentCover,
-                      width,
-                      height,
-                    ),
-                    _buildAnimatedCover(
-                      BottomLeftClipper(),
-                      _controller3,
-                      -1,
-                      currentCover,
-                      width,
-                      height,
-                    ),
-                    _buildAnimatedCover(
-                      BottomRightClipper(),
-                      _controller4,
-                      1,
-                      currentCover,
-                      width,
-                      height,
-                    ),
-                  ],
+                child: Blur(
+                  blur: blurValue,
+                  colorOpacity: 0,
+                  child: Stack(
+                    children: [
+                      _buildAnimatedCover(
+                        TopLeftClipper(),
+                        _controller1,
+                        0.8,
+                        currentCover,
+                        width,
+                        height,
+                      ),
+                      _buildAnimatedCover(
+                        TopRightClipper(),
+                        _controller2,
+                        -0.8,
+                        currentCover,
+                        width,
+                        height,
+                      ),
+                      _buildAnimatedCover(
+                        BottomLeftClipper(),
+                        _controller3,
+                        -1,
+                        currentCover,
+                        width,
+                        height,
+                      ),
+                      _buildAnimatedCover(
+                        BottomRightClipper(),
+                        _controller4,
+                        1,
+                        currentCover,
+                        width,
+                        height,
+                      ),
+                    ],
+                  ),
                 ),
               ),
           ],
