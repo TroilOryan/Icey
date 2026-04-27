@@ -48,6 +48,7 @@ class PageWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ProgressiveScrollview(
+      backgroundColor: backgroundColor,
       centerTitle: true,
       title: title,
       builder: (appbarHeight) => CustomScrollView(

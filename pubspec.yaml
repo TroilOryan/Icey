@@ -2,7 +2,7 @@ name: IceyPlayer
 description: "A new Flutter project."
 publish_to: 'none'
 
-version: 1.0.57+58
+version: 1.0.58+59
 
 environment:
   sdk: ">=3.10.0"
@@ -32,7 +32,7 @@ dependencies:
   flutter_sficon: ^1.3.0
   fluentui_system_icons: ^1.1.273
   keframe: ^3.0.0
-  liquid_glass_widgets: ^0.8.3
+  liquid_glass_widgets: ^0.8.4
   material_symbols_icons: ^4.2928.1
   scrollview_observer: ^1.26.3
   sliver_tools: ^0.2.12

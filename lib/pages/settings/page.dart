@@ -15,6 +15,7 @@ class SettingsPage extends StatelessWidget {
     final enabled = proManager.enabled.watch(context);
 
     return PageWrapper(
+      backgroundColor: Colors.transparent,
       title: '设置',
       body: Column(
         spacing: 16,

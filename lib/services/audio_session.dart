@@ -1,13 +1,17 @@
 import 'package:IceyPlayer/helpers/platform.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:IceyPlayer/models/media/media.dart';
+import 'package:IceyPlayer/models/settings/settings.dart';
 
 class AudioSessionHandler {
   late AudioSession session;
-  final bool _playInterrupted = false;
+  bool _playInterrupted = false;
 
   Future<bool> setActive(bool active) async {
     if (PlatformHelper.isDesktop) return false;
+
+    // 不与其他应用一起播放关闭时，不激活音频焦点
+    if (active && !settingsManager.audioFocus.value) return false;
 
     return await session.setActive(active);
   }
@@ -30,50 +34,41 @@ class AudioSessionHandler {
       ),
     );
 
-    // 耳机拔出暂停
+    // 耳机拔出暂停（无论 audioFocus 设置都暂停）
     session.becomingNoisyEventStream.listen((_) {
       mediaManager.pause();
     });
 
+    // 音频中断事件处理
     session.interruptionEventStream.listen((event) {
-      if (event.begin) {
-        mediaManager.pause();
-      }
+      // 不与其他应用一起播放关闭时，忽略所有中断
+      if (!settingsManager.audioFocus.value) return;
 
-      // session.interruptionEventStream.listen((event) {
-      //   final isPlaying = mediaManager.isPlaying;
-      //
-      //   if (event.begin) {
-      //     if (!settingsManager.audioFocus.value &&
-      //         event.type == AudioInterruptionType.pause) {
-      //       mediaManager.play();
-      //     }
-      //
-      //     switch (event.type) {
-      //       case AudioInterruptionType.duck:
-      //         // player.setVolume(player.volume.value * 0.5);
-      //         break;
-      //       case AudioInterruptionType.pause:
-      //         // player.pause(isInterrupt: true);
-      //         _playInterrupted = true;
-      //         break;
-      //       case AudioInterruptionType.unknown:
-      //         _playInterrupted = true;
-      //         break;
-      //     }
-      //   } else {
-      //     switch (event.type) {
-      //       case AudioInterruptionType.duck:
-      //         // player.setVolume(player.volume.value * 2);
-      //         break;
-      //       case AudioInterruptionType.pause:
-      //         if (_playInterrupted) {}
-      //         break;
-      //       case AudioInterruptionType.unknown:
-      //         break;
-      //     }
-      //     _playInterrupted = false;
-      //   }
+      if (event.begin) {
+        switch (event.type) {
+          case AudioInterruptionType.duck:
+            // 降低音量（暂不实现）
+            break;
+          case AudioInterruptionType.pause:
+          case AudioInterruptionType.unknown:
+            mediaManager.pause();
+            _playInterrupted = true;
+            break;
+        }
+      } else {
+        switch (event.type) {
+          case AudioInterruptionType.duck:
+            // 恢复音量（暂不实现）
+            break;
+          case AudioInterruptionType.pause:
+          case AudioInterruptionType.unknown:
+            if (_playInterrupted) {
+              mediaManager.play();
+            }
+            _playInterrupted = false;
+            break;
+        }
+      }
     });
   }
 }
