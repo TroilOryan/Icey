@@ -10,4 +10,11 @@ class CoverMap {
 
 class AlbumListState {
   final coverList = signal<List<CoverMap>>([]);
+
+  final crossAxisCount = signal(
+    Boxes.settingsBox.get(
+      CacheKey.Settings.albumCrossAxisCount,
+      defaultValue: PlatformHelper.isDesktop ? 6 : 2,
+    ),
+  );
 }

@@ -21,6 +21,7 @@ class SettingsPage extends StatelessWidget {
         spacing: 16,
         children: [
           ListCard(
+            highMaterial: true,
             children: [
               ListItem(
                 title: 'Icey Pro',
@@ -31,6 +32,7 @@ class SettingsPage extends StatelessWidget {
             ],
           ),
           ListCard(
+            highMaterial: true,
             children: [
               ListItem(
                 title: '媒体库',

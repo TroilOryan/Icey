@@ -10,6 +10,7 @@ import "package:IceyPlayer/entities/media.dart";
 import "package:IceyPlayer/helpers/media_scanner/media_sort.dart";
 import "package:IceyPlayer/helpers/toast/toast.dart";
 import "package:IceyPlayer/models/media/media.dart";
+import "package:flutter/foundation.dart";
 import "package:pinyin/pinyin.dart";
 import "package:uuid/uuid.dart";
 
@@ -22,12 +23,81 @@ final _mediaBox = Boxes.mediaBox,
     _mediaCountBox = Boxes.mediaCountBox,
     _likedBox = Boxes.likedBox;
 
+/// 在后台 Isolate 中执行排序和过滤（避免 Pinyin 排序阻塞 UI 线程）
+List<MediaEntity> _sortAndFilterInIsolate(
+  _SortFilterParams params,
+) {
+  final sortType0 = MediaSort.getByValue(params.sortType);
+
+  params.medias.sort((a, b) {
+    if (sortType0 == MediaSort.artist) {
+      final aArtist = PinyinHelper.getPinyinE(a.artist ?? '');
+      final bArtist = PinyinHelper.getPinyinE(b.artist ?? '');
+      return aArtist.compareTo(bArtist);
+    } else if (sortType0 == MediaSort.title) {
+      final aTitle = PinyinHelper.getPinyinE(a.title).toLowerCase();
+      final bTitle = PinyinHelper.getPinyinE(b.title).toLowerCase();
+      return aTitle.compareTo(bTitle);
+    } else if (sortType0 == MediaSort.addTime) {
+      return (a.dateAdded ?? 0).compareTo(b.dateAdded ?? 0);
+    } else if (sortType0 == MediaSort.addTimeDesc) {
+      return (b.dateAdded ?? 0).compareTo(a.dateAdded ?? 0);
+    } else if (sortType0 == MediaSort.modifyTime) {
+      return (a.dateModified ?? 0).compareTo(b.dateModified ?? 0);
+    } else if (sortType0 == MediaSort.modifyTimeDesc) {
+      return (b.dateModified ?? 0).compareTo(a.dateModified ?? 0);
+    } else if (sortType0 == MediaSort.duration) {
+      return (a.duration ?? 0).compareTo(b.duration ?? 0);
+    } else if (sortType0 == MediaSort.durationDesc) {
+      return (b.duration ?? 0).compareTo(a.duration ?? 0);
+    } else if (sortType0 == MediaSort.count) {
+      final int aCount = params.mediaCountMap[a.id] ?? 0;
+      final int bCount = params.mediaCountMap[b.id] ?? 0;
+      return aCount.compareTo(bCount);
+    } else if (sortType0 == MediaSort.countDesc) {
+      final int aCount = params.mediaCountMap[a.id] ?? 0;
+      final int bCount = params.mediaCountMap[b.id] ?? 0;
+      return bCount.compareTo(aCount);
+    } else {
+      final aTitle = PinyinHelper.getPinyinE(a.title).toLowerCase();
+      final bTitle = PinyinHelper.getPinyinE(b.title).toLowerCase();
+      return aTitle.compareTo(bTitle);
+    }
+  });
+
+  if (params.filterDir.isNotEmpty) {
+    return params.medias
+        .where(
+          (media) => params.filterDir.every((dir) => !media.data.contains(dir)),
+        )
+        .toList();
+  }
+
+  return params.medias;
+}
+
+class _SortFilterParams {
+  final List<MediaEntity> medias;
+  final int sortType;
+  final List<String> filterDir;
+  final Map<String, int> mediaCountMap;
+
+  _SortFilterParams({
+    required this.medias,
+    required this.sortType,
+    required this.filterDir,
+    required this.mediaCountMap,
+  });
+}
+
 class MediaHelper {
-  /// 获取本地
-  static List<MediaEntity> queryLocalMedia({
+  /// 获取本地媒体列表
+  /// [useIsolate] 为 true 时在后台 Isolate 中执行排序和过滤，避免阻塞 UI
+  static Future<List<MediaEntity>> queryLocalMedia({
     List<MediaEntity>? medias,
     bool? init,
-  }) {
+    bool useIsolate = false,
+  }) async {
     final sortType = _settingsBox.get(
       CacheKey.Settings.sortType,
       defaultValue: 1,
@@ -36,16 +106,43 @@ class MediaHelper {
     try {
       List<MediaEntity> medias0 = medias ?? _mediaBox.values.toList().cast();
 
-      medias0 = sortMedia(medias0, sortType);
-
       final List<String> filterDir = _settingsBox.get(
         CacheKey.Settings.filterDir,
         defaultValue: <String>[],
       );
 
-      medias0 = medias0
-          .where((media) => filterDir.every((dir) => !media.data.contains(dir)))
-          .toList();
+      if (useIsolate) {
+        // 构建播放次数 Map（需要在主线程读取 Hive Box）
+        final Map<String, int> mediaCountMap = {};
+        final sortType0 = MediaSort.getByValue(sortType);
+        if (sortType0 == MediaSort.count || sortType0 == MediaSort.countDesc) {
+          for (final media in medias0) {
+            mediaCountMap[media.id] = _mediaCountBox.get(
+              media.id,
+              defaultValue: 0,
+            );
+          }
+        }
+
+        // 在后台 Isolate 中执行排序和过滤（Pinyin 转换很耗时）
+        medias0 = await compute(
+          _sortAndFilterInIsolate,
+          _SortFilterParams(
+            medias: List.from(medias0),
+            sortType: sortType,
+            filterDir: filterDir,
+            mediaCountMap: mediaCountMap,
+          ),
+        );
+      } else {
+        medias0 = sortMedia(medias0, sortType);
+        medias0 = medias0
+            .where(
+              (media) =>
+                  filterDir.every((dir) => !media.data.contains(dir)),
+            )
+            .toList();
+      }
 
       if (init != true) {
         mediaManager.setLocalMediaList(medias0);
@@ -88,7 +185,7 @@ class MediaHelper {
             }
 
             mediaManager.removeQueue(queueIndex, noToast: true).then((_) async {
-              final medias = MediaHelper.queryLocalMedia();
+              final medias = await MediaHelper.queryLocalMedia();
 
               mediaManager.setLocalMediaList(medias, true);
 

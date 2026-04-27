@@ -16,9 +16,9 @@ class ArtistListDetailPage extends StatelessWidget {
 
     final extra = GoRouterState.of(context).extra as Map<String, dynamic>?;
 
-    final name = extra?["name"] as String,
+    final name = extra?["name"] as String? ?? "",
         cover = extra?["cover"] as Uint8List?,
-        mediaIDs = extra?["mediaIDs"] as List<String>;
+        mediaIDs = (extra?["mediaIDs"] as List<String>?) ?? [];
 
     final id = GoRouterState.of(context).pathParameters["id"]!;
 

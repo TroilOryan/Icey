@@ -311,13 +311,10 @@ class HomeController {
                   block: true,
                   disabled: !scanEnded,
                   onPressed: () async {
-                    if (PlatformHelper.isDesktop) {
-                      SmartDialog.dismiss();
-                    } else {
-                      context.pop();
-                    }
-
-                    final mediaList = MediaHelper.queryLocalMedia();
+                    // 在后台 Isolate 中处理排序和过滤，避免阻塞 UI
+                    final mediaList = await MediaHelper.queryLocalMedia(
+                      useIsolate: true,
+                    );
 
                     if (mediaManager.queue.value.isEmpty) {
                       mediaManager.updateQueue(
@@ -326,6 +323,15 @@ class HomeController {
                     }
 
                     state.scanEnded.value = false;
+
+                    // 处理完成后再关闭对话框
+                    if (context.mounted) {
+                      if (PlatformHelper.isDesktop) {
+                        SmartDialog.dismiss();
+                      } else {
+                        context.pop();
+                      }
+                    }
 
                     Future.delayed(const Duration(milliseconds: 800)).then((_) {
                       streamController!.close();
@@ -345,7 +351,7 @@ class HomeController {
         );
       }
     } else if (!e.isStart && e.silent == true) {
-      final mediaList = MediaHelper.queryLocalMedia();
+      final mediaList = await MediaHelper.queryLocalMedia();
 
       if (mediaManager.queue.value.isEmpty) {
         mediaManager.updateQueue(

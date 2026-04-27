@@ -10,4 +10,11 @@ class CoverMap {
 
 class ArtistListState {
   final coverList = signal<List<CoverMap>>([]);
+
+  final crossAxisCount = signal(
+    Boxes.settingsBox.get(
+      CacheKey.Settings.artistCrossAxisCount,
+      defaultValue: PlatformHelper.isDesktop ? 6 : 2,
+    ),
+  );
 }

@@ -95,4 +95,10 @@ class _SettingsKeys {
 
   /// 启动检查更新
   final String autoUpdate = "settings_autoUpdate";
+
+  /// 专辑列表列数
+  final String albumCrossAxisCount = "settings_albumCrossAxisCount";
+
+  /// 艺术家列表列数
+  final String artistCrossAxisCount = "settings_artistCrossAxisCount";
 }

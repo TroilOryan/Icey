@@ -203,7 +203,7 @@ class SettingsManager {
 
     _saveSetting(CacheKey.Settings.sortType, value, (v) => v.value);
 
-    MediaHelper.queryLocalMedia();
+    MediaHelper.queryLocalMedia(); // ignore: unawaited_futures
   }
 
   void setBrightnessTheme(BrightnessTheme value) {

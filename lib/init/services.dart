@@ -41,7 +41,7 @@ Future<void> initServices() async {
 
   await initHive();
 
-  final medias = MediaHelper.queryLocalMedia(init: true);
+  final medias = await MediaHelper.queryLocalMedia(init: true);
 
   final audioServiceHandler = AudioServiceHandler();
 

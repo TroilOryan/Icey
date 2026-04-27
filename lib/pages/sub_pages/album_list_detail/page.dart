@@ -14,11 +14,11 @@ class AlbumListDetailPage extends StatelessWidget {
     final deviceWidth = mediaQuery.size.width,
         deviceHeight = mediaQuery.size.height;
 
-    final extra = GoRouterState.of(context).extra as Map<String, dynamic>;
+    final extra = GoRouterState.of(context).extra as Map<String, dynamic>?;
 
-    final name = extra["name"] as String,
-        cover = extra["cover"] as Uint8List?,
-        mediaIDs = extra["mediaIDs"] as List<String>;
+    final name = extra?["name"] as String? ?? "",
+        cover = extra?["cover"] as Uint8List?,
+        mediaIDs = (extra?["mediaIDs"] as List<String>?) ?? [];
 
     final id = GoRouterState.of(context).pathParameters["id"]!;
 
