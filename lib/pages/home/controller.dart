@@ -225,7 +225,7 @@ class HomeController {
       // 非初始页，先回到初始页
       final page = playScreenController.state.currentPage.value;
       if (page != 1) {
-        playScreenController.pageController.animateToPage(
+        playScreenController.pageController?.animateToPage(
           1,
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,

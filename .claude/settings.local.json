@@ -1,7 +1,11 @@
 {
   "permissions": {
     "allow": [
-      "Bash(flutter analyze:*)"
+      "Bash(flutter analyze:*)",
+      "Bash(python3:*)",
+      "Bash(grep:*)",
+      "Bash(fvm flutter:*)",
+      "Bash(ls:*)"
     ]
   }
 }

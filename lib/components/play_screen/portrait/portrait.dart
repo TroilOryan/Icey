@@ -38,6 +38,16 @@ class _PortraitState extends State<Portrait> {
   }
 
   @override
+  void didUpdateWidget(covariant Portrait oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.pageController != widget.pageController) {
+      oldWidget.pageController.removeListener(_onPageChanged);
+      widget.pageController.addListener(_onPageChanged);
+      _currentPage = widget.pageController.initialPage;
+    }
+  }
+
+  @override
   void dispose() {
     widget.pageController.removeListener(_onPageChanged);
     super.dispose();

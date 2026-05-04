@@ -23,7 +23,7 @@ class BottomBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return GlassBottomBar(
+    return GlassSearchableBottomBar(
       horizontalPadding: 16,
       quality: GlassQuality.premium,
       indicatorColor: theme.colorScheme.primary.withAlpha(55),
@@ -31,10 +31,12 @@ class BottomBar extends StatelessWidget {
       iconSize: 20,
       selectedIconColor: theme.colorScheme.primary,
       unselectedIconColor: theme.iconTheme.color!,
-      extraButton: GlassBottomBarExtraButton(
-        icon: const Icon(FluentIcons.search_12_regular),
-        onTap: onSearch,
-        label: "",
+      searchConfig: GlassSearchBarConfig(
+        searchIconColor: theme.iconTheme.color,
+        searchIcon: const Icon(FluentIcons.search_12_regular),
+        onSearchToggle: (s) {
+          onSearch();
+        },
       ),
       tabs: menu
           .map(

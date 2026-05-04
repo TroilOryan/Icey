@@ -12,16 +12,19 @@ class PlayScreen extends StatefulWidget {
 }
 
 class _PlayScreenState extends State<PlayScreen> {
+  late final PageController _pageController;
+
   @override
   void initState() {
     super.initState();
 
-    // 监听 pageController 更新 currentPage 信号
-    playScreenController.pageController.addListener(_onPageControllerChanged);
+    _pageController = PageController(initialPage: 1);
+    _pageController.addListener(_onPageControllerChanged);
+    playScreenController.pageController = _pageController;
   }
 
   void _onPageControllerChanged() {
-    final page = playScreenController.pageController.page?.round();
+    final page = _pageController.page?.round();
     if (page != null && page != playScreenController.state.currentPage.value) {
       playScreenController.state.currentPage.value = page;
     }
@@ -29,9 +32,9 @@ class _PlayScreenState extends State<PlayScreen> {
 
   @override
   void dispose() {
-    playScreenController.pageController
-        .removeListener(_onPageControllerChanged);
-    playScreenController.onDispose();
+    _pageController.removeListener(_onPageControllerChanged);
+    _pageController.dispose();
+    playScreenController.pageController = null;
 
     super.dispose();
   }
@@ -50,7 +53,7 @@ class _PlayScreenState extends State<PlayScreen> {
 
         // 非初始页，回到初始页
         if (currentPage != 1) {
-          playScreenController.pageController.animateToPage(
+          _pageController.animateToPage(
             1,
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeInOut,
@@ -71,9 +74,13 @@ class _PlayScreenState extends State<PlayScreen> {
                   const PlayScreenBackground(),
                   AdaptiveBuilder(
                     mobile: (context) => Portrait(
-                      pageController: playScreenController.pageController,
-                      onOpenLyric: playScreenController.handleOpenLyric,
-                      onOpenPlaylist: playScreenController.handleOpenPlaylist,
+                      pageController: _pageController,
+                      onOpenLyric: (context) =>
+                          playScreenController.handleOpenLyric(
+                              _pageController, context),
+                      onOpenPlaylist: (context) =>
+                          playScreenController.handleOpenPlaylist(
+                              _pageController, context),
                       onClose: widget.onClose,
                     ),
                     landscape: (context) => OrientationBuilder(
@@ -83,10 +90,13 @@ class _PlayScreenState extends State<PlayScreen> {
                         }
 
                         return Portrait(
-                          pageController: playScreenController.pageController,
-                          onOpenLyric: playScreenController.handleOpenLyric,
-                          onOpenPlaylist:
-                              playScreenController.handleOpenPlaylist,
+                          pageController: _pageController,
+                          onOpenLyric: (context) =>
+                              playScreenController.handleOpenLyric(
+                                  _pageController, context),
+                          onOpenPlaylist: (context) =>
+                              playScreenController.handleOpenPlaylist(
+                                  _pageController, context),
                           onClose: widget.onClose,
                         );
                       },

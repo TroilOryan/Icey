@@ -59,8 +59,9 @@ Future<void> main() async {
     //   builder: (context) => const App(),
     // ),
     rootWidget: LiquidGlassWidgets.wrap(
-      const App(),
-      respectSystemAccessibility: false,
+        child: const App(),
+        respectSystemAccessibility: false,
+        adaptiveQuality: true
     ),
   );
 }
@@ -86,7 +87,9 @@ class _AppState extends State<App> with WidgetsBindingObserver, TrayListener {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _brightnessThemeListener = effect(() {
         if (settingsManager.brightnessTheme.value == BrightnessTheme.system) {
-          appState.brightness.value = MediaQuery.of(context).platformBrightness;
+          appState.brightness.value = MediaQuery
+              .of(context)
+              .platformBrightness;
         } else if (settingsManager.brightnessTheme.value ==
             BrightnessTheme.light) {
           appState.brightness.value = Brightness.light;
@@ -165,7 +168,8 @@ class _AppState extends State<App> with WidgetsBindingObserver, TrayListener {
     super.initState();
 
     scrollBehavior = computed(
-      () => settingsManager.isMaterialScrollBehavior.watch(context)
+          () =>
+      settingsManager.isMaterialScrollBehavior.watch(context)
           ? const MaterialScrollBehavior()
           : const CupertinoScrollBehavior(),
     );
