@@ -15,7 +15,7 @@ class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   @override
   void initState() {
-    homeController.onInit(context, widget.navigationShell);
+    homeController.onInit(context, widget.navigationShell, this);
 
     super.initState();
   }
@@ -54,11 +54,18 @@ class _HomePageState extends State<HomePage>
           ? Colors.transparent
           : theme.scaffoldBackgroundColor,
       bottomNavigationBar: mediaList.isNotEmpty
-          ? BottomBar(
-              menu: homeController.menu,
-              selectedIndex: widget.navigationShell.currentIndex,
-              onSearch: () => homeController.navToSearch(context),
-              onTabSelected: (index) => homeController.handleGoBranch(index),
+          ? AnimatedBuilder(
+              animation: homeController.panelAnimController,
+              builder: (context, child) => Transform.translate(
+                offset: Offset(0, homeController.panelAnimController.value * 200),
+                child: child,
+              ),
+              child: BottomBar(
+                menu: homeController.menu,
+                selectedIndex: widget.navigationShell.currentIndex,
+                onSearch: () => homeController.navToSearch(context),
+                onTabSelected: (index) => homeController.handleGoBranch(index),
+              ),
             )
           : null,
       body: Stack(
@@ -67,9 +74,61 @@ class _HomePageState extends State<HomePage>
           widget.navigationShell,
 
           if (mediaList.isNotEmpty)
-            PlayBarMobile(
-              hidePlayBar: hidePlayBar,
-              onTap: () => homeController.handleOpenPanel(context),
+            AnimatedBuilder(
+              animation: homeController.panelAnimController,
+              builder: (context, child) => Transform.translate(
+                offset: Offset(0, homeController.panelAnimController.value * 200),
+                child: child,
+              ),
+              child: PlayBarMobile(
+                hidePlayBar: hidePlayBar,
+                onTap: () => homeController.handleOpenPanel(),
+                onVerticalDragUpdate: (details) =>
+                    homeController.handlePlayBarVerticalDragUpdate(
+                      details,
+                      deviceHeight,
+                    ),
+                onVerticalDragEnd: (details) =>
+                    homeController.handlePlayBarVerticalDragEnd(
+                      details,
+                      deviceHeight,
+                    ),
+              ),
+            ),
+
+          // 播放页覆盖层（通过 AnimationController 驱动，支持手势跟随）
+          if (mediaList.isNotEmpty)
+            AnimatedBuilder(
+              animation: homeController.panelAnimController,
+              builder: (context, child) => Transform.translate(
+                offset: Offset(
+                  0,
+                  (1 - homeController.panelAnimController.value) * deviceHeight,
+                ),
+                child: child,
+              ),
+              child: GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onVerticalDragUpdate: (details) {
+                  if (details.delta.dy > 0) {
+                    homeController.handlePlayScreenVerticalDragUpdate(
+                      details.delta.dy,
+                      deviceHeight,
+                    );
+                  }
+                },
+                onVerticalDragEnd: (details) {
+                  if (details.velocity.pixelsPerSecond.dy > 300 ||
+                      homeController.panelAnimController.value < 0.5) {
+                    homeController.handleClosePanel();
+                  } else {
+                    homeController.handleOpenPanel();
+                  }
+                },
+                child: PlayScreen(
+                  onClose: () => homeController.handleClosePanel(),
+                ),
+              ),
             ),
         ],
       ),
@@ -151,10 +210,45 @@ class _HomePageState extends State<HomePage>
               if (mediaList.isNotEmpty)
                 PlayBarDesktop(
                   hidePlayBar: hidePlayBar,
-                  onTap: () => homeController.handleOpenPanel(context),
+                  onTap: () => homeController.handleOpenPanel(),
                 ),
               if (PlatformHelper.isDesktop)
                 TitleBarAction(sideBarOpened: sideBarOpened),
+
+              // 播放页覆盖层（通过 AnimationController 驱动，支持手势跟随）
+              if (mediaList.isNotEmpty)
+                AnimatedBuilder(
+                  animation: homeController.panelAnimController,
+                  builder: (context, child) => Transform.translate(
+                    offset: Offset(
+                      0,
+                      (1 - homeController.panelAnimController.value) * deviceHeight,
+                    ),
+                    child: child,
+                  ),
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onVerticalDragUpdate: (details) {
+                      if (details.delta.dy > 0) {
+                        homeController.handlePlayScreenVerticalDragUpdate(
+                          details.delta.dy,
+                          deviceHeight,
+                        );
+                      }
+                    },
+                    onVerticalDragEnd: (details) {
+                      if (details.velocity.pixelsPerSecond.dy > 300 ||
+                          homeController.panelAnimController.value < 0.5) {
+                        homeController.handleClosePanel();
+                      } else {
+                        homeController.handleOpenPanel();
+                      }
+                    },
+                    child: PlayScreen(
+                      onClose: () => homeController.handleClosePanel(),
+                    ),
+                  ),
+                ),
             ],
           ),
         ),

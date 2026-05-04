@@ -16,7 +16,7 @@ import 'package:IceyPlayer/pages/settings/pro/page.dart';
 import 'package:IceyPlayer/pages/settings/pro/pay/page.dart';
 import 'package:IceyPlayer/pages/sub_pages/artist_list_detail/controller.dart';
 import 'package:IceyPlayer/pages/sub_pages/media_order_detail/controller.dart';
-import 'package:IceyPlayer/pages/sub_pages/play_screen/controller.dart';
+import 'package:IceyPlayer/components/play_screen/controller.dart';
 import 'package:IceyPlayer/pages/sub_pages/player_style/page.dart';
 import 'package:IceyPlayer/pages/sub_pages/search/controller.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +30,7 @@ final indPages = [
   GoRoute(
     path: '/play_screen',
     pageBuilder: GoTransitions.slide.toTop.build(
-      builder: (_, _) => const PlayScreenPage(),
+      builder: (_, _) => const PlayScreen(),
     ),
   ),
 ];

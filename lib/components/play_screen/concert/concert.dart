@@ -10,13 +10,14 @@ import 'package:IceyPlayer/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_lyric/flutter_lyric.dart';
-import 'package:go_router/go_router.dart';
 import 'package:signals_flutter/signals_flutter.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 // 演唱会模式
 class Concert extends StatefulWidget {
-  const Concert({super.key});
+  final VoidCallback? onClose;
+
+  const Concert({super.key, this.onClose});
 
   @override
   State<Concert> createState() => _ConcertState();
@@ -169,7 +170,7 @@ class _ConcertState extends State<Concert> {
                     child: IconButton(
                       tooltip: "退出",
                       color: Colors.red,
-                      onPressed: context.pop,
+                      onPressed: widget.onClose ?? () {},
                       icon: const Icon(Icons.close, color: Colors.white),
                     ),
                   ),

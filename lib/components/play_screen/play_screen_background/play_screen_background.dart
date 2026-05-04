@@ -80,54 +80,53 @@ class _PlayScreenBackgroundState extends State<PlayScreenBackground>
               child: Blur(
                 blur: blurValue,
                 colorOpacity: colorOpacity,
-                overlay: null,
+                overlay: dynamicLight
+                    ? RepaintBoundary(
+                        child: Blur(
+                          blur: blurValue,
+                          colorOpacity: colorOpacity,
+                          child: Stack(
+                            children: [
+                              _buildAnimatedCover(
+                                TopLeftClipper(),
+                                _controller1,
+                                0.8,
+                                currentCover,
+                                width,
+                                height,
+                              ),
+                              _buildAnimatedCover(
+                                TopRightClipper(),
+                                _controller2,
+                                -0.8,
+                                currentCover,
+                                width,
+                                height,
+                              ),
+                              _buildAnimatedCover(
+                                BottomLeftClipper(),
+                                _controller3,
+                                -1,
+                                currentCover,
+                                width,
+                                height,
+                              ),
+                              _buildAnimatedCover(
+                                BottomRightClipper(),
+                                _controller4,
+                                1,
+                                currentCover,
+                                width,
+                                height,
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    : null,
                 child: _buildCoverImage(currentCover, width, height),
               ),
             ),
-            // 动态光效 - 在模糊层之上，RepaintBoundary 隔离
-            if (dynamicLight)
-              RepaintBoundary(
-                child: Blur(
-                  blur: blurValue,
-                  colorOpacity: 0,
-                  child: Stack(
-                    children: [
-                      _buildAnimatedCover(
-                        TopLeftClipper(),
-                        _controller1,
-                        0.8,
-                        currentCover,
-                        width,
-                        height,
-                      ),
-                      _buildAnimatedCover(
-                        TopRightClipper(),
-                        _controller2,
-                        -0.8,
-                        currentCover,
-                        width,
-                        height,
-                      ),
-                      _buildAnimatedCover(
-                        BottomLeftClipper(),
-                        _controller3,
-                        -1,
-                        currentCover,
-                        width,
-                        height,
-                      ),
-                      _buildAnimatedCover(
-                        BottomRightClipper(),
-                        _controller4,
-                        1,
-                        currentCover,
-                        width,
-                        height,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
           ],
         );
       },

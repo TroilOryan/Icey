@@ -7,15 +7,16 @@ import 'package:IceyPlayer/components/play_progress_bar/play_progress_bar.dart';
 import 'package:IceyPlayer/components/prev_button/prev_button.dart';
 import 'package:IceyPlayer/models/media/media.dart';
 import 'package:IceyPlayer/pages/home/title_bar_action/title_bar_action.dart';
-import 'package:IceyPlayer/pages/sub_pages/play_screen/play_info/play_info.dart';
+import 'package:IceyPlayer/components/play_screen/play_info/play_info.dart';
 import 'package:IceyPlayer/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 import './play_shaped_cover.dart';
 
 class Tablet extends StatelessWidget {
-  const Tablet({super.key});
+  final VoidCallback? onClose;
+
+  const Tablet({super.key, this.onClose});
 
   @override
   Widget build(BuildContext context) {
@@ -35,12 +36,12 @@ class Tablet extends StatelessWidget {
                 IconButton(
                   icon: const Icon(Icons.keyboard_arrow_down),
                   color: appThemeExtension.secondary,
-                  onPressed: () => context.pop(),
+                  onPressed: onClose ?? () {},
                 ),
                 IconButton(
                   icon: const Icon(Icons.fullscreen),
                   color: appThemeExtension.secondary,
-                  onPressed: () => context.pop(),
+                  onPressed: onClose ?? () {},
                 ),
               ],
             ),

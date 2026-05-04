@@ -36,11 +36,11 @@ class Landscape extends StatelessWidget {
       Widget child;
 
       if (immersive.value) {
-        child = PlayImmersiveCover(isLandscape: true, size: height);
+        child = PlayImmersiveCover(size: height);
       } else {
         child = Container(
           margin: const EdgeInsets.only(top: 32),
-          child: const PlayShapedCover(isLandscape: true),
+          child: PlayShapedCover(size: deviceHeight - 48),
         );
       }
 

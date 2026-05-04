@@ -51,7 +51,6 @@ class MediaManager {
   late final Computed<List<AlbumEntity>> _albumList;
   late final Computed<List<ArtistEntity>> _artistList;
   final Signal<MediaItem?> _currentMediaItem;
-  final Signal<Animation<double>?> _rotationAnimation;
   final Signal<bool> _isPlaying;
   late final AudioServiceHandler _audioService;
   final Signal<CoverColor> _coverColor;
@@ -71,8 +70,6 @@ class MediaManager {
   Computed<List<ArtistEntity>> get artistList => _artistList;
 
   Signal<MediaItem?> get currentMediaItem => _currentMediaItem;
-
-  Signal<Animation<double>?> get rotationAnimation => _rotationAnimation;
 
   Signal<bool> get isPlaying => _isPlaying;
 
@@ -102,7 +99,6 @@ class MediaManager {
       _localMediaList = signal([]),
       _mediaList = signal([]),
       _currentMediaItem = signal(null),
-      _rotationAnimation = signal(null),
       _isPlaying = signal(false),
       _coverColor = signal(
         const CoverColor(primary: -1, secondary: -1, isDark: false),

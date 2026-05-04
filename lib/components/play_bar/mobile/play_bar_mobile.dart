@@ -5,11 +5,15 @@ final playBarController = PlayBarController();
 class PlayBarMobile extends StatelessWidget {
   final bool hidePlayBar;
   final VoidCallback onTap;
+  final GestureDragUpdateCallback? onVerticalDragUpdate;
+  final GestureDragEndCallback? onVerticalDragEnd;
 
   const PlayBarMobile({
     super.key,
     required this.hidePlayBar,
     required this.onTap,
+    this.onVerticalDragUpdate,
+    this.onVerticalDragEnd,
   });
 
   @override
@@ -165,6 +169,8 @@ class PlayBarMobile extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         behavior: .opaque,
+        onVerticalDragUpdate: onVerticalDragUpdate,
+        onVerticalDragEnd: onVerticalDragEnd,
         onHorizontalDragUpdate: playBarController.handleHorizontalDragUpdate,
         onHorizontalDragEnd: playBarController.handleHorizontalDragEnd,
         child: AnimatedSlide(

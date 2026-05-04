@@ -8,6 +8,7 @@ import 'package:IceyPlayer/models/lyric/lyric.dart';
 import 'package:IceyPlayer/pages/home/bottom_bar/bottom_bar.dart';
 import 'package:IceyPlayer/pages/home/side_bar/side_bar.dart';
 import 'package:IceyPlayer/pages/home/title_bar_action/title_bar_action.dart';
+import 'package:IceyPlayer/components/play_screen/controller.dart';
 import 'package:audio_query/entities.dart';
 import 'package:common_utils/common_utils.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
@@ -61,6 +62,8 @@ class HomeController {
   final state = HomeState();
 
   late final StatefulNavigationShell navigationShell;
+
+  late final AnimationController panelAnimController;
 
   Timer? _scrollTimer;
 
@@ -217,8 +220,20 @@ class HomeController {
   void handlePopInvokedWithResult(bool didPop, Object? result) {
     if (didPop) return;
 
-    if (state.panelOpened.value) {
-      state.panelOpened.value = false;
+    // 播放面板打开时
+    if (panelAnimController.value > 0) {
+      // 非初始页，先回到初始页
+      final page = playScreenController.state.currentPage.value;
+      if (page != 1) {
+        playScreenController.pageController.animateToPage(
+          1,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+        return;
+      }
+
+      handleClosePanel();
 
       return;
     }
@@ -443,14 +458,36 @@ class HomeController {
     });
   }
 
-  void handleOpenPanel(BuildContext context) {
-    context.push("/play_screen").then((_) {
-      state.panelOpened.value = false;
-    });
+  void handleOpenPanel() {
+    panelAnimController.forward(from: panelAnimController.value);
+  }
 
-    Future.delayed(const Duration(milliseconds: 600)).then((_) {
-      state.panelOpened.value = true;
-    });
+  void handleClosePanel() {
+    panelAnimController.reverse(from: panelAnimController.value);
+  }
+
+  void handlePlayBarVerticalDragUpdate(DragUpdateDetails details, double screenHeight) {
+    panelAnimController.value += -details.delta.dy / screenHeight;
+  }
+
+  void handlePlayBarVerticalDragEnd(DragEndDetails details, double screenHeight) {
+    if (details.velocity.pixelsPerSecond.dy < -500 || panelAnimController.value > 0.5) {
+      handleOpenPanel();
+    } else {
+      handleClosePanel();
+    }
+  }
+
+  void handlePlayScreenVerticalDragUpdate(double deltaDy, double screenHeight) {
+    panelAnimController.value += -deltaDy / screenHeight;
+  }
+
+  void handlePlayScreenVerticalDragEnd(double velocity, double screenHeight) {
+    if (velocity > 500 || panelAnimController.value < 0.5) {
+      handleClosePanel();
+    } else {
+      handleOpenPanel();
+    }
   }
 
   void setStatusBarIconBrightness(bool isDark) {
@@ -470,8 +507,19 @@ class HomeController {
     }
   }
 
-  void onInit(BuildContext context, StatefulNavigationShell navi) {
+  void onInit(BuildContext context, StatefulNavigationShell navi, TickerProvider vsync) {
     navigationShell = navi;
+
+    panelAnimController = AnimationController(
+      duration: const Duration(milliseconds: 400),
+      vsync: vsync,
+    )..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          state.panelOpened.value = true;
+        } else if (status == AnimationStatus.dismissed) {
+          state.panelOpened.value = false;
+        }
+    });
 
     WidgetsBinding.instance.addPostFrameCallback((callback) {
       UpdateHelper.checkUpdate(context);
@@ -538,6 +586,8 @@ class HomeController {
     mediaScanListController?.dispose();
 
     _panelOpenedListener();
+
+    panelAnimController.dispose();
 
     lyricManager.dispose();
   }
